@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enchantments — Meridian</title>
+    <meta name="description" content="All 75 original enchantments in the Meridian enchanting overhaul mod, organized by category.">
+
+    <meta property="og:title" content="Enchantments — Meridian">
+    <meta property="og:description" content="75 original enchantments organized by category. Combat, ranged, tool, mobility, shield, elytra, mount, utility, and curses.">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0a0a0a',
+                        card: '#1a1a1a',
+                        elevated: '#222222',
+                        gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
+                        amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
+                        bone: '#e8e0d4',
+                        ash: '#a89f93',
+                        smoke: '#6b6359',
+                    },
+                    fontFamily: {
+                        mono: ['SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Liberation Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-base text-bone antialiased leading-relaxed">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 h-16 bg-base/92 backdrop-blur-xl border-b border-white/5 flex items-center px-6">
+        <div class="flex items-center justify-between w-full max-w-6xl mx-auto">
+            <a href="index.html" class="text-xl font-bold nav-brand-gradient">Meridian</a>
+            <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+            </button>
+            <ul id="nav-links" class="hidden md:flex items-center gap-8 list-none">
+                <li><a href="enchantments.html" class="text-gold text-sm font-medium">Enchantments</a></li>
+                <li><a href="shelves.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Shelves</a></li>
+                <li><a href="config.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Config</a></li>
+                <li><a href="commands.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Commands</a></li>
+                <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash text-sm font-medium hover:text-bone transition-colors">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden fixed top-16 inset-x-0 bg-base/95 backdrop-blur-xl border-b border-white/5 z-40">
+        <ul class="flex flex-col gap-4 p-6 list-none">
+            <li><a href="enchantments.html" class="text-gold">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-ash hover:text-bone transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-ash hover:text-bone transition-colors">Config</a></li>
+            <li><a href="commands.html" class="text-ash hover:text-bone transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash hover:text-bone transition-colors">GitHub</a></li>
+        </ul>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6">
+        <header class="py-10 border-b border-white/5 mb-10">
+            <h1 class="page-header-gradient text-3xl md:text-4xl font-bold tracking-tight">Enchantments</h1>
+            <p class="text-ash mt-2 text-lg">75 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via config overrides.</p>
+        </header>
+
+        <!-- Category Navigation -->
+        <nav class="mb-10 flex flex-wrap gap-3">
+            <a href="#combat" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Combat</a>
+            <a href="#ranged" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Ranged &amp; Projectile</a>
+            <a href="#tool" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Tool</a>
+            <a href="#mobility" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Mobility &amp; Armor</a>
+            <a href="#shield" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Shield</a>
+            <a href="#elytra" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Elytra</a>
+            <a href="#mount" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Mount</a>
+            <a href="#utility" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Utility</a>
+            <a href="#curses" class="px-3 py-1.5 text-sm rounded-lg bg-card border border-white/5 text-ash hover:text-bone hover:border-gold/30 transition-colors">Curses</a>
+        </nav>
+
+        <!-- Combat (Swords & Axes) -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="combat">
+            <h2 class="text-2xl font-bold mb-6">Combat (Swords &amp; Axes)</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Keen Edge</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Increases melee damage precision</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Tempo</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Increases attack speed</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Siphon</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Heals on kill</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Blight</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword / Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Applies Poison on hit (exclusive set: aspect)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Decay</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword / Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Applies Wither on hit</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Nightfall</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Bonus damage at night</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Final Gambit</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">High-risk, high-reward: massive damage at the cost of your own health</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Cleave</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Axe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Hits multiple targets in an arc</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Soul Tax</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Sword</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Steals life from enemies on hit</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Bloodrage</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Chest Armor (all armor slots)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Gain damage boost when health is low (exclusive: glass_cannon)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Reckless</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Increases damage dealt but also taken</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Sanctify</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Extra damage to undead</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Voidbane</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Extra damage to ender entities</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Snare</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Slows targets on hit</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Seismic Slam</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Axe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Ground-pound AoE on landing</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Ranged & Projectile -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="ranged">
+            <h2 class="text-2xl font-bold mb-6">Ranged &amp; Projectile</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Detonation</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Bow / Crossbow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Explosive arrows</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Stormcall</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Bow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Summons lightning on arrow hit</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Resonance</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Bow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Sound-based damage amplification</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Gale Shot</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Bow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Increased knockback on arrows</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Permafrost</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Bow / Crossbow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Freezing projectiles that slow targets</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Ricochet</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Bow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Arrows bounce to nearby targets</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">True Flight</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Bow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Perfect arrow accuracy, no drop-off</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Rift Strike</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Crossbow</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Teleport-on-hit projectiles</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Glacial Lance</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Trident</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Ice damage on trident throw</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Tempest</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Trident</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Wind burst on trident impact</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Tool Enchantments -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="tool">
+            <h2 class="text-2xl font-bold mb-6">Tool Enchantments</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Excavate</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Pickaxe / Shovel</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">3x3 mining radius</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Prospect</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Pickaxe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Highlights nearby ore veins with visual feedback</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Bounty</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Hoe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Enhanced crop drops</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Furrow</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Hoe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Auto-tills adjacent farmland</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Terrasculpt</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Boots (armor tick)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Tills soil as you walk</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Beckon</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Hoe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Attracts animals to harvested crops</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Insight</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Weapon / Tool</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Bonus XP from all sources</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Plunder</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Weapon</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Increased loot drops</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Renewal</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Hoe</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Chance to not consume durability on use</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Vital Mend</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Any durability</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Slowly repairs item over time using XP</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Mobility & Armor -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="mobility">
+            <h2 class="text-2xl font-bold mb-6">Mobility &amp; Armor</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Alacrity</td>
+                            <td class="px-4 py-2.5">V</td>
+                            <td class="px-4 py-2.5">Feet / Legs</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Movement speed boost (+0.01 base, +0.005/level)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Clamber</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Feet</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Increased step height (+0.4 base, +0.2/level)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Vault</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Feet</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Jump boost via attributes</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Slipstream</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Boots (armor tick)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduced friction for faster sliding</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Cinderwalk</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Feet</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Walk on netherrack to create magma blocks (exclusive: boots)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Diminish</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces incoming knockback</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Colossus</td>
+                            <td class="px-4 py-2.5">IV</td>
+                            <td class="px-4 py-2.5">Legs</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Increases player scale (+15% base, +10%/level) but reduces speed and reach (exclusive: size)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Gravitas</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor (armor tick)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Magnetizes nearby dropped items (3+2*level radius)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Luminance</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Helmet (armor tick)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Auto-applies Night Vision</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Steadfast</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Stability bonus, reduces mining speed penalty when airborne</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Premonition</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Armor (armor tick)</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Damage prediction warning</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Antidote</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces negative potion effect duration</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Shackle</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Feet</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Prevents knockback from explosions</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Updraft</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Chest</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces fall damage</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Quell</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces damage from projectiles</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Repulse</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Knockback attackers on hit</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Bulwark</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Knockback resistance (+0.1/level)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Animus</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Bonus XP from mobs and blocks (+1/level each)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Vitality</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Increases maximum health</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Sentinel</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Damage reduction while standing still</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Spellguard</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces magic damage</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Frostguard</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Freeze damage protection</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Rally</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Buffs nearby allies when you take damage</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Tether</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Prevents teleportation by endermen and chorus fruit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Shield Enchantments -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="shield">
+            <h2 class="text-2xl font-bold mb-6">Shield Enchantments</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Retribution</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Shield</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Returns damage to attackers when blocking</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Pummel</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Shield</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Strikes back when blocking</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Fortify</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Shield</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Reduces durability loss when blocking</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Elytra Enchantments -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="elytra">
+            <h2 class="text-2xl font-bold mb-6">Elytra Enchantments</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Ironwing</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Elytra</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces durability loss during flight</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Impact Ward</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Elytra</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Reduces crash landing damage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Mount Enchantments (Saddle) -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="mount">
+            <h2 class="text-2xl font-bold mb-6">Mount Enchantments (Saddle)</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Gallop</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Saddle</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Increases mount speed</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Trample</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Saddle</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Mount deals damage to entities it runs over</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Skybound</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Saddle</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Increases mount jump height</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Saddleguard</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Saddle</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash">Common</span></td>
+                            <td class="px-4 py-2.5">Reduces saddle durability loss</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Utility -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="utility">
+            <h2 class="text-2xl font-bold mb-6">Utility</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Mason's Reach</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Tool</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Extended block placement range</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Abyss Ward</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Head Armor</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Prevents void damage (levitation escape)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Outreach</td>
+                            <td class="px-4 py-2.5">III</td>
+                            <td class="px-4 py-2.5">Tool</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/10 border border-gold/20 text-gold">Uncommon</span></td>
+                            <td class="px-4 py-2.5">Extended block interaction range</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Prismatic</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Any</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Special shimmering effect</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Aurify</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Any durability</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Converts item to gold variant aesthetics</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Curses -->
+        <section class="mb-12" id="curses">
+            <h2 class="text-2xl font-bold mb-6">Curses</h2>
+            <div class="overflow-x-auto rounded-lg border border-white/5 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] transition-all duration-300">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Enchantment</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Level</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Slot</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Rarity</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Curse of Decay</td>
+                            <td class="px-4 py-2.5">V</td>
+                            <td class="px-4 py-2.5">Any durability</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Rare</span></td>
+                            <td class="px-4 py-2.5">Extra durability damage per use (+1/level)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Curse of Sealing</td>
+                            <td class="px-4 py-2.5">I</td>
+                            <td class="px-4 py-2.5">Any durability</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Very Rare</span></td>
+                            <td class="px-4 py-2.5">Cannot be removed from equipment slot</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 text-center mt-16">
+        <ul class="flex justify-center gap-8 flex-wrap list-none mb-4">
+            <li><a href="index.html" class="text-smoke text-sm hover:text-ash transition-colors">Home</a></li>
+            <li><a href="enchantments.html" class="text-smoke text-sm hover:text-ash transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-smoke text-sm hover:text-ash transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-smoke text-sm hover:text-ash transition-colors">Configuration</a></li>
+            <li><a href="commands.html" class="text-smoke text-sm hover:text-ash transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">GitHub</a></li>
+            <li><a href="https://github.com/rfizzle/meridian/issues" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">Issues</a></li>
+        </ul>
+        <p class="text-smoke text-xs">Meridian &copy; 2025 rfizzle. Minecraft is a trademark of Mojang Studios.</p>
+    </footer>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('nav-toggle');
+            var menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    var open = menu.classList.toggle('hidden');
+                    toggle.setAttribute('aria-expanded', !open);
+                });
+                menu.querySelectorAll('a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

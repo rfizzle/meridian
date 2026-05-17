@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shelves &amp; Setups — Meridian</title>
+    <meta name="description" content="Complete shelf reference for the Meridian enchanting overhaul. All shelf blocks, stat contributions, table crafting recipes, and recommended enchanting setups.">
+
+    <meta property="og:title" content="Shelves &amp; Setups — Meridian">
+    <meta property="og:description" content="All shelf blocks, their stat contributions, and recommended enchanting setups for Meridian.">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0a0a0a',
+                        card: '#1a1a1a',
+                        elevated: '#222222',
+                        gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
+                        amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
+                        bone: '#e8e0d4',
+                        ash: '#a89f93',
+                        smoke: '#6b6359',
+                    },
+                    fontFamily: {
+                        mono: ['SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Liberation Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-base text-bone antialiased leading-relaxed">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 h-16 bg-base/92 backdrop-blur-xl border-b border-white/5 flex items-center px-6">
+        <div class="flex items-center justify-between w-full max-w-6xl mx-auto">
+            <a href="index.html" class="text-xl font-bold nav-brand-gradient">Meridian</a>
+            <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+            </button>
+            <ul id="nav-links" class="hidden md:flex items-center gap-8 list-none">
+                <li><a href="enchantments.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Enchantments</a></li>
+                <li><a href="shelves.html" class="text-gold text-sm font-medium">Shelves</a></li>
+                <li><a href="config.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Config</a></li>
+                <li><a href="commands.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Commands</a></li>
+                <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash text-sm font-medium hover:text-bone transition-colors">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed top-16 inset-x-0 bg-base/95 backdrop-blur-xl border-b border-white/5 z-40">
+        <ul class="flex flex-col gap-4 p-6 list-none">
+            <li><a href="enchantments.html" class="text-ash hover:text-bone transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-gold">Shelves</a></li>
+            <li><a href="config.html" class="text-ash hover:text-bone transition-colors">Config</a></li>
+            <li><a href="commands.html" class="text-ash hover:text-bone transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash hover:text-bone transition-colors">GitHub</a></li>
+        </ul>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6">
+        <!-- Page Header -->
+        <header class="py-10 border-b border-white/5 mb-10">
+            <h1 class="page-header-gradient text-3xl md:text-4xl font-bold tracking-tight">Shelves &amp; Setups</h1>
+            <p class="text-ash mt-2 text-lg">All shelf blocks, their stat contributions, and recommended combinations for reaching key enchanting thresholds.</p>
+        </header>
+
+        <!-- Section 1: Stat Primer -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="stat-primer">
+            <h2 class="text-2xl font-bold mb-6">Stat Primer</h2>
+            <p class="text-ash mb-6">Shelf blocks contribute five independent stats to the enchanting table. Here is a quick recap of what each one does.</p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-card border border-white/5 rounded-xl p-4 hover:border-gold/30 transition-colors">
+                    <h3 class="text-sm font-semibold text-gold mb-1">Eterna</h3>
+                    <p class="text-ash text-xs leading-relaxed">Maximum enchanting level (0&ndash;50). Higher Eterna unlocks stronger enchantments and table crafting recipes.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-4 hover:border-gold/30 transition-colors">
+                    <h3 class="text-sm font-semibold text-gold mb-1">Quanta</h3>
+                    <p class="text-ash text-xs leading-relaxed">Power variance (0&ndash;100). High Quanta means bigger swings &mdash; potentially amazing or terrible results.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-4 hover:border-gold/30 transition-colors">
+                    <h3 class="text-sm font-semibold text-gold mb-1">Arcana</h3>
+                    <p class="text-ash text-xs leading-relaxed">Rarity bias (0&ndash;100). Higher Arcana shifts the pool toward rarer enchantments. Required for many recipes.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-4 hover:border-gold/30 transition-colors">
+                    <h3 class="text-sm font-semibold text-gold mb-1">Rectification</h3>
+                    <p class="text-ash text-xs leading-relaxed">Counters Quanta's negative variance. High Rectification + high Quanta = consistently strong enchantments.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-4 hover:border-gold/30 transition-colors">
+                    <h3 class="text-sm font-semibold text-gold mb-1">Clues</h3>
+                    <p class="text-ash text-xs leading-relaxed">Reveals extra enchantments in the tooltip preview before you commit. Each point shows one more result.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Shelf Reference Table -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="shelf-reference">
+            <h2 class="text-2xl font-bold mb-2">Shelf Reference</h2>
+            <p class="text-ash mb-6">Every shelf block with its stat contributions. Values are per shelf block placed adjacent to the enchanting table.</p>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Shelf</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Max Eterna</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Eterna</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Quanta</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Arcana</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Rectification</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Clues</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <!-- Starter Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Vanilla Bookshelf</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">1</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke">Starter</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Dormant Deepshelf</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">1</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke">Starter</span></td>
+                        </tr>
+                        <!-- Early Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Hellshelf</td>
+                            <td class="px-4 py-2.5 text-right">22.5</td>
+                            <td class="px-4 py-2.5 text-right">1.5</td>
+                            <td class="px-4 py-2.5 text-right">3</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Early</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Seashelf</td>
+                            <td class="px-4 py-2.5 text-right">22.5</td>
+                            <td class="px-4 py-2.5 text-right">1.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Early</span></td>
+                        </tr>
+                        <!-- Mid Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Infused Hellshelf</td>
+                            <td class="px-4 py-2.5 text-right">27</td>
+                            <td class="px-4 py-2.5 text-right">1.75</td>
+                            <td class="px-4 py-2.5 text-right">1.75</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Infused Seashelf</td>
+                            <td class="px-4 py-2.5 text-right">27</td>
+                            <td class="px-4 py-2.5 text-right">1.75</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">1.75</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Blazing Hellshelf</td>
+                            <td class="px-4 py-2.5 text-right">30</td>
+                            <td class="px-4 py-2.5 text-right">4</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">-1</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Glowing Hellshelf</td>
+                            <td class="px-4 py-2.5 text-right">30</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5 text-right">4</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Crystal Seashelf</td>
+                            <td class="px-4 py-2.5 text-right">30</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5 text-right">4</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Heart Seashelf</td>
+                            <td class="px-4 py-2.5 text-right">30</td>
+                            <td class="px-4 py-2.5 text-right">3</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">10</td>
+                            <td class="px-4 py-2.5 text-right">-5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Mid</span></td>
+                        </tr>
+                        <!-- Late Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Deepshelf</td>
+                            <td class="px-4 py-2.5 text-right">35</td>
+                            <td class="px-4 py-2.5 text-right">2.5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Late</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Echoing Deepshelf</td>
+                            <td class="px-4 py-2.5 text-right">37.5</td>
+                            <td class="px-4 py-2.5 text-right">2.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Late</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Soul-Touched Deepshelf</td>
+                            <td class="px-4 py-2.5 text-right">37.5</td>
+                            <td class="px-4 py-2.5 text-right">2.5</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Late</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Echoing Sculkshelf</td>
+                            <td class="px-4 py-2.5 text-right">40</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">1</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Late</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Soul-Touched Sculkshelf</td>
+                            <td class="px-4 py-2.5 text-right">40</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Late</span></td>
+                        </tr>
+                        <!-- End Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Endshelf</td>
+                            <td class="px-4 py-2.5 text-right">45</td>
+                            <td class="px-4 py-2.5 text-right">2.5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber-bright/20 border border-amber-bright/40 text-amber-bright">End</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Pearl Endshelf</td>
+                            <td class="px-4 py-2.5 text-right">45</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">7.5</td>
+                            <td class="px-4 py-2.5 text-right">7.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber-bright/20 border border-amber-bright/40 text-amber-bright">End</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Draconic Endshelf</td>
+                            <td class="px-4 py-2.5 text-right">50</td>
+                            <td class="px-4 py-2.5 text-right">10</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber-bright/20 border border-amber-bright/40 text-amber-bright">End</span></td>
+                        </tr>
+                        <!-- Utility Tier -->
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Filtering Shelf</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">1</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Stoneshelf</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">-1.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">-7.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Beeshelf</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">-15</td>
+                            <td class="px-4 py-2.5 text-right">100</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Melonshelf</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">-1</td>
+                            <td class="px-4 py-2.5 text-right">-10</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Sightshelf</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">1</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Sightshelf T2</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">2</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Rectifier</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">10</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Rectifier T2</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">15</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Rectifier T3</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">25</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash">Utility</span></td>
+                        </tr>
+                        <!-- Non-shelf providers -->
+                        <tr class="border-t-2 border-white/10 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Amethyst Cluster <span class="text-smoke text-xs">(non-shelf)</span></td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">1.5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="text-smoke text-xs">&mdash;</span></td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Basic Skulls <span class="text-smoke text-xs">(non-shelf)</span></td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">5</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="text-smoke text-xs">&mdash;</span></td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Wither Skeleton Skull <span class="text-smoke text-xs">(non-shelf)</span></td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">10</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5"><span class="text-smoke text-xs">&mdash;</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-smoke text-xs mt-3">Dash (&mdash;) indicates zero contribution. "Max Eterna" is the per-shelf cap &mdash; a shelf only contributes its Eterna if the table total hasn't exceeded that shelf's cap. Shelves with no Max Eterna don't contribute Eterna.</p>
+        </section>
+
+        <!-- Section 3: Utility Shelves -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="utility-shelves">
+            <h2 class="text-2xl font-bold mb-2">Utility Shelves</h2>
+            <p class="text-ash mb-6">These shelves have special behaviors beyond raw stat contributions. They occupy a shelf slot but serve a unique purpose.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Filtering Shelf</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        A block entity that lets players <strong class="text-bone">blacklist specific enchantments</strong> from appearing at the enchanting table. Right-click to open the filtering UI and select which enchantments to exclude.
+                    </p>
+                    <p class="text-smoke text-xs">Stats identical to a vanilla bookshelf (Eterna +1, maxEterna 15). Uses a shelf slot but adds filtering control.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Treasure Shelf</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        A block entity that <strong class="text-bone">unlocks treasure-tier enchantments</strong> (e.g., Mending) at the enchanting table. Without a Treasure Shelf placed nearby (or a config override), treasure enchantments will not appear in the enchanting pool.
+                    </p>
+                    <p class="text-smoke text-xs">Essential for accessing the most valuable vanilla and Meridian enchantments through the table.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Sightshelf / Sightshelf T2</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        Pure <strong class="text-bone">Clues providers</strong>. They contribute no other stats &mdash; their only purpose is to reveal additional enchantments in the tooltip preview before you spend levels. Sightshelf gives +1 Clue, Sightshelf T2 gives +2 Clues.
+                    </p>
+                    <p class="text-smoke text-xs">Reduces blind gambling. Pair with other shelves that provide the stats you need.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Rectifier / T2 / T3</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        Pure <strong class="text-bone">Rectification providers</strong>. They contribute no Eterna, Quanta, or Arcana &mdash; they only counter the negative variance introduced by Quanta. Higher tiers give more Rectification per slot: +10, +15, or +25.
+                    </p>
+                    <p class="text-smoke text-xs">Essential when using high-Quanta shelves like Blazing Hellshelves or Soul-Touched variants.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Stoneshelf</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        <strong class="text-bone">Reduces Arcana and Eterna</strong>. Useful when you want to lower Arcana to avoid rare enchantments and target common ones instead. Gives -1.5 Eterna and -7.5 Arcana per shelf.
+                    </p>
+                    <p class="text-smoke text-xs">Niche but valuable for targeted enchanting setups.</p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                    <h3 class="text-lg font-semibold mb-2">Beeshelf &amp; Melonshelf</h3>
+                    <p class="text-ash text-sm leading-relaxed mb-3">
+                        <strong class="text-bone">Stat manipulators</strong>. Beeshelf gives a massive +100 Quanta but -15 Eterna &mdash; extreme variance at the cost of level cap. Melonshelf gives -10 Quanta and -1 Eterna &mdash; use it to reduce Quanta when your setup has too much.
+                    </p>
+                    <p class="text-smoke text-xs">Beeshelf is for players who want to gamble. Melonshelf is the antidote.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Enchanting Table Crafting Recipes -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="table-crafting">
+            <h2 class="text-2xl font-bold mb-2">Enchanting Table Crafting Recipes</h2>
+            <p class="text-ash mb-6">When your shelf setup meets the stat thresholds below, place the input item in the enchanting table and the third slot becomes a crafting result.</p>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Input</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Output</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Eterna Req</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Quanta Req</th>
+                            <th class="text-right px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Arcana Req</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Carrot</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Golden Carrot</td>
+                            <td class="px-4 py-2.5 text-right">=10</td>
+                            <td class="px-4 py-2.5 text-right">10&ndash;30</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Honey Bottle</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">1x XP Bottle</td>
+                            <td class="px-4 py-2.5 text-right">&ge;10</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Honey Bottle</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">8x XP Bottle</td>
+                            <td class="px-4 py-2.5 text-right">&ge;30</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Honey Bottle</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">32x XP Bottle</td>
+                            <td class="px-4 py-2.5 text-right">&ge;50</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5 text-right">&ge;25</td>
+                            <td class="px-4 py-2.5">Requires end-game setup</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Hellshelf</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Infused Hellshelf</td>
+                            <td class="px-4 py-2.5 text-right">&ge;22.5</td>
+                            <td class="px-4 py-2.5 text-right">&ge;30</td>
+                            <td class="px-4 py-2.5 text-right">&mdash;</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Seashelf</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Infused Seashelf</td>
+                            <td class="px-4 py-2.5 text-right">&ge;22.5</td>
+                            <td class="px-4 py-2.5 text-right">&ge;15</td>
+                            <td class="px-4 py-2.5 text-right">&ge;10</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Scrap Tome</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">4x Improved Scrap Tome</td>
+                            <td class="px-4 py-2.5 text-right">&ge;22.5</td>
+                            <td class="px-4 py-2.5 text-right">25&ndash;50</td>
+                            <td class="px-4 py-2.5 text-right">&ge;35</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Improved Scrap Tome</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">4x Extraction Tome</td>
+                            <td class="px-4 py-2.5 text-right">&ge;30</td>
+                            <td class="px-4 py-2.5 text-right">25&ndash;75</td>
+                            <td class="px-4 py-2.5 text-right">&ge;45</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Dormant Deepshelf</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Deepshelf</td>
+                            <td class="px-4 py-2.5 text-right">&ge;30</td>
+                            <td class="px-4 py-2.5 text-right">&ge;40</td>
+                            <td class="px-4 py-2.5 text-right">&ge;40</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Amethyst Block</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Budding Amethyst</td>
+                            <td class="px-4 py-2.5 text-right">&ge;30</td>
+                            <td class="px-4 py-2.5 text-right">30&ndash;50</td>
+                            <td class="px-4 py-2.5 text-right">&ge;50</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Echo Shard</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">4x Echo Shard</td>
+                            <td class="px-4 py-2.5 text-right">&ge;35</td>
+                            <td class="px-4 py-2.5 text-right">&ge;50</td>
+                            <td class="px-4 py-2.5 text-right">&ge;50</td>
+                            <td class="px-4 py-2.5">&mdash;</td>
+                        </tr>
+                        <tr class="border-b border-white/5 hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Dragon's Breath</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">3x Infused Breath</td>
+                            <td class="px-4 py-2.5 text-right">&ge;40</td>
+                            <td class="px-4 py-2.5 text-right">15&ndash;25</td>
+                            <td class="px-4 py-2.5 text-right">&ge;60</td>
+                            <td class="px-4 py-2.5">Key material for End-tier shelves</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 font-medium text-bone whitespace-nowrap">Basic Library</td>
+                            <td class="px-4 py-2.5 whitespace-nowrap">Ender Library</td>
+                            <td class="px-4 py-2.5 text-right">=50</td>
+                            <td class="px-4 py-2.5 text-right">45&ndash;50</td>
+                            <td class="px-4 py-2.5 text-right">=100</td>
+                            <td class="px-4 py-2.5">Preserves stored data. Hardest recipe</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-smoke text-xs mt-3">Ranges (e.g., 25&ndash;50) indicate a minimum and maximum &mdash; Quanta must be within that window. Single values with &ge; are minimum thresholds. Values with = must be hit exactly.</p>
+        </section>
+
+        <!-- Section 5: Recommended Setups -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="recommended-setups">
+            <h2 class="text-2xl font-bold mb-2">Recommended Setups</h2>
+            <p class="text-ash mb-6">The enchanting table supports up to 15 shelf blocks in the standard 5x5 ring (same positions as vanilla bookshelves). Below are practical shelf combinations for reaching key stat thresholds at each stage of progression. Check in-game tooltips for exact stat totals &mdash; these are guidelines, not exact math.</p>
+
+            <div class="space-y-6">
+                <!-- Setup 1: Vanilla Start -->
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">Vanilla Start</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke">Eterna 15</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves</h4>
+                        <p class="text-ash text-sm">15x <strong class="text-bone">Vanilla Bookshelf</strong></p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Approximate Stats</h4>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <span class="text-ash">Eterna <strong class="text-bone">15</strong></span>
+                            <span class="text-ash">Quanta <strong class="text-bone">0</strong></span>
+                            <span class="text-ash">Arcana <strong class="text-bone">0</strong></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Unlocks</h4>
+                        <p class="text-ash text-sm">Basic enchanting, same as vanilla Minecraft. Golden Carrot crafting. Tier-1 XP Bottle crafting (with enough Quanta and Arcana from non-shelf sources).</p>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> This is your starting point. No Quanta means no variance &mdash; results are predictable but capped at vanilla power levels. Swap shelves out one at a time as you acquire Nether and Ocean materials.</p>
+                    </div>
+                </div>
+
+                <!-- Setup 2: Early Nether/Ocean -->
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">Early Nether / Ocean</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">Eterna ~22</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves (pick one path)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                                <p class="text-sm font-medium text-bone mb-1">Nether Path (Quanta)</p>
+                                <p class="text-ash text-sm">15x <strong class="text-bone">Hellshelf</strong></p>
+                                <p class="text-smoke text-xs mt-1">Eterna ~22.5, Quanta ~45, Arcana 0</p>
+                            </div>
+                            <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                                <p class="text-sm font-medium text-bone mb-1">Ocean Path (Arcana)</p>
+                                <p class="text-ash text-sm">15x <strong class="text-bone">Seashelf</strong></p>
+                                <p class="text-smoke text-xs mt-1">Eterna ~22.5, Quanta 0, Arcana ~30</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Unlocks</h4>
+                        <p class="text-ash text-sm">Infused Hellshelf and Infused Seashelf upgrades. Improved Scrap Tome crafting (with sufficient Arcana). Stronger enchantments beyond vanilla level 30.</p>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> Hellshelves add high Quanta &mdash; results become volatile. Consider mixing in 1&ndash;2 Rectifiers early to tame the variance. Seashelves are more stable but give Arcana instead of Quanta, which shifts the enchantment pool toward rarer results.</p>
+                    </div>
+                </div>
+
+                <!-- Setup 3: Mid-Game Power -->
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">Mid-Game Power</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber/15 border border-amber/30 text-amber">Eterna ~30</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves</h4>
+                        <p class="text-ash text-sm">
+                            Mix of <strong class="text-bone">Blazing Hellshelves</strong> (high Eterna + Quanta) and <strong class="text-bone">Crystal Seashelves</strong> (balanced Quanta + Arcana).
+                            Add <strong class="text-bone">Rectifiers</strong> to counter the Quanta variance and <strong class="text-bone">Sightshelves</strong> for preview visibility.
+                        </p>
+                        <p class="text-ash text-sm mt-2">Example: 8x Blazing Hellshelf + 3x Crystal Seashelf + 2x Rectifier + 1x Sightshelf T2 + 1x Treasure Shelf</p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Approximate Stats</h4>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <span class="text-ash">Eterna <strong class="text-bone">~30</strong></span>
+                            <span class="text-ash">Quanta <strong class="text-bone">high</strong></span>
+                            <span class="text-ash">Arcana <strong class="text-bone">moderate</strong></span>
+                            <span class="text-ash">Rectification <strong class="text-bone">+20</strong></span>
+                            <span class="text-ash">Clues <strong class="text-bone">+2</strong></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Unlocks</h4>
+                        <p class="text-ash text-sm">Deepshelf awakening (Dormant Deepshelf to Deepshelf). Extraction Tome crafting. Budding Amethyst transmutation. 8x XP Bottle crafting. Most mid-tier table recipes.</p>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> This is where Rectifiers become critical. Blazing Hellshelves add +5 Quanta each, and without Rectification your results will swing wildly. Note that Blazing Hellshelves give -1 Clue each, so Sightshelves help compensate. Add a Treasure Shelf if you want Mending and other treasure enchantments to appear.</p>
+                    </div>
+                </div>
+
+                <!-- Setup 4: Deep Dark -->
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">Deep Dark</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/20 border border-gold/40 text-amber-bright">Eterna ~37</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves</h4>
+                        <p class="text-ash text-sm">
+                            Core of <strong class="text-bone">Deepshelves</strong>, <strong class="text-bone">Echoing Deepshelves</strong> (Arcana focus), and <strong class="text-bone">Soul-Touched Deepshelves</strong> (Quanta focus).
+                            Add <strong class="text-bone">Echoing Sculkshelves</strong> or <strong class="text-bone">Soul-Touched Sculkshelves</strong> to push higher.
+                        </p>
+                        <p class="text-ash text-sm mt-2">Example: 5x Echoing Sculkshelf + 4x Echoing Deepshelf + 3x Soul-Touched Sculkshelf + 2x Rectifier T2 + 1x Sightshelf T2</p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Approximate Stats</h4>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <span class="text-ash">Eterna <strong class="text-bone">~37</strong></span>
+                            <span class="text-ash">Quanta <strong class="text-bone">high</strong></span>
+                            <span class="text-ash">Arcana <strong class="text-bone">very high</strong></span>
+                            <span class="text-ash">Rectification <strong class="text-bone">+45</strong></span>
+                            <span class="text-ash">Clues <strong class="text-bone">+7</strong></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Unlocks</h4>
+                        <p class="text-ash text-sm">Infused Breath crafting (Dragon's Breath &rarr; 3x Infused Breath at E&ge;40). Echo Shard duplication. Access to the highest non-End enchantment tiers.</p>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> Sculkshelves are the powerhouses of this tier &mdash; 5 Eterna each with maxEterna 40. Echoing Sculkshelves provide +1 Clue to help compensate slot usage on Sightshelves. Soul-Touched Sculkshelves include built-in +5 Rectification, reducing the need for dedicated Rectifier slots.</p>
+                    </div>
+                </div>
+
+                <!-- Setup 5: End-Game Maximum -->
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">End-Game Maximum</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber-bright/20 border border-amber-bright/40 text-amber-bright">Eterna 50</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves</h4>
+                        <p class="text-ash text-sm">
+                            <strong class="text-bone">Draconic Endshelves</strong> are required &mdash; they are the only shelf with maxEterna 50, making them the only way to reach the Eterna cap.
+                            Fill remaining slots with <strong class="text-bone">Pearl Endshelves</strong> for balanced Quanta/Arcana, and utility shelves as needed.
+                        </p>
+                        <p class="text-ash text-sm mt-2">Example: 5x Draconic Endshelf + 6x Pearl Endshelf + 2x Rectifier T2 + 1x Sightshelf T2 + 1x Treasure Shelf</p>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Approximate Stats</h4>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <span class="text-ash">Eterna <strong class="text-bone">50</strong></span>
+                            <span class="text-ash">Quanta <strong class="text-bone">~45</strong></span>
+                            <span class="text-ash">Arcana <strong class="text-bone">~45</strong></span>
+                            <span class="text-ash">Rectification <strong class="text-bone">+30</strong></span>
+                            <span class="text-ash">Clues <strong class="text-bone">+2</strong></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Unlocks</h4>
+                        <p class="text-ash text-sm">32x XP Bottle crafting. Maximum enchantment power for all enchantments. Required Eterna level for the Ender Library upgrade (alongside extreme Arcana).</p>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> Draconic Endshelves give +10 Eterna each but zero Quanta/Arcana. They are pure power. Pearl Endshelves give +5 Eterna with +7.5 Quanta and +7.5 Arcana each &mdash; use them to build up the other stats. You need Draconic Endshelves to push beyond Eterna 45.</p>
+                    </div>
+                </div>
+
+                <!-- Setup 6: Ender Library Upgrade -->
+                <div class="bg-card border border-gold/20 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <div class="flex flex-wrap items-center gap-3 mb-3">
+                        <h3 class="text-lg font-semibold">Ender Library Upgrade</h3>
+                        <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-amber-bright/20 border border-amber-bright/40 text-amber-bright">E=50 / Q=45&ndash;50 / A=100</span>
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Shelves</h4>
+                        <p class="text-ash text-sm">
+                            This is the hardest recipe in the mod. You need <strong class="text-bone">Eterna exactly 50</strong>, <strong class="text-bone">Quanta between 45 and 50</strong>, and <strong class="text-bone">Arcana exactly 100</strong>.
+                            Reaching Arcana 100 requires massive Arcana contributors: <strong class="text-bone">Echoing Deepshelves</strong> (+15 Arcana each), <strong class="text-bone">Echoing Sculkshelves</strong> (+15 Arcana each), and <strong class="text-bone">Heart Seashelves</strong> (+10 Arcana each).
+                        </p>
+                        <p class="text-ash text-sm mt-2">
+                            You must carefully balance the 15 slots to hit all three thresholds simultaneously. Draconic Endshelves are needed for Eterna 50, but they give zero Arcana. Every non-Draconic slot must maximize Arcana contribution.
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h4 class="text-sm font-semibold text-gold mb-2">Strategy</h4>
+                        <ul class="text-ash text-sm space-y-1 ml-4 list-disc">
+                            <li>Use the minimum number of Draconic Endshelves needed to reach Eterna 50</li>
+                            <li>Fill remaining slots with Echoing Deepshelves and Echoing Sculkshelves for maximum Arcana</li>
+                            <li>Heart Seashelves provide +10 Arcana but come with -5 Rectification &mdash; factor that in</li>
+                            <li>Use Stoneshelves to reduce Arcana if you overshoot (need exactly 100)</li>
+                            <li>Quanta must land in the 45&ndash;50 window &mdash; Skulls and Soul-Touched shelves help here</li>
+                            <li>Experiment in-game with the tooltip to fine-tune your exact layout</li>
+                        </ul>
+                    </div>
+                    <div class="bg-base/50 rounded-lg px-4 py-3 border border-white/5">
+                        <p class="text-smoke text-xs"><strong class="text-ash">Tip:</strong> This is an aspirational end-game goal. The Ender Library doubles the point cap of the Basic Library (level 31 vs. level 16) and preserves all stored enchantment data during the upgrade. Plan your shelf layout carefully &mdash; trial and error at the table is expected.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Data-Driven Customization -->
+        <section class="mb-12" id="customization">
+            <h2 class="text-2xl font-bold mb-2">Data-Driven Customization</h2>
+            <p class="text-ash mb-6">All shelf stats are loaded from datapacks, not hardcoded. You can override any shelf's stat contribution without touching the mod jar.</p>
+            <div class="bg-card border border-gold/20 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-3">Overriding Shelf Stats</h3>
+                <p class="text-ash text-sm leading-relaxed mb-4">
+                    Shelf stat contributions are defined as JSON files in <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">data/meridian/enchanting_stats/</code> within any datapack.
+                    To change what stats a shelf block provides, create a datapack that overrides the relevant JSON file.
+                </p>
+                <p class="text-ash text-sm leading-relaxed mb-4">
+                    For example, to make Hellshelves provide more Eterna, create a file at
+                    <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">data/meridian/enchanting_stats/hellshelf.json</code>
+                    in your datapack and adjust the values.
+                </p>
+                <p class="text-ash text-sm leading-relaxed">
+                    After making changes, run <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">/reload</code> (the vanilla datapack reload command) to apply them without restarting the server. Changes take effect immediately for all players.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 text-center mt-16">
+        <ul class="flex justify-center gap-8 flex-wrap list-none mb-4">
+            <li><a href="index.html" class="text-smoke text-sm hover:text-ash transition-colors">Home</a></li>
+            <li><a href="enchantments.html" class="text-smoke text-sm hover:text-ash transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-smoke text-sm hover:text-ash transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-smoke text-sm hover:text-ash transition-colors">Configuration</a></li>
+            <li><a href="commands.html" class="text-smoke text-sm hover:text-ash transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">GitHub</a></li>
+        </ul>
+        <p class="text-smoke text-xs">Meridian &copy; 2025 rfizzle. Minecraft is a trademark of Mojang Studios.</p>
+    </footer>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('nav-toggle');
+            var menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    var open = menu.classList.toggle('hidden');
+                    toggle.setAttribute('aria-expanded', !open);
+                });
+                menu.querySelectorAll('a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

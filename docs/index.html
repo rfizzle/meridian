@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meridian — Enchanting Overhaul for Minecraft</title>
+    <meta name="description" content="Meridian is a complete enchanting overhaul mod for Minecraft 1.21.1 Fabric. Five stat axes, 75 original enchantments, 25+ themed shelves, enchantment libraries, salvage tomes, and anvil upgrades.">
+    <meta name="keywords" content="Minecraft, Fabric mod, enchanting, enchantment, 1.21.1, overhaul">
+
+    <meta property="og:title" content="Meridian — Enchanting Overhaul for Minecraft">
+    <meta property="og:description" content="A complete enchanting overhaul for Minecraft 1.21.1 Fabric. Five stat axes, 75 original enchantments, themed shelves, libraries, tomes, and more.">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Meridian — Enchanting Overhaul for Minecraft">
+    <meta name="twitter:description" content="A complete enchanting overhaul for Minecraft 1.21.1 Fabric.">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0a0a0a',
+                        card: '#1a1a1a',
+                        elevated: '#222222',
+                        gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
+                        amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
+                        bone: '#e8e0d4',
+                        ash: '#a89f93',
+                        smoke: '#6b6359',
+                    },
+                    fontFamily: {
+                        mono: ['SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Liberation Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-base text-bone antialiased leading-relaxed">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 h-16 bg-base/92 backdrop-blur-xl border-b border-white/5 flex items-center px-6">
+        <div class="flex items-center justify-between w-full max-w-6xl mx-auto">
+            <a href="index.html" class="text-xl font-bold nav-brand-gradient">Meridian</a>
+            <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+            </button>
+            <ul id="nav-links" class="hidden md:flex items-center gap-8 list-none">
+                <li><a href="enchantments.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Enchantments</a></li>
+                <li><a href="shelves.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Shelves</a></li>
+                <li><a href="config.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Config</a></li>
+                <li><a href="commands.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Commands</a></li>
+                <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash text-sm font-medium hover:text-bone transition-colors">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed top-16 inset-x-0 bg-base/95 backdrop-blur-xl border-b border-white/5 z-40">
+        <ul class="flex flex-col gap-4 p-6 list-none">
+            <li><a href="enchantments.html" class="text-ash hover:text-bone transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-ash hover:text-bone transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-ash hover:text-bone transition-colors">Config</a></li>
+            <li><a href="commands.html" class="text-ash hover:text-bone transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash hover:text-bone transition-colors">GitHub</a></li>
+        </ul>
+    </div>
+
+    <main>
+        <!-- Hero -->
+        <section class="relative overflow-hidden py-20 md:py-32 px-6 text-center hero-glow">
+            <h1 class="hero-title-gradient text-5xl md:text-7xl font-extrabold tracking-tight leading-none mb-4">Meridian</h1>
+            <p class="text-lg md:text-xl text-ash mb-2">A complete enchanting overhaul for Minecraft</p>
+            <p class="text-smoke max-w-xl mx-auto mb-8">
+                Five independent stats replace vanilla's single power value. 75 original enchantments, 25+ themed shelf blocks,
+                two-tier enchantment libraries, salvage tomes, and anvil upgrades &mdash; all fully data-driven.
+            </p>
+            <a href="https://github.com/rfizzle/meridian/releases" target="_blank" rel="noopener"
+               class="inline-block px-8 py-3 bg-gradient-to-br from-gold-dark to-gold text-bone font-semibold rounded-lg border border-gold/40 hover:shadow-[0_8px_30px_rgba(218,165,32,0.4),0_0_15px_rgba(240,192,64,0.35)] hover:-translate-y-0.5 transition-all duration-200">
+                Download Latest Release
+            </a>
+        </section>
+
+        <!-- Core Systems -->
+        <section class="py-16 md:py-20">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">Core Systems</h2>
+                <p class="text-ash text-lg mb-10 max-w-2xl">Six interlocking systems that transform Minecraft's enchanting from a single-click gamble into a deep progression mechanic.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#10024;</span>
+                        <h3 class="text-lg font-semibold mb-2">Five-Stat Enchanting</h3>
+                        <p class="text-ash text-sm leading-relaxed">Eterna, Quanta, Arcana, Rectification, and Clues &mdash; each axis controls a different aspect of enchanting power, variance, rarity bias, consistency, and preview visibility.</p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#128218;</span>
+                        <h3 class="text-lg font-semibold mb-2">75 Original Enchantments</h3>
+                        <p class="text-ash text-sm leading-relaxed">Combat, ranged, tool, mobility, shield, elytra, and mount enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers.</p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#128214;</span>
+                        <h3 class="text-lg font-semibold mb-2">Themed Shelves</h3>
+                        <p class="text-ash text-sm leading-relaxed">25+ shelf blocks spanning Overworld, Nether, Ocean, Deep Dark, and End tiers. Each contributes unique stat combinations. Fully data-driven via datapacks.</p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#127969;</span>
+                        <h3 class="text-lg font-semibold mb-2">Enchantment Libraries</h3>
+                        <p class="text-ash text-sm leading-relaxed">Two-tier pooling storage blocks that consolidate enchanted books into per-enchantment point banks. Basic (level 16 cap) and Ender (level 31 cap) variants.</p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#128220;</span>
+                        <h3 class="text-lg font-semibold mb-2">Salvage Tomes</h3>
+                        <p class="text-ash text-sm leading-relaxed">Three tomes for extracting enchantments: Scrap (random, destroys item), Improved Scrap (all, destroys item), and Extraction (all, preserves item).</p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(218,165,32,0.1)] hover:-translate-y-0.5 transition-all duration-300">
+                        <span class="text-3xl mb-4 block">&#9878;</span>
+                        <h3 class="text-lg font-semibold mb-2">Anvil Upgrades</h3>
+                        <p class="text-ash text-sm leading-relaxed">Prismatic Web strips all curses from an item. Iron Blocks repair chipped and damaged anvils. Both configurable and toggleable.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Five Stats -->
+        <section class="py-16 md:py-20 bg-card">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">The Five Stats</h2>
+                <p class="text-ash text-lg mb-10 max-w-2xl">Each stat is contributed by shelf blocks surrounding the enchanting table. Different shelf types push different stats, letting you tune your setup for the enchantments you want.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-base/50 border-l-[3px] border-l-gold rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-2">Eterna</h3>
+                        <p class="text-ash text-sm leading-relaxed">Maximum enchanting level cap. Replaces vanilla's 0&ndash;30 range with 0&ndash;50. Higher Eterna unlocks higher-tier enchantments and table crafting recipes. Each vanilla bookshelf provides +1 Eterna (capped at 15).</p>
+                    </div>
+                    <div class="bg-base/50 border-l-[3px] border-l-gold rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-2">Quanta</h3>
+                        <p class="text-ash text-sm leading-relaxed">Controls the upper bound of the random power roll. Higher Quanta means more variance &mdash; you might get amazing results or terrible ones. Tempered by Rectification.</p>
+                    </div>
+                    <div class="bg-base/50 border-l-[3px] border-l-gold rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-2">Arcana</h3>
+                        <p class="text-ash text-sm leading-relaxed">Biases the enchantment pool toward rarer, more obscure enchantments. High Arcana increases the chance of getting rare enchantments and is required for many table crafting recipes.</p>
+                    </div>
+                    <div class="bg-base/50 border-l-[3px] border-l-gold rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-2">Rectification</h3>
+                        <p class="text-ash text-sm leading-relaxed">Reduces the negative variance introduced by Quanta. High Rectification with high Quanta means consistently strong results without the downside of random garbage rolls.</p>
+                    </div>
+                    <div class="bg-base/50 border-l-[3px] border-l-gold rounded-xl p-6">
+                        <h3 class="text-lg font-semibold mb-2">Clues</h3>
+                        <p class="text-ash text-sm leading-relaxed">Reveals additional enchantments in the tooltip preview before you commit. Each point of Clues shows one more enchantment from the result, reducing blind gambling.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Table Crafting -->
+        <section class="py-16 md:py-20">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-4">Enchanting Table Crafting</h2>
+                <p class="text-ash text-lg mb-10 max-w-2xl">The enchanting table doubles as a stat-gated crafting station. When your shelf setup meets recipe thresholds, the third enchant slot becomes a crafting result.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2">Shelf Upgrades</h3>
+                        <p class="text-ash text-sm leading-relaxed">
+                            Craft higher-tier shelves directly in the enchanting table. Hellshelves upgrade to Infused, Blazing, and Glowing variants. Seashelves upgrade to Infused, Crystal, and Heart variants. Dormant Deepshelves awaken into full Deepshelves.
+                        </p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2">Tome Progression</h3>
+                        <p class="text-ash text-sm leading-relaxed">
+                            Scrap Tomes upgrade to Improved Scrap Tomes (Eterna 22.5+), which upgrade to Extraction Tomes (Eterna 30+). Each tier requires progressively higher stats.
+                        </p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2">Material Transmutation</h3>
+                        <p class="text-ash text-sm leading-relaxed">
+                            Convert Dragon's Breath into Infused Breath (key material for End-tier shelves). Transmute Honey Bottles into Experience Bottles at three output tiers. Craft Budding Amethyst, Golden Carrots, and duplicate Echo Shards.
+                        </p>
+                    </div>
+                    <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                        <h3 class="text-lg font-semibold mb-2">Library Upgrade</h3>
+                        <p class="text-ash text-sm leading-relaxed">
+                            Upgrade a Basic Library to an Ender Library at the enchanting table. Requires maximum stats: Eterna 50, Quanta 45&ndash;50, Arcana 100. Preserves all stored enchantment data.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Install -->
+        <section class="py-16 md:py-20 bg-card">
+            <div class="max-w-6xl mx-auto px-6">
+                <h2 class="text-2xl md:text-3xl font-bold tracking-tight mb-8">Quick Install</h2>
+                <ol class="space-y-0">
+                    <li class="flex items-start gap-4 py-4 border-b border-white/5">
+                        <span class="flex-shrink-0 w-8 h-8 bg-elevated border border-white/10 rounded-full flex items-center justify-center text-sm font-semibold text-gold">1</span>
+                        <span class="text-ash">Install <strong class="text-bone">Fabric Loader 0.16.10+</strong> for Minecraft <strong class="text-bone">1.21.1</strong></span>
+                    </li>
+                    <li class="flex items-start gap-4 py-4 border-b border-white/5">
+                        <span class="flex-shrink-0 w-8 h-8 bg-elevated border border-white/10 rounded-full flex items-center justify-center text-sm font-semibold text-gold">2</span>
+                        <span class="text-ash">Install <strong class="text-bone">Fabric API</strong> (required dependency)</span>
+                    </li>
+                    <li class="flex items-start gap-4 py-4 border-b border-white/5">
+                        <span class="flex-shrink-0 w-8 h-8 bg-elevated border border-white/10 rounded-full flex items-center justify-center text-sm font-semibold text-gold">3</span>
+                        <span class="text-ash">Drop <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">meridian-x.x.x.jar</code> into your <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">mods/</code> folder</span>
+                    </li>
+                    <li class="flex items-start gap-4 py-4 border-b border-white/5">
+                        <span class="flex-shrink-0 w-8 h-8 bg-elevated border border-white/10 rounded-full flex items-center justify-center text-sm font-semibold text-gold">4</span>
+                        <span class="text-ash">Launch the game. Config generates at <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">config/meridian.json</code> on first run</span>
+                    </li>
+                    <li class="flex items-start gap-4 py-4">
+                        <span class="flex-shrink-0 w-8 h-8 bg-elevated border border-white/10 rounded-full flex items-center justify-center text-sm font-semibold text-gold">5</span>
+                        <span class="text-ash">Adjust settings via the config file or <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">/meridian reload</code> in-game</span>
+                    </li>
+                </ol>
+                <p class="mt-6 text-smoke text-sm">
+                    Requires <strong class="text-ash">Java 21</strong>. Compatible with EMI, REI, JEI, Jade, WTHIT, ModMenu, and Trinkets.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 text-center mt-16">
+        <ul class="flex justify-center gap-8 flex-wrap list-none mb-4">
+            <li><a href="enchantments.html" class="text-smoke text-sm hover:text-ash transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-smoke text-sm hover:text-ash transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-smoke text-sm hover:text-ash transition-colors">Configuration</a></li>
+            <li><a href="commands.html" class="text-smoke text-sm hover:text-ash transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">GitHub</a></li>
+            <li><a href="https://github.com/rfizzle/meridian/issues" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">Issues</a></li>
+        </ul>
+        <p class="text-smoke text-xs">Meridian &copy; 2025 rfizzle. Minecraft is a trademark of Mojang Studios.</p>
+    </footer>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('nav-toggle');
+            var menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    var open = menu.classList.toggle('hidden');
+                    toggle.setAttribute('aria-expanded', !open);
+                });
+                menu.querySelectorAll('a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

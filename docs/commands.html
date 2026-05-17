@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Commands — Meridian</title>
+    <meta name="description" content="Command reference for the Meridian enchanting overhaul mod.">
+
+    <meta property="og:title" content="Commands — Meridian">
+    <meta property="og:description" content="Command reference for /meridian.">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0a0a0a',
+                        card: '#1a1a1a',
+                        elevated: '#222222',
+                        gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
+                        amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
+                        bone: '#e8e0d4',
+                        ash: '#a89f93',
+                        smoke: '#6b6359',
+                    },
+                    fontFamily: {
+                        mono: ['SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Liberation Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-base text-bone antialiased leading-relaxed">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 h-16 bg-base/92 backdrop-blur-xl border-b border-white/5 flex items-center px-6">
+        <div class="flex items-center justify-between w-full max-w-6xl mx-auto">
+            <a href="index.html" class="text-xl font-bold nav-brand-gradient">Meridian</a>
+            <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+            </button>
+            <ul id="nav-links" class="hidden md:flex items-center gap-8 list-none">
+                <li><a href="enchantments.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Enchantments</a></li>
+                <li><a href="shelves.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Shelves</a></li>
+                <li><a href="config.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Config</a></li>
+                <li><a href="commands.html" class="text-gold text-sm font-medium">Commands</a></li>
+                <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash text-sm font-medium hover:text-bone transition-colors">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden fixed top-16 inset-x-0 bg-base/95 backdrop-blur-xl border-b border-white/5 z-40">
+        <ul class="flex flex-col gap-4 p-6 list-none">
+            <li><a href="enchantments.html" class="text-ash hover:text-bone transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-ash hover:text-bone transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-ash hover:text-bone transition-colors">Config</a></li>
+            <li><a href="commands.html" class="text-gold">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash hover:text-bone transition-colors">GitHub</a></li>
+        </ul>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6">
+        <header class="py-10 border-b border-white/5 mb-10">
+            <h1 class="page-header-gradient text-3xl md:text-4xl font-bold tracking-tight">Commands</h1>
+            <p class="text-ash mt-2 text-lg">All commands use the <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">/meridian</code> root. Permission level 2 = operator.</p>
+        </header>
+
+        <!-- Command Table -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="command-reference">
+            <h2 class="text-2xl font-bold mb-6">Command Reference</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10 whitespace-nowrap">Command</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Perm</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">/meridian reload</code></td>
+                            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 text-xs font-semibold rounded bg-gold/15 border border-gold/30 text-gold">2</span></td>
+                            <td class="px-4 py-2.5">Reload the config from disk, rebuild enchantment info, and sync to all connected players</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Usage -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="usage">
+            <h2 class="text-2xl font-bold mb-6">Usage</h2>
+
+            <h3 class="text-lg font-semibold mt-8 mb-3">Hot-reload config</h3>
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto mb-2"><code class="font-mono text-sm text-bone">/meridian reload</code></pre>
+            <p class="text-ash text-sm mb-8">
+                Reloads <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">config/meridian.json</code> without restarting the server. All config sections are re-read, enchantment info is rebuilt, and updated values are synced to all connected players immediately.
+            </p>
+            <p class="text-ash text-sm mb-4">What gets reloaded:</p>
+            <ul class="text-ash space-y-2 ml-6 list-disc mb-8">
+                <li>Enchanting table settings (maxEterna, treasure shelf requirement, level indicator)</li>
+                <li>Shelf behavior (sculk shrieker chance, particle rates)</li>
+                <li>Anvil settings (prismatic web cost, iron block repair toggle)</li>
+                <li>Library settings (hopper rate limit)</li>
+                <li>Tome XP costs and durability values</li>
+                <li>Warden drop rates</li>
+                <li>Display settings (tooltips, colors, inline descriptions)</li>
+                <li>Per-enchantment overrides (max levels, power functions, enable/disable)</li>
+            </ul>
+
+            <div class="bg-card border border-gold/20 rounded-xl p-6">
+                <h3 class="text-lg font-semibold mb-2">Note on Shelf Stats</h3>
+                <p class="text-ash text-sm leading-relaxed">
+                    Shelf stat contributions (Eterna, Quanta, Arcana, etc.) are loaded from <strong class="text-bone">datapacks</strong>, not the config file.
+                    To change what stats a shelf block provides, create or modify JSON files in <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">data/meridian/enchanting_stats/</code> within a datapack and use <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">/reload</code> (the vanilla datapack reload command).
+                </p>
+            </div>
+        </section>
+
+        <!-- Permission Notes -->
+        <section class="mb-12" id="permissions">
+            <h2 class="text-2xl font-bold mb-6">Permission Notes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <h3 class="text-lg font-semibold mb-2">Level 2 (Operator)</h3>
+                    <p class="text-ash text-sm leading-relaxed">
+                        The <code class="font-mono text-xs text-amber">reload</code> command requires op level 2. This is the only command Meridian registers &mdash; all other interaction happens through the enchanting table, anvil, and library GUIs.
+                    </p>
+                </div>
+                <div class="bg-card border border-white/5 rounded-xl p-6 hover:border-gold/30 transition-colors">
+                    <h3 class="text-lg font-semibold mb-2">Permissions Mods</h3>
+                    <p class="text-ash text-sm leading-relaxed">
+                        If you use a permissions mod (e.g., LuckPerms), the permission node is <code class="font-mono text-xs text-amber">meridian.command.reload</code>.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 text-center mt-16">
+        <ul class="flex justify-center gap-8 flex-wrap list-none mb-4">
+            <li><a href="index.html" class="text-smoke text-sm hover:text-ash transition-colors">Home</a></li>
+            <li><a href="enchantments.html" class="text-smoke text-sm hover:text-ash transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-smoke text-sm hover:text-ash transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-smoke text-sm hover:text-ash transition-colors">Configuration</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">GitHub</a></li>
+        </ul>
+        <p class="text-smoke text-xs">Meridian &copy; 2025 rfizzle. Minecraft is a trademark of Mojang Studios.</p>
+    </footer>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('nav-toggle');
+            var menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    var open = menu.classList.toggle('hidden');
+                    toggle.setAttribute('aria-expanded', !open);
+                });
+                menu.querySelectorAll('a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

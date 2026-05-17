@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration Reference — Meridian</title>
+    <meta name="description" content="Complete configuration reference for the Meridian enchanting overhaul mod. All settings for meridian.json.">
+
+    <meta property="og:title" content="Configuration Reference — Meridian">
+    <meta property="og:description" content="All configuration options for the Meridian enchanting overhaul mod.">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        base: '#0a0a0a',
+                        card: '#1a1a1a',
+                        elevated: '#222222',
+                        gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
+                        amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
+                        bone: '#e8e0d4',
+                        ash: '#a89f93',
+                        smoke: '#6b6359',
+                    },
+                    fontFamily: {
+                        mono: ['SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', 'Liberation Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-base text-bone antialiased leading-relaxed">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 h-16 bg-base/92 backdrop-blur-xl border-b border-white/5 flex items-center px-6">
+        <div class="flex items-center justify-between w-full max-w-6xl mx-auto">
+            <a href="index.html" class="text-xl font-bold nav-brand-gradient">Meridian</a>
+            <button id="nav-toggle" class="md:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle navigation" aria-expanded="false">
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+                <span class="block w-6 h-0.5 bg-bone rounded"></span>
+            </button>
+            <ul id="nav-links" class="hidden md:flex items-center gap-8 list-none">
+                <li><a href="enchantments.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Enchantments</a></li>
+                <li><a href="shelves.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Shelves</a></li>
+                <li><a href="config.html" class="text-gold text-sm font-medium">Config</a></li>
+                <li><a href="commands.html" class="text-ash text-sm font-medium hover:text-bone transition-colors">Commands</a></li>
+                <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash text-sm font-medium hover:text-bone transition-colors">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="hidden md:hidden fixed top-16 inset-x-0 bg-base/95 backdrop-blur-xl border-b border-white/5 z-40">
+        <ul class="flex flex-col gap-4 p-6 list-none">
+            <li><a href="enchantments.html" class="text-ash hover:text-bone transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-ash hover:text-bone transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-gold">Config</a></li>
+            <li><a href="commands.html" class="text-ash hover:text-bone transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-ash hover:text-bone transition-colors">GitHub</a></li>
+        </ul>
+    </div>
+
+    <main class="max-w-6xl mx-auto px-6">
+        <header class="py-10 border-b border-white/5 mb-10">
+            <h1 class="page-header-gradient text-3xl md:text-4xl font-bold tracking-tight">Configuration Reference</h1>
+            <p class="text-ash mt-2 text-lg">All settings live in <code class="font-mono text-sm bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">config/meridian.json</code>. Auto-generated on first launch with defaults.</p>
+        </header>
+
+        <!-- enchantingTable -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="enchanting-table">
+            <h2 class="text-2xl font-bold mb-6">enchantingTable</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">allowTreasureWithoutShelf</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">boolean</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">false</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Allow treasure enchantments without a Treasure Shelf</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">maxEterna</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">50</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Maximum Eterna stat cap (range: 1&ndash;100)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">showLevelIndicator</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">boolean</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">true</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Display level indicator on enchanting table UI</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">globalMinEnchantability</code></td>
+                            <td class="px-4 py-2.5">int</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">1</code></td>
+                            <td class="px-4 py-2.5">Minimum enchantability requirement (range: 0&ndash;100)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto mt-6"><code class="font-mono text-sm text-bone">{
+  "enchantingTable": {
+    "allowTreasureWithoutShelf": false,
+    "maxEterna": 50,
+    "showLevelIndicator": true,
+    "globalMinEnchantability": 1
+  }
+}</code></pre>
+        </section>
+
+        <!-- shelves -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="shelves">
+            <h2 class="text-2xl font-bold mb-6">shelves</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">sculkShelfShriekerChance</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">double</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">0.02</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Chance for Sculk shelves to trigger a shrieker (0.0&ndash;1.0)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">sculkParticleChance</code></td>
+                            <td class="px-4 py-2.5">double</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">0.05</code></td>
+                            <td class="px-4 py-2.5">Particle spawn rate for Sculk shelves (0.0&ndash;1.0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- anvil -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="anvil">
+            <h2 class="text-2xl font-bold mb-6">anvil</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">prismaticWebRemovesCurses</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">boolean</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">true</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Enable Prismatic Web curse removal</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">prismaticWebLevelCost</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">30</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">XP levels consumed per curse removal</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">ironBlockRepairsAnvil</code></td>
+                            <td class="px-4 py-2.5">boolean</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">true</code></td>
+                            <td class="px-4 py-2.5">Enable Iron Block anvil repair</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto mt-6"><code class="font-mono text-sm text-bone">{
+  "anvil": {
+    "prismaticWebRemovesCurses": true,
+    "prismaticWebLevelCost": 30,
+    "ironBlockRepairsAnvil": true
+  }
+}</code></pre>
+        </section>
+
+        <!-- library -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="library">
+            <h2 class="text-2xl font-bold mb-6">library</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">ioRateLimitTicks</code></td>
+                            <td class="px-4 py-2.5">int</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">0</code></td>
+                            <td class="px-4 py-2.5">Hopper insert throttle in ticks (0 = no limit)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- tomes -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="tomes">
+            <h2 class="text-2xl font-bold mb-6">tomes</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">scrapTomeXpCost</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">3</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">XP levels for Scrap Tome use</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">improvedScrapTomeXpCost</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">5</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">XP levels for Improved Scrap Tome use</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">extractionTomeXpCost</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">10</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">XP levels for Extraction Tome use</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">extractionTomeItemDamage</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">50</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Durability damage to source item from Extraction Tome</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">extractionTomeRepairPercent</code></td>
+                            <td class="px-4 py-2.5">double</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">0.25</code></td>
+                            <td class="px-4 py-2.5">Percent of max durability restored after extraction (0.0&ndash;1.0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto mt-6"><code class="font-mono text-sm text-bone">{
+  "tomes": {
+    "scrapTomeXpCost": 3,
+    "improvedScrapTomeXpCost": 5,
+    "extractionTomeXpCost": 10,
+    "extractionTomeItemDamage": 50,
+    "extractionTomeRepairPercent": 0.25
+  }
+}</code></pre>
+        </section>
+
+        <!-- warden -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="warden">
+            <h2 class="text-2xl font-bold mb-6">warden</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">tendrilDropChance</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">double</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">1.0</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Warden Tendril drop chance (0.0&ndash;1.0; 1.0 = guaranteed)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">tendrilLootingBonus</code></td>
+                            <td class="px-4 py-2.5">double</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">0.10</code></td>
+                            <td class="px-4 py-2.5">Additional drop chance per Looting level (0.0&ndash;1.0)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- display -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="display">
+            <h2 class="text-2xl font-bold mb-6">display</h2>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">showBookTooltips</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">boolean</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">true</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Show enchantment tooltips on books</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">overLeveledColor</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">string</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">"#FF6600"</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Hex color for over-leveled enchantment display</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">enableInlineEnchDescs</code></td>
+                            <td class="px-4 py-2.5">boolean</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">false</code></td>
+                            <td class="px-4 py-2.5">Show inline enchantment descriptions in tooltips</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- enchantmentOverrides -->
+        <section class="mb-12 pb-12 border-b border-white/5" id="enchantment-overrides">
+            <h2 class="text-2xl font-bold mb-6">enchantmentOverrides</h2>
+            <p class="text-ash mb-6">Per-enchantment override system. Keys are enchantment IDs (e.g., <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">minecraft:sharpness</code> or <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">meridian:siphon</code>). Use <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">-1</code> for any field to keep the vanilla default.</p>
+            <div class="overflow-x-auto rounded-lg">
+                <table class="w-full text-sm border-collapse">
+                    <thead class="bg-elevated">
+                        <tr>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Key</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Type</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Default</th>
+                            <th class="text-left px-4 py-3 font-semibold text-bone border-b-2 border-white/10">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-ash">
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">enabled</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">boolean</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">true</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Whether this enchantment can appear</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">maxLevel</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">-1</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Override maximum level (1&ndash;127, or -1 for default)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">maxLootLevel</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">-1</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Override maximum level from loot tables (1&ndash;127, or -1)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">levelCap</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">int</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">-1</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Hard cap on level (1&ndash;127, or -1)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">minPowerFunction</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">object</td>
+                            <td class="px-4 py-2.5 border-b border-white/5"><code class="font-mono text-xs text-amber">null</code></td>
+                            <td class="px-4 py-2.5 border-b border-white/5">Custom min power function (see below)</td>
+                        </tr>
+                        <tr class="hover:bg-card/50">
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">maxPowerFunction</code></td>
+                            <td class="px-4 py-2.5">object</td>
+                            <td class="px-4 py-2.5"><code class="font-mono text-xs text-amber">null</code></td>
+                            <td class="px-4 py-2.5">Custom max power function (see below)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-card border border-white/5 rounded-xl p-6 mt-6">
+                <h3 class="text-lg font-semibold mb-4">Power Function Types</h3>
+                <ul class="text-ash space-y-3 ml-6 list-disc">
+                    <li><code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">"linear"</code> &mdash; <code class="font-mono text-xs text-amber">base + perLevel * level</code></li>
+                    <li><code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">"fixed"</code> &mdash; constant <code class="font-mono text-xs text-amber">value</code> regardless of level</li>
+                    <li><code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">"default"</code> &mdash; vanilla behavior</li>
+                </ul>
+            </div>
+
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto mt-6"><code class="font-mono text-sm text-bone">{
+  "enchantmentOverrides": {
+    "minecraft:sharpness": {
+      "enabled": true,
+      "maxLevel": 10,
+      "maxLootLevel": 5,
+      "levelCap": -1,
+      "minPowerFunction": {
+        "type": "linear",
+        "base": 1,
+        "perLevel": 11,
+        "value": 0
+      },
+      "maxPowerFunction": {
+        "type": "linear",
+        "base": 21,
+        "perLevel": 11,
+        "value": 0
+      }
+    },
+    "meridian:excavate": {
+      "enabled": false
+    }
+  }
+}</code></pre>
+        </section>
+
+        <!-- Full Default Config -->
+        <section class="mb-12" id="full-default-config">
+            <h2 class="text-2xl font-bold mb-6">Full Default Config</h2>
+            <p class="text-ash mb-6">The complete default <code class="font-mono text-xs bg-[#1a1710] border border-[#2a2418] px-1.5 py-0.5 rounded text-amber">config/meridian.json</code> generated on first launch.</p>
+            <pre class="bg-[#1a1710] border border-[#2a2418] rounded-lg px-6 py-4 overflow-x-auto"><code class="font-mono text-sm text-bone">{
+  "configVersion": 1,
+  "enchantingTable": {
+    "allowTreasureWithoutShelf": false,
+    "maxEterna": 50,
+    "showLevelIndicator": true,
+    "globalMinEnchantability": 1
+  },
+  "shelves": {
+    "sculkShelfShriekerChance": 0.02,
+    "sculkParticleChance": 0.05
+  },
+  "anvil": {
+    "prismaticWebRemovesCurses": true,
+    "prismaticWebLevelCost": 30,
+    "ironBlockRepairsAnvil": true
+  },
+  "library": {
+    "ioRateLimitTicks": 0
+  },
+  "tomes": {
+    "scrapTomeXpCost": 3,
+    "improvedScrapTomeXpCost": 5,
+    "extractionTomeXpCost": 10,
+    "extractionTomeItemDamage": 50,
+    "extractionTomeRepairPercent": 0.25
+  },
+  "warden": {
+    "tendrilDropChance": 1.0,
+    "tendrilLootingBonus": 0.10
+  },
+  "display": {
+    "showBookTooltips": true,
+    "overLeveledColor": "#FF6600",
+    "enableInlineEnchDescs": false
+  },
+  "enchantmentOverrides": {}
+}</code></pre>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-10 px-6 text-center mt-16">
+        <ul class="flex justify-center gap-8 flex-wrap list-none mb-4">
+            <li><a href="index.html" class="text-smoke text-sm hover:text-ash transition-colors">Home</a></li>
+            <li><a href="enchantments.html" class="text-smoke text-sm hover:text-ash transition-colors">Enchantments</a></li>
+            <li><a href="shelves.html" class="text-smoke text-sm hover:text-ash transition-colors">Shelves</a></li>
+            <li><a href="config.html" class="text-smoke text-sm hover:text-ash transition-colors">Configuration</a></li>
+            <li><a href="commands.html" class="text-smoke text-sm hover:text-ash transition-colors">Commands</a></li>
+            <li><a href="https://github.com/rfizzle/meridian" target="_blank" rel="noopener" class="text-smoke text-sm hover:text-ash transition-colors">GitHub</a></li>
+        </ul>
+        <p class="text-smoke text-xs">Meridian &copy; 2025 rfizzle. Minecraft is a trademark of Mojang Studios.</p>
+    </footer>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('nav-toggle');
+            var menu = document.getElementById('mobile-menu');
+            if (toggle && menu) {
+                toggle.addEventListener('click', function() {
+                    var open = menu.classList.toggle('hidden');
+                    toggle.setAttribute('aria-expanded', !open);
+                });
+                menu.querySelectorAll('a').forEach(function(a) {
+                    a.addEventListener('click', function() {
+                        menu.classList.add('hidden');
+                        toggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
