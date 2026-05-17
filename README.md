@@ -1,6 +1,8 @@
-# Meridian
+<p align="center">
+  <img src="logo.png" alt="Meridian" width="400">
+</p>
 
-**A complete enchanting overhaul for Minecraft 1.21.1 Fabric.**
+<p align="center"><strong>A complete enchanting overhaul for Minecraft 1.21.1 Fabric.</strong></p>
 
 Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 75 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
 
