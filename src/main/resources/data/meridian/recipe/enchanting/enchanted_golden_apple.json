@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:golden_apple"
+    },
+    "requirements": {
+        "eterna": 45,
+        "quanta": 40,
+        "arcana": 75
+    },
+    "result": {
+        "id": "minecraft:enchanted_golden_apple",
+        "count": 1
+    }
+}

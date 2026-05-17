@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:emerald_block"
+    },
+    "requirements": {
+        "eterna": 50,
+        "quanta": 45,
+        "arcana": 85
+    },
+    "result": {
+        "id": "minecraft:totem_of_undying",
+        "count": 1
+    }
+}

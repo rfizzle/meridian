@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:nautilus_shell"
+    },
+    "requirements": {
+        "eterna": 35,
+        "quanta": 30,
+        "arcana": 60
+    },
+    "result": {
+        "id": "minecraft:heart_of_the_sea",
+        "count": 1
+    }
+}

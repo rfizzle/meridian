@@ -226,6 +226,10 @@ class EnchantingRecipeTest {
         assertTypeField("honey_to_xp_t3.json", "meridian:enchanting");
         assertTypeField("echo_shard_duplication.json", "meridian:enchanting");
         assertTypeField("golden_carrot.json", "meridian:enchanting");
+        assertTypeField("golden_apple.json", "meridian:enchanting");
+        assertTypeField("enchanted_golden_apple.json", "meridian:enchanting");
+        assertTypeField("heart_of_the_sea.json", "meridian:enchanting");
+        assertTypeField("totem_of_undying.json", "meridian:enchanting");
         assertTypeField("budding_amethyst.json", "meridian:enchanting");
 
         // Spot-check stat values match Zenith on the ones we can fully read without item lookup.
