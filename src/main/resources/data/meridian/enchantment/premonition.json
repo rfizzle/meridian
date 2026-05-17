@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.premonition"
+  },
+  "supported_items": "#minecraft:enchantable/head_armor",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 60,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "head"
+  ],
+  "effects": {}
+}

@@ -1,0 +1,43 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.ironwing"
+  },
+  "supported_items": "#meridian:enchantable/elytra",
+  "weight": 5,
+  "max_level": 4,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "chest"
+  ],
+  "effects": {
+    "minecraft:damage_protection": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2,
+            "per_level_above_first": 2
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "flags": {
+              "is_fall_flying": true
+            }
+          }
+        }
+      }
+    ]
+  }
+}

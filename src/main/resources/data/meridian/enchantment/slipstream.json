@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.slipstream"
+  },
+  "supported_items": "#meridian:enchantable/leg_and_foot_armor",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 58,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "legs",
+    "feet"
+  ],
+  "effects": {}
+}

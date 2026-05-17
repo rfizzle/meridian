@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:tier_three",
+    "criteria": {
+        "has_filtering_shelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:filtering_shelf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.curator.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:filtering_shelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.curator.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_filtering_shelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

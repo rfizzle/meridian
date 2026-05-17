@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infused_breath": {
+      "conditions": {
+        "items": [
+          {
+            "items": "meridian:infused_breath"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "meridian:endshelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infused_breath"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "meridian:endshelf"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:beehive"
+    },
+    "C": {
+      "item": "minecraft:honeycomb"
+    },
+    "H": {
+      "item": "minecraft:honey_block"
+    },
+    "S": {
+      "tag": "c:bookshelves"
+    }
+  },
+  "pattern": [
+    "CBC",
+    "HSH",
+    "CBC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:beeshelf"
+  }
+}

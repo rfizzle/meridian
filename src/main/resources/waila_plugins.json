@@ -1,0 +1,12 @@
+{
+    "meridian:wthit": {
+        "entrypoints": {
+            "common": "com.rfizzle.meridian.compat.wthit.WthitCommonPlugin",
+            "client": "com.rfizzle.meridian.compat.wthit.WthitClientPlugin"
+        },
+        "side": "*",
+        "required": {
+            "wthit": "*"
+        }
+    }
+}

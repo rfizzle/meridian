@@ -1,0 +1,20 @@
+{
+    "type": "meridian:keep_nbt_enchanting",
+    "input": {
+        "item": "meridian:library"
+    },
+    "requirements": {
+        "eterna": 50,
+        "quanta": 45,
+        "arcana": 100
+    },
+    "max_requirements": {
+        "eterna": 50,
+        "quanta": 50,
+        "arcana": 100
+    },
+    "result": {
+        "id": "meridian:ender_library",
+        "count": 1
+    }
+}

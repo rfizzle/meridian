@@ -1,0 +1,314 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+}
+
+version = computeModVersion()
+group = project.maven_group
+
+tasks.register('printVersion') {
+    doLast { println project.version }
+}
+
+// Derives a SemVer-compliant version from `mod_version` plus the git state:
+//   - exact tag match (e.g. HEAD == fizzle-difficulty-v0.2.0) → "0.2.0"
+//   - exact tag, dirty tree                                  → "0.2.0+dirty"
+//   - N commits past the last matching tag                   → "0.2.0+N.gSHA[.dirty]"
+//   - no matching tag yet                                    → "0.2.0+gSHA[.dirty]"
+//   - git unavailable or describe fails                      → "0.2.0"
+// The base ("0.2.0") comes from gradle.properties and is bumped via
+// scripts/companion-release.sh. Tag pattern is `<archives_base_name>-v*`.
+def computeModVersion() {
+    def base = project.mod_version
+    def tagPrefix = "${project.archives_base_name}-v"
+    def described = runGitDescribe(tagPrefix)
+    if (described == null || described.isEmpty()) {
+        return base
+    }
+    if (described == "${tagPrefix}${base}") {
+        return base
+    }
+    if (described == "${tagPrefix}${base}-dirty") {
+        return "${base}+dirty"
+    }
+    def postTag = described =~ /^\Q${tagPrefix}\E(\S+?)-(\d+)-g([0-9a-f]+)(-dirty)?$/
+    if (postTag.matches()) {
+        def commits = postTag[0][2]
+        def sha = postTag[0][3]
+        def dirty = postTag[0][4] ? '.dirty' : ''
+        return "${base}+${commits}.g${sha}${dirty}"
+    }
+    def shaOnly = described =~ /^([0-9a-f]+)(-dirty)?$/
+    if (shaOnly.matches()) {
+        def sha = shaOnly[0][1]
+        def dirty = shaOnly[0][2] ? '.dirty' : ''
+        return "${base}+g${sha}${dirty}"
+    }
+    return base
+}
+
+def runGitDescribe(String tagPrefix) {
+    try {
+        def proc = new ProcessBuilder('git', 'describe', '--tags',
+                '--match', "${tagPrefix}*", '--dirty', '--always')
+                .directory(rootDir)
+                .redirectErrorStream(true)
+                .start()
+        proc.waitFor()
+        def out = proc.inputStream.text.trim()
+        if (proc.exitValue() != 0) return null
+        return out
+    } catch (Exception ignored) {
+        return null
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/'
+        content {
+            includeGroup 'dev.emi'
+        }
+    }
+    maven {
+        name = 'Shedaniel'
+        url = 'https://maven.shedaniel.me/'
+        content {
+            includeGroup 'me.shedaniel'
+            includeGroup 'me.shedaniel.cloth'
+            includeGroup 'dev.architectury'
+        }
+    }
+    maven {
+        name = 'Architectury'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup 'dev.architectury'
+        }
+    }
+    maven {
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup 'mezz.jei'
+        }
+    }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
+    maven {
+        name = 'Bai'
+        url = 'https://maven2.bai.lol'
+        content {
+            includeGroup 'lol.bai'
+            includeGroup 'mcp.mobius.waila'
+        }
+    }
+    maven {
+        name = 'Ladysnake'
+        url = 'https://maven.ladysnake.org/releases'
+        content {
+            includeGroup 'org.ladysnake.cardinal-components-api'
+        }
+    }
+}
+
+loom {
+    splitEnvironmentSourceSets()
+    accessWidenerPath = file("src/main/resources/meridian.accesswidener")
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs += [ "src/main/generated" ]
+        }
+    }
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+loom {
+    runs {
+        datagen {
+            inherit server
+            name "Data Generation"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.datagen"
+            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
+            vmArg "-Dfabric-api.datagen.modid=meridian"
+            runDir "build/datagen"
+        }
+        gametest {
+            server()
+            name "Game Test"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('junit-gametest.xml').get().asFile}"
+            runDir "build/gametest"
+        }
+    }
+}
+
+dependencies {
+    // Minecraft
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    // Fabric
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Client source set
+    "clientImplementation"("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+
+    // Integrations — compile against the api classifier so we never link the full mod into
+    // the production jar; the full artifact is loaded only into the local dev runtime so the
+    // in-dev client can actually use EMI when launched. End users get the integration only
+    // when they install EMI themselves.
+    modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
+    modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
+
+    // REI 16.x — MC 1.21 coordinates; runs unchanged on 1.21.1. Compile-only against the api
+    // split; only the full mod + architectury-fabric are pulled into the local dev runtime
+    // so players who do not install REI still get a working jar.
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    modLocalRuntime "dev.architectury:architectury-fabric:${project.architectury_version}"
+
+    // JEI 19.x — Compile-only against the api split so the production jar only links
+    // against @Internal-safe JEI API types; the full mod is only pulled into the local
+    // dev runtime (modLocalRuntime) so the in-dev client can actually show JEI panels.
+    modCompileOnly "mezz.jei:jei-1.21.1-fabric-api:${project.jei_version}"
+    modLocalRuntime "mezz.jei:jei-1.21.1-fabric:${project.jei_version}"
+
+    // Jade 15.x — Jade does not publish a split api jar, so compile-only links the full mod
+    // but only against the `snownee.jade.api` surface our plugin touches; end users still get
+    // the integration only when they install Jade themselves. modLocalRuntime pulls the same
+    // artifact into the dev client so the tooltip renders in-game during development.
+    modCompileOnly "maven.modrinth:jade:${project.jade_version}"
+    modLocalRuntime "maven.modrinth:jade:${project.jade_version}"
+
+    // WTHIT 12.x — Alternative probe-tooltip integration (Jade fallback). Compile-only against
+    // the API split so the production jar only links WTHIT API types; players who install WTHIT
+    // instead of Jade get the same stat display. Discovered via waila_plugins.json at runtime.
+    modCompileOnly "mcp.mobius.waila:wthit-api:${project.wthit_version}"
+
+    // ModMenu 11.x — Config screen entry point for Fabric 1.21.1. Compile-only + dev runtime
+    // so end users get the integration only when they install ModMenu themselves.
+    modCompileOnly "maven.modrinth:modmenu:${project.modmenu_version}"
+    modLocalRuntime "maven.modrinth:modmenu:${project.modmenu_version}"
+
+    // Cloth Config 15.x — Config screen builder used by ModMenuIntegration. Compile-only for
+    // the api surface; full mod in dev runtime. Cloth Config is a transitive dep of ModMenu in
+    // most player installs.
+    modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+    modLocalRuntime "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+
+    // Trinkets 3.x — Accessory/trinket slot API. Compile-only so the production jar only links
+    // against the Trinkets API surface (TrinketsApi, TrinketComponent); players who install
+    // Trinkets (or the Accessories Compat Layer) get enchantment support in accessory slots.
+    modCompileOnly "dev.emi:trinkets:${project.trinkets_version}"
+
+    // Tests
+    testImplementation platform("org.junit:junit-bom:5.10.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    // Knot-based classloader that boots Fabric before tests run — applies mixins/AWs so
+    // Tier 2 tests can read BuiltInRegistries after an explicit Bootstrap.bootStrap().
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+// With splitEnvironmentSourceSets, loom remaps fabric-api to *-common variants for the main
+// runtime classpath but leaves the unmapped fabric-api sibling on testRuntimeClasspath. That
+// sibling carries an intermediary-namespace accesswidener, which fabric-loader-junit rejects
+// against the runtime named namespace. Dropping it keeps the remapped artifacts and lets the
+// junit launcher boot.
+configurations.testRuntimeClasspath {
+    exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'meridian.generated.dir', file('src/main/generated').absolutePath
+}
+
+tasks.register('verifyDatagenIdempotent') {
+    description = 'Runs datagen and asserts no tracked diffs or untracked files in src/main/generated/'
+    group = 'verification'
+    dependsOn 'runDatagen'
+    doLast {
+        def genDir = file('src/main/generated').absolutePath
+        def diffResult = providers.exec {
+            commandLine 'git', 'diff', '--exit-code', genDir
+            ignoreExitValue = true
+        }
+        if (diffResult.result.get().exitValue != 0) {
+            throw new GradleException(
+                    'src/main/generated/ has unstaged changes after runDatagen. ' +
+                    'Run ./gradlew runDatagen and commit the results.')
+        }
+        def untrackedOutput = providers.exec {
+            commandLine 'git', 'ls-files', '--others', '--exclude-standard', genDir
+            ignoreExitValue = true
+        }
+        def untracked = untrackedOutput.standardOutput.asText.get().trim()
+        if (!untracked.isEmpty()) {
+            throw new GradleException(
+                    'src/main/generated/ has untracked files after runDatagen:\n' + untracked +
+                    '\nRun ./gradlew runDatagen, then git add and commit the results.')
+        }
+    }
+}
+
+processResources {
+    def projectVersion = project.version
+    inputs.property "version", projectVersion
+
+    filesMatching("fabric.mod.json") {
+        expand "version": projectVersion
+    }
+
+    exclude ".gitkeep"
+}
+
+processClientResources {
+    exclude ".gitkeep"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+
+    withSourcesJar()
+}
+
+jar {
+    def baseName = project.archives_base_name
+    from("LICENSE") {
+        rename { "${it}_${baseName}" }
+    }
+    exclude ".gitkeep"
+}
+
+tasks.named('sourcesJar') {
+    exclude ".gitkeep"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

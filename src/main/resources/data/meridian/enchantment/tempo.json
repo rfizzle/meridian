@@ -1,0 +1,35 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.tempo"
+  },
+  "supported_items": "#minecraft:enchantable/weapon",
+  "primary_items": "#minecraft:enchantable/sword",
+  "weight": 5,
+  "max_level": 2,
+  "min_cost": {
+    "base": 12,
+    "per_level_above_first": 18
+  },
+  "max_cost": {
+    "base": 52,
+    "per_level_above_first": 18
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.3,
+          "per_level_above_first": 0.3
+        },
+        "attribute": "minecraft:generic.attack_speed",
+        "id": "meridian:enchantment.tempo",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

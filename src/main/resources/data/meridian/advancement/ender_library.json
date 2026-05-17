@@ -1,0 +1,34 @@
+{
+    "parent": "meridian:library",
+    "criteria": {
+        "has_ender_library": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:ender_library"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.ender_library.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:ender_library"
+        },
+        "title": {
+            "translate": "advancements.meridian.ender_library.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_ender_library"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "meridian:voidbane",
+      "required": false
+    },
+    {
+      "id": "meridian:sanctify",
+      "required": false
+    },
+    {
+      "id": "meridian:sentinel",
+      "required": false
+    },
+    {
+      "id": "meridian:rift_strike",
+      "required": false
+    },
+    {
+      "id": "meridian:keen_edge",
+      "required": false
+    }
+  ]
+}

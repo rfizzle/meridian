@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    "M": {
+      "item": "minecraft:melon"
+    },
+    "S": {
+      "tag": "c:bookshelves"
+    }
+  },
+  "pattern": [
+    "MMM",
+    "GSG",
+    "MMM"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:melonshelf"
+  }
+}

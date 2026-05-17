@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.rally"
+  },
+  "supported_items": "#minecraft:enchantable/chest_armor",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "chest"
+  ],
+  "effects": {}
+}

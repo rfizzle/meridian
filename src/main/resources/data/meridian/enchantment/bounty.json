@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.bounty"
+  },
+  "supported_items": "#meridian:enchantable/hoes",
+  "weight": 5,
+  "max_level": 3,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

@@ -1,0 +1,34 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.vault"
+  },
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 5,
+  "max_level": 3,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "feet"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.06,
+          "per_level_above_first": 0.06
+        },
+        "attribute": "minecraft:generic.jump_strength",
+        "id": "meridian:enchantment.vault",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

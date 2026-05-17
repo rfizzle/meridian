@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.tempest"
+  },
+  "exclusive_set": "#minecraft:exclusive_set/mace",
+  "supported_items": "#minecraft:enchantable/mace",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 60,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

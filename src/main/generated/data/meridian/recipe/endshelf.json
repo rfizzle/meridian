@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "tag": "c:bookshelves"
+    },
+    "E": {
+      "item": "minecraft:end_stone_bricks"
+    },
+    "I": {
+      "item": "meridian:infused_breath"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    }
+  },
+  "pattern": [
+    "EEE",
+    "IBP",
+    "EEE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:endshelf"
+  }
+}

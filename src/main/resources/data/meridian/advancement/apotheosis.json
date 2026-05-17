@@ -1,0 +1,38 @@
+{
+    "parent": "meridian:tier_three",
+    "criteria": {
+        "max_slot_enchant": {
+            "conditions": {
+                "levels": {
+                    "min": 3
+                },
+                "eterna": {
+                    "min": 45.0
+                }
+            },
+            "trigger": "meridian:enchanted_at_table"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.apotheosis.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "meridian:draconic_endshelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.apotheosis.title"
+        }
+    },
+    "requirements": [
+        [
+            "max_slot_enchant"
+        ]
+    ],
+    "rewards": {
+        "experience": 500
+    },
+    "sends_telemetry_event": false
+}

@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.vital_mend"
+  },
+  "exclusive_set": "#meridian:exclusive_set/mending",
+  "supported_items": "#minecraft:enchantable/durability",
+  "weight": 1,
+  "max_level": 3,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 75,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "any"
+  ],
+  "effects": {}
+}

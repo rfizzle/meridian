@@ -1,0 +1,44 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.skybound"
+  },
+  "supported_items": "#meridian:enchantable/mounted",
+  "weight": 2,
+  "max_level": 7,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 8
+  },
+  "max_cost": {
+    "base": 58,
+    "per_level_above_first": 8
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "body"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.05,
+          "per_level_above_first": 0.03
+        },
+        "attribute": "minecraft:generic.jump_strength",
+        "id": "meridian:enchantment.skybound",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": -0.1,
+          "per_level_above_first": -0.05
+        },
+        "attribute": "minecraft:generic.fall_damage_multiplier",
+        "id": "meridian:enchantment.skybound.fall",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

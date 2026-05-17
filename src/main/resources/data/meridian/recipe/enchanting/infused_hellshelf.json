@@ -1,0 +1,16 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:hellshelf"
+    },
+    "requirements": {
+        "eterna": 22.5,
+        "quanta": 30,
+        "arcana": 0
+    },
+    "display_level": 5,
+    "result": {
+        "id": "meridian:infused_hellshelf",
+        "count": 1
+    }
+}

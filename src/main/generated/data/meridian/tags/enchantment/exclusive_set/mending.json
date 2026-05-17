@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:vital_mend",
+      "required": false
+    },
+    {
+      "id": "minecraft:mending",
+      "required": false
+    }
+  ]
+}

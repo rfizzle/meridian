@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.gale_shot"
+  },
+  "exclusive_set": "#meridian:exclusive_set/arrow_impact",
+  "supported_items": "#meridian:enchantable/range",
+  "primary_items": "#minecraft:enchantable/bow",
+  "weight": 5,
+  "max_level": 2,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

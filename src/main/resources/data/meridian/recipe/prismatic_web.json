@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " P ",
+        "PSP",
+        " P "
+    ],
+    "key": {
+        "P": {
+            "item": "minecraft:prismarine_shard"
+        },
+        "S": {
+            "item": "minecraft:string"
+        }
+    },
+    "result": {
+        "id": "meridian:prismatic_web",
+        "count": 1
+    }
+}

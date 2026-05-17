@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "meridian:sightshelf"
+    },
+    "G": {
+      "item": "minecraft:emerald_block"
+    },
+    "H": {
+      "tag": "c:ingots/netherite"
+    },
+    "P": {
+      "fabric:type": "fabric:components",
+      "base": {
+        "item": "minecraft:potion"
+      },
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:long_night_vision"
+        }
+      }
+    }
+  },
+  "pattern": [
+    "GHG",
+    "PEP",
+    "GHG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:sightshelf_t2"
+  }
+}

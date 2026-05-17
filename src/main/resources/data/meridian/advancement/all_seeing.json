@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "has_sightshelf_t2": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:sightshelf_t2"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.all_seeing.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:sightshelf_t2"
+        },
+        "title": {
+            "translate": "advancements.meridian.all_seeing.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_sightshelf_t2"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

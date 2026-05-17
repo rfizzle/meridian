@@ -1,0 +1,34 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.gallop"
+  },
+  "supported_items": "#meridian:enchantable/mounted",
+  "weight": 5,
+  "max_level": 4,
+  "min_cost": {
+    "base": 12,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 52,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "body"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.02,
+          "per_level_above_first": 0.015
+        },
+        "attribute": "minecraft:generic.movement_speed",
+        "id": "meridian:enchantment.gallop",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

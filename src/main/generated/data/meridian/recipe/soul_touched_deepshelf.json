@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "meridian:deepshelf"
+    },
+    "C": {
+      "item": "minecraft:sculk"
+    },
+    "E": {
+      "item": "minecraft:soul_lantern"
+    }
+  },
+  "pattern": [
+    " E ",
+    " B ",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:soul_touched_deepshelf"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_powder"
+    },
+    "F": {
+      "item": "minecraft:fire_charge"
+    },
+    "S": {
+      "item": "meridian:infused_hellshelf"
+    }
+  },
+  "pattern": [
+    " F ",
+    "FSF",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:blazing_hellshelf"
+  }
+}

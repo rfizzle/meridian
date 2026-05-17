@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:diminish",
+      "required": false
+    },
+    {
+      "id": "meridian:colossus",
+      "required": false
+    }
+  ]
+}

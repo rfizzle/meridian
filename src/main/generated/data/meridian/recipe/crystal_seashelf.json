@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "S": {
+      "item": "meridian:infused_seashelf"
+    }
+  },
+  "pattern": [
+    " P ",
+    " S ",
+    "P P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:crystal_seashelf"
+  }
+}

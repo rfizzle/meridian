@@ -1,0 +1,30 @@
+# gradle
+.gradle/
+build/
+out/
+classes/
+
+# loom dev runtime
+run/
+mods/
+logs/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.settings/
+.vscode/
+.classpath
+.project
+*.launch
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Fabric datagen hash cache — timestamps inside these files change every run,
+# so committing them would make `./gradlew runDatagen` non-idempotent against
+# git. The actual generated assets/data under src/main/generated are committed.
+src/main/generated/.cache/

@@ -1,0 +1,23 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "CSC",
+        "STS",
+        "CSC"
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:ender_chest"
+        },
+        "S": {
+            "tag": "meridian:infused_shelves"
+        },
+        "T": {
+            "item": "minecraft:enchanting_table"
+        }
+    },
+    "result": {
+        "id": "meridian:library",
+        "count": 1
+    }
+}

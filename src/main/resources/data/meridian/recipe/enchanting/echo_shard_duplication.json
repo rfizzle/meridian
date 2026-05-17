@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:echo_shard"
+    },
+    "requirements": {
+        "eterna": 35,
+        "quanta": 50,
+        "arcana": 50
+    },
+    "result": {
+        "id": "minecraft:echo_shard",
+        "count": 4
+    }
+}

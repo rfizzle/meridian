@@ -1,0 +1,36 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.alacrity"
+  },
+  "supported_items": "#meridian:enchantable/leg_and_foot_armor",
+  "primary_items": "#minecraft:enchantable/foot_armor",
+  "weight": 10,
+  "max_level": 5,
+  "min_cost": {
+    "base": 3,
+    "per_level_above_first": 9
+  },
+  "max_cost": {
+    "base": 43,
+    "per_level_above_first": 9
+  },
+  "anvil_cost": 1,
+  "slots": [
+    "feet",
+    "legs"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.01,
+          "per_level_above_first": 0.005
+        },
+        "attribute": "minecraft:generic.movement_speed",
+        "id": "meridian:enchantment.alacrity",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/mining",
+      "required": false
+    },
+    {
+      "id": "#minecraft:enchantable/weapon",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.resonance"
+  },
+  "exclusive_set": "#meridian:exclusive_set/arrow_impact",
+  "supported_items": "#meridian:enchantable/range",
+  "primary_items": "#minecraft:enchantable/bow",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 58,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

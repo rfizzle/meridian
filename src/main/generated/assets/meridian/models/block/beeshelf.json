@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "minecraft:block/beehive_end",
+    "side": "meridian:block/beeshelf"
+  }
+}

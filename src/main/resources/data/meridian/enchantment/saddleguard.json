@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.saddleguard"
+  },
+  "supported_items": "#meridian:enchantable/mounted",
+  "weight": 5,
+  "max_level": 5,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "body"
+  ],
+  "effects": {}
+}

@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.retribution"
+  },
+  "supported_items": "#meridian:enchantable/shield",
+  "weight": 1,
+  "max_level": 5,
+  "min_cost": {
+    "base": 22,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 62,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "offhand"
+  ],
+  "effects": {}
+}

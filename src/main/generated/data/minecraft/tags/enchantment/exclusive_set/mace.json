@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "minecraft:density",
+      "required": false
+    },
+    {
+      "id": "minecraft:breach",
+      "required": false
+    },
+    {
+      "id": "minecraft:wind_burst",
+      "required": false
+    },
+    {
+      "id": "meridian:tempest",
+      "required": false
+    },
+    {
+      "id": "meridian:seismic_slam",
+      "required": false
+    },
+    {
+      "id": "meridian:updraft",
+      "required": false
+    }
+  ]
+}

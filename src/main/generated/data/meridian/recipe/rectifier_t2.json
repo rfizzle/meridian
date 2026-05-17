@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_block"
+    },
+    "H": {
+      "item": "minecraft:gilded_blackstone"
+    },
+    "S": {
+      "item": "meridian:rectifier"
+    }
+  },
+  "pattern": [
+    "AHA",
+    "HSH",
+    "AHA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:rectifier_t2"
+  }
+}

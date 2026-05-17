@@ -1,0 +1,34 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.clamber"
+  },
+  "supported_items": "#minecraft:enchantable/foot_armor",
+  "weight": 10,
+  "max_level": 3,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 45,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 1,
+  "slots": [
+    "feet"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.4,
+          "per_level_above_first": 0.2
+        },
+        "attribute": "minecraft:generic.step_height",
+        "id": "meridian:enchantment.clamber",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

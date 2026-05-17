@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:root",
+    "criteria": {
+        "has_scrap_tome": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:scrap_tome"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.tome_apprentice.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:scrap_tome"
+        },
+        "title": {
+            "translate": "advancements.meridian.tome_apprentice.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_scrap_tome"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

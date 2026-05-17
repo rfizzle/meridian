@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone"
+    },
+    "S": {
+      "item": "meridian:infused_hellshelf"
+    }
+  },
+  "pattern": [
+    " G ",
+    " S ",
+    "G G"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:glowing_hellshelf"
+  }
+}

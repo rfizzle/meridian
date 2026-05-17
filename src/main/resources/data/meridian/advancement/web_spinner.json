@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:root",
+    "criteria": {
+        "has_prismatic_web": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:prismatic_web"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.web_spinner.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:prismatic_web"
+        },
+        "title": {
+            "translate": "advancements.meridian.web_spinner.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_prismatic_web"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

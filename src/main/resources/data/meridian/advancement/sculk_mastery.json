@@ -1,0 +1,37 @@
+{
+    "parent": "meridian:warden_tendril",
+    "criteria": {
+        "has_sculk_shelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "meridian:echoing_sculkshelf",
+                            "meridian:soul_touched_sculkshelf"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.sculk_mastery.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:echoing_sculkshelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.sculk_mastery.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_sculk_shelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

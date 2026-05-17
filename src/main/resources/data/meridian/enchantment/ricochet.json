@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.ricochet"
+  },
+  "supported_items": "#meridian:enchantable/range",
+  "primary_items": "#minecraft:enchantable/bow",
+  "weight": 2,
+  "max_level": 3,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 60,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

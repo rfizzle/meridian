@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "meridian:blight",
+      "required": false
+    },
+    {
+      "id": "meridian:decay",
+      "required": false
+    },
+    {
+      "id": "meridian:shackle",
+      "required": false
+    },
+    {
+      "id": "meridian:nightfall",
+      "required": false
+    },
+    {
+      "id": "minecraft:fire_aspect",
+      "required": false
+    }
+  ]
+}

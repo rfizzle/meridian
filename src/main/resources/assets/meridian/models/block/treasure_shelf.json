@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "meridian:block/treasure_shelf_top",
+    "side": "meridian:block/treasure_shelf_side"
+  }
+}

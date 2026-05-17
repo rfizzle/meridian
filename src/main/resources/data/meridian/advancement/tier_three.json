@@ -1,0 +1,38 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "infused_shelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "meridian:infused_hellshelf",
+                            "meridian:infused_seashelf",
+                            "meridian:deepshelf"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.tier_three.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:infused_hellshelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.tier_three.title"
+        }
+    },
+    "requirements": [
+        [
+            "infused_shelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

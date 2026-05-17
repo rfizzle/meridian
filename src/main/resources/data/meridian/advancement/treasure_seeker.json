@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:tier_three",
+    "criteria": {
+        "has_treasure_shelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:treasure_shelf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.treasure_seeker.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:treasure_shelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.treasure_seeker.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_treasure_shelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

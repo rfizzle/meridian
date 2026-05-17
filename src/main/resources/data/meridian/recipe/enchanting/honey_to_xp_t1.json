@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:honey_bottle"
+    },
+    "requirements": {
+        "eterna": 10,
+        "quanta": 25,
+        "arcana": 25
+    },
+    "result": {
+        "id": "minecraft:experience_bottle",
+        "count": 1
+    }
+}

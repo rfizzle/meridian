@@ -1,0 +1,34 @@
+{
+    "parent": "meridian:tome_apprentice",
+    "criteria": {
+        "has_extraction_tome": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:extraction_tome"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.tome_master.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:extraction_tome"
+        },
+        "title": {
+            "translate": "advancements.meridian.tome_master.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_extraction_tome"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

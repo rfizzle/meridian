@@ -1,0 +1,42 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.sentinel"
+  },
+  "supported_items": "#minecraft:enchantable/sword",
+  "weight": 5,
+  "max_level": 5,
+  "min_cost": {
+    "base": 10,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "mainhand"
+  ],
+  "exclusive_set": "#minecraft:exclusive_set/damage",
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2.5,
+            "per_level_above_first": 2.5
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "type": "#meridian:sensitive_to_sentinel"
+          }
+        }
+      }
+    ]
+  }
+}

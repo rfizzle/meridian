@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:pillager",
+    "minecraft:vindicator",
+    "minecraft:evoker",
+    "minecraft:illusioner",
+    "minecraft:ravager",
+    "minecraft:witch",
+    "minecraft:vex"
+  ]
+}

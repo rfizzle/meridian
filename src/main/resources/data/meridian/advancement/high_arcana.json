@@ -1,0 +1,32 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "high_arcana_enchant": {
+            "conditions": {
+                "arcana": {
+                    "min": 60.0
+                }
+            },
+            "trigger": "meridian:enchanted_at_table"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.high_arcana.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:crystal_seashelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.high_arcana.title"
+        }
+    },
+    "requirements": [
+        [
+            "high_arcana_enchant"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

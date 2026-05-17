@@ -1,0 +1,20 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:improved_scrap_tome"
+    },
+    "requirements": {
+        "eterna": 30,
+        "quanta": 25,
+        "arcana": 45
+    },
+    "max_requirements": {
+        "eterna": -1,
+        "quanta": 75,
+        "arcana": -1
+    },
+    "result": {
+        "id": "meridian:extraction_tome",
+        "count": 4
+    }
+}

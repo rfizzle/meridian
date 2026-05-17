@@ -1,0 +1,16 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:seashelf"
+    },
+    "requirements": {
+        "eterna": 22.5,
+        "quanta": 15,
+        "arcana": 10
+    },
+    "display_level": 5,
+    "result": {
+        "id": "meridian:infused_seashelf",
+        "count": 1
+    }
+}

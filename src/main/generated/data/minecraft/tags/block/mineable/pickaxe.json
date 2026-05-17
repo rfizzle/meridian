@@ -1,0 +1,30 @@
+{
+  "values": [
+    "meridian:stoneshelf",
+    "meridian:hellshelf",
+    "meridian:blazing_hellshelf",
+    "meridian:glowing_hellshelf",
+    "meridian:infused_hellshelf",
+    "meridian:seashelf",
+    "meridian:heart_seashelf",
+    "meridian:crystal_seashelf",
+    "meridian:infused_seashelf",
+    "meridian:endshelf",
+    "meridian:pearl_endshelf",
+    "meridian:draconic_endshelf",
+    "meridian:deepshelf",
+    "meridian:dormant_deepshelf",
+    "meridian:echoing_deepshelf",
+    "meridian:soul_touched_deepshelf",
+    "meridian:echoing_sculkshelf",
+    "meridian:soul_touched_sculkshelf",
+    "meridian:sightshelf",
+    "meridian:sightshelf_t2",
+    "meridian:rectifier",
+    "meridian:rectifier_t2",
+    "meridian:rectifier_t3",
+    "meridian:treasure_shelf",
+    "meridian:library",
+    "meridian:ender_library"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "textures": [
+    "meridian:sga_a_sculk",
+    "meridian:sga_b_sculk",
+    "meridian:sga_c_sculk",
+    "meridian:sga_d_sculk",
+    "meridian:sga_e_sculk",
+    "meridian:sga_f_sculk",
+    "meridian:sga_g_sculk",
+    "meridian:sga_h_sculk",
+    "meridian:sga_i_sculk",
+    "meridian:sga_j_sculk",
+    "meridian:sga_k_sculk",
+    "meridian:sga_l_sculk",
+    "meridian:sga_m_sculk",
+    "meridian:sga_n_sculk",
+    "meridian:sga_o_sculk",
+    "meridian:sga_p_sculk",
+    "meridian:sga_q_sculk",
+    "meridian:sga_r_sculk",
+    "meridian:sga_s_sculk",
+    "meridian:sga_t_sculk",
+    "meridian:sga_u_sculk",
+    "meridian:sga_v_sculk",
+    "meridian:sga_w_sculk",
+    "meridian:sga_x_sculk",
+    "meridian:sga_y_sculk",
+    "meridian:sga_z_sculk"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:excavate",
+      "required": false
+    },
+    {
+      "id": "meridian:prospect",
+      "required": false
+    }
+  ]
+}

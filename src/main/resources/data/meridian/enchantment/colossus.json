@@ -1,0 +1,55 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.colossus"
+  },
+  "supported_items": "#minecraft:enchantable/leg_armor",
+  "weight": 1,
+  "max_level": 4,
+  "min_cost": {
+    "base": 40,
+    "per_level_above_first": 20
+  },
+  "max_cost": {
+    "base": 80,
+    "per_level_above_first": 20
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "legs"
+  ],
+  "exclusive_set": "#meridian:exclusive_set/size",
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.15,
+          "per_level_above_first": 0.1
+        },
+        "attribute": "minecraft:generic.scale",
+        "id": "meridian:enchantment.colossus/scale",
+        "operation": "add_multiplied_base"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": -0.008,
+          "per_level_above_first": -0.004
+        },
+        "attribute": "minecraft:generic.movement_speed",
+        "id": "meridian:enchantment.colossus/speed",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": -0.3,
+          "per_level_above_first": -0.2
+        },
+        "attribute": "minecraft:player.entity_interaction_range",
+        "id": "meridian:enchantment.colossus/reach",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

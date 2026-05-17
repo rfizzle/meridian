@@ -1,0 +1,44 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.rift_strike"
+  },
+  "supported_items": "#minecraft:enchantable/sword",
+  "weight": 2,
+  "max_level": 5,
+  "min_cost": {
+    "base": 22,
+    "per_level_above_first": 16
+  },
+  "max_cost": {
+    "base": 62,
+    "per_level_above_first": 16
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "exclusive_set": "#minecraft:exclusive_set/damage",
+  "effects": {
+    "minecraft:damage": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2.5,
+            "per_level_above_first": 2.5
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:inverted",
+          "term": {
+            "condition": "minecraft:location_check",
+            "predicate": {
+              "dimension": "minecraft:overworld"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

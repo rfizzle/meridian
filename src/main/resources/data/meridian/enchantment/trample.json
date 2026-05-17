@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.trample"
+  },
+  "supported_items": "#meridian:enchantable/mounted",
+  "weight": 5,
+  "max_level": 3,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "body"
+  ],
+  "effects": {}
+}

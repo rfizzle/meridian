@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.stormcall"
+  },
+  "exclusive_set": "#meridian:exclusive_set/arrow_impact",
+  "supported_items": "#meridian:enchantable/range",
+  "primary_items": "#minecraft:enchantable/bow",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 22,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 62,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

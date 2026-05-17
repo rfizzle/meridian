@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:pufferfish"
+    },
+    "N": {
+      "item": "minecraft:prismarine_bricks"
+    },
+    "P": {
+      "fabric:type": "fabric:components",
+      "base": {
+        "item": "minecraft:potion"
+      },
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:water"
+        }
+      }
+    },
+    "S": {
+      "tag": "c:bookshelves"
+    }
+  },
+  "pattern": [
+    "NNN",
+    "BSP",
+    "NNN"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:seashelf"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.impact_ward"
+  },
+  "supported_items": "#meridian:enchantable/elytra",
+  "weight": 5,
+  "max_level": 5,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "chest"
+  ],
+  "effects": {
+    "minecraft:damage_protection": [
+      {
+        "effect": {
+          "type": "minecraft:add",
+          "value": {
+            "type": "minecraft:linear",
+            "base": 2,
+            "per_level_above_first": 2
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:damage_source_properties",
+          "predicate": {
+            "tags": [
+              {
+                "id": "minecraft:is_fall",
+                "expected": true
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

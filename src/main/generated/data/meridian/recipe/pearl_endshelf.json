@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "R": {
+      "item": "minecraft:end_rod"
+    },
+    "S": {
+      "item": "meridian:endshelf"
+    }
+  },
+  "pattern": [
+    "R R",
+    "PSP",
+    "R R"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:pearl_endshelf"
+  }
+}

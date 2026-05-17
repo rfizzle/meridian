@@ -1,0 +1,37 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "has_rectifier": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "meridian:rectifier",
+                            "meridian:rectifier_t2",
+                            "meridian:rectifier_t3"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.stable_enchanting.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:rectifier"
+        },
+        "title": {
+            "translate": "advancements.meridian.stable_enchanting.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_rectifier"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

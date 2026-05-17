@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.detonation"
+  },
+  "exclusive_set": "#meridian:exclusive_set/arrow_impact",
+  "supported_items": "#meridian:enchantable/range",
+  "primary_items": "#minecraft:enchantable/bow",
+  "weight": 1,
+  "max_level": 4,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

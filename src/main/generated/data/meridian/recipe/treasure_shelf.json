@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "tag": "c:gems/diamond"
+    },
+    "E": {
+      "item": "minecraft:emerald_block"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "S": {
+      "item": "meridian:deepshelf"
+    }
+  },
+  "pattern": [
+    "GSG",
+    "DED",
+    "GSG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:treasure_shelf"
+  }
+}

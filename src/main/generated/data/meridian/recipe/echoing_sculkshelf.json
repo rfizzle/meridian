@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "meridian:echoing_deepshelf"
+    },
+    "C": {
+      "item": "minecraft:sculk_catalyst"
+    },
+    "S": {
+      "item": "minecraft:sculk"
+    },
+    "T": {
+      "item": "meridian:warden_tendril"
+    }
+  },
+  "pattern": [
+    " T ",
+    "SBS",
+    "SCS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:echoing_sculkshelf"
+  }
+}

@@ -1,0 +1,32 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.rfizzle.meridian.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "AbstractArrowMixin",
+        "AntidoteMixin",
+        "AnvilMenuAccessor",
+        "AnvilMenuMixin",
+        "CreeperEntityAccessor",
+        "EnchantmentHelperMixin",
+        "EnchantmentMenuAccessor",
+        "EnchantmentMixin",
+        "EnchantmentTableBlockMixin",
+        "EnchantRandomlyFunctionMixin",
+        "ItemMixin",
+        "ItemStackMixin",
+        "LivingEntityHealMixin",
+        "LivingEntityLootInvoker",
+        "PlayerMixin",
+        "SaddleguardMixin",
+        "SheepMixin",
+        "ShieldFortifyMixin",
+        "TetherMixin",
+        "TemptGoalMixin"
+    ],
+    "client": [],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:dormant_deepshelf"
+    },
+    "requirements": {
+        "eterna": 30,
+        "quanta": 40,
+        "arcana": 40
+    },
+    "result": {
+        "id": "meridian:deepshelf",
+        "count": 1
+    }
+}

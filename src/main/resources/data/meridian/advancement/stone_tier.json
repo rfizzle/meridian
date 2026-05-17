@@ -1,0 +1,55 @@
+{
+    "parent": "meridian:root",
+    "criteria": {
+        "hellshelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:hellshelf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "seashelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:seashelf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        },
+        "dormant_deepshelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:dormant_deepshelf"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.stone_tier.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:hellshelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.stone_tier.title"
+        }
+    },
+    "requirements": [
+        [
+            "hellshelf",
+            "seashelf",
+            "dormant_deepshelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

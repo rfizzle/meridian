@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "meridian:deepshelf"
+    },
+    "C": {
+      "tag": "minecraft:candles"
+    },
+    "E": {
+      "item": "minecraft:echo_shard"
+    }
+  },
+  "pattern": [
+    " E ",
+    " B ",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:echoing_deepshelf"
+  }
+}

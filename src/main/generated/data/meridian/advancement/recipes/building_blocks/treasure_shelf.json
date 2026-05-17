@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_deepshelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "meridian:deepshelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "meridian:treasure_shelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_deepshelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "meridian:treasure_shelf"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "meridian:gale_shot",
+      "required": false
+    },
+    {
+      "id": "meridian:resonance",
+      "required": false
+    },
+    {
+      "id": "meridian:permafrost",
+      "required": false
+    },
+    {
+      "id": "meridian:detonation",
+      "required": false
+    },
+    {
+      "id": "meridian:stormcall",
+      "required": false
+    }
+  ]
+}

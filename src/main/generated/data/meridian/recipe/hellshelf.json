@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:blaze_rod"
+    },
+    "N": {
+      "item": "minecraft:nether_bricks"
+    },
+    "P": {
+      "fabric:type": "fabric:components",
+      "base": {
+        "item": "minecraft:potion"
+      },
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:regeneration"
+        }
+      }
+    },
+    "S": {
+      "tag": "c:bookshelves"
+    }
+  },
+  "pattern": [
+    "NNN",
+    "BSP",
+    "NNN"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:hellshelf"
+  }
+}

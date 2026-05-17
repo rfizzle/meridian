@@ -1,0 +1,33 @@
+{
+    "parent": "meridian:tier_three",
+    "criteria": {
+        "has_library": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "meridian:library"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.library.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:library"
+        },
+        "title": {
+            "translate": "advancements.meridian.library.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_library"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -1,0 +1,32 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "high_quanta_enchant": {
+            "conditions": {
+                "quanta": {
+                    "min": 60.0
+                }
+            },
+            "trigger": "meridian:enchanted_at_table"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.high_quanta.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:blazing_hellshelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.high_quanta.title"
+        }
+    },
+    "requirements": [
+        [
+            "high_quanta_enchant"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:bloodrage",
+      "required": false
+    },
+    {
+      "id": "meridian:reckless",
+      "required": false
+    }
+  ]
+}

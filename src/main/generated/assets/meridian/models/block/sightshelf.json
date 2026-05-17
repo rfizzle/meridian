@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "meridian:block/sight_top",
+    "side": "meridian:block/sight_side"
+  }
+}

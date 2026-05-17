@@ -1,0 +1,20 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "BBB",
+        "BAB",
+        "BBB"
+    ],
+    "key": {
+        "B": {
+            "item": "minecraft:book"
+        },
+        "A": {
+            "item": "minecraft:anvil"
+        }
+    },
+    "result": {
+        "id": "meridian:scrap_tome",
+        "count": 8
+    }
+}

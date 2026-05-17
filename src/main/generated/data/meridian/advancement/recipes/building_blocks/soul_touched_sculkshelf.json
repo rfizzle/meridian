@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_soul_touched_deepshelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "meridian:soul_touched_deepshelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "meridian:soul_touched_sculkshelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_soul_touched_deepshelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "meridian:soul_touched_sculkshelf"
+    ]
+  }
+}

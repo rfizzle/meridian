@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infused_hellshelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "meridian:infused_hellshelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "meridian:blazing_hellshelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infused_hellshelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "meridian:blazing_hellshelf"
+    ]
+  }
+}

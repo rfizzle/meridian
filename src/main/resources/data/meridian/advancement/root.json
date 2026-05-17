@@ -1,0 +1,63 @@
+{
+    "criteria": {
+        "has_shelf": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": [
+                            "meridian:beeshelf",
+                            "meridian:melonshelf",
+                            "meridian:stoneshelf",
+                            "meridian:hellshelf",
+                            "meridian:blazing_hellshelf",
+                            "meridian:glowing_hellshelf",
+                            "meridian:infused_hellshelf",
+                            "meridian:seashelf",
+                            "meridian:heart_seashelf",
+                            "meridian:crystal_seashelf",
+                            "meridian:infused_seashelf",
+                            "meridian:endshelf",
+                            "meridian:pearl_endshelf",
+                            "meridian:draconic_endshelf",
+                            "meridian:deepshelf",
+                            "meridian:dormant_deepshelf",
+                            "meridian:echoing_deepshelf",
+                            "meridian:soul_touched_deepshelf",
+                            "meridian:echoing_sculkshelf",
+                            "meridian:soul_touched_sculkshelf",
+                            "meridian:sightshelf",
+                            "meridian:sightshelf_t2",
+                            "meridian:rectifier",
+                            "meridian:rectifier_t2",
+                            "meridian:rectifier_t3",
+                            "meridian:filtering_shelf",
+                            "meridian:treasure_shelf"
+                        ]
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "announce_to_chat": false,
+        "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+        "description": {
+            "translate": "advancements.meridian.root.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:stoneshelf"
+        },
+        "show_toast": true,
+        "title": {
+            "translate": "advancements.meridian.root.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_shelf"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

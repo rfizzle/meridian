@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.pummel"
+  },
+  "supported_items": "#meridian:enchantable/shield",
+  "weight": 2,
+  "max_level": 4,
+  "min_cost": {
+    "base": 16,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 56,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "offhand"
+  ],
+  "effects": {}
+}

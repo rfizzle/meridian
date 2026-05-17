@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_eye"
+    },
+    "G": {
+      "item": "minecraft:gold_block"
+    },
+    "H": {
+      "item": "meridian:infused_hellshelf"
+    },
+    "P": {
+      "fabric:type": "fabric:components",
+      "base": {
+        "item": "minecraft:potion"
+      },
+      "components": {
+        "minecraft:potion_contents": {
+          "potion": "minecraft:night_vision"
+        }
+      }
+    },
+    "S": {
+      "item": "minecraft:spyglass"
+    }
+  },
+  "pattern": [
+    "GHG",
+    "PES",
+    "GHG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "meridian:sightshelf"
+  }
+}
