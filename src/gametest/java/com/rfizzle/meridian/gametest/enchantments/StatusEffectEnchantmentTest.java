@@ -93,7 +93,7 @@ public class StatusEffectEnchantmentTest implements FabricGameTest {
         Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
         attacker.setItemSlot(EquipmentSlot.MAINHAND, sword);
 
-        Mob victim = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 2));
+        Mob victim = helper.spawnWithNoFreeWill(EntityType.COW, new BlockPos(1, 1, 2));
         attacker.doHurtTarget(victim);
 
         helper.runAfterDelay(2, () -> {

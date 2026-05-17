@@ -66,11 +66,11 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
                     }
                     helper.succeed();
                 } finally {
-                    restoreConfig(original);
+                    restoreConfig(original, helper.getLevel().getServer());
                 }
             });
         } catch (Exception e) {
-            restoreConfig(original);
+            restoreConfig(original, helper.getLevel().getServer());
             helper.fail("Exception: " + e.getMessage());
         }
     }
@@ -91,15 +91,15 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
                     Registries.ENCHANTMENT, Meridian.id("shackle"));
             for (EnchantmentInstance inst : results) {
                 if (inst.enchantment.is(shackleKey)) {
-                    restoreConfig(original);
+                    restoreConfig(original, helper.getLevel().getServer());
                     helper.fail("Disabled enchantment 'shackle' should not appear in enchanting table pool");
                     return;
                 }
             }
-            restoreConfig(original);
+            restoreConfig(original, helper.getLevel().getServer());
             helper.succeed();
         } catch (Exception e) {
-            restoreConfig(original);
+            restoreConfig(original, helper.getLevel().getServer());
             helper.fail("Exception: " + e.getMessage());
         }
     }
@@ -128,7 +128,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
                 }
                 helper.succeed();
             } finally {
-                restoreConfig(original);
+                restoreConfig(original, helper.getLevel().getServer());
             }
         });
     }
@@ -143,12 +143,12 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
 
         EnchantmentInfo infoDisabled = EnchantmentInfoRegistry.getInfo(bulwark);
         if (infoDisabled.enabled()) {
-            restoreConfig(original);
+            restoreConfig(original, helper.getLevel().getServer());
             helper.fail("Bulwark should be disabled");
             return;
         }
 
-        restoreConfig(original);
+        restoreConfig(original, helper.getLevel().getServer());
         EnchantmentInfo infoRestored = EnchantmentInfoRegistry.getInfo(bulwark);
         if (!infoRestored.enabled()) {
             helper.fail("Bulwark should be re-enabled after restoring config");
@@ -183,12 +183,10 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         return original;
     }
 
-    private void restoreConfig(byte[] original) {
+    private void restoreConfig(byte[] original, net.minecraft.server.MinecraftServer server) {
         try {
             Files.write(CONFIG_FILE, original);
-            // Note: We don't have access to server here for full reload,
-            // but the next test setup or server restart will reload
         } catch (IOException ignored) {}
-        Meridian.reloadConfig();
+        Meridian.reloadConfig(server);
     }
 }

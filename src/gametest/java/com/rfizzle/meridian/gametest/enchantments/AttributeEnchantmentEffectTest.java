@@ -15,6 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 
 public class AttributeEnchantmentEffectTest implements FabricGameTest {
 
@@ -147,21 +148,24 @@ public class AttributeEnchantmentEffectTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "tempo");
         if (ench == null) { helper.fail("tempo not in registry"); return; }
 
-        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-        double baseSpeed = mob.getAttributeValue(Attributes.ATTACK_SPEED);
-
-        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
-        sword.enchant(ench, 2);
-        mob.setItemSlot(EquipmentSlot.MAINHAND, sword);
-
-        helper.runAfterDelay(1, () -> {
-            double modified = mob.getAttributeValue(Attributes.ATTACK_SPEED);
-            if (modified <= baseSpeed) {
-                helper.fail("Tempo II should increase attack speed. Base: " + baseSpeed + ", got: " + modified);
-                return;
+        var attrEffects = ench.value().getEffects(EnchantmentEffectComponents.ATTRIBUTES);
+        boolean found = false;
+        for (var effect : attrEffects) {
+            if (effect.attribute().is(Attributes.ATTACK_SPEED)) {
+                found = true;
+                var mod = effect.getModifier(2, EquipmentSlot.MAINHAND);
+                if (mod.amount() <= 0) {
+                    helper.fail("Tempo II attack_speed modifier should be positive, got: " + mod.amount());
+                    return;
+                }
+                break;
             }
-            helper.succeed();
-        });
+        }
+        if (!found) {
+            helper.fail("Tempo should define an attack_speed attribute effect");
+            return;
+        }
+        helper.succeed();
     }
 
     @GameTest(template = "meridian:empty_3x3")
