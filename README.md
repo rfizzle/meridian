@@ -156,7 +156,7 @@ See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
 
 ## Credits & Attribution
 
-Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by bageldotjpg. All code is a fresh 1.21.1 rewrite — no source was copied. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the reference for the enchanting table subsystem.
+Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by TheWinABagel. All code is a fresh 1.21.1 rewrite — no source was copied. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the reference for the enchanting table subsystem.
 
 All 75 enchantments are original to Meridian — names, IDs, weights, costs, effect definitions, and description text are authored fresh.
 
