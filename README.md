@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="Meridian" width="400">
+  <img src="logo.png" alt="Meridian" width="800">
 </p>
 
 <p align="center"><strong>A complete enchanting overhaul for Minecraft 1.21.1 Fabric.</strong></p>
