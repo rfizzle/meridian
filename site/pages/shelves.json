@@ -1,0 +1,323 @@
+{
+  "nav": "Shelves",
+  "metaTitle": "Shelves & Setups — Meridian | Enchanting Overhaul for Minecraft",
+  "metaDescription": "Complete shelf reference for the Meridian enchanting overhaul. All shelf blocks, stat contributions, table crafting recipes, and recommended enchanting setups.",
+  "ogTitle": "Shelves & Setups — Meridian",
+  "ogDescription": "All shelf blocks, their stat contributions, and recommended enchanting setups for Meridian.",
+  "title": "Shelves &amp; Setups",
+  "lede": "All shelf blocks, their stat contributions, and recommended combinations for reaching key enchanting thresholds.",
+  "width": "6xl",
+  "scale": "lg",
+  "sections": [
+    {
+      "id": "stat-primer",
+      "title": "Stat Primer",
+      "intro": "Shelf blocks contribute five independent stats to the enchanting table. Here is a quick recap of what each one does.",
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 2,
+          "lgColumns": 5,
+          "titleSize": "base",
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "Eterna",
+              "html": ["Maximum enchanting level (0–50). Higher Eterna unlocks stronger enchantments and table crafting recipes."]
+            },
+            {
+              "title": "Quanta",
+              "html": ["Power variance (0–100). High Quanta means bigger swings — potentially amazing or terrible results."]
+            },
+            {
+              "title": "Arcana",
+              "html": ["Rarity bias (0–100). Higher Arcana shifts the pool toward rarer enchantments. Required for many recipes."]
+            },
+            {
+              "title": "Rectification",
+              "html": ["Counters Quanta's negative variance. High Rectification + high Quanta = consistently strong enchantments."]
+            },
+            {
+              "title": "Clues",
+              "html": ["Reveals extra enchantments in the tooltip preview before you commit. Each point shows one more result."]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shelf-reference",
+      "title": "Shelf Reference",
+      "intro": "Every shelf block with its stat contributions. Values are per shelf block placed adjacent to the enchanting table.",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": ["Shelf", "Max Eterna", "Eterna", "Quanta", "Arcana", "Rectification", "Clues", "Tier"],
+          "rows": [
+            ["<span class='text-bone'>Vanilla Bookshelf</span>", "15", "1", "—", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke'>Starter</span>"],
+            ["<span class='text-bone'>Dormant Deepshelf</span>", "15", "1", "—", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke'>Starter</span>"],
+            ["<span class='text-bone'>Hellshelf</span>", "22.5", "1.5", "3", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Early</span>"],
+            ["<span class='text-bone'>Seashelf</span>", "22.5", "1.5", "—", "2", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Early</span>"],
+            ["<span class='text-bone'>Infused Hellshelf</span>", "27", "1.75", "1.75", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Infused Seashelf</span>", "27", "1.75", "—", "1.75", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Blazing Hellshelf</span>", "30", "4", "5", "—", "—", "-1", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Glowing Hellshelf</span>", "30", "2", "2", "4", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Crystalline Seashelf</span>", "30", "2", "4", "2", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Heart-Forged Seashelf</span>", "30", "3", "—", "10", "-5", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Mid</span>"],
+            ["<span class='text-bone'>Deepshelf</span>", "35", "2.5", "5", "5", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2'>Late</span>"],
+            ["<span class='text-bone'>Echoing Deepshelf</span>", "37.5", "2.5", "—", "15", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2'>Late</span>"],
+            ["<span class='text-bone'>Soul-Touched Deepshelf</span>", "37.5", "2.5", "15", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2'>Late</span>"],
+            ["<span class='text-bone'>Echoing Sculkshelf</span>", "40", "5", "5", "15", "—", "1", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2'>Late</span>"],
+            ["<span class='text-bone'>Soul-Touched Sculkshelf</span>", "40", "5", "15", "5", "5", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2'>Late</span>"],
+            ["<span class='text-bone'>Endshelf</span>", "45", "2.5", "5", "5", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2'>End</span>"],
+            ["<span class='text-bone'>Pearlescent Endshelf</span>", "45", "5", "7.5", "7.5", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2'>End</span>"],
+            ["<span class='text-bone'>Draconic Endshelf</span>", "50", "10", "—", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2'>End</span>"],
+            ["<span class='text-bone'>Filtering Shelf</span>", "15", "1", "—", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Stoneshelf</span>", "—", "-1.5", "—", "-7.5", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Beeshelf</span>", "—", "-15", "100", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Melonshelf</span>", "—", "-1", "-10", "—", "—", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Hellshelf of Sight</span>", "—", "—", "—", "—", "—", "1", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Hellshelf of Masterful Sight</span>", "—", "—", "—", "—", "—", "2", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Shelf of Seabound Rectification</span>", "—", "—", "—", "—", "10", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Shelf of Hellbound Rectification</span>", "—", "—", "—", "—", "15", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Shelf of End-Fused Rectification</span>", "—", "—", "—", "—", "25", "—", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-white/10 border border-white/20 text-ash'>Utility</span>"],
+            ["<span class='text-bone'>Amethyst Cluster</span> <span class='text-smoke text-xs'>(non-shelf)</span>", "—", "—", "—", "—", "1.5", "—", "<span class='text-smoke text-xs'>—</span>"],
+            ["<span class='text-bone'>Basic Skulls</span> <span class='text-smoke text-xs'>(non-shelf)</span>", "—", "—", "5", "—", "—", "—", "<span class='text-smoke text-xs'>—</span>"],
+            ["<span class='text-bone'>Wither Skeleton Skull</span> <span class='text-smoke text-xs'>(non-shelf)</span>", "—", "—", "10", "—", "—", "—", "<span class='text-smoke text-xs'>—</span>"]
+          ],
+          "note": "Dash (—) indicates zero contribution. \"Max Eterna\" is the per-shelf cap — a shelf only contributes its Eterna if the table total hasn't exceeded that shelf's cap. Shelves with no Max Eterna don't contribute Eterna."
+        }
+      ]
+    },
+    {
+      "id": "utility-shelves",
+      "title": "Utility Shelves",
+      "intro": "These shelves have special behaviors beyond raw stat contributions. They occupy a shelf slot but serve a unique purpose.",
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 2,
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "Filtering Shelf",
+              "html": ["A block entity that lets players <strong class='text-bone'>blacklist specific enchantments</strong> from appearing at the enchanting table. Right-click to open the filtering UI and select which enchantments to exclude."],
+              "note": "Stats identical to a vanilla bookshelf (Eterna +1, maxEterna 15). Uses a shelf slot but adds filtering control."
+            },
+            {
+              "title": "Treasure Shelf",
+              "html": ["A block entity that <strong class='text-bone'>unlocks treasure-tier enchantments</strong> (e.g., Mending) at the enchanting table. Without a Treasure Shelf placed nearby (or a <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> override), treasure enchantments will not appear in the enchanting pool."],
+              "note": "Essential for accessing the most valuable vanilla and Meridian enchantments through the table."
+            },
+            {
+              "title": "Hellshelf of Sight / Hellshelf of Masterful Sight",
+              "html": ["Pure <strong class='text-bone'>Clues providers</strong>. They contribute no other stats — their only purpose is to reveal additional enchantments in the tooltip preview before you spend levels. Hellshelf of Sight gives +1 Clue, Hellshelf of Masterful Sight gives +2 Clues."],
+              "note": "Reduces blind gambling. Pair with other shelves that provide the stats you need."
+            },
+            {
+              "title": "Rectification Shelves (Seabound / Hellbound / End-Fused)",
+              "html": ["Pure <strong class='text-bone'>Rectification providers</strong>. They contribute no Eterna, Quanta, or Arcana — they only counter the negative variance introduced by Quanta. Higher tiers give more Rectification per slot: Seabound +10, Hellbound +15, End-Fused +25."],
+              "note": "Essential when using high-Quanta shelves like Blazing Hellshelves or Soul-Touched Sculkshelves."
+            },
+            {
+              "title": "Stoneshelf",
+              "html": ["<strong class='text-bone'>Reduces Arcana and Eterna</strong>. Useful when you want to lower Arcana to avoid rare enchantments and target common ones instead. Gives -1.5 Eterna and -7.5 Arcana per shelf."],
+              "note": "Niche but valuable for targeted enchanting setups."
+            },
+            {
+              "title": "Beeshelf &amp; Melonshelf",
+              "html": ["<strong class='text-bone'>Stat manipulators</strong>. Beeshelf gives a massive +100 Quanta but -15 Eterna — extreme variance at the cost of level cap. Melonshelf gives -10 Quanta and -1 Eterna — use it to reduce Quanta when your setup has too much."],
+              "note": "Beeshelf is for players who want to gamble. Melonshelf is the antidote."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "table-crafting",
+      "title": "Enchanting Table Crafting Recipes",
+      "intro": "When your shelf setup meets the stat thresholds below, place the input item in the enchanting table and the third slot becomes a crafting result.",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": ["Input", "Output", "Eterna Req", "Quanta Req", "Arcana Req", "Notes"],
+          "rows": [
+            ["<span class='text-bone'>Carrot</span>", "Golden Carrot", "=10", "10–30", "—", "—"],
+            ["<span class='text-bone'>Honey Bottle</span>", "1x XP Bottle", "≥10", "≥25", "≥25", "—"],
+            ["<span class='text-bone'>Honey Bottle</span>", "8x XP Bottle", "≥30", "≥25", "≥25", "—"],
+            ["<span class='text-bone'>Honey Bottle</span>", "32x XP Bottle", "≥50", "≥25", "≥25", "Requires end-game setup"],
+            ["<span class='text-bone'>Hellshelf</span>", "Infused Hellshelf", "≥22.5", "≥30", "—", "—"],
+            ["<span class='text-bone'>Seashelf</span>", "Infused Seashelf", "≥22.5", "≥15", "≥10", "—"],
+            ["<span class='text-bone'>Scrap Tome</span>", "4x Improved Scrap Tome", "≥22.5", "25–50", "≥35", "—"],
+            ["<span class='text-bone'>Apple</span>", "Golden Apple", "=25", "20–40", "≥15", "—"],
+            ["<span class='text-bone'>Improved Scrap Tome</span>", "4x Extraction Tome", "≥30", "25–75", "≥45", "—"],
+            ["<span class='text-bone'>Dormant Deepshelf</span>", "Deepshelf", "≥30", "≥40", "≥40", "—"],
+            ["<span class='text-bone'>Amethyst Block</span>", "Budding Amethyst", "≥30", "30–50", "≥50", "—"],
+            ["<span class='text-bone'>Echo Shard</span>", "4x Echo Shard", "≥35", "≥50", "≥50", "—"],
+            ["<span class='text-bone'>Nautilus Shell</span>", "Heart of the Sea", "≥35", "≥30", "≥60", "Key for Heart-Forged Seashelf"],
+            ["<span class='text-bone'>Dragon's Breath</span>", "3x Infused Breath", "≥40", "15–25", "≥60", "Key material for End-tier shelves"],
+            ["<span class='text-bone'>Golden Apple</span>", "Enchanted Golden Apple", "≥45", "≥40", "≥75", "—"],
+            ["<span class='text-bone'>Emerald Block</span>", "Totem of Undying", "≥50", "≥45", "≥85", "Requires max Eterna"],
+            ["<span class='text-bone'>Enchantment Library</span>", "Ender Library", "=50", "45–50", "=100", "Preserves stored data. Hardest recipe"]
+          ],
+          "note": "Ranges (e.g., 25–50) indicate a minimum and maximum — Quanta must be within that window. Single values with ≥ are minimum thresholds. Values with = must be hit exactly."
+        }
+      ]
+    },
+    {
+      "id": "recommended-setups",
+      "title": "Recommended Setups",
+      "intro": "The enchanting table supports up to 15 shelf blocks in the standard 5x5 ring (same positions as vanilla bookshelves). Below are practical shelf combinations for reaching key stat thresholds at each stage of progression. Check in-game tooltips for exact stat totals — these are guidelines, not exact math.",
+      "blocks": [
+        {
+          "type": "sub",
+          "id": "setup-vanilla-start",
+          "title": "Vanilla Start <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-smoke/20 border border-smoke/30 text-smoke align-middle'>Eterna 15</span>",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "<strong class='text-bone'>Shelves:</strong> 15x <strong class='text-bone'>Vanilla Bookshelf</strong>",
+                "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>15</strong> · Quanta <strong class='text-bone'>0</strong> · Arcana <strong class='text-bone'>0</strong>",
+                "<strong class='text-bone'>Unlocks:</strong> Basic enchanting, same as vanilla Minecraft. Golden Carrot crafting. Tier-1 XP Bottle crafting (with enough Quanta and Arcana from non-shelf sources)."
+              ]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is your starting point. No Quanta means no variance — results are predictable but capped at vanilla power levels. Swap shelves out one at a time as you acquire Nether and Ocean materials." }
+          ]
+        },
+        {
+          "type": "sub",
+          "id": "setup-early-nether-ocean",
+          "title": "Early Nether / Ocean <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent align-middle'>Eterna ~22</span>",
+          "intro": "Pick one path:",
+          "blocks": [
+            {
+              "type": "cards",
+              "mdColumns": 2,
+              "titleSize": "base",
+              "items": [
+                {
+                  "title": "Nether Path (Quanta)",
+                  "html": ["15x <strong class='text-bone'>Hellshelf</strong>"],
+                  "note": "Eterna ~22.5, Quanta ~45, Arcana 0"
+                },
+                {
+                  "title": "Ocean Path (Arcana)",
+                  "html": ["15x <strong class='text-bone'>Seashelf</strong>"],
+                  "note": "Eterna ~22.5, Quanta 0, Arcana ~30"
+                }
+              ]
+            },
+            {
+              "type": "prose",
+              "html": ["<strong class='text-bone'>Unlocks:</strong> Infused Hellshelf and Infused Seashelf upgrades. Improved Scrap Tome crafting (with sufficient Arcana). Stronger enchantments beyond vanilla level 30."]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> Hellshelves add high Quanta — results become volatile. Consider mixing in 1–2 Rectification Shelves early to tame the variance. Seashelves are more stable but give Arcana instead of Quanta, which shifts the enchantment pool toward rarer results." }
+          ]
+        },
+        {
+          "type": "sub",
+          "id": "setup-mid-game",
+          "title": "Mid-Game Power <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2 align-middle'>Eterna ~30</span>",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "<strong class='text-bone'>Shelves:</strong> Mix of <strong class='text-bone'>Blazing Hellshelves</strong> (high Eterna + Quanta) and <strong class='text-bone'>Crystalline Seashelves</strong> (balanced Quanta + Arcana). Add <strong class='text-bone'>Rectification Shelves</strong> to counter the Quanta variance and <strong class='text-bone'>Hellshelves of Sight</strong> for preview visibility.",
+                "Example: 8x Blazing Hellshelf + 3x Crystalline Seashelf + 2x Shelf of Seabound Rectification + 1x Hellshelf of Masterful Sight + 1x Treasure Shelf",
+                "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>~30</strong> · Quanta <strong class='text-bone'>high</strong> · Arcana <strong class='text-bone'>moderate</strong> · Rectification <strong class='text-bone'>+20</strong> · Clues <strong class='text-bone'>+2</strong>",
+                "<strong class='text-bone'>Unlocks:</strong> Deepshelf awakening (Dormant Deepshelf to Deepshelf). Golden Apple crafting. Extraction Tome crafting. Budding Amethyst transmutation. 8x XP Bottle crafting. Most mid-tier table recipes."
+              ]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is where Rectification Shelves become critical. Blazing Hellshelves add +5 Quanta each, and without Rectification your results will swing wildly. Note that Blazing Hellshelves give -1 Clue each, so Hellshelves of Sight help compensate. Add a Treasure Shelf if you want Mending and other treasure enchantments to appear." }
+          ]
+        },
+        {
+          "type": "sub",
+          "id": "setup-deep-dark",
+          "title": "Deep Dark <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent/20 border border-accent/40 text-accent2 align-middle'>Eterna ~37</span>",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "<strong class='text-bone'>Shelves:</strong> Core of <strong class='text-bone'>Deepshelves</strong>, <strong class='text-bone'>Echoing Deepshelves</strong> (Arcana focus), and <strong class='text-bone'>Soul-Touched Deepshelves</strong> (Quanta focus). Add <strong class='text-bone'>Echoing Sculkshelves</strong> or <strong class='text-bone'>Soul-Touched Sculkshelves</strong> to push higher.",
+                "Example: 5x Echoing Sculkshelf + 4x Echoing Deepshelf + 3x Soul-Touched Sculkshelf + 2x Shelf of Hellbound Rectification + 1x Hellshelf of Masterful Sight",
+                "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>~37</strong> · Quanta <strong class='text-bone'>high</strong> · Arcana <strong class='text-bone'>very high</strong> · Rectification <strong class='text-bone'>+45</strong> · Clues <strong class='text-bone'>+7</strong>",
+                "<strong class='text-bone'>Unlocks:</strong> Infused Breath crafting (Dragon's Breath → 3x Infused Breath at E≥40). Echo Shard duplication. Heart of the Sea transmutation. Access to the highest non-End enchantment tiers."
+              ]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> Sculkshelves are the powerhouses of this tier — 5 Eterna each with maxEterna 40. Echoing Sculkshelves provide +1 Clue to help compensate slot usage on sight shelves. Soul-Touched Sculkshelves include built-in +5 Rectification, reducing the need for dedicated Rectification Shelf slots." }
+          ]
+        },
+        {
+          "type": "sub",
+          "id": "setup-end-game",
+          "title": "End-Game Maximum <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2 align-middle'>Eterna 50</span>",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "<strong class='text-bone'>Shelves:</strong> <strong class='text-bone'>Draconic Endshelves</strong> are required — they are the only shelf with maxEterna 50, making them the only way to reach the Eterna cap. Fill remaining slots with <strong class='text-bone'>Pearlescent Endshelves</strong> for balanced Quanta/Arcana, and utility shelves as needed.",
+                "Example: 5x Draconic Endshelf + 6x Pearlescent Endshelf + 2x Shelf of Hellbound Rectification + 1x Hellshelf of Masterful Sight + 1x Treasure Shelf",
+                "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>50</strong> · Quanta <strong class='text-bone'>~45</strong> · Arcana <strong class='text-bone'>~45</strong> · Rectification <strong class='text-bone'>+30</strong> · Clues <strong class='text-bone'>+2</strong>",
+                "<strong class='text-bone'>Unlocks:</strong> 32x XP Bottle crafting. Enchanted Golden Apple and Totem of Undying crafting. Maximum enchantment power for all enchantments. Required Eterna level for the Ender Library upgrade (alongside extreme Arcana)."
+              ]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> Draconic Endshelves give +10 Eterna each but zero Quanta/Arcana. They are pure power. Pearlescent Endshelves give +5 Eterna with +7.5 Quanta and +7.5 Arcana each — use them to build up the other stats. You need Draconic Endshelves to push beyond Eterna 45." }
+          ]
+        },
+        {
+          "type": "sub",
+          "id": "setup-ender-library",
+          "title": "Ender Library Upgrade <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2 align-middle'>E=50 / Q=45–50 / A=100</span>",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "This is the hardest recipe in the mod. You need <strong class='text-bone'>Eterna exactly 50</strong>, <strong class='text-bone'>Quanta between 45 and 50</strong>, and <strong class='text-bone'>Arcana exactly 100</strong>. Reaching Arcana 100 requires massive Arcana contributors: <strong class='text-bone'>Echoing Deepshelves</strong> (+15 Arcana each), <strong class='text-bone'>Echoing Sculkshelves</strong> (+15 Arcana each), and <strong class='text-bone'>Heart-Forged Seashelves</strong> (+10 Arcana each).",
+                "You must carefully balance the 15 slots to hit all three thresholds simultaneously. Draconic Endshelves are needed for Eterna 50, but they give zero Arcana. Every non-Draconic slot must maximize Arcana contribution.",
+                "<strong class='text-bone'>Strategy:</strong>"
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                "Use the minimum number of Draconic Endshelves needed to reach Eterna 50",
+                "Fill remaining slots with Echoing Deepshelves and Echoing Sculkshelves for maximum Arcana",
+                "Heart-Forged Seashelves provide +10 Arcana but come with -5 Rectification — factor that in",
+                "Use Stoneshelves to reduce Arcana if you overshoot (need exactly 100)",
+                "Quanta must land in the 45–50 window — Skulls and Soul-Touched shelves help here",
+                "Experiment in-game with the tooltip to fine-tune your exact layout"
+              ]
+            },
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is an aspirational end-game goal. The Ender Library doubles the point cap of the Enchantment Library (level 31 vs. level 16) and preserves all stored enchantment data during the upgrade. Plan your shelf layout carefully — trial and error at the table is expected." }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "customization",
+      "title": "Data-Driven Customization",
+      "intro": "All shelf stats are loaded from datapacks, not hardcoded. You can override any shelf's stat contribution without touching the mod jar.",
+      "blocks": [
+        {
+          "type": "sub",
+          "id": "overriding-shelf-stats",
+          "title": "Overriding Shelf Stats",
+          "blocks": [
+            {
+              "type": "prose",
+              "html": [
+                "Shelf stat contributions are defined as JSON files in <code class='text-accent2'>data/meridian/enchanting_stats/</code> within any datapack. To change what stats a shelf block provides, create a datapack that overrides the relevant JSON file.",
+                "For example, to make Hellshelves provide more Eterna, create a file at <code class='text-accent2'>data/meridian/enchanting_stats/hellshelf.json</code> in your datapack and adjust the values.",
+                "After making changes, run <code class='text-accent2'>/reload</code> (the vanilla datapack reload command) to apply them without restarting the server. Changes take effect immediately for all players."
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

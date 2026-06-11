@@ -1,10 +1,10 @@
-![Meridian Logo](https://meridian.rfizzle.com/logo.png)
+![Meridian Logo](https://raw.githubusercontent.com/rfizzle/meridian/master/art/logo.png)
 
 # Meridian — A Complete Enchanting Overhaul
 
 Meridian is a **ground-up rewrite of Minecraft's enchanting system** for Fabric 1.21.1. It replaces the single-stat enchanting table with a five-axis progression system, adds 75 original enchantments, introduces 25+ biome-themed shelf blocks, and gives you real tools for managing your enchantment collection — libraries, salvage tomes, and anvil upgrades included.
 
-Inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) and [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith), rebuilt from scratch for modern Fabric.
+Inspired by [Apotheosis](https://modrinth.com/mod/apotheosis) and [Zenith](https://modrinth.com/mod/zenith), rebuilt from scratch for modern Fabric.
 
 ---
 
