@@ -1,24 +1,36 @@
 {
   "type": "home",
   "nav": "Home",
-  "metaTitle": "Meridian — Enchanting Overhaul for Minecraft",
+  "metaTitle": "Meridian \u2014 Enchanting Overhaul for Minecraft",
   "metaDescription": "Meridian is a complete enchanting overhaul mod for Minecraft 1.21.1 Fabric. Five stat axes, 75 original enchantments, 25+ themed shelves, enchantment libraries, salvage tomes, and anvil upgrades.",
-  "ogTitle": "Meridian — Enchanting Overhaul for Minecraft",
+  "ogTitle": "Meridian \u2014 Enchanting Overhaul for Minecraft",
   "ogDescription": "A complete enchanting overhaul for Minecraft 1.21.1 Fabric. Five stat axes, 75 original enchantments, themed shelves, libraries, tomes, and more.",
   "hero": {
     "lede": "A complete enchanting overhaul for Minecraft 1.21.1 (Fabric).",
-    "sub": "Five independent stats replace vanilla's single power value. 75 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage tomes, and anvil upgrades — all fully data-driven.",
+    "sub": "Five independent stats replace vanilla's single power value. 75 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage tomes, and anvil upgrades \u2014 all fully data-driven.",
     "buttons": [
-      { "label": "Download Latest Release", "href": "https://github.com/rfizzle/meridian/releases", "primary": true, "external": true },
-      { "label": "Enchantments", "href": "/enchantments.html" },
-      { "label": "GitHub", "href": "https://github.com/rfizzle/meridian", "external": true }
+      {
+        "label": "Download Latest Release",
+        "href": "https://github.com/rfizzle/meridian/releases",
+        "primary": true,
+        "external": true
+      },
+      {
+        "label": "Getting Started",
+        "href": "/guide.html"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/rfizzle/meridian",
+        "external": true
+      }
     ]
   },
   "sections": [
     {
       "title": "Core Systems",
       "band": true,
-      "lede": "Six interlocking systems that transform Minecraft's enchanting from a single-click gamble into a deep progression mechanic. <a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Full enchantment list →</a>",
+      "lede": "Six interlocking systems that transform Minecraft's enchanting from a single-click gamble into a deep progression mechanic. <a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Full enchantment list \u2192</a>",
       "blocks": [
         {
           "type": "cards",
@@ -29,32 +41,44 @@
             {
               "icon": "&#10024;",
               "title": "Five-Stat Enchanting",
-              "html": ["Eterna, Quanta, Arcana, Rectification, and Clues — each axis controls a different aspect of enchanting power, variance, rarity bias, consistency, and preview visibility."]
+              "html": [
+                "Eterna, Quanta, Arcana, Rectification, and Clues \u2014 each axis controls a different aspect of enchanting power, variance, rarity bias, consistency, and preview visibility."
+              ]
             },
             {
               "icon": "&#128218;",
               "title": "75 Original Enchantments",
-              "html": ["Combat, ranged, tool, mobility, shield, elytra, and mount enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."]
+              "html": [
+                "Combat, ranged, tool, mobility, shield, elytra, and mount enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."
+              ]
             },
             {
               "icon": "&#128214;",
               "title": "Themed Shelves",
-              "html": ["25+ shelf blocks spanning Overworld, Nether, Ocean, Deep Dark, and End tiers. Each contributes unique stat combinations. Fully data-driven via datapacks."]
+              "html": [
+                "25+ shelf blocks spanning Overworld, Nether, Ocean, Deep Dark, and End tiers. Each contributes unique stat combinations. Fully data-driven via datapacks."
+              ]
             },
             {
               "icon": "&#127969;",
               "title": "Enchantment Libraries",
-              "html": ["Two-tier pooling storage blocks that consolidate enchanted books into per-enchantment point banks. Basic (level 16 cap) and Ender (level 31 cap) variants."]
+              "html": [
+                "Two-tier pooling storage blocks that consolidate enchanted books into per-enchantment point banks. Basic (level 16 cap) and Ender (level 31 cap) variants."
+              ]
             },
             {
               "icon": "&#128220;",
               "title": "Salvage Tomes",
-              "html": ["Three tomes for extracting enchantments: Scrap (random, destroys item), Improved Scrap (all, destroys item), and Extraction (all, preserves item)."]
+              "html": [
+                "Three tomes for extracting enchantments: Scrap (random, destroys item), Improved Scrap (all, destroys item), and Extraction (all, preserves item)."
+              ]
             },
             {
               "icon": "&#9878;",
               "title": "Anvil Upgrades",
-              "html": ["Prismatic Web strips all curses from an item. Iron Blocks repair chipped and damaged anvils. Both configurable and toggleable."]
+              "html": [
+                "Prismatic Web strips all curses from an item. Iron Blocks repair chipped and damaged anvils. Both configurable and toggleable."
+              ]
             }
           ]
         }
@@ -62,7 +86,7 @@
     },
     {
       "title": "The Five Stats",
-      "lede": "Each stat is contributed by shelf blocks surrounding the enchanting table. Different shelf types push different stats, letting you tune your setup for the enchantments you want. <a href='/shelves.html' class='text-accent hover:text-accent2 underline'>Browse the shelves →</a>",
+      "lede": "Each stat is contributed by shelf blocks surrounding the enchanting table. Different shelf types push different stats, letting you tune your setup for the enchantments you want. <a href='/shelves.html' class='text-accent hover:text-accent2 underline'>Browse the shelves \u2192</a>",
       "blocks": [
         {
           "type": "cards",
@@ -73,27 +97,37 @@
             {
               "title": "Eterna",
               "titleTone": "bone",
-              "html": ["Maximum enchanting level cap. Replaces vanilla's 0–30 range with 0–50. Higher Eterna unlocks higher-tier enchantments and table crafting recipes. Each vanilla bookshelf provides +1 Eterna (capped at 15)."]
+              "html": [
+                "Maximum enchanting level cap. Replaces vanilla's 0\u201330 range with 0\u201350. Higher Eterna unlocks higher-tier enchantments and table crafting recipes. Each vanilla bookshelf provides +1 Eterna (capped at 15)."
+              ]
             },
             {
               "title": "Quanta",
               "titleTone": "bone",
-              "html": ["Controls the upper bound of the random power roll. Higher Quanta means more variance — you might get amazing results or terrible ones. Tempered by Rectification."]
+              "html": [
+                "Controls the upper bound of the random power roll. Higher Quanta means more variance \u2014 you might get amazing results or terrible ones. Tempered by Rectification."
+              ]
             },
             {
               "title": "Arcana",
               "titleTone": "bone",
-              "html": ["Biases the enchantment pool toward rarer, more obscure enchantments. High Arcana increases the chance of getting rare enchantments and is required for many table crafting recipes."]
+              "html": [
+                "Biases the enchantment pool toward rarer, more obscure enchantments. High Arcana increases the chance of getting rare enchantments and is required for many table crafting recipes."
+              ]
             },
             {
               "title": "Rectification",
               "titleTone": "bone",
-              "html": ["Reduces the negative variance introduced by Quanta. High Rectification with high Quanta means consistently strong results without the downside of random garbage rolls."]
+              "html": [
+                "Reduces the negative variance introduced by Quanta. High Rectification with high Quanta means consistently strong results without the downside of random garbage rolls."
+              ]
             },
             {
               "title": "Clues",
               "titleTone": "bone",
-              "html": ["Reveals additional enchantments in the tooltip preview before you commit. Each point of Clues shows one more enchantment from the result, reducing blind gambling."]
+              "html": [
+                "Reveals additional enchantments in the tooltip preview before you commit. Each point of Clues shows one more enchantment from the result, reducing blind gambling."
+              ]
             }
           ]
         }
@@ -111,19 +145,27 @@
           "items": [
             {
               "title": "Shelf Upgrades",
-              "html": ["Craft higher-tier shelves directly in the enchanting table. Hellshelves upgrade to Infused, Blazing, and Glowing variants. Seashelves upgrade to Infused, Crystal, and Heart variants. Dormant Deepshelves awaken into full Deepshelves."]
+              "html": [
+                "Craft higher-tier shelves directly in the enchanting table. Hellshelves upgrade to Infused, Blazing, and Glowing variants. Seashelves upgrade to Infused, Crystal, and Heart variants. Dormant Deepshelves awaken into full Deepshelves."
+              ]
             },
             {
               "title": "Tome Progression",
-              "html": ["Scrap Tomes upgrade to Improved Scrap Tomes (Eterna 22.5+), which upgrade to Extraction Tomes (Eterna 30+). Each tier requires progressively higher stats."]
+              "html": [
+                "Scrap Tomes upgrade to Improved Scrap Tomes (Eterna 22.5+), which upgrade to Extraction Tomes (Eterna 30+). Each tier requires progressively higher stats."
+              ]
             },
             {
               "title": "Material Transmutation",
-              "html": ["Convert Dragon's Breath into Infused Breath (key material for End-tier shelves). Transmute Honey Bottles into Experience Bottles at three output tiers. Craft Budding Amethyst, Golden Carrots, Golden Apples, Enchanted Golden Apples, Hearts of the Sea, Totems of Undying, and duplicate Echo Shards."]
+              "html": [
+                "Convert Dragon's Breath into Infused Breath (key material for End-tier shelves). Transmute Honey Bottles into Experience Bottles at three output tiers. Craft Budding Amethyst, Golden Carrots, Golden Apples, Enchanted Golden Apples, Hearts of the Sea, Totems of Undying, and duplicate Echo Shards."
+              ]
             },
             {
               "title": "Library Upgrade",
-              "html": ["Upgrade a Basic Library to an Ender Library at the enchanting table. Requires maximum stats: Eterna 50, Quanta 45–50, Arcana 100. Preserves all stored enchantment data."]
+              "html": [
+                "Upgrade a Basic Library to an Ender Library at the enchanting table. Requires maximum stats: Eterna 50, Quanta 45\u201350, Arcana 100. Preserves all stored enchantment data."
+              ]
             }
           ]
         }

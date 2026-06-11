@@ -1,0 +1,85 @@
+{
+  "nav": "FAQ",
+  "metaTitle": "FAQ \u2014 Meridian | Enchanting Overhaul for Minecraft",
+  "metaDescription": "Frequently asked questions about Meridian: treasure enchantments, config vs datapack customization, enchantment overrides, mod compatibility, and supported versions.",
+  "ogTitle": "FAQ \u2014 Meridian",
+  "ogDescription": "Treasure enchantments, customization, compatibility, and common questions about Meridian.",
+  "title": "Frequently Asked Questions",
+  "lede": "Click any question to expand. If yours isn't here, <a href='https://github.com/rfizzle/meridian/issues' rel='noopener noreferrer' target='_blank' class='text-accent hover:text-accent2 underline'>open an issue on GitHub</a>.",
+  "width": "4xl",
+  "sections": [
+    {
+      "id": "enchanting",
+      "title": "Enchanting & Results",
+      "blocks": [
+        {
+          "type": "faq",
+          "items": [
+            {
+              "q": "Why doesn't Mending (or another treasure enchantment) show up at my table?",
+              "a": "Treasure-tier enchantments like Mending are locked behind the <strong class='text-bone'>Treasure Shelf</strong>, a utility shelf block. Without one placed in your shelf ring, treasure enchantments will not appear in the enchanting pool. Either craft and place a Treasure Shelf (see the <a href='/shelves.html#utility-shelves' class='text-accent hover:text-accent2 underline'>utility shelves reference</a>), or set <code class='text-accent2'>allowTreasureWithoutShelf</code> to <code class='text-accent2'>true</code> under <code class='text-accent2'>enchantingTable</code> in the <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config</a> to remove the requirement entirely."
+            },
+            {
+              "q": "My results are wildly inconsistent \u2014 why?",
+              "a": "You almost certainly have <strong class='text-bone'>high Quanta without Rectification</strong>. Quanta raises the upper bound of the random power roll, so high-Quanta shelves like Blazing Hellshelves (or the extreme Beeshelf) make results swing between amazing and terrible. Rectification counters Quanta's negative variance \u2014 add Rectification Shelves (Seabound +10, Hellbound +15, End-Fused +25) and your rolls become consistently strong instead of volatile. If you've overshot on Quanta, a Melonshelf (-10 Quanta) is the antidote. The <a href='/guide.html' class='text-accent hover:text-accent2 underline'>Getting Started guide</a> covers taming variance step by step, and the <a href='/shelves.html#recommended-setups' class='text-accent hover:text-accent2 underline'>recommended setups</a> give balanced shelf combinations for each progression stage."
+            },
+            {
+              "q": "Do vanilla enchantments still exist? Can they go higher than vanilla levels?",
+              "a": "Yes \u2014 vanilla enchantments participate in Meridian's system alongside the 75 original ones, and the table's level range scales to 0\u201350 instead of vanilla's 0\u201330 cap. Per-enchantment overrides work on <strong class='text-bone'>any enchantment, vanilla or modded</strong>: the <a href='/config.html#enchantment-overrides' class='text-accent hover:text-accent2 underline'>config reference</a> includes an example that raises <code class='text-accent2'>minecraft:sharpness</code> to <code class='text-accent2'>maxLevel: 10</code> with custom linear power functions, while capping its loot-table level at 5."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "customization",
+      "title": "Configuration & Customization",
+      "blocks": [
+        {
+          "type": "faq",
+          "items": [
+            {
+              "q": "How do I disable or re-tune a specific enchantment?",
+              "a": "Use the <code class='text-accent2'>enchantmentOverrides</code> map in <code class='text-accent2'>config/meridian.json</code>. Keys are enchantment IDs (e.g., <code class='text-accent2'>minecraft:sharpness</code> or <code class='text-accent2'>meridian:siphon</code>), and each entry can set <code class='text-accent2'>enabled</code>, <code class='text-accent2'>maxLevel</code>, <code class='text-accent2'>maxLootLevel</code>, <code class='text-accent2'>levelCap</code>, and custom <code class='text-accent2'>minPowerFunction</code> / <code class='text-accent2'>maxPowerFunction</code> objects (linear, fixed, or default). Setting <code class='text-accent2'>enabled: false</code> removes an enchantment from the table, loot, and tooltips without deleting data from existing items. Apply changes live with <code class='text-accent2'>/meridian reload</code>. Full details in the <a href='/config.html#enchantment-overrides' class='text-accent hover:text-accent2 underline'>configuration reference</a>."
+            },
+            {
+              "q": "How do I change what stats a shelf gives?",
+              "a": "Shelf stat contributions are <strong class='text-bone'>datapack-driven, not config-driven</strong>. They're defined as JSON files in <code class='text-accent2'>data/meridian/enchanting_stats/</code> \u2014 create a datapack that overrides the relevant file (e.g., <code class='text-accent2'>data/meridian/enchanting_stats/hellshelf.json</code> to retune Hellshelves), then run the vanilla <code class='text-accent2'>/reload</code> command to apply changes without restarting. They take effect immediately for all players. See <a href='/shelves.html#customization' class='text-accent hover:text-accent2 underline'>data-driven customization</a> on the shelves page."
+            },
+            {
+              "q": "Config file vs datapack \u2014 which controls what?",
+              "a": "<strong class='text-bone'>Config</strong> (<code class='text-accent2'>config/meridian.json</code>) controls behavior: enchanting-table settings (max Eterna, treasure shelf requirement, level indicator), shelf effects (sculk shrieker and particle chances), anvil settings, library hopper limits, tome XP costs, warden drop rates, display/tooltip options, and per-enchantment overrides. It hot-reloads via <code class='text-accent2'>/meridian reload</code>. <strong class='text-bone'>Datapacks</strong> control shelf stat contributions (Eterna, Quanta, Arcana, Rectification, Clues per block) under <code class='text-accent2'>data/meridian/enchanting_stats/</code>, reloaded with the vanilla <code class='text-accent2'>/reload</code>. See the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config reference</a> and <a href='/commands.html' class='text-accent hover:text-accent2 underline'>commands page</a>."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "compatibility",
+      "title": "Compatibility & Installation",
+      "blocks": [
+        {
+          "type": "faq",
+          "items": [
+            {
+              "q": "Does Meridian work with EMI / REI / JEI / Jade / WTHIT / ModMenu / Trinkets?",
+              "a": "Yes. Meridian ships first-class integration adapters for <strong class='text-bone'>EMI, REI, and JEI</strong> (enchanting-table crafting recipes and library mechanics) and <strong class='text-bone'>Jade</strong> (shelf stat tooltips and library contents), plus a ModMenu entry, and is compatible with WTHIT and Trinkets. All of these are <strong class='text-bone'>optional</strong> \u2014 none are bundled or required, and Meridian runs fine without any of them installed."
+            },
+            {
+              "q": "Do I install it on the server, the client, or both?",
+              "a": "For multiplayer, <strong class='text-bone'>both</strong>. Drop the jar into the <code class='text-accent2'>mods/</code> directory on the server and on every client \u2014 a client missing the mod will desync on the first table interaction. The config lives in <code class='text-accent2'>config/meridian.json</code> on the server side, and <code class='text-accent2'>/meridian reload</code> re-reads it and syncs updated values to all connected players immediately. See the <a href='/commands.html' class='text-accent hover:text-accent2 underline'>commands page</a> for reload details."
+            },
+            {
+              "q": "How does Meridian relate to Apotheosis and Zenith?",
+              "a": "Meridian is a <strong class='text-bone'>clean-room rewrite for modern Fabric 1.21.1</strong>, not a port. The enchanting module concepts \u2014 stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system \u2014 are inspired by <a href='https://www.curseforge.com/minecraft/mc-mods/apotheosis' rel='noopener noreferrer' target='_blank' class='text-accent hover:text-accent2 underline'>Apotheosis</a> by Shadows_of_Fire and its Fabric port <a href='https://www.curseforge.com/minecraft/mc-mods/zenith' rel='noopener noreferrer' target='_blank' class='text-accent hover:text-accent2 underline'>Zenith</a> by TheWinABagel, but all code is a fresh 1.21.1 rewrite with no source copied. Textures are sourced from Zenith (originally Apotheosis), while all 75 <a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>enchantments</a> \u2014 names, IDs, weights, costs, effects, and descriptions \u2014 are original to Meridian."
+            },
+            {
+              "q": "Which Minecraft and loader versions are supported?",
+              "a": "Minecraft <strong class='text-bone'>1.21.1</strong> with Fabric Loader <strong class='text-bone'>0.16.10+</strong>, Fabric API (0.116.1+1.21.1 or newer), and <strong class='text-bone'>Java 21</strong>. Quilt users can run the mod via Quilted Fabric API with no changes. Watch the <a href='https://github.com/rfizzle/meridian/releases' rel='noopener noreferrer' target='_blank' class='text-accent hover:text-accent2 underline'>releases page</a> for version updates."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

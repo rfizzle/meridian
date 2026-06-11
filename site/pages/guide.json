@@ -1,0 +1,161 @@
+{
+  "nav": "Guide",
+  "metaTitle": "Getting Started — Meridian | Enchanting Overhaul for Minecraft",
+  "metaDescription": "A progression walkthrough — install Meridian, build your first enchanting table setup, learn the five stats, and climb from vanilla bookshelves to the Ender Library.",
+  "ogTitle": "Getting Started — Meridian",
+  "ogDescription": "Install Meridian, learn the five enchanting stats, and progress from vanilla bookshelves to Eterna 50.",
+  "title": "Getting Started",
+  "lede": "A progression walkthrough — install Meridian, build your first table, learn what the five stats actually mean for your rolls, and climb shelf tier by shelf tier toward Eterna 50 and the Ender Library.",
+  "width": "4xl",
+  "scale": "lg",
+  "sections": [
+    {
+      "id": "installation",
+      "title": "1. Install &amp; First Launch",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": [
+          "Meridian is a Fabric mod for Minecraft <strong class='text-bone'>1.21.1</strong>. You need <strong class='text-bone'>Fabric Loader 0.16.10+</strong>, <strong class='text-bone'>Fabric API</strong>, and <strong class='text-bone'>Java 21</strong> — drop the jar into <code class='text-accent2'>mods/</code> on both the server and every client, then launch once. The config generates at <code class='text-accent2'>config/meridian.json</code> on first run.",
+          "The <a href='/index.html' class='text-accent hover:text-accent2 underline'>home page</a> has the full step-by-step install, and the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config reference</a> covers every setting. Defaults are sensible — you don't need to touch anything to start playing."
+        ] }
+      ]
+    },
+    {
+      "id": "first-table",
+      "title": "2. Your First Table",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": [
+          "Build an enchanting table exactly like you always have: surround it with <strong class='text-bone'>15 vanilla bookshelves</strong> in the standard 5x5 ring. That gives you <strong class='text-bone'>Eterna 15</strong> — full vanilla parity. Each bookshelf contributes +1 Eterna, capped at 15, so day one feels identical to unmodded Minecraft.",
+          "The difference is what the table is measuring. Vanilla's single \"power\" value is gone, replaced by <strong class='text-bone'>five independent stats</strong> contributed by the shelves around the table. Hover the table and check the enchanting screen — the tooltip preview shows your current stat totals and a peek at the enchantments you'll get, so you can rearrange shelves and watch the numbers move before spending a single level.",
+          "From here, progression is simple: better shelves push better stats, and swapping bookshelves for themed shelves <em>is</em> the upgrade path."
+        ] }
+      ]
+    },
+    {
+      "id": "five-stats",
+      "title": "3. Understanding the Five Stats",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": ["Every shelf pushes some combination of these five axes. What each one means for your rolls:"] },
+        {
+          "type": "list",
+          "spacing": 3,
+          "items": [
+            "<strong class='text-bone'>Eterna</strong> — your level cap, 0–50 (vanilla stops at 30). Higher Eterna unlocks stronger enchantments and gates the table's crafting recipes. The headline number you're always pushing up.",
+            "<strong class='text-bone'>Quanta</strong> — variance. It raises the upper bound of the random power roll, so high Quanta means bigger swings: occasionally amazing, occasionally terrible.",
+            "<strong class='text-bone'>Arcana</strong> — rarity bias. Higher Arcana shifts the enchantment pool toward rarer, more obscure results, and many crafting recipes require it.",
+            "<strong class='text-bone'>Rectification</strong> — the tame for Quanta. It cancels Quanta's negative variance, so high Quanta + high Rectification means consistently strong rolls without the garbage outcomes.",
+            "<strong class='text-bone'>Clues</strong> — preview visibility. Each point reveals one more enchantment in the tooltip before you commit, turning a blind gamble into an informed choice."
+          ]
+        },
+        { "type": "prose", "html": ["The full <a href='/shelves.html#stat-primer' class='text-accent hover:text-accent2 underline'>stat primer</a> and per-shelf numbers live on the <a href='/shelves.html#shelf-reference' class='text-accent hover:text-accent2 underline'>shelves page</a> — this guide only needs the shape of each stat."], "topGap": true }
+      ]
+    },
+    {
+      "id": "nether-vs-ocean",
+      "title": "4. Choosing Your Path: Nether vs Ocean",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": [
+          "Your first real upgrade comes from one of two biomes, and both land around <strong class='text-bone'>Eterna ~22</strong> with a full ring of 15:"
+        ] },
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Path", "Shelf", "Pushes", "Character"],
+          "rows": [
+            ["<span class='text-bone'>Nether</span>", "Hellshelf", "Quanta", "Volatile — big swings, big jackpots"],
+            ["<span class='text-bone'>Ocean</span>", "Seashelf", "Arcana", "Stable — steady rolls, rarer enchantments"]
+          ]
+        },
+        { "type": "prose", "html": [
+          "<strong class='text-bone'>Hellshelves</strong> stack Quanta fast (a full ring sits around Quanta ~45), which means exciting but unpredictable results. <strong class='text-bone'>Seashelves</strong> add zero Quanta and build Arcana instead, quietly tilting the pool toward rarer enchantments.",
+          "Either path unlocks the table's first self-upgrade: with the right stats, place a Hellshelf or Seashelf <em>in the enchanting table itself</em> and the third enchant slot becomes an <strong class='text-bone'>Infused</strong> variant of that shelf. Building your shelf collection at the table is the core loop from here on — see the <a href='/shelves.html#table-crafting' class='text-accent hover:text-accent2 underline'>full recipe table</a> for exact thresholds, and the <a href='/shelves.html#setup-early-nether-ocean' class='text-accent hover:text-accent2 underline'>early setups</a> for layouts."
+        ] }
+      ]
+    },
+    {
+      "id": "taming-variance",
+      "title": "5. Taming the Variance",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": ["Once Quanta climbs, three utility shelves keep your rolls honest. Each occupies a shelf slot but does one job extremely well:"] },
+        {
+          "type": "list",
+          "spacing": 3,
+          "items": [
+            "<strong class='text-bone'>Rectification Shelves</strong> — pure Rectification, nothing else. Three tiers: <strong class='text-bone'>Seabound +10</strong>, <strong class='text-bone'>Hellbound +15</strong>, <strong class='text-bone'>End-Fused +25</strong> per shelf. Mix in one or two whenever Hellshelves make your results swing wildly.",
+            "<strong class='text-bone'>Hellshelves of Sight</strong> — pure Clues (+1, or +2 for the Masterful variant). More of the result revealed in the tooltip before you spend levels.",
+            "<strong class='text-bone'>Treasure Shelf</strong> — easy to miss, and important: <strong class='text-bone'>treasure enchantments like Mending will not appear at the table at all</strong> unless a Treasure Shelf is placed nearby (or you flip the <code class='text-accent2'>allowTreasureWithoutShelf</code> <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config option</a>). If you've been wondering where Mending went — this is where."
+          ]
+        },
+        { "type": "note", "html": "All three are detailed under <a href='/shelves.html#utility-shelves' class='text-accent hover:text-accent2 underline'>utility shelves</a>, alongside niche tools like the Stoneshelf, Beeshelf, and Melonshelf for fine-tuning stats." }
+      ]
+    },
+    {
+      "id": "mid-game",
+      "title": "6. Mid-Game Power",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": [
+          "Around <strong class='text-bone'>Eterna ~30</strong> the shelf roster opens up. Upgraded Nether shelves — <strong class='text-bone'>Blazing Hellshelves</strong> (big Eterna + Quanta, but -1 Clue each) and <strong class='text-bone'>Glowing Hellshelves</strong> (adds Arcana) — sit alongside upgraded Ocean shelves: <strong class='text-bone'>Crystalline Seashelves</strong> (balanced Quanta + Arcana) and <strong class='text-bone'>Heart-Forged Seashelves</strong> (+10 Arcana each, at the cost of -5 Rectification).",
+          "This is also when <strong class='text-bone'>Dormant Deepshelves</strong> — which you may have collected from the Deep Dark earlier, acting as plain bookshelves — can be <strong class='text-bone'>awakened into full Deepshelves</strong> at the table.",
+          "The table's crafting side gets serious too: <strong class='text-bone'>Golden Apples</strong>, <strong class='text-bone'>tome upgrades</strong> (Scrap → Improved Scrap → Extraction), <strong class='text-bone'>8x XP Bottles</strong> from Honey Bottles, and Budding Amethyst all unlock in this band. See the <a href='/shelves.html#setup-mid-game' class='text-accent hover:text-accent2 underline'>mid-game setup</a> for a concrete 15-shelf layout and the <a href='/shelves.html#table-crafting' class='text-accent hover:text-accent2 underline'>recipe thresholds</a> for exact stat requirements."
+        ] },
+        { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> mid-game is where Rectification Shelves stop being optional. Blazing Hellshelves pile on Quanta fast — without Rectification, your rolls will swing hard in both directions." }
+      ]
+    },
+    {
+      "id": "late-and-end-game",
+      "title": "7. Deep Dark &amp; the End",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "sub", "title": "Deep Dark — Eterna ~37", "blocks": [
+          { "type": "prose", "html": [
+            "<strong class='text-bone'>Deepshelves</strong> and their Echoing (Arcana-focused) and Soul-Touched (Quanta-focused) variants carry you to <strong class='text-bone'>Eterna ~37</strong>, and <strong class='text-bone'>Sculkshelves</strong> — crafted with Warden Tendrils — push further still, with Echoing Sculkshelves adding a bonus Clue and Soul-Touched Sculkshelves bringing built-in Rectification. This tier unlocks <strong class='text-bone'>Infused Breath</strong> crafting from Dragon's Breath, the key material for End-tier shelves. Layout details in the <a href='/shelves.html#setup-deep-dark' class='text-accent hover:text-accent2 underline'>Deep Dark setup</a>."
+          ] }
+        ] },
+        { "type": "sub", "title": "The End — Eterna 50", "blocks": [
+          { "type": "prose", "html": [
+            "Endshelves finish the climb. <strong class='text-bone'>Pearlescent Endshelves</strong> give balanced stats (+5 Eterna with Quanta and Arcana alongside); <strong class='text-bone'>Draconic Endshelves</strong> are pure power — <strong class='text-bone'>+10 Eterna each and the only shelf that can reach the Eterna 50 cap</strong>. A typical end-game ring mixes Draconics for the cap with Pearlescents for everything else: see the <a href='/shelves.html#setup-end-game' class='text-accent hover:text-accent2 underline'>end-game setup</a>.",
+            "The aspirational capstone is the <strong class='text-bone'>Ender Library upgrade</strong> — the hardest recipe in the mod, demanding <strong class='text-bone'>Eterna exactly 50, Quanta 45–50, and Arcana exactly 100</strong> simultaneously. Balancing all fifteen slots to hit three thresholds at once is a puzzle in itself; the <a href='/shelves.html#setup-ender-library' class='text-accent hover:text-accent2 underline'>Ender Library strategy</a> walks through it."
+          ] }
+        ] }
+      ]
+    },
+    {
+      "id": "beyond-the-table",
+      "title": "8. Beyond the Table",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": ["The enchanting table is the centerpiece, but Meridian's other systems round out the loop:"] },
+        {
+          "type": "list",
+          "spacing": 3,
+          "items": [
+            "<strong class='text-bone'>Enchantment Libraries</strong> — pooling storage that consolidates enchanted books into per-enchantment point banks, dispensed deterministically for XP. Basic Libraries cap at level 16; the Ender Library doubles that to level 31.",
+            "<strong class='text-bone'>Salvage Tomes</strong> — extract enchantments in the anvil: <strong class='text-bone'>Scrap</strong> (one random, destroys the item), <strong class='text-bone'>Improved Scrap</strong> (all, destroys the item), <strong class='text-bone'>Extraction</strong> (all, preserves the item).",
+            "<strong class='text-bone'>Anvil upgrades</strong> — a <strong class='text-bone'>Prismatic Web</strong> strips every curse from an item, and an <strong class='text-bone'>Iron Block</strong> repairs a chipped or damaged anvil by one tier.",
+            "<strong class='text-bone'>Live tuning</strong> — every value lives in <code class='text-accent2'>config/meridian.json</code>; apply edits without a restart via <code class='text-accent2'>/meridian reload</code>."
+          ]
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "type": "panel",
+          "title": "Where to go next",
+          "items": [
+            "<a href='/shelves.html' class='text-accent hover:text-accent2 underline'>Shelves &amp; Setups</a> — every shelf's exact stats, all table recipes, and recommended layouts for each tier.",
+            "<a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Enchantments</a> — the full roster of 75 original enchantments.",
+            "<a href='/config.html' class='text-accent hover:text-accent2 underline'>Config</a> — every key, type, and default in <code class='text-accent2'>meridian.json</code>.",
+            "<a href='/commands.html' class='text-accent hover:text-accent2 underline'>Commands</a> — operator tools, including <code class='text-accent2'>/meridian reload</code>.",
+            "<a href='/faq.html' class='text-accent hover:text-accent2 underline'>FAQ</a> — compatibility, multiplayer, and common questions."
+          ]
+        }
+      ]
+    }
+  ]
+}
