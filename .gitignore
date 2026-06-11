@@ -3,12 +3,13 @@
 build/
 out/
 classes/
+net/
 
 # loom dev runtime
 run/
 mods/
 logs/
-net/
+config/
 
 # IDE
 .idea/
@@ -21,9 +22,22 @@ net/
 .project
 *.launch
 
+# generated website (built by concord template)
+_site/
+
+# local AI / planning state
+.claude/settings.local.json
+.claude/projects/
+.claude/scheduled_tasks.lock
+.plan/
+
 # OS junk
 .DS_Store
 Thumbs.db
+
+# stray runtime artifacts
+replay_pid*.log
+hs_err_pid*.log
 
 # Fabric datagen hash cache — timestamps inside these files change every run,
 # so committing them would make `./gradlew runDatagen` non-idempotent against
