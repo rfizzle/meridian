@@ -7,9 +7,17 @@
   "metaKeywords": "Minecraft, Fabric mod, enchanting mod, enchanting overhaul, Apotheosis, Zenith, 1.21.1",
   "github": "https://github.com/rfizzle/meridian",
   "defaultBranch": "master",
-  "copyright": "© 2026 rfizzle. Meridian is not affiliated with Mojang Studios or Microsoft.",
-  "footerMeta": "Minecraft 1.21.1 · Fabric",
-  "nav": ["index", "enchantments", "shelves", "commands", "config"],
+  "copyright": "\u00a9 2026 rfizzle. Meridian is not affiliated with Mojang Studios or Microsoft.",
+  "footerMeta": "Minecraft 1.21.1 \u00b7 Fabric",
+  "nav": [
+    "index",
+    "enchantments",
+    "shelves",
+    "commands",
+    "config",
+    "guide",
+    "faq"
+  ],
   "theme": {
     "accent": "#DAA520",
     "accentDark": "#8B6914",
