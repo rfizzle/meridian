@@ -132,7 +132,7 @@ Quilt users can run the mod via Quilted Fabric API with no changes.
 
 The mod generates `config/meridian.json` on first launch with sensible defaults. Every value can be tuned without a restart using `/meridian reload`.
 
-See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
+See the full annotated reference: **[Configuration Guide](https://meridian.rfizzle.com/config.html)**
 
 ---
 
