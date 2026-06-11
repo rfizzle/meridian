@@ -30,6 +30,13 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Each test below rewrites the shared {@code config/meridian.json} and reloads the global
+ * config singleton, so no two of them may run in the same gametest batch: batches run their
+ * tests interleaved on the server thread, and a concurrent test would capture (and later
+ * restore) another test's mutated config instead of the pristine one. A unique {@code batch}
+ * per config-mutating test serializes them — vanilla runs batches strictly one at a time.
+ */
 public class ConfigDisableEnchantmentTest implements FabricGameTest {
 
     private static final Path CONFIG_FILE =
@@ -41,7 +48,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         return reg.getHolder(Meridian.id(id)).orElse(null);
     }
 
-    @GameTest(template = "meridian:empty_3x3")
+    @GameTest(template = "meridian:empty_3x3", batch = "configMutation1")
     public void disabledEnchantmentHasNoAttributeEffect(GameTestHelper helper) {
         Holder<Enchantment> bulwark = lookup(helper, "bulwark");
         if (bulwark == null) { helper.fail("bulwark not in registry"); return; }
@@ -75,7 +82,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         }
     }
 
-    @GameTest(template = "meridian:empty_3x3")
+    @GameTest(template = "meridian:empty_3x3", batch = "configMutation2")
     public void disabledEnchantmentNotInTablePool(GameTestHelper helper) {
         byte[] original = saveAndDisable(helper, "meridian:shackle");
         if (original == null) return;
@@ -104,7 +111,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         }
     }
 
-    @GameTest(template = "meridian:empty_3x3")
+    @GameTest(template = "meridian:empty_3x3", batch = "configMutation3")
     public void disabledEnchantmentOnExistingItemHasNoEffect(GameTestHelper helper) {
         Holder<Enchantment> alacrity = lookup(helper, "alacrity");
         if (alacrity == null) { helper.fail("alacrity not in registry"); return; }
@@ -133,7 +140,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         });
     }
 
-    @GameTest(template = "meridian:empty_3x3")
+    @GameTest(template = "meridian:empty_3x3", batch = "configMutation4")
     public void reEnablingEnchantmentRestoresEffect(GameTestHelper helper) {
         Holder<Enchantment> bulwark = lookup(helper, "bulwark");
         if (bulwark == null) { helper.fail("bulwark not in registry"); return; }
