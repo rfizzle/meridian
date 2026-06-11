@@ -1,0 +1,722 @@
+{
+  "nav": "Enchantments",
+  "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
+  "metaDescription": "Complete reference for all 75 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "ogTitle": "Enchantments — Meridian",
+  "ogDescription": "75 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "title": "Enchantments",
+  "lede": "75 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "width": "6xl",
+  "sections": [
+    {
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Jump to a category: <a href='#combat' class='text-accent hover:text-accent2 underline'>Combat</a> · <a href='#ranged' class='text-accent hover:text-accent2 underline'>Ranged &amp; Projectile</a> · <a href='#tool' class='text-accent hover:text-accent2 underline'>Tool &amp; Harvest</a> · <a href='#armor' class='text-accent hover:text-accent2 underline'>Armor &amp; Mobility</a> · <a href='#shield' class='text-accent hover:text-accent2 underline'>Shield</a> · <a href='#elytra' class='text-accent hover:text-accent2 underline'>Elytra</a> · <a href='#mount' class='text-accent hover:text-accent2 underline'>Mount</a> · <a href='#universal' class='text-accent hover:text-accent2 underline'>Universal</a> · <a href='#curses' class='text-accent hover:text-accent2 underline'>Curses</a>"
+          ]
+        },
+        {
+          "type": "note",
+          "html": "Tags like <span class='text-smoke'>(exclusive: …)</span> mark exclusivity groups — enchantments sharing a group cannot be combined on the same item."
+        }
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Combat (Swords, Axes &amp; Mace)",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Keen Edge</span>",
+              "IV",
+              "Sword",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Chance on hit to deal a burst of bonus damage <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Tempo</span>",
+              "II",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Increases attack speed, allowing faster strikes"
+            ],
+            [
+              "<span class='text-bone'>Siphon</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Chance on hit to drain life from the target"
+            ],
+            [
+              "<span class='text-bone'>Blight</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Poisons the target on hit <span class='text-smoke'>(exclusive: aspect)</span>"
+            ],
+            [
+              "<span class='text-bone'>Decay</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Inflicts wither on the target <span class='text-smoke'>(exclusive: aspect)</span>"
+            ],
+            [
+              "<span class='text-bone'>Nightfall</span>",
+              "I",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Blinds the target with darkness on hit <span class='text-smoke'>(exclusive: aspect)</span>"
+            ],
+            [
+              "<span class='text-bone'>Shackle</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Strikes slow the target on hit <span class='text-smoke'>(exclusive: aspect)</span>"
+            ],
+            [
+              "<span class='text-bone'>Final Gambit</span>",
+              "I",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Sneak-attack to sacrifice the weapon for a devastating burst of damage"
+            ],
+            [
+              "<span class='text-bone'>Cleave</span>",
+              "III",
+              "Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Attacks strike nearby enemies in an arc"
+            ],
+            [
+              "<span class='text-bone'>Soul Tax</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Spends experience to amplify each strike"
+            ],
+            [
+              "<span class='text-bone'>Sanctify</span>",
+              "V",
+              "Sword",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Deals bonus damage to Nether creatures <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Voidbane</span>",
+              "V",
+              "Sword",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Deals bonus damage to Ender creatures <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Rift Strike</span>",
+              "V",
+              "Sword",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Deals bonus damage outside the Overworld <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Sentinel</span>",
+              "V",
+              "Sword",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Deals bonus damage to Illagers <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Snare</span>",
+              "I",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Slain creatures may drop their spawn egg"
+            ],
+            [
+              "<span class='text-bone'>Quell</span>",
+              "I",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Hitting a creeper resets its detonation fuse"
+            ],
+            [
+              "<span class='text-bone'>Outreach</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Extends melee attack range"
+            ],
+            [
+              "<span class='text-bone'>Insight</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash'>Common</span>",
+              "Increases experience gained from slaying mobs"
+            ],
+            [
+              "<span class='text-bone'>Plunder</span>",
+              "III",
+              "Sword / Weapon",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Slain creatures may drop their loot a second time"
+            ],
+            [
+              "<span class='text-bone'>Seismic Slam</span>",
+              "I",
+              "Mace",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Crouch-slamming releases a shockwave that damages nearby foes <span class='text-smoke'>(exclusive: mace)</span>"
+            ],
+            [
+              "<span class='text-bone'>Tempest</span>",
+              "II",
+              "Mace",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Mace slams call down lightning during thunderstorms <span class='text-smoke'>(exclusive: mace)</span>"
+            ],
+            [
+              "<span class='text-bone'>Updraft</span>",
+              "III",
+              "Mace",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Mace slams launch the wielder skyward for another strike <span class='text-smoke'>(exclusive: mace)</span>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ranged",
+      "title": "Ranged &amp; Projectile",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Detonation</span>",
+              "IV",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Arrows explode on impact with increasing force <span class='text-smoke'>(exclusive: arrow_impact)</span>"
+            ],
+            [
+              "<span class='text-bone'>Stormcall</span>",
+              "I",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Arrows summon a lightning bolt where they land <span class='text-smoke'>(exclusive: arrow_impact)</span>"
+            ],
+            [
+              "<span class='text-bone'>Resonance</span>",
+              "II",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Arrows emit a damaging sonic shockwave on impact <span class='text-smoke'>(exclusive: arrow_impact)</span>"
+            ],
+            [
+              "<span class='text-bone'>Gale Shot</span>",
+              "II",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Arrows release a burst of wind on impact, pushing nearby targets away <span class='text-smoke'>(exclusive: arrow_impact)</span>"
+            ],
+            [
+              "<span class='text-bone'>Permafrost</span>",
+              "I",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Arrows freeze nearby water and chill struck targets <span class='text-smoke'>(exclusive: arrow_impact)</span>"
+            ],
+            [
+              "<span class='text-bone'>Ricochet</span>",
+              "III",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Arrows bounce off surfaces instead of breaking"
+            ],
+            [
+              "<span class='text-bone'>True Flight</span>",
+              "I",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Arrows fly in a flat trajectory, ignoring gravity"
+            ],
+            [
+              "<span class='text-bone'>Glacial Lance</span>",
+              "III",
+              "Trident",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Thrown trident freezes nearby water and chills targets on impact"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tool",
+      "title": "Tool &amp; Harvest",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Excavate</span>",
+              "I",
+              "Pickaxe / Shovel",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Mines a 3x3 area of blocks in a single swing <span class='text-smoke'>(exclusive: mining)</span>"
+            ],
+            [
+              "<span class='text-bone'>Prospect</span>",
+              "I",
+              "Pickaxe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Breaking an ore shatters the entire connected vein <span class='text-smoke'>(exclusive: mining)</span>"
+            ],
+            [
+              "<span class='text-bone'>Bounty</span>",
+              "III",
+              "Hoe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Harvesting a crop also reaps and replants nearby mature crops"
+            ],
+            [
+              "<span class='text-bone'>Furrow</span>",
+              "III",
+              "Hoe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Tilling soil with a hoe also tills surrounding blocks"
+            ],
+            [
+              "<span class='text-bone'>Terrasculpt</span>",
+              "I",
+              "Hoe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Walking converts rough terrain underfoot into natural growth"
+            ],
+            [
+              "<span class='text-bone'>Beckon</span>",
+              "I",
+              "Hoe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash'>Common</span>",
+              "Farm animals are drawn to the wielder while a hoe is held"
+            ],
+            [
+              "<span class='text-bone'>Renewal</span>",
+              "I",
+              "Shears",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Chance for sheep to instantly regrow wool after shearing"
+            ],
+            [
+              "<span class='text-bone'>Prismatic</span>",
+              "I",
+              "Shears",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Sheared wool drops as a random color"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "armor",
+      "title": "Armor &amp; Mobility",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Alacrity</span>",
+              "V",
+              "Legs / Feet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash'>Common</span>",
+              "Boosts movement speed while worn"
+            ],
+            [
+              "<span class='text-bone'>Clamber</span>",
+              "III",
+              "Boots",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash'>Common</span>",
+              "Automatically step up taller blocks"
+            ],
+            [
+              "<span class='text-bone'>Vault</span>",
+              "III",
+              "Boots",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Increases jump height"
+            ],
+            [
+              "<span class='text-bone'>Cinderwalk</span>",
+              "III",
+              "Boots",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Solidifies lava beneath the wearer into temporary obsidian <span class='text-smoke'>(exclusive: boots)</span>"
+            ],
+            [
+              "<span class='text-bone'>Slipstream</span>",
+              "I",
+              "Legs / Feet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Grants the speed of dolphins while swimming"
+            ],
+            [
+              "<span class='text-bone'>Steadfast</span>",
+              "I",
+              "Legs / Feet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Mining speed is unaffected while airborne or flying"
+            ],
+            [
+              "<span class='text-bone'>Colossus</span>",
+              "IV",
+              "Leg Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Enlarges the wearer at the cost of speed and reach <span class='text-smoke'>(exclusive: size)</span>"
+            ],
+            [
+              "<span class='text-bone'>Diminish</span>",
+              "V",
+              "Leg Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Shrinks the wearer but grants auto step-up <span class='text-smoke'>(exclusive: size)</span>"
+            ],
+            [
+              "<span class='text-bone'>Bulwark</span>",
+              "III",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-elevated border border-white/10 text-ash'>Common</span>",
+              "Adds knockback resistance, keeping you grounded under fire"
+            ],
+            [
+              "<span class='text-bone'>Vitality</span>",
+              "V",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Grants bonus hearts, increasing maximum health"
+            ],
+            [
+              "<span class='text-bone'>Spellguard</span>",
+              "IV",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Reduces incoming magic damage <span class='text-smoke'>(exclusive: armor)</span>"
+            ],
+            [
+              "<span class='text-bone'>Animus</span>",
+              "III",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Increases experience gained from kills and mining"
+            ],
+            [
+              "<span class='text-bone'>Gravitas</span>",
+              "III",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Nearby dropped items drift toward the wearer"
+            ],
+            [
+              "<span class='text-bone'>Antidote</span>",
+              "I",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Harmful potion effects wear off in half the time"
+            ],
+            [
+              "<span class='text-bone'>Frostguard</span>",
+              "III",
+              "Armor (primary: Chest)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Melee attackers are chilled with slowness on contact"
+            ],
+            [
+              "<span class='text-bone'>Bloodrage</span>",
+              "III",
+              "Armor (primary: Chest)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Taking damage fuels a violent frenzy at the cost of vitality <span class='text-smoke'>(exclusive: glass_cannon)</span>"
+            ],
+            [
+              "<span class='text-bone'>Reckless</span>",
+              "III",
+              "Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Trades armor for raw attack power <span class='text-smoke'>(exclusive: glass_cannon)</span>"
+            ],
+            [
+              "<span class='text-bone'>Repulse</span>",
+              "III",
+              "Chest / Legs",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Attackers are knocked away when striking the wearer"
+            ],
+            [
+              "<span class='text-bone'>Mason's Reach</span>",
+              "III",
+              "Chest Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Extends block placement and breaking distance"
+            ],
+            [
+              "<span class='text-bone'>Rally</span>",
+              "II",
+              "Chest Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Dropping to critical health triggers a surge of regeneration"
+            ],
+            [
+              "<span class='text-bone'>Abyss Ward</span>",
+              "I",
+              "Helmet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Saves the wearer from the void once per life with a burst of levitation"
+            ],
+            [
+              "<span class='text-bone'>Luminance</span>",
+              "I",
+              "Helmet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Grants permanent night vision while the helmet is worn"
+            ],
+            [
+              "<span class='text-bone'>Premonition</span>",
+              "I",
+              "Helmet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Nearby hostile creatures glow through walls"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shield",
+      "title": "Shield Enchantments",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Retribution</span>",
+              "V",
+              "Shield",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Chance to reflect blocked damage back at the attacker"
+            ],
+            [
+              "<span class='text-bone'>Pummel</span>",
+              "IV",
+              "Shield",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Strikes deal bonus damage while a shield is equipped, at the cost of shield durability"
+            ],
+            [
+              "<span class='text-bone'>Fortify</span>",
+              "III",
+              "Shield",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Blocking costs less shield durability"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "elytra",
+      "title": "Elytra Enchantments",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Ironwing</span>",
+              "IV",
+              "Elytra",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Reduces all damage taken while gliding"
+            ],
+            [
+              "<span class='text-bone'>Impact Ward</span>",
+              "V",
+              "Elytra",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Reduces kinetic damage from elytra collisions"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mount",
+      "title": "Mount Enchantments",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Gallop</span>",
+              "IV",
+              "Mount (body)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Increases mount movement speed"
+            ],
+            [
+              "<span class='text-bone'>Trample</span>",
+              "III",
+              "Mount (body)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Mount deals damage to creatures it runs through"
+            ],
+            [
+              "<span class='text-bone'>Skybound</span>",
+              "VII",
+              "Mount (body)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Mount jumps higher and takes less fall damage"
+            ],
+            [
+              "<span class='text-bone'>Saddleguard</span>",
+              "V",
+              "Mount (body)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Rider takes reduced damage while mounted"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "universal",
+      "title": "Universal",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Aurify</span>",
+              "I",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Sneak-use on a block for a chance to transmute it into gold"
+            ],
+            [
+              "<span class='text-bone'>Tether</span>",
+              "I",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Item stays in your inventory on death"
+            ],
+            [
+              "<span class='text-bone'>Vital Mend</span>",
+              "III",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Incoming healing repairs durability instead of restoring health <span class='text-smoke'>(exclusive: mending)</span>"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "curses",
+      "title": "Curses",
+      "blocks": [
+        {
+          "type": "table",
+          "nowrapHeaders": true,
+          "headers": [
+            "Enchantment",
+            "Max",
+            "Applies to",
+            "Rarity",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<span class='text-bone'>Curse of Decay</span>",
+              "V",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Item loses durability faster"
+            ],
+            [
+              "<span class='text-bone'>Curse of Sealing</span>",
+              "I",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Item cannot be enchanted or modified"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

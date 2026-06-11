@@ -1,0 +1,161 @@
+{
+  "nav": "Config",
+  "metaTitle": "Configuration Reference — Meridian",
+  "metaDescription": "Complete configuration reference for the Meridian enchanting overhaul mod. All settings for meridian.json.",
+  "ogTitle": "Configuration Reference — Meridian",
+  "ogDescription": "All configuration options for the Meridian enchanting overhaul mod.",
+  "title": "Configuration Reference",
+  "lede": "All settings live in config/meridian.json. Auto-generated on first launch with defaults.",
+  "width": "5xl",
+  "sections": [
+    {
+      "id": "enchanting-table",
+      "title": "enchantingTable",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>allowTreasureWithoutShelf</code>", "boolean", "false", "Allow treasure enchantments without a Treasure Shelf"],
+            ["<code class='text-accent2 whitespace-nowrap'>maxEterna</code>", "int", "50", "Maximum Eterna stat cap (range: 1&ndash;100)"],
+            ["<code class='text-accent2 whitespace-nowrap'>showLevelIndicator</code>", "boolean", "true", "Display level indicator on enchanting table UI"],
+            ["<code class='text-accent2 whitespace-nowrap'>globalMinEnchantability</code>", "int", "1", "Minimum enchantability requirement (range: 0&ndash;100)"]
+          ]
+        },
+        { "type": "code", "small": true, "code": "{\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  }\n}" }
+      ]
+    },
+    {
+      "id": "shelves",
+      "title": "shelves",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>sculkShelfShriekerChance</code>", "double", "0.02", "Chance for Sculk shelves to trigger a shrieker (0.0&ndash;1.0)"],
+            ["<code class='text-accent2 whitespace-nowrap'>sculkParticleChance</code>", "double", "0.05", "Particle spawn rate for Sculk shelves (0.0&ndash;1.0)"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "anvil",
+      "title": "anvil",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>prismaticWebRemovesCurses</code>", "boolean", "true", "Enable Prismatic Web curse removal"],
+            ["<code class='text-accent2 whitespace-nowrap'>prismaticWebLevelCost</code>", "int", "30", "XP levels consumed per curse removal"],
+            ["<code class='text-accent2 whitespace-nowrap'>ironBlockRepairsAnvil</code>", "boolean", "true", "Enable Iron Block anvil repair"]
+          ]
+        },
+        { "type": "code", "small": true, "code": "{\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true\n  }\n}" }
+      ]
+    },
+    {
+      "id": "library",
+      "title": "library",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>ioRateLimitTicks</code>", "int", "0", "Hopper insert throttle in ticks (0 = no limit)"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "tomes",
+      "title": "tomes",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>scrapTomeXpCost</code>", "int", "3", "XP levels for Scrap Tome use"],
+            ["<code class='text-accent2 whitespace-nowrap'>improvedScrapTomeXpCost</code>", "int", "5", "XP levels for Improved Scrap Tome use"],
+            ["<code class='text-accent2 whitespace-nowrap'>extractionTomeXpCost</code>", "int", "10", "XP levels for Extraction Tome use"],
+            ["<code class='text-accent2 whitespace-nowrap'>extractionTomeItemDamage</code>", "int", "50", "Durability damage to source item from Extraction Tome"],
+            ["<code class='text-accent2 whitespace-nowrap'>extractionTomeRepairPercent</code>", "double", "0.25", "Percent of max durability restored after extraction (0.0&ndash;1.0)"]
+          ]
+        },
+        { "type": "code", "small": true, "code": "{\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  }\n}" }
+      ]
+    },
+    {
+      "id": "warden",
+      "title": "warden",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>tendrilDropChance</code>", "double", "1.0", "Warden Tendril drop chance (0.0&ndash;1.0; 1.0 = guaranteed)"],
+            ["<code class='text-accent2 whitespace-nowrap'>tendrilLootingBonus</code>", "double", "0.10", "Additional drop chance per Looting level (0.0&ndash;1.0)"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "display",
+      "title": "display",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>showBookTooltips</code>", "boolean", "true", "Show enchantment tooltips on books"],
+            ["<code class='text-accent2 whitespace-nowrap'>overLeveledColor</code>", "string", "\"#FF6600\"", "Hex color for over-leveled enchantment display"],
+            ["<code class='text-accent2 whitespace-nowrap'>enableInlineEnchDescs</code>", "boolean", "false", "Show inline enchantment descriptions in tooltips"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "enchantment-overrides",
+      "title": "enchantmentOverrides",
+      "intro": "Per-enchantment override system. Keys are enchantment IDs (e.g., <code class='text-accent2'>minecraft:sharpness</code> or <code class='text-accent2'>meridian:siphon</code>). Use <code class='text-accent2'>-1</code> for any field to keep the vanilla default.",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>enabled</code>", "boolean", "true", "Whether this enchantment can appear"],
+            ["<code class='text-accent2 whitespace-nowrap'>maxLevel</code>", "int", "-1", "Override maximum level (1&ndash;127, or -1 for default)"],
+            ["<code class='text-accent2 whitespace-nowrap'>maxLootLevel</code>", "int", "-1", "Override maximum level from loot tables (1&ndash;127, or -1)"],
+            ["<code class='text-accent2 whitespace-nowrap'>levelCap</code>", "int", "-1", "Hard cap on level (1&ndash;127, or -1)"],
+            ["<code class='text-accent2 whitespace-nowrap'>minPowerFunction</code>", "object", "null", "Custom min power function (see below)"],
+            ["<code class='text-accent2 whitespace-nowrap'>maxPowerFunction</code>", "object", "null", "Custom max power function (see below)"]
+          ]
+        },
+        {
+          "type": "panel",
+          "title": "Power Function Types",
+          "items": [
+            "<code class='text-accent2'>\"linear\"</code> &mdash; <code class='text-accent2'>base + perLevel * level</code>",
+            "<code class='text-accent2'>\"fixed\"</code> &mdash; constant <code class='text-accent2'>value</code> regardless of level",
+            "<code class='text-accent2'>\"default\"</code> &mdash; vanilla behavior"
+          ]
+        },
+        { "type": "code", "small": true, "topGap": true, "code": "{\n  \"enchantmentOverrides\": {\n    \"minecraft:sharpness\": {\n      \"enabled\": true,\n      \"maxLevel\": 10,\n      \"maxLootLevel\": 5,\n      \"levelCap\": -1,\n      \"minPowerFunction\": {\n        \"type\": \"linear\",\n        \"base\": 1,\n        \"perLevel\": 11,\n        \"value\": 0\n      },\n      \"maxPowerFunction\": {\n        \"type\": \"linear\",\n        \"base\": 21,\n        \"perLevel\": 11,\n        \"value\": 0\n      }\n    },\n    \"meridian:excavate\": {\n      \"enabled\": false\n    }\n  }\n}" }
+      ]
+    },
+    {
+      "id": "full-default-config",
+      "title": "Full Default Config",
+      "plainTitle": true,
+      "intro": "The complete default <code class='text-accent2'>config/meridian.json</code> generated on first launch.",
+      "blocks": [
+        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 1,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
+      ]
+    }
+  ]
+}
