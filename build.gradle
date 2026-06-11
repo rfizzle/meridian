@@ -1,5 +1,10 @@
 plugins {
     id 'fabric-loom' version "${loom_version}"
+    id 'jacoco'
+}
+
+jacoco {
+    toolVersion = '0.8.12'
 }
 
 version = computeModVersion()
@@ -244,6 +249,15 @@ configurations.testRuntimeClasspath {
 test {
     useJUnitPlatform()
     systemProperty 'meridian.generated.dir', file('src/main/generated').absolutePath
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
 }
 
 tasks.register('verifyDatagenIdempotent') {
