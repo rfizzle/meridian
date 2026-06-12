@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
-import com.rfizzle.meridian.enchanting.EnchantmentInfo;
+import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

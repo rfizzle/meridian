@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.shelf;
 
-import com.rfizzle.meridian.enchanting.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Block;
@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * Stone-tier shelf whose only stat-scan effect is to flag the table as treasure-eligible —
  * Mending, Frost Walker, Soul Speed, etc. become rollable when one of these is in range.
  * Backs that flag with a {@link TreasureShelfBlockEntity} that carries no state of its own and
- * implements {@link com.rfizzle.meridian.enchanting.TreasureFlagSource} so the existing
+ * implements {@link com.rfizzle.meridian.api.TreasureFlagSource} so the existing
  * gather pipeline picks it up via the standard {@code level.getBlockEntity(offset)} lookup.
  *
  * <p>No stat JSON is shipped for {@code treasure_shelf} — DESIGN's "no Eterna contribution of its

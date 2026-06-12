@@ -1,6 +1,10 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.api.BlacklistSource;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.StatCollection;
+import com.rfizzle.meridian.api.TreasureFlagSource;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;

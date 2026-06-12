@@ -104,7 +104,7 @@ public final class MeridianRegistry {
 
     /**
      * Treasure-shelf block. Stat-scan effect is "treasure enchantments unlocked" — surfaced
-     * through the BE's {@link com.rfizzle.meridian.enchanting.TreasureFlagSource}
+     * through the BE's {@link com.rfizzle.meridian.api.TreasureFlagSource}
      * marker. Stone-tier physical properties matched to Zenith
      * ({@code MapColor.COLOR_BLACK}, {@code SoundType.STONE}, {@code 1.75F}, requires correct
      * tool) so the block feels like every other stone-tier shelf to the player.

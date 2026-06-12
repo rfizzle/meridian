@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.compat.common;
 
 import com.rfizzle.meridian.enchanting.EnchantingStats;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,7 +2,7 @@ package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
-import com.rfizzle.meridian.enchanting.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.BlockPos;

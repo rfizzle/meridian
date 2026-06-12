@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.shelf;
 
-import com.rfizzle.meridian.enchanting.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 
 import java.util.Objects;
 

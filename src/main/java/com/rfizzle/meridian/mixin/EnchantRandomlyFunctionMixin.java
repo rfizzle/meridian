@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.mixin;
 
-import com.rfizzle.meridian.enchanting.EnchantmentInfo;
+import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;

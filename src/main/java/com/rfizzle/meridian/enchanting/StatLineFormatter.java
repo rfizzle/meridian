@@ -1,5 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
+import com.rfizzle.meridian.api.StatCollection;
+
 /**
  * Produces the single-line stat summary that {@code MeridianEnchantmentScreen} draws below the
  * three enchant preview slots (see DESIGN.md §"Table Menu Implementation"). Kept render-free so

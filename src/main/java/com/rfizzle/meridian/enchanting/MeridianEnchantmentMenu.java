@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.advancement.ModTriggers;
 import com.rfizzle.meridian.config.MeridianConfig;

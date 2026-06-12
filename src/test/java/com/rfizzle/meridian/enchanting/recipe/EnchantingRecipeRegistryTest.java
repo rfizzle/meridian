@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.server.Bootstrap;

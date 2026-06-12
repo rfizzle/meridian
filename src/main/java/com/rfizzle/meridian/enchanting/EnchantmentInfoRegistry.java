@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.net.EnchantmentInfoPayload;
 import net.minecraft.core.Holder;

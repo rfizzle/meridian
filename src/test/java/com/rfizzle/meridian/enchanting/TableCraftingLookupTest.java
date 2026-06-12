@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;

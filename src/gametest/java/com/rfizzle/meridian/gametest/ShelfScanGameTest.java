@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest;
 
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.shelf.FilteringShelfBlockEntity;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

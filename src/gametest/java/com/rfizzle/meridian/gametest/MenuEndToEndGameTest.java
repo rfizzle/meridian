@@ -2,7 +2,7 @@
 package com.rfizzle.meridian.gametest;
 
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTest;

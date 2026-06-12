@@ -1,6 +1,8 @@
 // Tier: 2 (fabric-loader-junit)
 package com.rfizzle.meridian.enchanting;
 
+import com.rfizzle.meridian.api.StatCollection;
+
 import com.rfizzle.meridian.net.EnchantmentClue;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;

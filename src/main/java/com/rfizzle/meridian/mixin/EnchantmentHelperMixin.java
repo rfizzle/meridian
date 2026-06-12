@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.mixin;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
-import com.rfizzle.meridian.enchanting.EnchantmentInfo;
+import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import net.minecraft.util.RandomSource;
 import net.minecraft.core.Holder;

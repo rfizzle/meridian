@@ -2,7 +2,7 @@ package com.rfizzle.meridian.compat.wthit;
 
 import com.rfizzle.meridian.compat.common.JadeTooltipFormatter;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
