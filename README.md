@@ -168,6 +168,68 @@ See the full annotated reference: **[Configuration Guide](https://meridian.rfizz
 
 ---
 
+## For Mod Developers
+
+Meridian provides a stable, read-only API and a reload event for other mods to integrate with, conforming to the [Concord API Standard v1](https://github.com/rfizzle/concord/blob/master/API-STANDARD.md). Use it as a soft dependency: compile against it with `modCompileOnly` and guard every call with `FabricLoader.isModLoaded("meridian")`.
+
+### Gradle Setup
+```gradle
+dependencies {
+    modCompileOnly "maven.modrinth:meridian:<version>"
+}
+```
+
+### The Stable Surface
+
+Everything under `com.rfizzle.meridian.api` is stable across patch and minor versions; everything outside it is internal and may change without notice.
+
+| Type | What it's for |
+|---|---|
+| `MeridianAPI` | Static read-only facade: `gatherStats(Level, BlockPos)`, `getEnchantmentInfo(Holder<Enchantment>)`, `getAllEnchantmentInfo()`, `getStoredPoints(Level, BlockPos, ResourceKey<Enchantment>)` |
+| `StatCollection` | Aggregated shelf stats (eterna, quanta, arcana, rectification, clues, blacklist, treasure flag) |
+| `EnchantmentInfo` | Per-enchantment config: effective max level, max loot level, level cap, power functions, enabled flag |
+| `MeridianReloadCallback` | Fabric event fired server-side at the end of `/meridian reload` |
+| `IEnchantingStatProvider` | Implement on a block to contribute stats to the table scan |
+| `BlacklistSource` / `TreasureFlagSource` | Implement on a shelf block entity to blacklist enchantments / unlock treasure rolls |
+| `EnchantableItem` | Implement on an item to post-process the table's enchantment selection |
+
+### Usage Examples
+
+**Reading the shelf stats around a table (server-side):**
+```java
+if (FabricLoader.getInstance().isModLoaded("meridian")) {
+    StatCollection stats = com.rfizzle.meridian.api.MeridianAPI.gatherStats(level, tablePos);
+    float eterna = stats.eterna();
+}
+```
+
+**Looking up per-enchantment config (e.g. loot-level overrides):**
+```java
+if (FabricLoader.getInstance().isModLoaded("meridian")) {
+    EnchantmentInfo info = com.rfizzle.meridian.api.MeridianAPI.getEnchantmentInfo(enchHolder);
+    int maxLootLevel = info.getMaxLootLevel();
+}
+```
+
+**Re-reading after `/meridian reload` instead of polling:**
+```java
+if (FabricLoader.getInstance().isModLoaded("meridian")) {
+    com.rfizzle.meridian.api.MeridianReloadCallback.EVENT.register(server -> {
+        // EnchantmentInfo has been rebuilt and synced — refresh your caches here
+    });
+}
+```
+
+**Querying an enchantment library's stored points (tooltips/automation):**
+```java
+if (FabricLoader.getInstance().isModLoaded("meridian")) {
+    // OptionalInt.empty() when the block at pos is not a library
+    OptionalInt points = com.rfizzle.meridian.api.MeridianAPI.getStoredPoints(level, pos, enchKey);
+}
+```
+
+---
+
 ## Credits & Attribution
 
 Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by TheWinABagel. All code is a fresh 1.21.1 rewrite — no source was copied. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the reference for the enchanting table subsystem.
