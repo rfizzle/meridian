@@ -22,6 +22,7 @@
             "com.rfizzle.meridian.gametest.MenuEndToEndGameTest",
             "com.rfizzle.meridian.gametest.PrismaticWebGameTest",
             "com.rfizzle.meridian.gametest.LibraryGameTest",
+            "com.rfizzle.meridian.gametest.LibraryQueryApiGameTest",
             "com.rfizzle.meridian.gametest.TomeRegistryGameTest",
             "com.rfizzle.meridian.gametest.TomeAnvilGameTest",
             "com.rfizzle.meridian.gametest.CraftingButtonGameTest",

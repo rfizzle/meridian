@@ -2,6 +2,7 @@ package com.rfizzle.meridian.api;
 
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
+import com.rfizzle.meridian.library.EnchantmentLibraryBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
@@ -9,6 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 
 import java.util.Map;
+import java.util.OptionalInt;
 
 /**
  * Stable, read-only entry point to Meridian's enchanting data, per the
@@ -68,5 +70,25 @@ public final class MeridianAPI {
      */
     public static Map<ResourceKey<Enchantment>, EnchantmentInfo> getAllEnchantmentInfo() {
         return EnchantmentInfoRegistry.getAll();
+    }
+
+    /**
+     * Points stored for {@code enchantment} in the enchantment library at {@code pos} —
+     * read-only, for tooltip and automation consumers. Points accumulate as
+     * {@code 2^(level - 1)} per deposited book level.
+     *
+     * @param level       the level containing the block
+     * @param pos         the position to query
+     * @param enchantment the enchantment to look up
+     * @return the stored points ({@code 0} when the library holds none of that enchantment),
+     *         or {@link OptionalInt#empty()} as the sentinel when the block at {@code pos} is
+     *         not an enchantment library
+     */
+    public static OptionalInt getStoredPoints(
+            Level level, BlockPos pos, ResourceKey<Enchantment> enchantment) {
+        if (level.getBlockEntity(pos) instanceof EnchantmentLibraryBlockEntity library) {
+            return OptionalInt.of(library.getPoints().getInt(enchantment));
+        }
+        return OptionalInt.empty();
     }
 }
