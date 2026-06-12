@@ -3,7 +3,7 @@
   "name": "Meridian",
   "domain": "meridian.rfizzle.com",
   "url": "https://meridian.rfizzle.com",
-  "description": "A complete enchanting overhaul for Minecraft 1.21.1 (Fabric).",
+  "description": "Chart your enchantments. A complete enchanting overhaul for Minecraft 1.21.1 (Fabric).",
   "metaKeywords": "Minecraft, Fabric mod, enchanting mod, enchanting overhaul, Apotheosis, Zenith, 1.21.1",
   "github": "https://github.com/rfizzle/meridian",
   "defaultBranch": "master",
