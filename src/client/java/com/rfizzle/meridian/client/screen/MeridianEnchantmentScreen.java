@@ -3,7 +3,7 @@ package com.rfizzle.meridian.client.screen;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentLogic;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.net.CraftingResultEntry;
 import com.rfizzle.meridian.net.EnchantmentClue;

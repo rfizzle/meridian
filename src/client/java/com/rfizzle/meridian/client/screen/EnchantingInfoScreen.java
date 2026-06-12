@@ -2,7 +2,7 @@ package com.rfizzle.meridian.client.screen;
 
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

@@ -4,7 +4,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.compat.common.JadeTooltipFormatter;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
-import com.rfizzle.meridian.enchanting.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlock;
 
 import net.minecraft.network.chat.Component;

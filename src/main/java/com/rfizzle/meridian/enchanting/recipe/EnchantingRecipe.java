@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
-import com.rfizzle.meridian.enchanting.StatCollection;
+import com.rfizzle.meridian.api.StatCollection;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;

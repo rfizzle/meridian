@@ -2,6 +2,7 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.shelf.FilteringShelfBlockEntity;
 import com.rfizzle.meridian.shelf.TreasureShelfBlockEntity;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;

@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.net;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.enchanting.EnchantmentInfo;
+import com.rfizzle.meridian.api.EnchantmentInfo;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;

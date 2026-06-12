@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.MeridianRegistry;
-import com.rfizzle.meridian.enchanting.TreasureFlagSource;
+import com.rfizzle.meridian.api.TreasureFlagSource;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;

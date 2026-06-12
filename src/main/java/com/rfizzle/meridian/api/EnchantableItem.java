@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.enchanting;
+package com.rfizzle.meridian.api;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -7,14 +7,14 @@ import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import java.util.List;
 
 /**
- * API interface that items can implement to customize the enchantment selection at the
- * enchanting table. The selection algorithm in {@link RealEnchantmentHelper#selectEnchantment}
- * checks for this interface after building the enchantment list and calls
- * {@link #selectEnchantments} to allow post-processing.
+ * Implemented by items that customize the enchantment selection at the enchanting table.
+ * Meridian's selection algorithm checks for this interface after building the enchantment
+ * list and calls {@link #selectEnchantments} to allow post-processing.
  *
  * <p>Implementations must be deterministic with respect to the random seed — the same seed
  * must produce the same result every time.
  */
+@ApiStatus.Stable
 public interface EnchantableItem {
 
     /**

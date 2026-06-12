@@ -1,6 +1,9 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.api.EnchantableItem;
+import com.rfizzle.meridian.api.EnchantmentInfo;
+import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.config.MeridianConfig;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;

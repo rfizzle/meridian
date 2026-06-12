@@ -1,5 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
+import com.rfizzle.meridian.api.StatCollection;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import net.minecraft.core.BlockPos;

@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.mixin;
 
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
-import com.rfizzle.meridian.enchanting.IEnchantingStatProvider;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;

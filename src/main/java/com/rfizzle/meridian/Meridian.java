@@ -1,6 +1,7 @@
 package com.rfizzle.meridian;
 
 import com.rfizzle.meridian.anvil.MeridianAnvilHandlers;
+import com.rfizzle.meridian.api.MeridianReloadCallback;
 import com.rfizzle.meridian.command.MeridianCommand;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.advancement.ModTriggers;
@@ -97,10 +98,16 @@ public class Meridian implements ModInitializer {
         config = MeridianConfig.load();
     }
 
+    /**
+     * The {@code /meridian reload} code path: re-reads the config from disk, rebuilds the
+     * enchantment info registry, syncs it to all connected clients, then fires
+     * {@link MeridianReloadCallback#EVENT} so API consumers can re-read.
+     */
     public static void reloadConfig(MinecraftServer server) {
         config = MeridianConfig.load();
         rebuildEnchantmentInfo(server);
         syncEnchantmentInfoToAll(server);
+        MeridianReloadCallback.EVENT.invoker().onReload(server);
     }
 
     public static ResourceLocation id(String path) {

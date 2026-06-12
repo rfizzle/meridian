@@ -1,5 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
+import com.rfizzle.meridian.api.StatCollection;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;

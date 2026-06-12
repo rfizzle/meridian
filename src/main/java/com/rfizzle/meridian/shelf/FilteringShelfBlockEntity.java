@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.MeridianRegistry;
-import com.rfizzle.meridian.enchanting.BlacklistSource;
+import com.rfizzle.meridian.api.BlacklistSource;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
