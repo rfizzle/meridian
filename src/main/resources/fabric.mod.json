@@ -34,6 +34,7 @@
             "com.rfizzle.meridian.gametest.LibraryHopperGameTest",
             "com.rfizzle.meridian.gametest.ModSentinelGameTest",
             "com.rfizzle.meridian.gametest.ConfigReloadGameTest",
+            "com.rfizzle.meridian.gametest.ReloadCallbackGameTest",
             "com.rfizzle.meridian.gametest.enchantments.EnchantmentRosterIntegrationTest",
             "com.rfizzle.meridian.gametest.enchantments.ExclusiveSetEnforcementTest",
             "com.rfizzle.meridian.gametest.enchantments.ConfigDisableEnchantmentTest",
