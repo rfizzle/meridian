@@ -2,9 +2,23 @@
   <img src="art/logo.png" alt="Meridian" width="800">
 </p>
 
-<p align="center"><strong>A complete enchanting overhaul for Minecraft 1.21.1 Fabric.</strong></p>
+<p align="center"><strong>Chart your enchantments.</strong></p>
 
-Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 75 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
+<p align="center">
+  <a href="https://www.minecraft.net/"><img alt="Minecraft 1.21.1" src="https://img.shields.io/badge/Minecraft-1.21.1-62B47A?logo=minecraft&logoColor=white"></a>
+  <a href="https://fabricmc.net/"><img alt="Fabric" src="https://img.shields.io/badge/Mod_Loader-Fabric-DBB69B"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/rfizzle/meridian"></a>
+  <a href="https://github.com/rfizzle/meridian/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/rfizzle/meridian?include_prereleases"></a>
+  <a href="https://github.com/rfizzle/meridian/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/rfizzle/meridian/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul"><img alt="CurseForge downloads" src="https://img.shields.io/curseforge/dt/1546092?logo=curseforge&label=CurseForge"></a>
+</p>
+
+A complete enchanting overhaul for Minecraft 1.21.1 (Fabric). Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 75 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
+
+## Download
+
+| [CurseForge](https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul) | [GitHub Releases](https://github.com/rfizzle/meridian/releases) | [Website](https://meridian.rfizzle.com) | [Report an issue](https://github.com/rfizzle/meridian/issues) |
+| --- | --- | --- | --- |
 
 ---
 
@@ -162,8 +176,21 @@ All 75 enchantments are original to Meridian — names, IDs, weights, costs, eff
 
 ---
 
+## Part of Concord
+
+Part of [Concord](https://github.com/rfizzle/concord) — a Vanilla+ collection.
+Install any, combine all.
+
+- [Mercantile](https://mercantile.rfizzle.com) — Every villager remembers.
+- [Tribulation](https://tribulation.rfizzle.com) — Survive what comes next.
+- [Prosperity](https://prosperity.rfizzle.com) — Every chest, yours to discover.
+
+---
+
 ## License
 
 - **Code:** MIT
 - **Textures:** Sourced from Zenith (originally Apotheosis).
 - **Enchantment data (75 of 75):** Original to Meridian.
+
+© 2026 rfizzle. Meridian is not affiliated with Mojang Studios or Microsoft.
