@@ -188,6 +188,8 @@
     "info.meridian.improved_scrap_tome2": "Destroys the item in the process.",
     "info.meridian.extraction_tome": "Extracts all enchantments from an item.",
     "info.meridian.extraction_tome2": "Does not destroy the item.",
+    "info.meridian.filtering_shelf": "Insert single-enchantment enchanted books to prevent those enchantments from appearing in the enchanting table.",
+    "info.meridian.filtering_shelf2": "Gains bonus Eterna and Arcana for each inserted book.",
     "death.attack.meridian.corrupted": "%1$s was consumed by a corrupted enchantment",
     "death.attack.meridian.corrupted.player": "%1$s was corrupted by %2$s",
     "enchantment.meridian.tempo": "Tempo",

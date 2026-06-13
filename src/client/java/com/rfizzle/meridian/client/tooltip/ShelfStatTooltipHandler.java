@@ -1,10 +1,12 @@
 package com.rfizzle.meridian.client.tooltip;
 
+import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.shelf.TreasureShelfBlock;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -28,6 +30,17 @@ public final class ShelfStatTooltipHandler {
 
         Block block = blockItem.getBlock();
         ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
+
+        // Mirrors the per-item appendHoverText pattern: info.meridian.<block> (+ "2", "3", …
+        // continuation lines) describe what the block does, ahead of the stat readout.
+        if (blockId.getNamespace().equals(Meridian.MOD_ID)) {
+            String infoKey = "info." + Meridian.MOD_ID + "." + blockId.getPath();
+            for (int i = 0; I18n.exists(i == 0 ? infoKey : infoKey + (i + 1)); i++) {
+                lines.add(Component.translatable(i == 0 ? infoKey : infoKey + (i + 1))
+                        .withStyle(ChatFormatting.GRAY));
+            }
+        }
+
         EnchantingStats stats = EnchantingStatRegistry.getInstance().blockEntries().get(blockId);
         boolean hasStats = stats != null && !stats.equals(EnchantingStats.ZERO)
                 && (stats.eterna() != 0 || stats.quanta() != 0 || stats.arcana() != 0
