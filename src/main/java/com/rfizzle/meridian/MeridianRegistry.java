@@ -11,6 +11,7 @@ import com.rfizzle.meridian.library.EnchantmentLibraryMenu;
 import com.rfizzle.meridian.library.EnderLibraryBlockEntity;
 import com.rfizzle.meridian.shelf.FilteringShelfBlock;
 import com.rfizzle.meridian.shelf.FilteringShelfBlockEntity;
+import com.rfizzle.meridian.shelf.MeridianShelfItem;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 import com.rfizzle.meridian.shelf.TreasureShelfBlock;
 import com.rfizzle.meridian.shelf.TreasureShelfBlockEntity;
@@ -44,6 +45,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 
 /**
  * Central registry for blocks, items, block entities, menus, and particles shipped by
@@ -239,9 +241,9 @@ public final class MeridianRegistry {
         registerMenuType("enchanting_table", ENCHANTING_TABLE_MENU);
         registerMenuType("library", LIBRARY_MENU);
         MeridianShelves.register();
-        registerBlock("filtering_shelf", FILTERING_SHELF, new Item.Properties());
+        registerBlock("filtering_shelf", FILTERING_SHELF, new Item.Properties(), MeridianShelfItem::new);
         registerBlockEntityType("filtering_shelf", FILTERING_SHELF_BE);
-        registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
+        registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties(), MeridianShelfItem::new);
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
         registerBlock("library", BASIC_LIBRARY, new Item.Properties());
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
@@ -297,10 +299,25 @@ public final class MeridianRegistry {
      * @return the registered block, for fluent assignment at call sites
      */
     public static <T extends Block> T registerBlock(String name, T block, Item.Properties itemProps) {
+        return registerBlock(name, block, itemProps, BlockItem::new);
+    }
+
+    /**
+     * Registers a block and a custom companion {@link Item} under the same path. The block is
+     * also added to {@link #BLOCKS}.
+     *
+     * @param name      path component; namespaced to {@link Meridian#MOD_ID}
+     * @param block     pre-constructed block instance
+     * @param itemProps item properties for the companion item
+     * @param factory   factory function to construct the companion item from the block and properties
+     * @return the registered block, for fluent assignment at call sites
+     */
+    public static <T extends Block> T registerBlock(String name, T block, Item.Properties itemProps,
+                                                    BiFunction<Block, Item.Properties, Item> factory) {
         ResourceLocation id = Meridian.id(name);
         Registry.register(BuiltInRegistries.BLOCK, id, block);
         BLOCKS.put(id, block);
-        Registry.register(BuiltInRegistries.ITEM, id, new BlockItem(block, itemProps));
+        Registry.register(BuiltInRegistries.ITEM, id, factory.apply(block, itemProps));
         return block;
     }
 
