@@ -22,19 +22,19 @@ public class EnchantRandomlyFunctionMixin {
         if (result == null || result.isEmpty()) return;
         var enchantments = EnchantmentHelper.getEnchantmentsForCrafting(result);
         if (enchantments.isEmpty()) return;
-        boolean hasDisabled = enchantments.entrySet().stream()
-                .anyMatch(entry -> {
-                    EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(entry.getKey());
-                    return !info.enabled();
-                });
-        if (hasDisabled) {
-            var mutable = new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(enchantments);
-            enchantments.entrySet().forEach(entry -> {
-                EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(entry.getKey());
-                if (!info.enabled()) {
-                    mutable.set(entry.getKey(), 0);
+
+        net.minecraft.world.item.enchantment.ItemEnchantments.Mutable mutable = null;
+        for (var entry : enchantments.entrySet()) {
+            EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(entry.getKey());
+            if (!info.enabled()) {
+                if (mutable == null) {
+                    mutable = new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(enchantments);
                 }
-            });
+                mutable.set(entry.getKey(), 0);
+            }
+        }
+
+        if (mutable != null) {
             EnchantmentHelper.setEnchantments(result, mutable.toImmutable());
         }
     }
