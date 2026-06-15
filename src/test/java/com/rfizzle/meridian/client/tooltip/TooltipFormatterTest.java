@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.client.tooltip;
 
+import com.rfizzle.meridian.util.TooltipFormatter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.item.enchantment.Enchantments;

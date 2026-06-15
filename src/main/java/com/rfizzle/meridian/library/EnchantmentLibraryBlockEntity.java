@@ -368,7 +368,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     public static int maxLevelAffordable(int points, int curLvl) {
         long budget = (long) Math.max(0, points) + (long) points(curLvl);
         if (budget <= 0L) return 0;
-        return 1 + (int) (Math.log(budget) / Math.log(2));
+        return 1 + (63 - Long.numberOfLeadingZeros(budget));
     }
 
     /** Tier max level (read-only view). */

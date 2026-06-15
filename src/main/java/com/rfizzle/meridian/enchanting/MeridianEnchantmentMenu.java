@@ -86,9 +86,8 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
      * authoritative; this field exists solely for the client-side render path.
      */
     private Optional<CraftingResultEntry> lastCraftingResult = Optional.empty();
-    @SuppressWarnings("unchecked")
-    private List<EnchantmentClue>[] clientClues = new List[]{List.of(), List.of(), List.of()};
-    private boolean[] clientCluesExhausted = new boolean[]{true, true, true};
+    private List<List<EnchantmentClue>> clientClues = List.of(List.of(), List.of(), List.of());
+    private List<Boolean> clientCluesExhausted = List.of(true, true, true);
 
     public MeridianEnchantmentMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
@@ -201,17 +200,22 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
 
     public void applyClientClues(int slot, List<EnchantmentClue> clues, boolean exhausted) {
         if (slot >= 0 && slot < 3) {
-            this.clientClues[slot] = clues;
-            this.clientCluesExhausted[slot] = exhausted;
+            List<List<EnchantmentClue>> newClues = new ArrayList<>(this.clientClues);
+            newClues.set(slot, clues);
+            this.clientClues = List.copyOf(newClues);
+
+            List<Boolean> newExhausted = new ArrayList<>(this.clientCluesExhausted);
+            newExhausted.set(slot, exhausted);
+            this.clientCluesExhausted = List.copyOf(newExhausted);
         }
     }
 
     public List<EnchantmentClue> getClientClues(int slot) {
-        return (slot >= 0 && slot < 3) ? clientClues[slot] : List.of();
+        return (slot >= 0 && slot < 3) ? clientClues.get(slot) : List.of();
     }
 
     public boolean isClientCluesExhausted(int slot) {
-        return (slot >= 0 && slot < 3) && clientCluesExhausted[slot];
+        return (slot >= 0 && slot < 3) && clientCluesExhausted.get(slot);
     }
 
     @Override

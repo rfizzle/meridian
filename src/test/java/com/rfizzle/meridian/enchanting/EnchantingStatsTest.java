@@ -11,6 +11,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EnchantingStatsTest {
 
@@ -32,6 +33,13 @@ class EnchantingStatsTest {
         EnchantingStats decoded = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
 
         assertEquals(stats, decoded);
+    }
+
+    @Test
+    void codec_rejectsExtremeNegativeValues() {
+        JsonElement extreme = JsonParser.parseString("{\"eterna\":-1001}");
+        var result = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, extreme);
+        assertTrue(result.error().isPresent());
     }
 
     @Test

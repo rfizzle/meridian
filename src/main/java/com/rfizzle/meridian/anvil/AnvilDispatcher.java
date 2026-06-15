@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Central entry point consulted by {@link com.rfizzle.meridian.mixin.AnvilMenuMixin} at
@@ -22,7 +23,7 @@ import java.util.Optional;
  */
 public final class AnvilDispatcher {
 
-    private static final List<AnvilHandler> HANDLERS = new ArrayList<>();
+    private static final List<AnvilHandler> HANDLERS = new CopyOnWriteArrayList<>();
 
     private AnvilDispatcher() {
     }
@@ -32,7 +33,7 @@ public final class AnvilDispatcher {
      * {@link #handle}, so callers should register more-specific handlers before more-permissive
      * ones.
      */
-    public static synchronized void register(AnvilHandler handler) {
+    public static void register(AnvilHandler handler) {
         HANDLERS.add(handler);
     }
 
@@ -40,7 +41,7 @@ public final class AnvilDispatcher {
      * Removes every registered handler. Production code does not need this — it exists so unit
      * tests can isolate dispatch state between cases.
      */
-    public static synchronized void clear() {
+    public static void clear() {
         HANDLERS.clear();
     }
 
@@ -48,7 +49,7 @@ public final class AnvilDispatcher {
      * Snapshot of currently registered handlers, in dispatch order. Returned as an unmodifiable
      * list so tests can inspect ordering without being able to mutate the live chain.
      */
-    public static synchronized List<AnvilHandler> handlers() {
+    public static List<AnvilHandler> handlers() {
         return Collections.unmodifiableList(new ArrayList<>(HANDLERS));
     }
 
@@ -60,11 +61,7 @@ public final class AnvilDispatcher {
      */
     public static Optional<AnvilResult> handle(
             AnvilMenu menu, ItemStack left, ItemStack right, Player player, int currentCost) {
-        List<AnvilHandler> snapshot;
-        synchronized (AnvilDispatcher.class) {
-            snapshot = new ArrayList<>(HANDLERS);
-        }
-        for (AnvilHandler handler : snapshot) {
+        for (AnvilHandler handler : HANDLERS) {
             Optional<AnvilResult> result = handler.handle(left, right, player);
             if (result.isPresent()) {
                 return result;

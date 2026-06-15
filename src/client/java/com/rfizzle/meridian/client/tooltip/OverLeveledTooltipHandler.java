@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.client.tooltip;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.util.TooltipFormatter;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;

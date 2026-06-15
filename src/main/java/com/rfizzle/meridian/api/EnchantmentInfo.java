@@ -42,9 +42,12 @@ public record EnchantmentInfo(
      */
     @org.jetbrains.annotations.ApiStatus.Internal
     public static final StreamCodec<RegistryFriendlyByteBuf, EnchantmentInfo> STREAM_CODEC = new StreamCodec<>() {
+        private static final StreamCodec<RegistryFriendlyByteBuf, Holder<Enchantment>> ENCH_CODEC =
+                ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT);
+
         @Override
         public EnchantmentInfo decode(RegistryFriendlyByteBuf buf) {
-            Holder<Enchantment> ench = ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT).decode(buf);
+            Holder<Enchantment> ench = ENCH_CODEC.decode(buf);
             int maxLevel = ByteBufCodecs.VAR_INT.decode(buf);
             int maxLootLevel = ByteBufCodecs.VAR_INT.decode(buf);
             int levelCap = ByteBufCodecs.VAR_INT.decode(buf);
@@ -54,11 +57,9 @@ public record EnchantmentInfo(
             return new EnchantmentInfo(ench, maxLevel, maxLootLevel, levelCap, maxPower, minPower, enabled);
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public void encode(RegistryFriendlyByteBuf buf, EnchantmentInfo info) {
-            ((StreamCodec<RegistryFriendlyByteBuf, Holder<Enchantment>>) (StreamCodec<?, ?>)
-                    ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT)).encode(buf, info.ench());
+            ENCH_CODEC.encode(buf, info.ench());
             ByteBufCodecs.VAR_INT.encode(buf, info.maxLevel());
             ByteBufCodecs.VAR_INT.encode(buf, info.maxLootLevel());
             ByteBufCodecs.VAR_INT.encode(buf, info.levelCap());

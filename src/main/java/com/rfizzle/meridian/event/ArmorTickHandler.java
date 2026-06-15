@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class ArmorTickHandler {
 
-    private static int tickCounter = 0;
+    private static long tickCounter = 0;
 
     private static final Map<BlockPos, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
     private static final int CINDERWALK_REVERT_TICKS = 80;

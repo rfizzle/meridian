@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.mixin;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.client.tooltip.TooltipFormatter;
+import com.rfizzle.meridian.util.TooltipFormatter;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;

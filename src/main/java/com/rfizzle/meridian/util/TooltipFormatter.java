@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.client.tooltip;
+package com.rfizzle.meridian.util;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
