@@ -131,6 +131,15 @@ class AnvilMenuMixinTest {
     }
 
     @Test
+    void redirectMethod_suppressesVanillaBroadcastOnCreateResult() throws Exception {
+        ClassNode node = readMixinClass();
+        MethodNode redirectHook = findRedirectForTargetMethod(node, "createResult");
+        assertNotNull(redirectHook, "mixin must contain a @Redirect on createResult's broadcastChanges() "
+                + "call — without it vanilla's broadcast fires alongside meridian$dispatch's, "
+                + "double-syncing the result; drift in vanilla's call site would silently no-op the redirect");
+    }
+
+    @Test
     void injectorBody_callsDispatcherAndForwardsResult() throws Exception {
         ClassNode node = readMixinClass();
         MethodNode hook = findInjectForTargetMethod(node, "createResult");
@@ -214,8 +223,11 @@ class AnvilMenuMixinTest {
             if (methods == null) continue;
             if (!methods.contains(targetMethod)) continue;
             if (match != null) {
-                // onTake has multiple hooks now (Inject and Redirect), this helper needs to be specific to @Inject
-                continue;
+                // Two @Inject hooks on the same vanilla method is a mixin-author error.
+                // Co-located @Redirect hooks are filtered out above by INJECT_DESC, so
+                // they never reach here — fail loudly rather than silently picking one.
+                throw new AssertionError("Multiple @Inject hooks target " + targetMethod
+                        + " — disambiguate the helper or consolidate the hooks");
             }
             match = m;
         }
