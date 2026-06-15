@@ -3,6 +3,7 @@ package com.rfizzle.meridian.mixin;
 import com.rfizzle.meridian.anvil.AnvilDispatcher;
 import com.rfizzle.meridian.anvil.AnvilResult;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -15,6 +16,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
@@ -76,14 +78,15 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
         if (this.meridian$takingResult) return;
 
         ItemStack left = this.inputSlots.getItem(0);
+        AnvilMenu self = (AnvilMenu) (Object) this;
 
         if (EnchantmentEffects.getEnchantmentLevel(left, EnchantmentEffects.CURSE_OF_SEALING) > 0) {
             this.resultSlots.setItem(0, ItemStack.EMPTY);
             this.meridian$pendingResult = null;
+            self.broadcastChanges();
             return;
         }
 
-        AnvilMenu self = (AnvilMenu) (Object) this;
         AnvilMenuAccessor accessor = (AnvilMenuAccessor) (Object) this;
         ItemStack right = this.inputSlots.getItem(1);
         Player player = this.player;
@@ -93,6 +96,7 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
                 AnvilDispatcher.handle(self, left, right, player, currentCost);
         if (result.isEmpty()) {
             this.meridian$pendingResult = null;
+            self.broadcastChanges();
             return;
         }
         AnvilResult r = result.get();
@@ -104,14 +108,24 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
         self.broadcastChanges();
     }
 
-    @Inject(method = "onTake", at = @At("HEAD"))
-    private void meridian$beginTake(Player player, ItemStack stack, CallbackInfo ci) {
-        this.meridian$takingResult = true;
+    @Redirect(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/AnvilMenu;broadcastChanges()V"))
+    private void meridian$suppressVanillaBroadcast(AnvilMenu instance) {
+        // No-op to avoid double sync packets; meridian$dispatch calls it once at RETURN.
     }
 
-    @Inject(method = "onTake", at = @At("TAIL"))
+    @Redirect(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V"))
+    private void meridian$guardSetItem(Container instance, int slot, ItemStack stack) {
+        boolean wasTaking = this.meridian$takingResult;
+        this.meridian$takingResult = true;
+        try {
+            instance.setItem(slot, stack);
+        } finally {
+            this.meridian$takingResult = wasTaking;
+        }
+    }
+
+    @Inject(method = "onTake", at = @At("RETURN"))
     private void meridian$restoreLeft(Player player, ItemStack stack, CallbackInfo ci) {
-        this.meridian$takingResult = false;
         AnvilResult pending = this.meridian$pendingResult;
         this.meridian$pendingResult = null;
         if (pending == null) return;

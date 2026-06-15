@@ -54,6 +54,8 @@ class AnvilMenuMixinTest {
             Type.getDescriptor(org.spongepowered.asm.mixin.injection.Inject.class);
     private static final String AT_DESC = Type.getDescriptor(org.spongepowered.asm.mixin.injection.At.class);
     private static final String TARGET_INTERNAL_NAME = Type.getInternalName(AnvilMenu.class);
+    private static final String REDIRECT_DESC =
+            Type.getDescriptor(org.spongepowered.asm.mixin.injection.Redirect.class);
 
     @Test
     void targetMethod_stillExistsOnAnvilMenu() throws NoSuchMethodException {
@@ -106,10 +108,10 @@ class AnvilMenuMixinTest {
     }
 
     @Test
-    void injectMethod_hasTailOnOnTake() throws Exception {
+    void injectMethod_hasReturnOnOnTake() throws Exception {
         ClassNode node = readMixinClass();
-        MethodNode tailHook = findInjectForTargetMethodAndAt(node, "onTake", "TAIL");
-        assertNotNull(tailHook, "mixin must contain a TAIL @Inject hook on onTake — otherwise "
+        MethodNode tailHook = findInjectForTargetMethodAndAt(node, "onTake", "RETURN");
+        assertNotNull(tailHook, "mixin must contain a RETURN @Inject hook on onTake — otherwise "
                 + "vanilla's slot-0 clear strips the Extraction Tome's leftReplacement");
 
         AnnotationNode inject = findAnnotation(tailHook.invisibleAnnotations, INJECT_DESC);
@@ -121,11 +123,20 @@ class AnvilMenuMixinTest {
     }
 
     @Test
-    void injectMethod_hasHeadOnOnTake() throws Exception {
+    void redirectMethod_existsOnOnTake() throws Exception {
         ClassNode node = readMixinClass();
-        MethodNode headHook = findInjectForTargetMethodAndAt(node, "onTake", "HEAD");
-        assertNotNull(headHook, "mixin must contain a HEAD @Inject hook on onTake — "
-                + "guards the takingResult flag for the TAIL hook's leftReplacement path");
+        MethodNode redirectHook = findRedirectForTargetMethod(node, "onTake");
+        assertNotNull(redirectHook, "mixin must contain a @Redirect hook on onTake — "
+                + "guards the takingResult flag for the RETURN hook's leftReplacement path");
+    }
+
+    @Test
+    void redirectMethod_suppressesVanillaBroadcastOnCreateResult() throws Exception {
+        ClassNode node = readMixinClass();
+        MethodNode redirectHook = findRedirectForTargetMethod(node, "createResult");
+        assertNotNull(redirectHook, "mixin must contain a @Redirect on createResult's broadcastChanges() "
+                + "call — without it vanilla's broadcast fires alongside meridian$dispatch's, "
+                + "double-syncing the result; drift in vanilla's call site would silently no-op the redirect");
     }
 
     @Test
@@ -212,8 +223,11 @@ class AnvilMenuMixinTest {
             if (methods == null) continue;
             if (!methods.contains(targetMethod)) continue;
             if (match != null) {
-                throw new AssertionError("two @Inject hooks target " + targetMethod
-                        + " — collapse or rename before this helper can disambiguate");
+                // Two @Inject hooks on the same vanilla method is a mixin-author error.
+                // Co-located @Redirect hooks are filtered out above by INJECT_DESC, so
+                // they never reach here — fail loudly rather than silently picking one.
+                throw new AssertionError("Multiple @Inject hooks target " + targetMethod
+                        + " — disambiguate the helper or consolidate the hooks");
             }
             match = m;
         }
@@ -230,6 +244,17 @@ class AnvilMenuMixinTest {
             List<AnnotationNode> ats = extractArrayValue(inject, "at");
             if (ats == null || ats.isEmpty()) continue;
             if (atValue.equals(extractValue(ats.get(0), "value"))) return m;
+        }
+        return null;
+    }
+
+    private static MethodNode findRedirectForTargetMethod(ClassNode node, String targetMethod) {
+        for (MethodNode m : node.methods) {
+            AnnotationNode redirect = findAnnotation(m.invisibleAnnotations, REDIRECT_DESC);
+            if (redirect == null) redirect = findAnnotation(m.visibleAnnotations, REDIRECT_DESC);
+            if (redirect == null) continue;
+            List<String> methods = extractArrayValue(redirect, "method");
+            if (methods != null && methods.contains(targetMethod)) return m;
         }
         return null;
     }
