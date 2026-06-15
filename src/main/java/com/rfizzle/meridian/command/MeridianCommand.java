@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
 import java.util.function.Supplier;
 
 public final class MeridianCommand {
-    public static final String ROOT = "meridian";
+    public static final String ROOT = Meridian.MOD_ID;
 
     static final String RELOAD_OK_KEY = "command.meridian.reload.ok";
     static final String RELOAD_ERROR_KEY = "command.meridian.reload.error";

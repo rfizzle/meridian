@@ -34,14 +34,14 @@ public final class EnchantingRecipeRegistry {
     public static final RecipeType<EnchantingRecipe> ENCHANTING_TYPE = new RecipeType<>() {
         @Override
         public String toString() {
-            return "meridian:enchanting";
+            return Meridian.id("enchanting").toString();
         }
     };
 
     public static final RecipeType<KeepNbtEnchantingRecipe> KEEP_NBT_TYPE = new RecipeType<>() {
         @Override
         public String toString() {
-            return "meridian:keep_nbt_enchanting";
+            return Meridian.id("keep_nbt_enchanting").toString();
         }
     };
 
