@@ -144,4 +144,28 @@ public class EnchantmentSelectionGameTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    // --- S-4.2f: Meridian non-treasure enchantments appear in table pool ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void meridianEnchantmentsAppearInTablePool(GameTestHelper helper) {
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        List<EnchantmentInstance> results = RealEnchantmentHelper.getAvailableEnchantmentResults(
+                30, sword, reg, false, Set.of());
+
+        boolean hasMeridian = false;
+        for (EnchantmentInstance inst : results) {
+            if (inst.enchantment.getRegisteredName().startsWith("meridian:")) {
+                hasMeridian = true;
+                break;
+            }
+        }
+        if (!hasMeridian) {
+            helper.fail("Expected at least one Meridian enchantment in table pool for diamond sword");
+            return;
+        }
+        helper.succeed();
+    }
 }

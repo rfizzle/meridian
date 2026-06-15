@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:curse_of_decay",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_sealing",
+      "required": false
+    }
+  ]
+}
