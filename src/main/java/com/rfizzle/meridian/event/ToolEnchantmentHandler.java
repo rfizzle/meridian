@@ -26,7 +26,7 @@ import java.util.*;
 
 public final class ToolEnchantmentHandler {
 
-    private static boolean excavating = false;
+    private static final Set<UUID> EXCAVATING_PLAYERS = Collections.synchronizedSet(new HashSet<>());
     private static final int PROSPECT_MAX_VEIN = 48;
 
     private ToolEnchantmentHandler() {}
@@ -39,14 +39,19 @@ public final class ToolEnchantmentHandler {
     private static void onBlockBroken(Level world, Player player, BlockPos pos,
                                        BlockState state, BlockEntity blockEntity) {
         if (world.isClientSide()) return;
-        if (excavating) return;
+        if (EXCAVATING_PLAYERS.contains(player.getUUID())) return;
         if (!(player instanceof ServerPlayer serverPlayer)) return;
 
         ItemStack tool = player.getMainHandItem();
 
-        handleExcavate(serverPlayer, (ServerLevel) world, pos, state, tool);
-        handleProspect(serverPlayer, (ServerLevel) world, pos, state, tool);
-        handleBounty(serverPlayer, (ServerLevel) world, pos, state, tool);
+        EXCAVATING_PLAYERS.add(player.getUUID());
+        try {
+            handleExcavate(serverPlayer, (ServerLevel) world, pos, state, tool);
+            handleProspect(serverPlayer, (ServerLevel) world, pos, state, tool);
+            handleBounty(serverPlayer, (ServerLevel) world, pos, state, tool);
+        } finally {
+            EXCAVATING_PLAYERS.remove(player.getUUID());
+        }
     }
 
     private static void handleExcavate(ServerPlayer player, ServerLevel world, BlockPos pos,
@@ -57,18 +62,13 @@ public final class ToolEnchantmentHandler {
         Direction face = getMiningFace(player);
         List<BlockPos> targets = get3x3(pos, face);
 
-        excavating = true;
-        try {
-            for (BlockPos target : targets) {
-                BlockState targetState = world.getBlockState(target);
-                if (targetState.isAir()) continue;
-                if (targetState.getDestroySpeed(world, target) < 0) continue;
-                if (!player.hasCorrectToolForDrops(targetState) && targetState.requiresCorrectToolForDrops()) continue;
+        for (BlockPos target : targets) {
+            BlockState targetState = world.getBlockState(target);
+            if (targetState.isAir()) continue;
+            if (targetState.getDestroySpeed(world, target) < 0) continue;
+            if (!player.hasCorrectToolForDrops(targetState) && targetState.requiresCorrectToolForDrops()) continue;
 
-                player.gameMode.destroyBlock(target);
-            }
-        } finally {
-            excavating = false;
+            player.gameMode.destroyBlock(target);
         }
     }
 
@@ -87,13 +87,8 @@ public final class ToolEnchantmentHandler {
         Block oreBlock = state.getBlock();
         List<BlockPos> vein = findVein(world, pos, oreBlock);
 
-        excavating = true;
-        try {
-            for (BlockPos target : vein) {
-                player.gameMode.destroyBlock(target);
-            }
-        } finally {
-            excavating = false;
+        for (BlockPos target : vein) {
+            player.gameMode.destroyBlock(target);
         }
     }
 
@@ -107,21 +102,16 @@ public final class ToolEnchantmentHandler {
 
         int radius = level + 1;
 
-        excavating = true;
-        try {
-            for (BlockPos bp : BlockPos.betweenClosed(pos.offset(-radius, 0, -radius),
-                    pos.offset(radius, 0, radius))) {
-                if (bp.equals(pos)) continue;
-                BlockState cropState = world.getBlockState(bp);
-                if (!(cropState.getBlock() instanceof CropBlock neighborCrop)) continue;
-                if (!neighborCrop.isMaxAge(cropState)) continue;
+        for (BlockPos bp : BlockPos.betweenClosed(pos.offset(-radius, 0, -radius),
+                pos.offset(radius, 0, radius))) {
+            if (bp.equals(pos)) continue;
+            BlockState cropState = world.getBlockState(bp);
+            if (!(cropState.getBlock() instanceof CropBlock neighborCrop)) continue;
+            if (!neighborCrop.isMaxAge(cropState)) continue;
 
-                BlockPos immutable = bp.immutable();
-                player.gameMode.destroyBlock(immutable);
-                world.setBlockAndUpdate(immutable, neighborCrop.getStateForAge(0));
-            }
-        } finally {
-            excavating = false;
+            BlockPos immutable = bp.immutable();
+            player.gameMode.destroyBlock(immutable);
+            world.setBlockAndUpdate(immutable, neighborCrop.getStateForAge(0));
         }
     }
 
