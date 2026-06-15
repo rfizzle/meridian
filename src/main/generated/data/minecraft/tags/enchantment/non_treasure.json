@@ -1,0 +1,240 @@
+{
+  "values": [
+    {
+      "id": "meridian:alacrity",
+      "required": false
+    },
+    {
+      "id": "meridian:animus",
+      "required": false
+    },
+    {
+      "id": "meridian:antidote",
+      "required": false
+    },
+    {
+      "id": "meridian:beckon",
+      "required": false
+    },
+    {
+      "id": "meridian:blight",
+      "required": false
+    },
+    {
+      "id": "meridian:bounty",
+      "required": false
+    },
+    {
+      "id": "meridian:bulwark",
+      "required": false
+    },
+    {
+      "id": "meridian:cinderwalk",
+      "required": false
+    },
+    {
+      "id": "meridian:clamber",
+      "required": false
+    },
+    {
+      "id": "meridian:cleave",
+      "required": false
+    },
+    {
+      "id": "meridian:decay",
+      "required": false
+    },
+    {
+      "id": "meridian:excavate",
+      "required": false
+    },
+    {
+      "id": "meridian:fortify",
+      "required": false
+    },
+    {
+      "id": "meridian:frostguard",
+      "required": false
+    },
+    {
+      "id": "meridian:furrow",
+      "required": false
+    },
+    {
+      "id": "meridian:gale_shot",
+      "required": false
+    },
+    {
+      "id": "meridian:gallop",
+      "required": false
+    },
+    {
+      "id": "meridian:glacial_lance",
+      "required": false
+    },
+    {
+      "id": "meridian:gravitas",
+      "required": false
+    },
+    {
+      "id": "meridian:impact_ward",
+      "required": false
+    },
+    {
+      "id": "meridian:insight",
+      "required": false
+    },
+    {
+      "id": "meridian:ironwing",
+      "required": false
+    },
+    {
+      "id": "meridian:keen_edge",
+      "required": false
+    },
+    {
+      "id": "meridian:luminance",
+      "required": false
+    },
+    {
+      "id": "meridian:masons_reach",
+      "required": false
+    },
+    {
+      "id": "meridian:nightfall",
+      "required": false
+    },
+    {
+      "id": "meridian:outreach",
+      "required": false
+    },
+    {
+      "id": "meridian:permafrost",
+      "required": false
+    },
+    {
+      "id": "meridian:premonition",
+      "required": false
+    },
+    {
+      "id": "meridian:prismatic",
+      "required": false
+    },
+    {
+      "id": "meridian:prospect",
+      "required": false
+    },
+    {
+      "id": "meridian:pummel",
+      "required": false
+    },
+    {
+      "id": "meridian:quell",
+      "required": false
+    },
+    {
+      "id": "meridian:renewal",
+      "required": false
+    },
+    {
+      "id": "meridian:repulse",
+      "required": false
+    },
+    {
+      "id": "meridian:resonance",
+      "required": false
+    },
+    {
+      "id": "meridian:ricochet",
+      "required": false
+    },
+    {
+      "id": "meridian:rift_strike",
+      "required": false
+    },
+    {
+      "id": "meridian:saddleguard",
+      "required": false
+    },
+    {
+      "id": "meridian:sanctify",
+      "required": false
+    },
+    {
+      "id": "meridian:seismic_slam",
+      "required": false
+    },
+    {
+      "id": "meridian:sentinel",
+      "required": false
+    },
+    {
+      "id": "meridian:shackle",
+      "required": false
+    },
+    {
+      "id": "meridian:siphon",
+      "required": false
+    },
+    {
+      "id": "meridian:skybound",
+      "required": false
+    },
+    {
+      "id": "meridian:slipstream",
+      "required": false
+    },
+    {
+      "id": "meridian:soul_tax",
+      "required": false
+    },
+    {
+      "id": "meridian:spellguard",
+      "required": false
+    },
+    {
+      "id": "meridian:steadfast",
+      "required": false
+    },
+    {
+      "id": "meridian:stormcall",
+      "required": false
+    },
+    {
+      "id": "meridian:tempest",
+      "required": false
+    },
+    {
+      "id": "meridian:tempo",
+      "required": false
+    },
+    {
+      "id": "meridian:terrasculpt",
+      "required": false
+    },
+    {
+      "id": "meridian:trample",
+      "required": false
+    },
+    {
+      "id": "meridian:true_flight",
+      "required": false
+    },
+    {
+      "id": "meridian:updraft",
+      "required": false
+    },
+    {
+      "id": "meridian:vault",
+      "required": false
+    },
+    {
+      "id": "meridian:vitality",
+      "required": false
+    },
+    {
+      "id": "meridian:voidbane",
+      "required": false
+    }
+  ]
+}

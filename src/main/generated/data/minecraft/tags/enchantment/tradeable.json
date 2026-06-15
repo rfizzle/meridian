@@ -1,0 +1,68 @@
+{
+  "values": [
+    {
+      "id": "meridian:abyss_ward",
+      "required": false
+    },
+    {
+      "id": "meridian:aurify",
+      "required": false
+    },
+    {
+      "id": "meridian:bloodrage",
+      "required": false
+    },
+    {
+      "id": "meridian:colossus",
+      "required": false
+    },
+    {
+      "id": "meridian:detonation",
+      "required": false
+    },
+    {
+      "id": "meridian:diminish",
+      "required": false
+    },
+    {
+      "id": "meridian:final_gambit",
+      "required": false
+    },
+    {
+      "id": "meridian:plunder",
+      "required": false
+    },
+    {
+      "id": "meridian:rally",
+      "required": false
+    },
+    {
+      "id": "meridian:reckless",
+      "required": false
+    },
+    {
+      "id": "meridian:retribution",
+      "required": false
+    },
+    {
+      "id": "meridian:snare",
+      "required": false
+    },
+    {
+      "id": "meridian:tether",
+      "required": false
+    },
+    {
+      "id": "meridian:vital_mend",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_decay",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_sealing",
+      "required": false
+    }
+  ]
+}
