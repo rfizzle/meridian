@@ -1,12 +1,14 @@
 package com.rfizzle.meridian.data;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 
 import java.util.concurrent.CompletableFuture;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
@@ -95,5 +97,12 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ItemTags.WEAPON_ENCHANTABLE)
                 .add(Items.SHIELD);
+
+        var bookshelves = getOrCreateTagBuilder(ConventionalItemTags.BOOKSHELVES);
+        MeridianRegistry.BLOCKS.forEach((id, block) -> {
+            if (id.getPath().contains("shelf")) {
+                bookshelves.add(block.asItem());
+            }
+        });
     }
 }
