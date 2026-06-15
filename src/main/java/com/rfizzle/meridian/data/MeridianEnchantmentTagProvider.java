@@ -89,9 +89,6 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("cinderwalk"));
 
         getOrCreateTagBuilder(MACE_EXCLUSIVE)
-                .addOptional(mc("density"))
-                .addOptional(mc("breach"))
-                .addOptional(mc("wind_burst"))
                 .addOptional(Meridian.id("tempest"))
                 .addOptional(Meridian.id("seismic_slam"))
                 .addOptional(Meridian.id("updraft"));

@@ -199,7 +199,7 @@ public class MeridianRecipeProvider extends FabricRecipeProvider {
                 .pattern("EEE")
                 .define('E', DEEPSLATE_TAG)
                 .define('B', Items.BOOK)
-                .unlockedBy("has_book", has(Items.BOOK))
+                .unlockedBy("has_deepslate", has(DEEPSLATE_TAG))
                 .save(exporter);
 
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MeridianShelves.ECHOING_DEEPSHELF)

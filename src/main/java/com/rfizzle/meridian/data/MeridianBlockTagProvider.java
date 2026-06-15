@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.Blocks;
 public class MeridianBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     private static final TagKey<Block> EXCAVATE_BLACKLIST = TagKey.create(Registries.BLOCK, Meridian.id("excavate_blacklist"));
-    private static final TagKey<Block> NON_SOLID = TagKey.create(Registries.BLOCK, Meridian.id("non-solid"));
+    private static final TagKey<Block> NON_SOLID = TagKey.create(Registries.BLOCK, Meridian.id("non_solid"));
     private static final TagKey<Block> PROSPECT_ORES = TagKey.create(Registries.BLOCK, Meridian.id("prospect_ores"));
 
     public MeridianBlockTagProvider(FabricDataOutput output,
