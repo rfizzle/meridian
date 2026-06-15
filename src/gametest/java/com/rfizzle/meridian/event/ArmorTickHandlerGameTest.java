@@ -22,11 +22,15 @@ public class ArmorTickHandlerGameTest implements FabricGameTest {
         MinecraftServer server = level.getServer();
         BlockPos pos = helper.absolutePos(new BlockPos(1, 1, 1));
 
-        // Positive case: tracked in THIS dimension with timestamp 0, which is far past
-        // the 80-tick revert threshold, so the obsidian must revert to lava.
+        // Anchor tracking one tick past the revert threshold relative to the canonical clock
+        // (server.overworld().getGameTime(), which revertCinderwalkBlocks compares against), so
+        // the entries are always due no matter how many ticks elapsed before the test ran.
+        long pastTick = server.overworld().getGameTime() - (ArmorTickHandler.CINDERWALK_REVERT_TICKS + 1L);
+
+        // Positive case: tracked in THIS dimension past the threshold, so the obsidian reverts.
         ArmorTickHandler.cinderwalkResetForTest();
         level.setBlockAndUpdate(pos, Blocks.OBSIDIAN.defaultBlockState());
-        ArmorTickHandler.cinderwalkTrackForTest(level.dimension(), pos, 0L);
+        ArmorTickHandler.cinderwalkTrackForTest(level.dimension(), pos, pastTick);
         ArmorTickHandler.revertCinderwalkBlocks(server);
         if (!level.getBlockState(pos).is(Blocks.LAVA)) {
             helper.fail("Cinderwalk block tracked in this dimension should revert to lava, got "
@@ -40,7 +44,7 @@ public class ArmorTickHandlerGameTest implements FabricGameTest {
                 level.dimension().equals(Level.OVERWORLD) ? Level.NETHER : Level.OVERWORLD;
         ArmorTickHandler.cinderwalkResetForTest();
         level.setBlockAndUpdate(pos, Blocks.OBSIDIAN.defaultBlockState());
-        ArmorTickHandler.cinderwalkTrackForTest(otherDimension, pos, 0L);
+        ArmorTickHandler.cinderwalkTrackForTest(otherDimension, pos, pastTick);
         ArmorTickHandler.revertCinderwalkBlocks(server);
         if (!level.getBlockState(pos).is(Blocks.OBSIDIAN)) {
             helper.fail("Cinderwalk block tracked in another dimension must not revert here, got "

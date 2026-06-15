@@ -33,7 +33,7 @@ public final class ArmorTickHandler {
     private record TrackedBlock(ResourceKey<Level> dimension, BlockPos pos) {}
 
     private static final Map<TrackedBlock, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
-    private static final int CINDERWALK_REVERT_TICKS = 80;
+    static final int CINDERWALK_REVERT_TICKS = 80;
 
     private ArmorTickHandler() {}
 
