@@ -48,7 +48,7 @@ public final class EnchantingRecipeRegistry {
     public static final EnchantingRecipe.Serializer ENCHANTING_SERIALIZER = new EnchantingRecipe.Serializer();
     public static final KeepNbtEnchantingRecipe.Serializer KEEP_NBT_SERIALIZER = new KeepNbtEnchantingRecipe.Serializer();
 
-    private static boolean registered = false;
+    private static volatile boolean registered = false;
 
     private EnchantingRecipeRegistry() {
     }

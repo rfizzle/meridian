@@ -63,6 +63,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
 
     private static final EnchantingStatRegistry INSTANCE = new EnchantingStatRegistry();
 
+    private static volatile boolean registered = false;
+
     private final Map<ResourceLocation, EnchantingStats> byBlock = new HashMap<>();
     private final List<TagBinding> byTag = new ArrayList<>();
 
@@ -74,6 +76,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     public static void bootstrap() {
+        if (registered) return;
+        registered = true;
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(INSTANCE);
     }
 

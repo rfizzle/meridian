@@ -11,6 +11,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EnchantingStatsTest {
 
@@ -32,6 +33,31 @@ class EnchantingStatsTest {
         EnchantingStats decoded = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, encoded).getOrThrow();
 
         assertEquals(stats, decoded);
+    }
+
+    @Test
+    void codec_rejectsExtremeNegativeValues() {
+        JsonElement extreme = JsonParser.parseString("{\"eterna\":-1001}");
+        var result = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, extreme);
+        assertTrue(result.error().isPresent());
+    }
+
+    @Test
+    void codec_acceptsValueAtNegativeThreshold() {
+        JsonElement atThreshold = JsonParser.parseString("{\"eterna\":-50}");
+
+        EnchantingStats decoded = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, atThreshold).getOrThrow();
+
+        assertEquals(-50F, decoded.eterna());
+    }
+
+    @Test
+    void codec_rejectsValueJustBelowNegativeThreshold() {
+        JsonElement belowThreshold = JsonParser.parseString("{\"eterna\":-50.1}");
+
+        var result = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, belowThreshold);
+
+        assertTrue(result.error().isPresent());
     }
 
     @Test

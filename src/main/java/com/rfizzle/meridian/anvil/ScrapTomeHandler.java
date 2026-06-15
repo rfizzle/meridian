@@ -6,6 +6,7 @@ import com.rfizzle.meridian.tome.ScrapTomeItem;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Supplier;
 
 /**
@@ -91,7 +91,7 @@ public final class ScrapTomeHandler implements AnvilHandler {
             return Optional.empty();
         }
 
-        Random rand = new Random(seedFor(player, candidates));
+        RandomSource rand = RandomSource.create(seedFor(player, candidates));
         Holder<Enchantment> picked = candidates.get(rand.nextInt(candidates.size()));
         int level = existing.getLevel(picked);
 

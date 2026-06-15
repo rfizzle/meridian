@@ -384,7 +384,7 @@ public class EnchantingInfoScreen extends Screen {
         this.minecraft.setScreen(parent);
     }
 
-    public class PowerSlider extends AbstractSliderButton {
+    private class PowerSlider extends AbstractSliderButton {
 
         public PowerSlider(int x, int y, int width, int height) {
             super(x, y, width, height, Component.empty(), 0);
