@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.event;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -17,6 +18,7 @@ public final class TetherHandler {
 
     public static void register() {
         ServerPlayerEvents.COPY_FROM.register(TetherHandler::onPlayerRespawn);
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> tetheredItems.remove(handler.player.getUUID()));
     }
 
     public static void saveTetheredItems(UUID playerId, List<ItemStack> items) {

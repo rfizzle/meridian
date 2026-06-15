@@ -63,6 +63,38 @@ public class EdgeCaseEnchantmentTest implements FabricGameTest {
         });
     }
 
+    // --- Final Gambit: destroyed even with Unbreaking on the weapon ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void finalGambitDestroysUnbreakingWeaponOnHit(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "final_gambit");
+        if (ench == null) { helper.fail("final_gambit not in registry"); return; }
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        attacker.setShiftKeyDown(true);
+
+        // A pristine, Unbreaking III weapon is the case that survived hurtAndBreak: the
+        // per-point Unbreaking check spares most of the durability damage.
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.enchant(ench, 1);
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        reg.getHolder(Enchantments.UNBREAKING).ifPresent(u -> sword.enchant(u, 3));
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, sword);
+
+        Mob victim = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 2));
+        attacker.doHurtTarget(victim);
+
+        helper.runAfterDelay(2, () -> {
+            if (!attacker.getMainHandItem().isEmpty()) {
+                helper.fail("Final Gambit must sacrifice the weapon even with Unbreaking III. "
+                        + "Weapon still present.");
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
     // --- Ricochet: bounce count capped ---
 
     @GameTest(template = "meridian:empty_3x3")

@@ -122,7 +122,16 @@ public final class EnchantmentEffectHandler {
         if (level <= 0) return;
 
         float bonusDamage = weapon.getMaxDamage() * 0.15f;
-        weapon.setCount(0);
+
+        // FinalGambit sacrifices the weapon for the bonus hit. Damage it to the break
+        // threshold first so the real break effects (sound, particles, break callbacks)
+        // fire, then force-consume any survivor: hurtAndBreak honours Unbreaking per
+        // damage point and would otherwise spare a lightly-damaged or Unbreaking weapon.
+        weapon.setDamageValue(Math.max(0, weapon.getMaxDamage() - 1));
+        weapon.hurtAndBreak(weapon.getMaxDamage(), livingAttacker, EquipmentSlot.MAINHAND);
+        if (!weapon.isEmpty()) {
+            weapon.setCount(0);
+        }
 
         FINAL_GAMBIT_PROCESSING.add(livingAttacker.getUUID());
         try {

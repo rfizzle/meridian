@@ -42,7 +42,7 @@ public final class AurifyHandler {
         if (player.getRandom().nextFloat() >= 0.30f) {
             EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             stack.hurtAndBreak(3, player, slot);
-            return InteractionResult.SUCCESS;
+            return InteractionResult.PASS;
         }
 
         world.setBlockAndUpdate(pos, converted);
