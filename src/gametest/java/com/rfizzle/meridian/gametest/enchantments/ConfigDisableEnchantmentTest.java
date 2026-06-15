@@ -1,24 +1,17 @@
 package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.config.MeridianConfig;
-import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -49,36 +42,30 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3", batch = "configMutation1")
-    public void disabledEnchantmentHasNoAttributeEffect(GameTestHelper helper) {
+    public void disabledEnchantmentSuppressesItemGlint(GameTestHelper helper) {
         Holder<Enchantment> bulwark = lookup(helper, "bulwark");
         if (bulwark == null) { helper.fail("bulwark not in registry"); return; }
+
+        ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
+        chest.enchant(bulwark, 3);
+        if (!chest.hasFoil()) {
+            helper.fail("Sanity: an item with an enabled enchantment should have a glint");
+            return;
+        }
 
         byte[] original = saveAndDisable(helper, "meridian:bulwark");
         if (original == null) return;
 
         try {
-            Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-            double baseKR = mob.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
-
-            ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
-            chest.enchant(bulwark, 3);
-            mob.setItemSlot(EquipmentSlot.CHEST, chest);
-
-            helper.runAfterDelay(1, () -> {
-                try {
-                    EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(bulwark);
-                    if (info.enabled()) {
-                        helper.fail("Bulwark should be disabled in EnchantmentInfoRegistry after config reload");
-                        return;
-                    }
-                    helper.succeed();
-                } finally {
-                    restoreConfig(original, helper.getLevel().getServer());
-                }
-            });
-        } catch (Exception e) {
+            // Disabling does not strip the enchantment from gear that already carries it, but it
+            // does mark the item inert: with every enchantment disabled, the glint is suppressed.
+            if (chest.hasFoil()) {
+                helper.fail("Disabling the only enchantment on an item should suppress its glint");
+                return;
+            }
+            helper.succeed();
+        } finally {
             restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Exception: " + e.getMessage());
         }
     }
 
@@ -98,46 +85,43 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
                     Registries.ENCHANTMENT, Meridian.id("shackle"));
             for (EnchantmentInstance inst : results) {
                 if (inst.enchantment.is(shackleKey)) {
-                    restoreConfig(original, helper.getLevel().getServer());
                     helper.fail("Disabled enchantment 'shackle' should not appear in enchanting table pool");
                     return;
                 }
             }
-            restoreConfig(original, helper.getLevel().getServer());
             helper.succeed();
-        } catch (Exception e) {
+        } finally {
             restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Exception: " + e.getMessage());
         }
     }
 
     @GameTest(template = "meridian:empty_3x3", batch = "configMutation3")
-    public void disabledEnchantmentOnExistingItemHasNoEffect(GameTestHelper helper) {
+    public void glintRetainedWhenAnotherEnchantmentStillEnabled(GameTestHelper helper) {
+        Holder<Enchantment> bulwark = lookup(helper, "bulwark");
         Holder<Enchantment> alacrity = lookup(helper, "alacrity");
-        if (alacrity == null) { helper.fail("alacrity not in registry"); return; }
+        if (bulwark == null || alacrity == null) {
+            helper.fail("bulwark/alacrity not in registry");
+            return;
+        }
 
-        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-        ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
-        boots.enchant(alacrity, 5);
-        mob.setItemSlot(EquipmentSlot.FEET, boots);
+        ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
+        chest.enchant(bulwark, 3);
+        chest.enchant(alacrity, 1);
 
-        helper.runAfterDelay(1, () -> {
-            double speedBefore = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        byte[] original = saveAndDisable(helper, "meridian:bulwark");
+        if (original == null) return;
 
-            byte[] original = saveAndDisable(helper, "meridian:alacrity");
-            if (original == null) return;
-
-            try {
-                EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(alacrity);
-                if (info.enabled()) {
-                    helper.fail("Alacrity should be disabled after config reload");
-                    return;
-                }
-                helper.succeed();
-            } finally {
-                restoreConfig(original, helper.getLevel().getServer());
+        try {
+            // Glint is suppressed only when every enchantment on the item is disabled. With
+            // alacrity still enabled, disabling bulwark alone must leave the glint intact.
+            if (!chest.hasFoil()) {
+                helper.fail("Glint should remain while another enabled enchantment is present");
+                return;
             }
-        });
+            helper.succeed();
+        } finally {
+            restoreConfig(original, helper.getLevel().getServer());
+        }
     }
 
     @GameTest(template = "meridian:empty_3x3", batch = "configMutation4")
@@ -148,20 +132,29 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         byte[] original = saveAndDisable(helper, "meridian:bulwark");
         if (original == null) return;
 
-        EnchantmentInfo infoDisabled = EnchantmentInfoRegistry.getInfo(bulwark);
-        if (infoDisabled.enabled()) {
-            restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Bulwark should be disabled");
-            return;
-        }
+        // The inline restore below is the re-enable under test; the finally is only a safety net
+        // for the paths that fail before reaching it, so it must not restore a second time.
+        boolean restored = false;
+        try {
+            EnchantmentInfo infoDisabled = EnchantmentInfoRegistry.getInfo(bulwark);
+            if (infoDisabled.enabled()) {
+                helper.fail("Bulwark should be disabled");
+                return;
+            }
 
-        restoreConfig(original, helper.getLevel().getServer());
-        EnchantmentInfo infoRestored = EnchantmentInfoRegistry.getInfo(bulwark);
-        if (!infoRestored.enabled()) {
-            helper.fail("Bulwark should be re-enabled after restoring config");
-            return;
+            restoreConfig(original, helper.getLevel().getServer());
+            restored = true;
+            EnchantmentInfo infoRestored = EnchantmentInfoRegistry.getInfo(bulwark);
+            if (!infoRestored.enabled()) {
+                helper.fail("Bulwark should be re-enabled after restoring config");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            if (!restored) {
+                restoreConfig(original, helper.getLevel().getServer());
+            }
         }
-        helper.succeed();
     }
 
     private byte[] saveAndDisable(GameTestHelper helper, String enchantmentId) {
@@ -183,6 +176,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
             Files.writeString(CONFIG_FILE, disabledConfig);
             Meridian.reloadConfig(helper.getLevel().getServer());
         } catch (IOException e) {
+            Meridian.LOGGER.error("Could not write config in saveAndDisable", e);
             try { Files.write(CONFIG_FILE, original); } catch (IOException ignored) {}
             helper.fail("Could not write config: " + e.getMessage());
             return null;
@@ -193,7 +187,9 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
     private void restoreConfig(byte[] original, net.minecraft.server.MinecraftServer server) {
         try {
             Files.write(CONFIG_FILE, original);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            Meridian.LOGGER.error("Failed to restore config", e);
+        }
         Meridian.reloadConfig(server);
     }
 }

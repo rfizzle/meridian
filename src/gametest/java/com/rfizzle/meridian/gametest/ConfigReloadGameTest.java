@@ -93,7 +93,8 @@ public class ConfigReloadGameTest implements FabricGameTest {
         try {
             Files.write(CONFIG_FILE, original);
             Meridian.reloadConfig();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            Meridian.LOGGER.error("Failed to restore config", e);
         }
     }
 }
