@@ -129,7 +129,7 @@ public final class EnchantmentEffectHandler {
         if (level <= 0) return;
 
         float bonusDamage = weapon.getMaxDamage() * 0.15f;
-        weapon.setCount(0);
+        weapon.hurtAndBreak(weapon.getMaxDamage(), livingAttacker, EquipmentSlot.MAINHAND);
 
         applyingFinalGambit = true;
         try {

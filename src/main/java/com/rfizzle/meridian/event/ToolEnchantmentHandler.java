@@ -118,7 +118,9 @@ public final class ToolEnchantmentHandler {
 
                 BlockPos immutable = bp.immutable();
                 player.gameMode.destroyBlock(immutable);
-                world.setBlockAndUpdate(immutable, neighborCrop.getStateForAge(0));
+                if (world.getBlockState(immutable).isAir()) {
+                    world.setBlockAndUpdate(immutable, neighborCrop.getStateForAge(0));
+                }
             }
         } finally {
             excavating = false;
