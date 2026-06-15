@@ -12,12 +12,14 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class MountedEnchantmentHandler {
 
-    private static final WeakHashMap<Entity, Long> trampleCooldowns = new WeakHashMap<>();
+    private static final Map<Entity, Long> trampleCooldowns = Collections.synchronizedMap(new WeakHashMap<>());
     private static final int TRAMPLE_COOLDOWN_TICKS = 10;
 
     private MountedEnchantmentHandler() {}
