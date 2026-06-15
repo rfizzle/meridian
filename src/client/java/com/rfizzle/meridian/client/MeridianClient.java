@@ -6,7 +6,6 @@ import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
 import com.rfizzle.meridian.client.screen.MeridianEnchantmentScreen;
 import com.rfizzle.meridian.client.tooltip.InlineEnchDescTooltipHandler;
 import com.rfizzle.meridian.client.tooltip.OverLeveledTooltipHandler;
-import com.rfizzle.meridian.client.tooltip.ShelfStatTooltipHandler;
 import com.rfizzle.meridian.particle.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -21,7 +20,6 @@ public class MeridianClient implements ClientModInitializer {
         MenuScreens.register(MeridianRegistry.LIBRARY_MENU, EnchantmentLibraryScreen::new);
         OverLeveledTooltipHandler.register();
         InlineEnchDescTooltipHandler.register();
-        ShelfStatTooltipHandler.register();
         registerParticleProviders();
     }
 

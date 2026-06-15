@@ -152,7 +152,7 @@ public final class MeridianShelves {
     }
 
     private static void registerShelf(String name, EnchantingShelfBlock block) {
-        MeridianRegistry.registerBlock(name, block, new Item.Properties());
+        MeridianRegistry.registerBlock(name, block, new Item.Properties(), MeridianShelfItem::new);
     }
 
     private static EnchantingShelfBlock woodShelf(MapColor color, float strength, ParticleTheme theme) {
