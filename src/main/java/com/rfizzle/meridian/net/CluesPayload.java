@@ -23,7 +23,7 @@ public record CluesPayload(int slot, List<EnchantmentClue> clues, boolean exhaus
             new CustomPacketPayload.Type<>(Meridian.id("clues"));
 
     private static final StreamCodec<ByteBuf, List<EnchantmentClue>> CLUES_CODEC =
-            EnchantmentClue.STREAM_CODEC.apply(ByteBufCodecs.list());
+            EnchantmentClue.STREAM_CODEC.apply(ByteBufCodecs.list(256));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, CluesPayload> CODEC =
             StreamCodec.composite(
