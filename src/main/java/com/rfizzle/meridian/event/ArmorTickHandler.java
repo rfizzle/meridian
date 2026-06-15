@@ -124,7 +124,7 @@ public final class ArmorTickHandler {
         }
     }
 
-    private static void revertCinderwalkBlocks(MinecraftServer server) {
+    static void revertCinderwalkBlocks(MinecraftServer server) {
         if (cinderwalkBlocks.isEmpty()) return;
 
         long currentTick = server.overworld().getGameTime();
@@ -141,6 +141,16 @@ public final class ArmorTickHandler {
             }
             it.remove();
         }
+    }
+
+    // Test support: package-private hooks exercised by ArmorTickHandlerGameTest to drive
+    // the Cinderwalk revert path with explicit dimension keys and timestamps.
+    static void cinderwalkTrackForTest(ResourceKey<Level> dimension, BlockPos pos, long gameTime) {
+        cinderwalkBlocks.put(new TrackedBlock(dimension, pos.immutable()), gameTime);
+    }
+
+    static void cinderwalkResetForTest() {
+        cinderwalkBlocks.clear();
     }
 
     private static void handleTerrasculpt(ServerPlayer player) {
