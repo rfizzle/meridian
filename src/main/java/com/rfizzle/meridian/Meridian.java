@@ -63,7 +63,7 @@ public class Meridian implements ModInitializer {
     }
 
     private void registerLifecycleEvents() {
-        ServerLifecycleEvents.SERVER_STARTED.register(server -> rebuildEnchantmentInfo(server));
+        ServerLifecycleEvents.SERVER_STARTED.register(Meridian::rebuildEnchantmentInfo);
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
             if (success) {

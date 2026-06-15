@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.jade;
 
+import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlock;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlockEntity;
 
@@ -29,7 +30,7 @@ import snownee.jade.api.WailaPlugin;
  *       directly without a server data round-trip.</li>
  * </ul>
  */
-@WailaPlugin("meridian")
+@WailaPlugin(Meridian.MOD_ID)
 public final class JadeEnchantingPlugin implements IWailaPlugin {
 
     @Override

@@ -29,6 +29,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import com.rfizzle.meridian.Meridian;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,7 @@ import java.util.Optional;
 public class MeridianEnchantmentScreen extends EnchantmentScreen {
 
     private static final ResourceLocation TEXTURE =
-            ResourceLocation.fromNamespaceAndPath("meridian", "textures/gui/enchanting_table.png");
+            Meridian.id("textures/gui/enchanting_table.png");
 
     private static final float FALLBACK_MAX_ETERNA = 50.0F;
 

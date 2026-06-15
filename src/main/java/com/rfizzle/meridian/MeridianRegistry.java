@@ -29,7 +29,6 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
@@ -244,16 +243,16 @@ public final class MeridianRegistry {
         registerBlockEntityType("filtering_shelf", FILTERING_SHELF_BE);
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
+        registerBlock("library", BASIC_LIBRARY, new Item.Properties());
+        registerBlockEntityType("library", BASIC_LIBRARY_BE);
+        registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
+        registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
         registerItem("prismatic_web", PRISMATIC_WEB);
         registerItem("infused_breath", INFUSED_BREATH);
         registerItem("warden_tendril", WARDEN_TENDRIL);
         registerItem("scrap_tome", SCRAP_TOME);
         registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
         registerItem("extraction_tome", EXTRACTION_TOME);
-        registerBlock("library", BASIC_LIBRARY, new Item.Properties());
-        registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
-        registerBlockEntityType("library", BASIC_LIBRARY_BE);
-        registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
         registerCreativeTab();
     }
@@ -264,7 +263,7 @@ public final class MeridianRegistry {
                         .title(Component.translatable("itemGroup.meridian"))
                         .icon(() -> new ItemStack(INFUSED_BREATH))
                         .displayItems((params, output) -> {
-                            BLOCKS.values().forEach(block -> output.accept(block));
+                            BLOCKS.values().forEach(output::accept);
                             STANDALONE_ITEMS.forEach(output::accept);
                         })
                         .build());
