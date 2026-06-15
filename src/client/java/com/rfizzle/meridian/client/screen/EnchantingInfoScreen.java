@@ -141,7 +141,7 @@ public class EnchantingInfoScreen extends Screen {
 
         EnchantmentDataWrapper hover = getHovered(mouseX, mouseY);
         for (int i = 0; i < 11; i++) {
-            if (enchantments.size() - 1 < i) break;
+            if (startIndex + i >= enchantments.size()) break;
             int rowY = tp + 18 + 13 * i;
             EnchantmentDataWrapper data = enchantments.get(startIndex + i);
             int rowBg;
@@ -152,7 +152,7 @@ public class EnchantingInfoScreen extends Screen {
         }
 
         for (int i = 0; i < 11; i++) {
-            if (enchantments.size() - 1 < i) break;
+            if (startIndex + i >= enchantments.size()) break;
             EnchantmentDataWrapper data = enchantments.get(startIndex + i);
             int textY = tp + 21 + 13 * i;
             if (data.isBlacklisted) {
@@ -358,7 +358,7 @@ public class EnchantingInfoScreen extends Screen {
 
     private EnchantmentDataWrapper getHovered(double mouseX, double mouseY) {
         for (int i = 0; i < 11; i++) {
-            if (enchantments.size() - 1 < i) break;
+            if (startIndex + i >= enchantments.size()) break;
             if (isHovering(89, 18 + i * 13, 128, 13, mouseX, mouseY)) {
                 EnchantmentDataWrapper data = enchantments.get(startIndex + i);
                 return data.isBlacklisted ? null : data;
