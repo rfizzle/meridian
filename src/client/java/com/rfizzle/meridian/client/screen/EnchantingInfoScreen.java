@@ -317,6 +317,7 @@ public class EnchantingInfoScreen extends Screen {
     }
 
     private void recomputeEnchantments() {
+        if (this.minecraft == null || this.minecraft.level == null) return;
         if (selectedSlot < 0 || powers[selectedSlot] == null) {
             enchantments = Collections.emptyList();
             return;

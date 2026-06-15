@@ -6,8 +6,10 @@ import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
 import com.rfizzle.meridian.client.screen.MeridianEnchantmentScreen;
 import com.rfizzle.meridian.client.tooltip.InlineEnchDescTooltipHandler;
 import com.rfizzle.meridian.client.tooltip.OverLeveledTooltipHandler;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.particle.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.particle.FlyTowardsPositionParticle;
@@ -16,6 +18,7 @@ public class MeridianClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPayloadHandlers.register();
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> EnchantmentInfoRegistry.clear());
         MenuScreens.register(MeridianRegistry.ENCHANTING_TABLE_MENU, MeridianEnchantmentScreen::new);
         MenuScreens.register(MeridianRegistry.LIBRARY_MENU, EnchantmentLibraryScreen::new);
         OverLeveledTooltipHandler.register();
