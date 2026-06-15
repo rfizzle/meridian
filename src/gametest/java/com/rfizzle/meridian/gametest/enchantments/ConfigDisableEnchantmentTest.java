@@ -64,21 +64,20 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
             chest.enchant(bulwark, 3);
             mob.setItemSlot(EquipmentSlot.CHEST, chest);
 
-            helper.runAfterDelay(1, () -> {
-                try {
-                    EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(bulwark);
-                    if (info.enabled()) {
-                        helper.fail("Bulwark should be disabled in EnchantmentInfoRegistry after config reload");
-                        return;
-                    }
-                    helper.succeed();
-                } finally {
-                    restoreConfig(original, helper.getLevel().getServer());
-                }
-            });
-        } catch (Exception e) {
+            EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(bulwark);
+            if (info.enabled()) {
+                helper.fail("Bulwark should be disabled in EnchantmentInfoRegistry after config reload");
+                return;
+            }
+
+            double currentKR = mob.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+            if (currentKR != baseKR) {
+                helper.fail("Bulwark KR effect should be removed after disable. Expected " + baseKR + ", got " + currentKR);
+                return;
+            }
+            helper.succeed();
+        } finally {
             restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Exception: " + e.getMessage());
         }
     }
 
@@ -98,16 +97,13 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
                     Registries.ENCHANTMENT, Meridian.id("shackle"));
             for (EnchantmentInstance inst : results) {
                 if (inst.enchantment.is(shackleKey)) {
-                    restoreConfig(original, helper.getLevel().getServer());
                     helper.fail("Disabled enchantment 'shackle' should not appear in enchanting table pool");
                     return;
                 }
             }
-            restoreConfig(original, helper.getLevel().getServer());
             helper.succeed();
-        } catch (Exception e) {
+        } finally {
             restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Exception: " + e.getMessage());
         }
     }
 
@@ -117,27 +113,31 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         if (alacrity == null) { helper.fail("alacrity not in registry"); return; }
 
         Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        double baseSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+
         ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
         boots.enchant(alacrity, 5);
         mob.setItemSlot(EquipmentSlot.FEET, boots);
 
-        helper.runAfterDelay(1, () -> {
-            double speedBefore = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+        byte[] original = saveAndDisable(helper, "meridian:alacrity");
+        if (original == null) return;
 
-            byte[] original = saveAndDisable(helper, "meridian:alacrity");
-            if (original == null) return;
-
-            try {
-                EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(alacrity);
-                if (info.enabled()) {
-                    helper.fail("Alacrity should be disabled after config reload");
-                    return;
-                }
-                helper.succeed();
-            } finally {
-                restoreConfig(original, helper.getLevel().getServer());
+        try {
+            EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(alacrity);
+            if (info.enabled()) {
+                helper.fail("Alacrity should be disabled after config reload");
+                return;
             }
-        });
+
+            double currentSpeed = mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
+            if (currentSpeed != baseSpeed) {
+                helper.fail("Alacrity speed effect should be removed after disable. Expected " + baseSpeed + ", got " + currentSpeed);
+                return;
+            }
+            helper.succeed();
+        } finally {
+            restoreConfig(original, helper.getLevel().getServer());
+        }
     }
 
     @GameTest(template = "meridian:empty_3x3", batch = "configMutation4")
@@ -148,20 +148,23 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
         byte[] original = saveAndDisable(helper, "meridian:bulwark");
         if (original == null) return;
 
-        EnchantmentInfo infoDisabled = EnchantmentInfoRegistry.getInfo(bulwark);
-        if (infoDisabled.enabled()) {
-            restoreConfig(original, helper.getLevel().getServer());
-            helper.fail("Bulwark should be disabled");
-            return;
-        }
+        try {
+            EnchantmentInfo infoDisabled = EnchantmentInfoRegistry.getInfo(bulwark);
+            if (infoDisabled.enabled()) {
+                helper.fail("Bulwark should be disabled");
+                return;
+            }
 
-        restoreConfig(original, helper.getLevel().getServer());
-        EnchantmentInfo infoRestored = EnchantmentInfoRegistry.getInfo(bulwark);
-        if (!infoRestored.enabled()) {
-            helper.fail("Bulwark should be re-enabled after restoring config");
-            return;
+            restoreConfig(original, helper.getLevel().getServer());
+            EnchantmentInfo infoRestored = EnchantmentInfoRegistry.getInfo(bulwark);
+            if (!infoRestored.enabled()) {
+                helper.fail("Bulwark should be re-enabled after restoring config");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            restoreConfig(original, helper.getLevel().getServer());
         }
-        helper.succeed();
     }
 
     private byte[] saveAndDisable(GameTestHelper helper, String enchantmentId) {
@@ -183,6 +186,7 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
             Files.writeString(CONFIG_FILE, disabledConfig);
             Meridian.reloadConfig(helper.getLevel().getServer());
         } catch (IOException e) {
+            Meridian.LOGGER.error("Could not write config in saveAndDisable", e);
             try { Files.write(CONFIG_FILE, original); } catch (IOException ignored) {}
             helper.fail("Could not write config: " + e.getMessage());
             return null;
@@ -193,7 +197,9 @@ public class ConfigDisableEnchantmentTest implements FabricGameTest {
     private void restoreConfig(byte[] original, net.minecraft.server.MinecraftServer server) {
         try {
             Files.write(CONFIG_FILE, original);
-        } catch (IOException ignored) {}
+        } catch (IOException e) {
+            Meridian.LOGGER.error("Failed to restore config", e);
+        }
         Meridian.reloadConfig(server);
     }
 }

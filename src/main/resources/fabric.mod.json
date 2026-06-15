@@ -14,7 +14,6 @@
         "client": ["com.rfizzle.meridian.client.MeridianClient"],
         "fabric-datagen": ["com.rfizzle.meridian.data.MeridianDataGenerator"],
         "fabric-gametest": [
-            "com.rfizzle.meridian.gametest.PlaceholderGameTest",
             "com.rfizzle.meridian.gametest.RegistryGameTest",
             "com.rfizzle.meridian.gametest.ShelfRosterGameTest",
             "com.rfizzle.meridian.enchanting.FilteringTreasureGameTest",
