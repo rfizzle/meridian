@@ -19,10 +19,6 @@
     "meridian:echoing_deepshelf",
     "meridian:soul_touched_deepshelf",
     "meridian:echoing_sculkshelf",
-    "meridian:soul_touched_sculkshelf",
-    "meridian:sightshelf",
-    "meridian:sightshelf_t2",
-    "meridian:filtering_shelf",
-    "meridian:treasure_shelf"
+    "meridian:soul_touched_sculkshelf"
   ]
 }

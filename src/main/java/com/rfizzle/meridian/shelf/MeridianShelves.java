@@ -2,6 +2,8 @@ package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.MeridianRegistry;
 
+import java.util.Set;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -92,6 +94,15 @@ public final class MeridianShelves {
             stoneShelf(MapColor.COLOR_BLACK, 1.5F, ParticleTheme.ENCHANT_FIRE);
     public static final EnchantingShelfBlock RECTIFIER_T3 =
             stoneShelf(MapColor.SAND, 1.5F, ParticleTheme.ENCHANT_END);
+
+    /**
+     * Utility shelves whose stat contribution is purely Rectification or Clues — they grant no
+     * enchanting power (no Eterna/Quanta/Arcana). Excluded from {@code c:bookshelves}: that
+     * convention tag signals vanilla-style enchantment-table power to other mods, which these
+     * blocks do not provide.
+     */
+    public static final Set<EnchantingShelfBlock> UTILITY_SHELVES = Set.of(
+            SIGHTSHELF, SIGHTSHELF_T2, RECTIFIER, RECTIFIER_T2, RECTIFIER_T3);
 
     private static boolean registered = false;
 

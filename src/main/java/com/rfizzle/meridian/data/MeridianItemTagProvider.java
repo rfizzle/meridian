@@ -2,6 +2,7 @@ package com.rfizzle.meridian.data;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.shelf.EnchantingShelfBlock;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 
 import java.util.concurrent.CompletableFuture;
@@ -98,9 +99,12 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
         getOrCreateTagBuilder(ItemTags.WEAPON_ENCHANTABLE)
                 .add(Items.SHIELD);
 
+        // Expose Meridian shelves to other mods via the convention tag. Only power-granting
+        // shelves qualify — utility shelves (rectifiers, sightshelves) provide no enchantment
+        // power, so they are excluded.
         var bookshelves = getOrCreateTagBuilder(ConventionalItemTags.BOOKSHELVES);
         MeridianRegistry.BLOCKS.forEach((id, block) -> {
-            if (id.getPath().contains("shelf")) {
+            if (block instanceof EnchantingShelfBlock shelf && !MeridianShelves.UTILITY_SHELVES.contains(shelf)) {
                 bookshelves.add(block.asItem());
             }
         });
