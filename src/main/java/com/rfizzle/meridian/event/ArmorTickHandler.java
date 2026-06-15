@@ -3,6 +3,7 @@ package com.rfizzle.meridian.event;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,6 +14,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
@@ -28,7 +30,9 @@ public final class ArmorTickHandler {
 
     private static long tickCounter = 0;
 
-    private static final Map<BlockPos, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
+    private record TrackedBlock(ResourceKey<Level> dimension, BlockPos pos) {}
+
+    private static final Map<TrackedBlock, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
     private static final int CINDERWALK_REVERT_TICKS = 80;
 
     private ArmorTickHandler() {}
@@ -105,7 +109,7 @@ public final class ArmorTickHandler {
         ServerLevel world = player.serverLevel();
         BlockPos center = player.blockPosition().below();
         int radius = 1 + level;
-        long currentTick = world.getGameTime();
+        long currentTick = player.getServer().overworld().getGameTime();
 
         for (BlockPos bp : BlockPos.betweenClosed(center.offset(-radius, 0, -radius),
                 center.offset(radius, 0, radius))) {
@@ -115,7 +119,7 @@ public final class ArmorTickHandler {
             if (state.getFluidState().is(Fluids.LAVA) && state.getFluidState().isSource()) {
                 BlockPos immutable = bp.immutable();
                 world.setBlockAndUpdate(immutable, Blocks.OBSIDIAN.defaultBlockState());
-                cinderwalkBlocks.put(immutable, currentTick);
+                cinderwalkBlocks.put(new TrackedBlock(world.dimension(), immutable), currentTick);
             }
         }
     }
@@ -124,18 +128,16 @@ public final class ArmorTickHandler {
         if (cinderwalkBlocks.isEmpty()) return;
 
         long currentTick = server.overworld().getGameTime();
-        Iterator<Map.Entry<BlockPos, Long>> it = cinderwalkBlocks.entrySet().iterator();
+        Iterator<Map.Entry<TrackedBlock, Long>> it = cinderwalkBlocks.entrySet().iterator();
 
         while (it.hasNext()) {
-            Map.Entry<BlockPos, Long> entry = it.next();
+            Map.Entry<TrackedBlock, Long> entry = it.next();
             if (currentTick - entry.getValue() < CINDERWALK_REVERT_TICKS) continue;
 
-            BlockPos pos = entry.getKey();
-            for (ServerLevel level : server.getAllLevels()) {
-                if (level.isLoaded(pos) && level.getBlockState(pos).is(Blocks.OBSIDIAN)) {
-                    level.setBlockAndUpdate(pos, Blocks.LAVA.defaultBlockState());
-                    break;
-                }
+            TrackedBlock tracked = entry.getKey();
+            ServerLevel level = server.getLevel(tracked.dimension());
+            if (level != null && level.isLoaded(tracked.pos()) && level.getBlockState(tracked.pos()).is(Blocks.OBSIDIAN)) {
+                level.setBlockAndUpdate(tracked.pos(), Blocks.LAVA.defaultBlockState());
             }
             it.remove();
         }
