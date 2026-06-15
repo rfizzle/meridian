@@ -252,13 +252,12 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     /**
-     * Read-only view of the block-keyed stat entries. Recipe-viewer integrations (EMI/REI/JEI)
+     * Snapshotted view of the block-keyed stat entries. Recipe-viewer integrations (EMI/REI/JEI)
      * iterate this to surface per-shelf stat info panels — each entry becomes one hover card
-     * in the viewer. Returned map reflects the current registration state; a subsequent
-     * resource reload mutates it. Callers that need a snapshot should copy.
+     * in the viewer.
      */
     public Map<ResourceLocation, EnchantingStats> blockEntries() {
-        return Collections.unmodifiableMap(byBlock);
+        return Map.copyOf(byBlock);
     }
 
     @Override

@@ -25,8 +25,8 @@ import java.util.Map;
  */
 public final class EnchantmentInfoRegistry {
 
-    private static final Map<ResourceKey<Enchantment>, EnchantmentInfo> INFO = new HashMap<>();
-    private static final IdentityHashMap<Enchantment, EnchantmentInfo> INSTANCE_INFO = new IdentityHashMap<>();
+    private static volatile Map<ResourceKey<Enchantment>, EnchantmentInfo> INFO = Map.of();
+    private static volatile Map<Enchantment, EnchantmentInfo> INSTANCE_INFO = Map.of();
 
     private EnchantmentInfoRegistry() {
     }
@@ -61,8 +61,8 @@ public final class EnchantmentInfoRegistry {
      * start and after datapack reload.
      */
     public static void rebuild(Registry<Enchantment> registry, MeridianConfig config) {
-        INFO.clear();
-        INSTANCE_INFO.clear();
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> newInfo = new HashMap<>();
+        Map<Enchantment, EnchantmentInfo> newInstanceInfo = new IdentityHashMap<>();
         Map<String, MeridianConfig.EnchantmentOverride> overrides =
                 config.enchantmentOverrides != null ? config.enchantmentOverrides : Map.of();
         int overrideCount = 0;
@@ -78,9 +78,11 @@ public final class EnchantmentInfoRegistry {
             } else {
                 info = EnchantmentInfo.fallback(holder);
             }
-            INFO.put(key, info);
-            INSTANCE_INFO.put(holder.value(), info);
+            newInfo.put(key, info);
+            newInstanceInfo.put(holder.value(), info);
         }
+        INFO = Map.copyOf(newInfo);
+        INSTANCE_INFO = Collections.unmodifiableMap(newInstanceInfo);
         Meridian.LOGGER.info(
                 "Rebuilt enchantment info registry: {} enchantments, {} overrides",
                 INFO.size(), overrideCount);
@@ -90,12 +92,20 @@ public final class EnchantmentInfoRegistry {
      * Client-side: replaces the local registry with data received from the server.
      */
     public static void applyFromPayload(Map<ResourceKey<Enchantment>, EnchantmentInfo> data) {
-        INFO.clear();
-        INSTANCE_INFO.clear();
-        INFO.putAll(data);
+        Map<Enchantment, EnchantmentInfo> newInstanceInfo = new IdentityHashMap<>();
         for (EnchantmentInfo info : data.values()) {
-            INSTANCE_INFO.put(info.ench().value(), info);
+            newInstanceInfo.put(info.ench().value(), info);
         }
+        INFO = Map.copyOf(data);
+        INSTANCE_INFO = Collections.unmodifiableMap(newInstanceInfo);
+    }
+
+    /**
+     * Clears the registry.
+     */
+    public static void clear() {
+        INFO = Map.of();
+        INSTANCE_INFO = Map.of();
     }
 
     /**

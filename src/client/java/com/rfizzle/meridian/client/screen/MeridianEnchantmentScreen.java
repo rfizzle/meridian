@@ -247,6 +247,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                     lines.add(Component.translatable("info.meridian.enchant.clues"
                             + (exhausted ? "_all" : ""))
                             .withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
+                    if (this.minecraft.level == null) break;
                     Registry<Enchantment> registry = this.minecraft.level.registryAccess()
                             .registryOrThrow(Registries.ENCHANTMENT);
                     for (EnchantmentClue clue : clues) {
