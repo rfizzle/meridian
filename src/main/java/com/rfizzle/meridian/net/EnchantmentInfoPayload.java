@@ -3,6 +3,7 @@ package com.rfizzle.meridian.net;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.api.EnchantmentInfo;
 import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -42,6 +43,9 @@ public record EnchantmentInfoPayload(
 
     private static EnchantmentInfoPayload decode(RegistryFriendlyByteBuf buf) {
         int size = ByteBufCodecs.VAR_INT.decode(buf);
+        if (size < 0 || size > 1024) {
+            throw new DecoderException("EnchantmentInfoPayload size out of bounds: " + size);
+        }
         Map<ResourceKey<Enchantment>, EnchantmentInfo> map = new HashMap<>(size);
         for (int i = 0; i < size; i++) {
             ResourceKey<Enchantment> key = KEY_CODEC.decode(buf);

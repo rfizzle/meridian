@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.enchanting;
 
+import io.netty.handler.codec.DecoderException;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -17,7 +18,12 @@ public sealed interface PowerFunction {
     StreamCodec<RegistryFriendlyByteBuf, PowerFunction> STREAM_CODEC = new StreamCodec<>() {
         @Override
         public PowerFunction decode(RegistryFriendlyByteBuf buf) {
-            Type type = Type.values()[buf.readByte()];
+            int ord = buf.readByte() & 0xFF;
+            Type[] types = Type.values();
+            if (ord >= types.length) {
+                throw new DecoderException("Unknown PowerFunction discriminator byte: " + ord);
+            }
+            Type type = types[ord];
             return switch (type) {
                 case DEFAULT_MIN -> DefaultMinPowerFunction.INNER_CODEC.decode(buf);
                 case DEFAULT_MAX -> DefaultMaxPowerFunction.INSTANCE;

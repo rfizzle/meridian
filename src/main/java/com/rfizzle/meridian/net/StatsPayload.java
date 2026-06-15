@@ -34,7 +34,7 @@ public record StatsPayload(
             new CustomPacketPayload.Type<>(Meridian.id("stats"));
 
     private static final StreamCodec<ByteBuf, List<ResourceKey<Enchantment>>> BLACKLIST_CODEC =
-            ResourceKey.<Enchantment>streamCodec(Registries.ENCHANTMENT).apply(ByteBufCodecs.list());
+            ResourceKey.<Enchantment>streamCodec(Registries.ENCHANTMENT).apply(ByteBufCodecs.list(1024));
 
     private static final StreamCodec<RegistryFriendlyByteBuf, Optional<CraftingResultEntry>> CRAFTING_CODEC =
             ByteBufCodecs.optional(CraftingResultEntry.STREAM_CODEC);
