@@ -10,8 +10,8 @@
         "AnvilMenuMixin",
         "CreeperEntityAccessor",
         "EnchantmentHelperMixin",
+        "EnchantmentMaxLevelMixin",
         "EnchantmentMenuAccessor",
-        "EnchantmentMixin",
         "EnchantmentTableBlockMixin",
         "EnchantRandomlyFunctionMixin",
         "ItemMixin",
@@ -25,7 +25,9 @@
         "TetherMixin",
         "TemptGoalMixin"
     ],
-    "client": [],
+    "client": [
+        "EnchantmentTooltipMixin"
+    ],
     "injectors": {
         "defaultRequire": 1
     }

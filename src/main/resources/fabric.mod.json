@@ -41,7 +41,8 @@
             "com.rfizzle.meridian.gametest.enchantments.AttributeEnchantmentEffectTest",
             "com.rfizzle.meridian.gametest.enchantments.StatusEffectEnchantmentTest",
             "com.rfizzle.meridian.gametest.enchantments.EdgeCaseEnchantmentTest",
-            "com.rfizzle.meridian.gametest.EnchantmentSelectionGameTest"
+            "com.rfizzle.meridian.gametest.EnchantmentSelectionGameTest",
+            "com.rfizzle.meridian.event.ArmorTickHandlerGameTest"
         ],
         "emi": ["com.rfizzle.meridian.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.rfizzle.meridian.compat.rei.ReiEnchantingPlugin"],

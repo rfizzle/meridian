@@ -24,22 +24,27 @@ import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.WeakHashMap;
 
 public final class EnchantmentEffectHandler {
 
-    private static final WeakHashMap<LivingEntity, Long> rallyCooldowns = new WeakHashMap<>();
+    private static final Map<LivingEntity, Long> rallyCooldowns = Collections.synchronizedMap(new WeakHashMap<>());
     private static final int RALLY_COOLDOWN_TICKS = 6000;
 
-    private static final WeakHashMap<LivingEntity, Long> abyssWardCooldowns = new WeakHashMap<>();
+    private static final Map<LivingEntity, Long> abyssWardCooldowns = Collections.synchronizedMap(new WeakHashMap<>());
     private static final int ABYSS_WARD_COOLDOWN_TICKS = 12000;
 
-    private static boolean applyingBloodrage = false;
-    private static boolean applyingFinalGambit = false;
-    private static boolean applyingSoulTax = false;
-    private static boolean applyingCleave = false;
-    private static boolean applyingPummel = false;
+    private static final Set<UUID> BLOODRAGE_PROCESSING = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<UUID> FINAL_GAMBIT_PROCESSING = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<UUID> SOUL_TAX_PROCESSING = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<UUID> CLEAVE_PROCESSING = Collections.synchronizedSet(new HashSet<>());
+    private static final Set<UUID> PUMMEL_PROCESSING = Collections.synchronizedSet(new HashSet<>());
 
     private EnchantmentEffectHandler() {}
 
@@ -80,29 +85,16 @@ public final class EnchantmentEffectHandler {
         if (damageTaken <= 0 && !blocked) return;
 
         handleQuell(entity, source);
-
-        if (!applyingFinalGambit) {
-            handleFinalGambit(entity, source);
-        }
-
+        handleFinalGambit(entity, source);
         handleSiphon(entity, source);
-        if (!applyingSoulTax) {
-            handleSoulTax(entity, source);
-        }
-        if (!applyingCleave) {
-            handleCleave(entity, source);
-        }
-        if (!applyingPummel) {
-            handlePummel(entity, source);
-        }
+        handleSoulTax(entity, source);
+        handleCleave(entity, source);
+        handlePummel(entity, source);
         handleMaceSlam(entity, source);
         handleRepulse(entity, source);
         handleFrostguard(entity, source);
         handleRally(entity);
-
-        if (!applyingBloodrage) {
-            handleBloodrage(entity);
-        }
+        handleBloodrage(entity);
     }
 
     private static void handleQuell(LivingEntity entity, DamageSource source) {
@@ -122,6 +114,7 @@ public final class EnchantmentEffectHandler {
     private static void handleFinalGambit(LivingEntity entity, DamageSource source) {
         Entity attacker = source.getEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (FINAL_GAMBIT_PROCESSING.contains(livingAttacker.getUUID())) return;
         if (!livingAttacker.isShiftKeyDown()) return;
 
         ItemStack weapon = livingAttacker.getMainHandItem();
@@ -140,11 +133,11 @@ public final class EnchantmentEffectHandler {
             weapon.setCount(0);
         }
 
-        applyingFinalGambit = true;
+        FINAL_GAMBIT_PROCESSING.add(livingAttacker.getUUID());
         try {
             entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage);
         } finally {
-            applyingFinalGambit = false;
+            FINAL_GAMBIT_PROCESSING.remove(livingAttacker.getUUID());
         }
     }
 
@@ -165,6 +158,7 @@ public final class EnchantmentEffectHandler {
     private static void handleSoulTax(LivingEntity entity, DamageSource source) {
         Entity attacker = source.getEntity();
         if (!(attacker instanceof ServerPlayer player)) return;
+        if (SOUL_TAX_PROCESSING.contains(player.getUUID())) return;
 
         int level = EnchantmentEffects.getEnchantmentLevel(player.getMainHandItem(), EnchantmentEffects.SOUL_TAX);
         if (level <= 0) return;
@@ -175,17 +169,18 @@ public final class EnchantmentEffectHandler {
         player.giveExperiencePoints(-xpCost);
 
         float bonusDamage = 2.0f + 1.5f * level;
-        applyingSoulTax = true;
+        SOUL_TAX_PROCESSING.add(player.getUUID());
         try {
             entity.hurt(player.damageSources().mobAttack(player), bonusDamage);
         } finally {
-            applyingSoulTax = false;
+            SOUL_TAX_PROCESSING.remove(player.getUUID());
         }
     }
 
     private static void handleCleave(LivingEntity entity, DamageSource source) {
         Entity attacker = source.getEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (CLEAVE_PROCESSING.contains(livingAttacker.getUUID())) return;
 
         int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.CLEAVE);
         if (level <= 0) return;
@@ -197,13 +192,13 @@ public final class EnchantmentEffectHandler {
         List<LivingEntity> nearby = entity.level().getEntitiesOfClass(LivingEntity.class, area,
                 e -> e != entity && e != livingAttacker && e.isAlive());
 
-        applyingCleave = true;
+        CLEAVE_PROCESSING.add(livingAttacker.getUUID());
         try {
             for (LivingEntity target : nearby) {
                 target.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), damage);
             }
         } finally {
-            applyingCleave = false;
+            CLEAVE_PROCESSING.remove(livingAttacker.getUUID());
         }
     }
 
@@ -260,6 +255,8 @@ public final class EnchantmentEffectHandler {
     }
 
     private static void handleBloodrage(LivingEntity entity) {
+        if (BLOODRAGE_PROCESSING.contains(entity.getUUID())) return;
+
         int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.BLOODRAGE,
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
@@ -270,11 +267,11 @@ public final class EnchantmentEffectHandler {
         entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, buffDuration, 0, true, false, true));
 
         float hpCost = 1.5f + 0.5f * level;
-        applyingBloodrage = true;
+        BLOODRAGE_PROCESSING.add(entity.getUUID());
         try {
             entity.hurt(entity.damageSources().magic(), hpCost);
         } finally {
-            applyingBloodrage = false;
+            BLOODRAGE_PROCESSING.remove(entity.getUUID());
         }
     }
 
@@ -370,6 +367,7 @@ public final class EnchantmentEffectHandler {
     private static void handlePummel(LivingEntity entity, DamageSource source) {
         Entity attacker = source.getEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (PUMMEL_PROCESSING.contains(livingAttacker.getUUID())) return;
 
         ItemStack offhand = livingAttacker.getOffhandItem();
         int level = EnchantmentEffects.getEnchantmentLevel(offhand, EnchantmentEffects.PUMMEL);
@@ -378,11 +376,11 @@ public final class EnchantmentEffectHandler {
         float bonusDamage = 1.5f + 1.0f * level;
         offhand.hurtAndBreak(2, livingAttacker, EquipmentSlot.OFFHAND);
 
-        applyingPummel = true;
+        PUMMEL_PROCESSING.add(livingAttacker.getUUID());
         try {
             entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage);
         } finally {
-            applyingPummel = false;
+            PUMMEL_PROCESSING.remove(livingAttacker.getUUID());
         }
     }
 

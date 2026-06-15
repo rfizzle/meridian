@@ -22,12 +22,14 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class ProjectileEnchantmentHandler {
 
-    private static final WeakHashMap<AbstractArrow, Integer> bouncesRemaining = new WeakHashMap<>();
+    private static final Map<AbstractArrow, Integer> bouncesRemaining = Collections.synchronizedMap(new WeakHashMap<>());
 
     private ProjectileEnchantmentHandler() {}
 
