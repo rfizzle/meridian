@@ -20,13 +20,14 @@ public class ItemStackMixin {
         if (!cir.getReturnValueZ()) return;
         ItemStack self = (ItemStack) (Object) this;
         if (self.has(DataComponents.ENCHANTMENT_GLINT_OVERRIDE)) return;
-        if (allDisabled(self.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY))
-                && allDisabled(self.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY))) {
+        if (meridian$allDisabled(self.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY))
+                && meridian$allDisabled(self.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY))) {
             cir.setReturnValue(false);
         }
     }
 
-    private static boolean allDisabled(ItemEnchantments enchantments) {
+    @org.spongepowered.asm.mixin.Unique
+    private static boolean meridian$allDisabled(ItemEnchantments enchantments) {
         if (enchantments.isEmpty()) return true;
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
             if (EnchantmentInfoRegistry.getInfo(entry.getKey()).enabled()) return false;
