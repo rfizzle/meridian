@@ -43,6 +43,24 @@ class EnchantingStatsTest {
     }
 
     @Test
+    void codec_acceptsValueAtNegativeThreshold() {
+        JsonElement atThreshold = JsonParser.parseString("{\"eterna\":-50}");
+
+        EnchantingStats decoded = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, atThreshold).getOrThrow();
+
+        assertEquals(-50F, decoded.eterna());
+    }
+
+    @Test
+    void codec_rejectsValueJustBelowNegativeThreshold() {
+        JsonElement belowThreshold = JsonParser.parseString("{\"eterna\":-50.1}");
+
+        var result = EnchantingStats.CODEC.parse(JsonOps.INSTANCE, belowThreshold);
+
+        assertTrue(result.error().isPresent());
+    }
+
+    @Test
     void codec_missingFieldsDefaultToZero() {
         JsonElement empty = JsonParser.parseString("{}");
 
