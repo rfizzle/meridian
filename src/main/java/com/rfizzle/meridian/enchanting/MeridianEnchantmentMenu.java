@@ -409,14 +409,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
                 MeridianEnchantmentLogic.applyPicks(input, id, picks);
 
         ItemStack result = outcome.resultStack();
-        if (input.is(Items.BOOK)) {
-            enchantSlots.setItem(INPUT_SLOT, result);
-        } else {
-            for (EnchantmentInstance inst : picks) {
-                input.enchant(inst.enchantment, inst.level);
-            }
-            result = input;
-        }
+        enchantSlots.setItem(INPUT_SLOT, result);
 
         player.onEnchantmentPerformed(result, outcome.xpLevelsConsumed());
         lapis.consume(outcome.lapisConsumed(), player);

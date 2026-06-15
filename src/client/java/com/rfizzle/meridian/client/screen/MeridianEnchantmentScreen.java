@@ -142,11 +142,11 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
         }
         if (this.quanta > 0) {
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 85, 0, 202,
-                    (int) (this.quanta / 100F * 110), 5);
+                    (int) (Math.min(this.quanta / 100F, 1.0F) * 110), 5);
         }
         if (this.arcana > 0) {
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 95, 0, 207,
-                    (int) (this.arcana / 100F * 110), 5);
+                    (int) (Math.min(this.arcana / 100F, 1.0F) * 110), 5);
         }
 
         if (isInfoButtonVisible()) {
