@@ -15,16 +15,21 @@ import com.rfizzle.meridian.shelf.MeridianShelfItem;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 import com.rfizzle.meridian.shelf.TreasureShelfBlock;
 import com.rfizzle.meridian.shelf.TreasureShelfBlockEntity;
+import com.mojang.serialization.Codec;
+import com.rfizzle.meridian.tome.DormantXpTomeItem;
 import com.rfizzle.meridian.tome.ExtractionTomeItem;
 import com.rfizzle.meridian.tome.ImprovedScrapTomeItem;
 import com.rfizzle.meridian.tome.ScrapTomeItem;
+import com.rfizzle.meridian.tome.XpTomeItem;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -46,6 +51,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.UnaryOperator;
 
 /**
  * Central registry for blocks, items, block entities, menus, and particles shipped by
@@ -71,6 +77,13 @@ public final class MeridianRegistry {
      * in insertion order. Used by the creative tab builder to enumerate all mod items.
      */
     public static final List<Item> STANDALONE_ITEMS = new ArrayList<>();
+
+    /**
+     * Component tracking stored experience levels in an {@link XpTomeItem}. Persistent and
+     * network-synced so the fill bar and tooltips update immediately on both sides.
+     */
+    public static final DataComponentType<Integer> STORED_XP =
+            registerDataComponentType("stored_xp", builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
 
     public static final MenuType<MeridianEnchantmentMenu> ENCHANTING_TABLE_MENU =
             new MenuType<>(MeridianEnchantmentMenu::new, FeatureFlags.VANILLA_SET);
@@ -177,6 +190,24 @@ public final class MeridianRegistry {
             new ExtractionTomeItem(new Item.Properties().stacksTo(16));
 
     /**
+     * Base material for XP tomes. Stacks to 16. Promote to a tiered tome at the enchanting table.
+     */
+    public static final DormantXpTomeItem DORMANT_XP_TOME =
+            new DormantXpTomeItem(new Item.Properties().stacksTo(16));
+
+    /** Tier-1 XP storage book; capacity: 10 levels. Stacks to 16 when empty, 1 when storing XP. */
+    public static final XpTomeItem XP_TOME_T1 =
+            new XpTomeItem(new Item.Properties().stacksTo(16), 10);
+
+    /** Tier-2 XP storage book; capacity: 30 levels. */
+    public static final XpTomeItem XP_TOME_T2 =
+            new XpTomeItem(new Item.Properties().stacksTo(16), 30);
+
+    /** Tier-3 XP storage book; capacity: 50 levels. */
+    public static final XpTomeItem XP_TOME_T3 =
+            new XpTomeItem(new Item.Properties().stacksTo(16), 50);
+
+    /**
      * Tier-1 enchantment-library block. Shares {@link EnchantmentLibraryBlock} with the ender
      * variant; the only differentiation is the {@code BlockEntitySupplier} — here bound to
      * {@link BasicLibraryBlockEntity#BasicLibraryBlockEntity(BlockPos, BlockState)}. Ender-chest-
@@ -255,6 +286,10 @@ public final class MeridianRegistry {
         registerItem("scrap_tome", SCRAP_TOME);
         registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
         registerItem("extraction_tome", EXTRACTION_TOME);
+        registerItem("dormant_xp_tome", DORMANT_XP_TOME);
+        registerItem("xp_tome_t1", XP_TOME_T1);
+        registerItem("xp_tome_t2", XP_TOME_T2);
+        registerItem("xp_tome_t3", XP_TOME_T3);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
         registerCreativeTab();
     }
@@ -319,6 +354,11 @@ public final class MeridianRegistry {
         BLOCKS.put(id, block);
         Registry.register(BuiltInRegistries.ITEM, id, factory.apply(block, itemProps));
         return block;
+    }
+
+    /** Registers a data component type under {@code meridian:<name>}. */
+    public static <T> DataComponentType<T> registerDataComponentType(String name, UnaryOperator<DataComponentType.Builder<T>> builder) {
+        return Registry.register(BuiltInRegistries.DATA_COMPONENT_TYPE, Meridian.id(name), builder.apply(DataComponentType.builder()).build());
     }
 
     /** Registers a standalone item under {@code meridian:<name>}. */

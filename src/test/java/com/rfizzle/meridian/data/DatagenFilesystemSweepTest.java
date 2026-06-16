@@ -59,7 +59,8 @@ class DatagenFilesystemSweepTest {
             "echoing_sculkshelf", "soul_touched_sculkshelf",
             "filtering_shelf", "treasure_shelf",
             "sightshelf", "sightshelf_t2",
-            "rectifier", "rectifier_t2", "rectifier_t3");
+            "rectifier", "rectifier_t2", "rectifier_t3",
+            "dormant_xp_tome");
 
     private static JsonObject parseJson(Path file) throws Exception {
         try (BufferedReader reader = Files.newBufferedReader(file, StandardCharsets.UTF_8)) {
@@ -142,9 +143,14 @@ class DatagenFilesystemSweepTest {
 
     @TestFactory
     Stream<DynamicTest> everyGeneratedRecipe_hasAdvancement() {
-        return GENERATED_RECIPE_IDS.stream().map(id -> DynamicTest.dynamicTest(id, () ->
-                assertTrue(Files.isRegularFile(ADVANCEMENTS.resolve(id + ".json")),
-                        "missing recipe advancement: " + id + ".json")));
+        return GENERATED_RECIPE_IDS.stream().map(id -> DynamicTest.dynamicTest(id, () -> {
+            Path path = ADVANCEMENTS.resolve(id + ".json");
+            if (!Files.isRegularFile(path)) {
+                // Try misc/ subdirectory
+                path = ADVANCEMENTS.getParent().resolve("misc").resolve(id + ".json");
+            }
+            assertTrue(Files.isRegularFile(path), "missing recipe advancement: " + id + ".json");
+        }));
     }
 
     // --- Negative: no custom-recipe-type files in generated output ---

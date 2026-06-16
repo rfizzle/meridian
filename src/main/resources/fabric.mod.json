@@ -24,6 +24,7 @@
             "com.rfizzle.meridian.gametest.LibraryQueryApiGameTest",
             "com.rfizzle.meridian.gametest.TomeRegistryGameTest",
             "com.rfizzle.meridian.gametest.TomeAnvilGameTest",
+            "com.rfizzle.meridian.gametest.XpTomeGameTest",
             "com.rfizzle.meridian.gametest.CraftingButtonGameTest",
             "com.rfizzle.meridian.gametest.SpecialtyMaterialsGameTest",
             "com.rfizzle.meridian.gametest.AdvancementCodecGameTest",

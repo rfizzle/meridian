@@ -1,0 +1,14 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:dormant_xp_tome"
+    },
+    "requirements": {
+        "eterna": 50.0,
+        "quanta": 25.0,
+        "arcana": 25.0
+    },
+    "result": {
+        "id": "meridian:xp_tome_t3"
+    }
+}
