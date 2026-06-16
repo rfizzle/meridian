@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalItemTags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -31,6 +32,7 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_RANGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/range"));
     private static final TagKey<Item> ENCHANTABLE_CHEST_AND_LEG = TagKey.create(Registries.ITEM, Meridian.id("enchantable/chest_and_leg_armor"));
     private static final TagKey<Item> ENCHANTABLE_LEG_AND_FOOT = TagKey.create(Registries.ITEM, Meridian.id("enchantable/leg_and_foot_armor"));
+    private static final TagKey<Item> MINECRAFT_ENCHANTABLE_AXE = TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace("enchantable/axe"));
     private static final TagKey<Item> INFUSED_SHELVES = TagKey.create(Registries.ITEM, Meridian.id("infused_shelves"));
 
     public MeridianItemTagProvider(FabricDataOutput output,
@@ -90,6 +92,9 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
         getOrCreateTagBuilder(ENCHANTABLE_LEG_AND_FOOT)
                 .addOptionalTag(ItemTags.FOOT_ARMOR_ENCHANTABLE)
                 .addOptionalTag(ItemTags.LEG_ARMOR_ENCHANTABLE);
+
+        getOrCreateTagBuilder(MINECRAFT_ENCHANTABLE_AXE)
+                .addOptionalTag(ItemTags.AXES);
 
         getOrCreateTagBuilder(INFUSED_SHELVES)
                 .add(MeridianShelves.INFUSED_HELLSHELF.asItem())
