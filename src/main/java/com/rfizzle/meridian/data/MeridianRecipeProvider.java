@@ -323,6 +323,16 @@ public class MeridianRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_deepshelf", has(MeridianShelves.DEEPSHELF))
                 .save(exporter);
 
+        // === XP Tome ===
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, MeridianRegistry.DORMANT_XP_TOME)
+                .pattern(" A ")
+                .pattern("ABA")
+                .pattern(" A ")
+                .define('A', Items.AMETHYST_SHARD)
+                .define('B', Items.BOOK)
+                .unlockedBy("has_amethyst_shard", has(Items.AMETHYST_SHARD))
+                .save(exporter);
+
         // === Prismatic Web ===
         // Recipe ships hand-written at src/main/resources/data/meridian/recipe/prismatic_web.json
         // per T-4.1.3 (ported verbatim from Zenith). Not emitted here so datagen output stays scoped
