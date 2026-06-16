@@ -4,15 +4,13 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
-import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.Holder;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +36,15 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        MutableComponent name = Component.translatable(record.ench().value().descriptionId());
+        Component name = record.ench().value().description();
+        MutableComponent styledName = name.copy();
         if (!record.isEnabled()) {
-            name.withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.RED);
+            styledName.withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.RED);
         } else if (record.isTreasure()) {
-            name.withStyle(ChatFormatting.GOLD);
+            styledName.withStyle(ChatFormatting.GOLD);
         }
 
-        widgets.addText(name, 2, 2, 0xFFFFFF, true);
+        widgets.addText(styledName, 2, 2, 0xFFFFFF, true);
 
         int x = 2;
         // Levels
@@ -53,7 +52,7 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
         if (record.maxLevel() == 1) levels = "I";
         MutableComponent levelsComp = Component.literal(levels).withStyle(ChatFormatting.GRAY);
         widgets.addText(levelsComp, x, 14, 0xFFFFFF, false);
-        x += 24; // Simple fixed offset since getTextWidget is missing
+        x += 24;
 
         // Exclusivity Tags
         for (String setName : record.exclusiveSetNames()) {
@@ -65,7 +64,7 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
         // Config Override Icon
         if (record.isConfigOverridden()) {
             widgets.addTexture(GUI_TEXTURE, 126, 2, 12, 12, 224, 0, 16, 16, 256, 256)
-                    .tooltip((mx, my) -> List.of(Component.translatable("gui.meridian.enchant_info.overridden")));
+                    .tooltip((mx, my) -> List.of(ClientTooltipComponent.create(Component.translatable("gui.meridian.enchant_info.overridden").getVisualOrderText())));
         }
 
         // Background / Tooltip area
@@ -74,9 +73,9 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
         }).tooltip((mx, my) -> getTooltip());
     }
 
-    private List<Component> getTooltip() {
+    private List<ClientTooltipComponent> getTooltip() {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.translatable(record.ench().value().descriptionId()).withStyle(ChatFormatting.WHITE));
+        tooltip.add(record.ench().value().description().copy().withStyle(ChatFormatting.WHITE));
 
         if (!record.isEnabled()) {
             tooltip.add(Component.translatable("tooltip.meridian.enchlib.disabled").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
@@ -107,6 +106,6 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
             tooltip.add(Component.translatable("gui.meridian.enchant_info.overridden").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
         }
 
-        return tooltip;
+        return tooltip.stream().map(c -> ClientTooltipComponent.create(c.getVisualOrderText())).toList();
     }
 }
