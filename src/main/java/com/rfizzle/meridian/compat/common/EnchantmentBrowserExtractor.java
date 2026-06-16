@@ -4,8 +4,7 @@ import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.PowerFunction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EnchantmentTags;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * Builds {@link EnchantmentBrowserRecord} entries for all registered enchantments.
@@ -27,13 +25,13 @@ public final class EnchantmentBrowserExtractor {
     private EnchantmentBrowserExtractor() {
     }
 
-    public static List<EnchantmentBrowserRecord> extract(RegistryAccess registryAccess) {
-        Registry<Enchantment> registry = registryAccess.registryOrThrow(Registries.ENCHANTMENT);
+    public static List<EnchantmentBrowserRecord> extract(HolderLookup.Provider registries) {
+        HolderLookup.RegistryLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
         Map<ResourceKey<Enchantment>, EnchantmentInfo> infoMap = EnchantmentInfoRegistry.getAll();
 
         List<EnchantmentBrowserRecord> records = new ArrayList<>();
 
-        for (Holder.Reference<Enchantment> holder : registry.holders().toList()) {
+        for (Holder.Reference<Enchantment> holder : lookup.listElements().toList()) {
             EnchantmentInfo info = infoMap.get(holder.key());
             if (info == null) {
                 info = EnchantmentInfo.fallback(holder);
@@ -62,8 +60,16 @@ public final class EnchantmentBrowserExtractor {
             powerWindows.add(new int[]{info.getMinPower(i), info.getMaxPower(i)});
         }
 
+        // getSupportedItems() is a tag-backed HolderSet (e.g. enchantable/mining). It can only be
+        // dereferenced once datapack tags have bound — true at the recipe-registration timing this
+        // extractor runs at, but not during the brief pre-world-join window. Degrade to an empty
+        // item list there rather than failing the whole browser.
         List<Holder<Item>> compatibleItems = new ArrayList<>();
-        holder.value().getSupportedItems().forEach(compatibleItems::add);
+        try {
+            holder.value().getSupportedItems().forEach(compatibleItems::add);
+        } catch (IllegalStateException | UnsupportedOperationException tagsNotBound) {
+            compatibleItems.clear();
+        }
 
         return new EnchantmentBrowserRecord(
                 holder,

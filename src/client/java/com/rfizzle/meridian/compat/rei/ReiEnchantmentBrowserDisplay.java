@@ -7,7 +7,7 @@ import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.core.Holder;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +31,11 @@ public final class ReiEnchantmentBrowserDisplay implements Display {
 
     @Override
     public List<EntryIngredient> getInputEntries() {
-        return List.of(EntryIngredients.ofHolders(record.compatibleItems()));
+        if (record.compatibleItems().isEmpty()) {
+            return List.of();
+        }
+        return List.of(EntryIngredients.ofItems(
+                record.compatibleItems().stream().<ItemLike>map(Holder::value).toList()));
     }
 
     @Override

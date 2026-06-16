@@ -9,12 +9,11 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Items;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,11 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
 
     private static final ResourceLocation OVERRIDE_TEXTURE = Meridian.id("textures/gui/enchanting_table.png");
 
+    private static final ResourceLocation ICON_TEXTURE = Meridian.id("icon.png");
+    private static final Renderer MOD_ICON = (GuiGraphics graphics, Rectangle bounds, int mouseX, int mouseY, float delta) ->
+            graphics.blit(ICON_TEXTURE, bounds.x, bounds.y, 0, 0,
+                    bounds.width, bounds.height, bounds.width, bounds.height);
+
     private final CategoryIdentifier<ReiEnchantmentBrowserDisplay> identifier;
     private final Component title;
 
@@ -36,7 +40,7 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(Items.ENCHANTING_TABLE);
+        return MOD_ICON;
     }
 
     @Override
@@ -61,7 +65,7 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
 
         widgets.add(Widgets.createRecipeBase(bounds));
 
-        MutableComponent name = Component.translatable(record.ench().value().descriptionId());
+        MutableComponent name = record.ench().value().description().copy();
         if (!record.isEnabled()) {
             name.withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.RED);
         } else if (record.isTreasure()) {
@@ -93,14 +97,14 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
             }));
         }
 
-        widgets.add(Widgets.createTooltipArea(bounds, getTooltip(record)));
+        widgets.add(Widgets.createTooltip(bounds, getTooltip(record)));
 
         return widgets;
     }
 
     private List<Component> getTooltip(EnchantmentBrowserRecord record) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.translatable(record.ench().value().descriptionId()).withStyle(ChatFormatting.WHITE));
+        tooltip.add(record.ench().value().description().copy().withStyle(ChatFormatting.WHITE));
 
         if (!record.isEnabled()) {
             tooltip.add(Component.translatable("tooltip.meridian.enchlib.disabled").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
