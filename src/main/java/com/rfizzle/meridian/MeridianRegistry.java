@@ -197,15 +197,15 @@ public final class MeridianRegistry {
 
     /** Tier-1 XP storage book; capacity: 10 levels. Stacks to 16 when empty, 1 when storing XP. */
     public static final XpTomeItem XP_TOME_T1 =
-            new XpTomeItem(new Item.Properties(), 10);
+            new XpTomeItem(new Item.Properties().stacksTo(16), 10);
 
     /** Tier-2 XP storage book; capacity: 30 levels. */
     public static final XpTomeItem XP_TOME_T2 =
-            new XpTomeItem(new Item.Properties(), 30);
+            new XpTomeItem(new Item.Properties().stacksTo(16), 30);
 
     /** Tier-3 XP storage book; capacity: 50 levels. */
     public static final XpTomeItem XP_TOME_T3 =
-            new XpTomeItem(new Item.Properties(), 50);
+            new XpTomeItem(new Item.Properties().stacksTo(16), 50);
 
     /**
      * Tier-1 enchantment-library block. Shares {@link EnchantmentLibraryBlock} with the ender
