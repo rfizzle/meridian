@@ -35,9 +35,8 @@ _site/
 .DS_Store
 Thumbs.db
 
-# stray runtime artifacts
-replay_pid*.log
-hs_err_pid*.log
+# stray runtime artifacts (crash dumps, build/gametest logs, etc.)
+*.log
 
 # Fabric datagen hash cache — timestamps inside these files change every run,
 # so committing them would make `./gradlew runDatagen` non-idempotent against
