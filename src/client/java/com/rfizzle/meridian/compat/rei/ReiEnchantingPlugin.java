@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.compat.rei;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplayExtractor;
@@ -41,6 +43,9 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
     public static final CategoryIdentifier<ReiEnchantingDisplay> INFUSIONS_ID =
             CategoryIdentifier.of(Meridian.MOD_ID, "infusions");
 
+    public static final CategoryIdentifier<ReiEnchantmentBrowserDisplay> ENCHANTMENTS_ID =
+            CategoryIdentifier.of(Meridian.MOD_ID, "enchantments");
+
     @Override
     public String getPluginProviderName() {
         return Meridian.MOD_ID;
@@ -52,7 +57,12 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
                 INFUSIONS_ID,
                 Component.translatable("rei.meridian.category.infusions")));
 
+        registry.add(new ReiEnchantmentBrowserCategory(
+                ENCHANTMENTS_ID,
+                Component.translatable("gui.meridian.enchant_info.title")));
+
         registry.addWorkstations(INFUSIONS_ID, EntryIngredients.of(new ItemStack(Items.ENCHANTING_TABLE)));
+        registry.addWorkstations(ENCHANTMENTS_ID, EntryIngredients.of(new ItemStack(Items.ENCHANTING_TABLE)));
     }
 
     @Override
@@ -63,6 +73,10 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         }
         for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(client.level.getRecipeManager())) {
             registry.add(new ReiEnchantingDisplay(display, INFUSIONS_ID));
+        }
+
+        for (EnchantmentBrowserRecord record : EnchantmentBrowserExtractor.extract(client.level.registryAccess())) {
+            registry.add(new ReiEnchantmentBrowserDisplay(record, ENCHANTMENTS_ID));
         }
 
         registerShelfInfoPanels(registry);

@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.compat.jei;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplayExtractor;
@@ -66,17 +68,25 @@ public final class JeiEnchantingPlugin implements IModPlugin {
                 JeiEnchantingRecipeTypes.INFUSIONS,
                 Component.translatable("jei.meridian.category.infusions"),
                 modIcon));
+
+        registration.addRecipeCategories(new JeiEnchantmentBrowserCategory(
+                JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS,
+                Component.translatable("gui.meridian.enchant_info.title"),
+                modIcon,
+                registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         registration.addRecipes(JeiEnchantingRecipeTypes.INFUSIONS, extractDisplays());
+        registration.addRecipes(JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS, extractEnchantments());
         registerShelfInfoPanels(registration);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(Items.ENCHANTING_TABLE), JeiEnchantingRecipeTypes.INFUSIONS);
+        registration.addRecipeCatalyst(new ItemStack(Items.ENCHANTING_TABLE), JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS);
     }
 
     /**
@@ -119,5 +129,17 @@ public final class JeiEnchantingPlugin implements IModPlugin {
             return List.of();
         }
         return TableCraftingDisplayExtractor.extract(level.getRecipeManager());
+    }
+
+    private static List<EnchantmentBrowserRecord> extractEnchantments() {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null) {
+            return List.of();
+        }
+        ClientLevel level = client.level;
+        if (level == null) {
+            return List.of();
+        }
+        return EnchantmentBrowserExtractor.extract(level.registryAccess());
     }
 }

@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.compat.emi;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplayExtractor;
@@ -13,6 +15,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -43,6 +46,10 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
             Meridian.id("infusions"),
             MOD_ICON);
 
+    public static final EmiRecipeCategory ENCHANTMENTS = new EmiRecipeCategory(
+            Meridian.id("enchantments"),
+            MOD_ICON);
+
     @Override
     public void register(EmiRegistry registry) {
         registry.addCategory(INFUSIONS);
@@ -50,6 +57,16 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
 
         for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(registry.getRecipeManager())) {
             registry.addRecipe(new EmiEnchantingRecipe(INFUSIONS, display));
+        }
+
+        registry.addCategory(ENCHANTMENTS);
+        registry.addWorkstation(ENCHANTMENTS, EmiStack.of(Items.ENCHANTING_TABLE));
+
+        Minecraft client = Minecraft.getInstance();
+        if (client != null && client.level != null) {
+            for (EnchantmentBrowserRecord record : EnchantmentBrowserExtractor.extract(client.level.registryAccess())) {
+                registry.addRecipe(new EmiEnchantmentBrowserRecipe(ENCHANTMENTS, record));
+            }
         }
 
         registerShelfInfoPanels(registry);
