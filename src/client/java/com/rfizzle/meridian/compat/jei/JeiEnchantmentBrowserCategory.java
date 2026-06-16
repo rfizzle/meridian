@@ -102,12 +102,16 @@ public final class JeiEnchantmentBrowserCategory extends AbstractRecipeCategory<
             }
 
             tooltip.add(Component.empty());
-            tooltip.add(Component.translatable("gui.meridian.enchant_info.title").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("gui.meridian.enchant_info.power_header").withStyle(ChatFormatting.GRAY));
             for (int i = 0; i < record.powerWindows().size(); i++) {
                 int level = i + 1;
                 int[] window = record.powerWindows().get(i);
                 tooltip.add(Component.literal("Level " + level + ": Eterna " + window[0] + " - " + window[1]).withStyle(ChatFormatting.DARK_GREEN));
             }
+
+            tooltip.add(Component.empty());
+            tooltip.add(Component.translatable("gui.meridian.enchant_info.stats_header").withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("gui.meridian.enchant_info.stats_global").withStyle(ChatFormatting.DARK_AQUA));
 
             if (record.isConfigOverridden()) {
                 tooltip.add(Component.empty());
