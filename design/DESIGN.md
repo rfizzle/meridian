@@ -16,9 +16,9 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 
 ### Logo Description
 
-**Full Logo (`Meridian-Logo.png`):** A stone archway frames a glowing compass rose set against a star field. The compass has an eight-pointed design with a golden central star. Runic symbols (enchanting table glyphs) fill the background on dark blue-violet brickwork. Constellation lines and galaxy swirls weave through the scene. Below, the word "MERIDIAN" appears in a blocky pixel font on a stone tablet, with "MINECRAFT ENCHANTING OVERHAUL" as a subtitle. A crescent moon crowns the arch.
+**Full Logo (`art/logo.png`):** A stone archway frames a glowing compass rose set against a star field. The compass has an eight-pointed design with a golden central star. Runic symbols (enchanting table glyphs) fill the background on dark blue-violet brickwork. Constellation lines and galaxy swirls weave through the scene. Below, the word "MERIDIAN" appears in a blocky pixel font on a stone tablet, with "MINECRAFT ENCHANTING OVERHAUL" as a subtitle. A crescent moon crowns the arch.
 
-**Icon (`Meridian-Icon.png`):** The compass rose and stone archway isolated — no text. The golden star center radiates against deep blue-violet. The arch has twisted vine/tendril detailing. A purple-blue glow emanates outward.
+**Icon (`art/icon-128.png`):** The compass rose and stone archway isolated — no text. The golden star center radiates against deep blue-violet. The arch has twisted vine/tendril detailing. A purple-blue glow emanates outward.
 
 **In-Game Icon (`assets/meridian/icon.png`):** A pixel-art open spellbook — purple covers with gold trim, glowing white pages, cyan sparkle particles above.
 
@@ -53,20 +53,18 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 
 | Asset | Location | Size | Status |
 |-------|----------|------|--------|
-| Full Logo | `/mnt/c/Users/colet/Downloads/Final-Minecraft-Mod-Logos/Meridian-Logo.png` | ~7MB | Final |
-| Icon (large) | `/mnt/c/Users/colet/Downloads/Final-Minecraft-Mod-Logos/Meridian-Icon.png` | ~6MB | Final |
-| Icon (1024px) | `/mnt/c/Users/colet/Downloads/Final-Minecraft-Mod-Logos/Meridian-Icon-1024px.png` | ~1.4MB | Final |
-| Repo Logo | `logo.png` (root) | — | Copied from above |
-| Docs Logo | `docs/logo.png` | — | Copied from above |
-| Docs Icon | `docs/icon.png` | — | Copied from above |
+| Logo master | `art/logo.png` | 2760×1504 | Final |
+| Icon master | `art/icon-128.png` | 128×128 | Final |
+| Site Logo | `site/assets/logo.png` | 1280×698 | Derived from master |
+| Site Icon | `site/assets/icon.png` | 256×256 | Derived from master |
 | In-Game Icon | `src/main/resources/assets/meridian/icon.png` | 128×128 | Final — pixel-art spellbook |
 
 ### Needed Assets
 
 | Asset | Generator | Priority | Spec |
 |-------|-----------|----------|------|
-| Recipe browser icon (EMI/REI/JEI tab) | PixelLab | High | 16×16 or 32×32 pixel art, compass rose or enchanting table motif, violet/gold palette |
-| Shelf progression icons (per tier) | PixelLab | Medium | 16×16 pixel art icons for each shelf tier, used in tooltips/docs |
+| Recipe browser icon (EMI/REI/JEI tab) | `/glyph` | High | 16×16 or 32×32 pixel art, compass rose or enchanting table motif, violet/gold palette |
+| Shelf progression icons (per tier) | `/glyph` | Medium | 16×16 pixel art icons for each shelf tier, used in tooltips/docs |
 | Website hero background | Gemini | Medium | Wide banner (1920×600) — runic brickwork with constellation overlay, dark violet |
 | Open Graph image | Gemini | Medium | 1200×630, logo centered on dark background with subtle glow |
 | CurseForge gallery screenshots | Screenshot | High | 1920×1080, Complementary Shaders, showing enchanting table with shelves |
@@ -107,7 +105,17 @@ Faint runic symbols in the background. "Meridian" in gold pixel font below
 the icon. "Enchanting Overhaul" subtitle in lighter text. Clean, minimal.
 ```
 
-### PixelLab Prompts (Pixel Art)
+### Glyph Specs (In-Game Pixel Art)
+
+In-game pixel art — HUD/UI glyphs, recipe-browser icons, item textures, and
+tier-icon sets — is authored through Concord's glyph pipeline: write the
+ASCII-grid `.glyph` spec, then render it deterministically with `/glyph` (the
+`mc-textures` skill is the craft reference). Every PNG master commits its
+`.glyph` source beside it in `art/glyphs/`, so each texture re-renders from its
+spec rather than being hand-patched. Design at the target size with hard pixels,
+a limited palette, and an `ink` (#0a0a0a) 1px outline so the glyph reads against
+any background. The normative spec is concord's `design/DESIGN-SYSTEM.md` §8.
+The specs below seed that work.
 
 **Recipe Browser Icon (EMI/REI/JEI Tab):**
 ```
@@ -120,44 +128,9 @@ Colors: Deep violet background, gold (#DAA520) star, purple (#7B2FBE) compass po
 Notes: Must read clearly at 16x16 downscale. No text. Single centered motif.
 ```
 
-### Shared HUD Element Standard
+### HUD
 
-All mods in the rfizzle suite that display a persistent HUD element follow a single
-shared design pattern to ensure visual consistency when multiple mods are installed:
-
-**Layout:** Simple semi-transparent dark box (`#000000` at ~50-60% opacity, 2px rounded
-corners) containing a 16×16 mod-themed icon on the left and short informational text
-on the right (e.g., "Lv. 42", "Trusted", "Frontier"). Text uses the vanilla Minecraft
-font, white with a standard drop shadow.
-
-**Position:** Top-left corner of the screen, below the vanilla debug/coordinates area.
-Elements stack vertically in a fixed priority order:
-
-| Priority | Mod | HUD Element | Example Display |
-|----------|-----|-------------|-----------------|
-| 1 | Tribulation | Difficulty level + tier | `[skull] Lv. 127 · T3` |
-| 2 | Mercantile | Reputation tier | `[emerald] Trusted` |
-| 3 | Prosperity | Loot distance tier | `[chest] Frontier` |
-
-Each element is independently togglable via its mod's config. Elements shift up to
-fill gaps when a mod above them is absent or its HUD is disabled. Small vertical
-padding (2px) between stacked elements.
-
-**Implementation notes:**
-- Each mod renders its own element at the correct offset based on how many higher-priority
-  mods are present and have their HUD enabled. Check via `FabricLoader.getInstance().isModLoaded()`.
-- The semi-transparent box auto-sizes to fit the icon + text content.
-- No custom fonts, no ornate frames, no animations. Must blend with vanilla HUD.
-- Hide during F1 (HUD hidden), during screen/GUI open, and during death screen.
-
-### Meridian HUD
-
-Meridian has **no persistent HUD element**. Enchanting is table-interaction-based — there
-is no persistent player stat (like a level or reputation) that warrants always-on display.
-All information (Eterna, Quanta, Arcana, Rectification, Clues, shelf stats, library
-contents) is surfaced through Jade/WTHIT overlays when looking at enchanting blocks and
-EMI/REI/JEI recipe browser integration. Meridian does not occupy a slot in the HUD
-priority order.
+Meridian occupies **no HUD slot**, by design — enchanting is table-interaction-based, with no persistent ambient stat that warrants an always-on element (concord [`HUD-STANDARD.md`](../../concord/HUD-STANDARD.md) §1: "opting out is conformant"). Eterna, Quanta, Arcana, Rectification, clues, shelf stats, and library contents surface through Jade/WTHIT overlays on enchanting blocks and EMI/REI/JEI recipe-browser integration.
 
 **Shelf Tier Icons (batch of 5):**
 ```
