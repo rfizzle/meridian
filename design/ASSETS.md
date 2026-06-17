@@ -37,7 +37,7 @@
 | Enchanting shelf + library blocks (≈40 textures) | **MISSING** | `assets/meridian/textures/block/*.png` — shelves (`hellshelf`, `seashelf`, `deepshelf`, `endshelf`, `sculkshelf`, variants…), `library/`, `ender_library/`, `filtering_shelf/`, `rectifier*`, sight/treasure shelves. Sourced from Zenith (orig. Apotheosis) per README attribution — not glyph-authored |
 | Enchanting table GUI | **MISSING** | `assets/meridian/textures/gui/enchanting_table.png` |
 | Library GUI | **MISSING** | `assets/meridian/textures/gui/library.png` |
-| SGA rune particles (104: a–z × fire/water/sculk/end) | **MISSING** | `assets/meridian/textures/particle/sga_*.png` |
+| SGA rune particles (104: a–z × fire/water/sculk/end) | `art/glyphs/sga/*.glyph` (26 shapes) + `render-sga.py` | `assets/meridian/textures/particle/sga_*.png` |
 
 ## Not yet created
 
