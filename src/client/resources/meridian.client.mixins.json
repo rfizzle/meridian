@@ -1,0 +1,13 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.rfizzle.meridian.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "environment": "client",
+    "mixins": [
+        "EnchantmentTooltipMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

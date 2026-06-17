@@ -54,7 +54,11 @@
     },
     "accessWidener": "meridian.accesswidener",
     "mixins": [
-        "meridian.mixins.json"
+        "meridian.mixins.json",
+        {
+            "config": "meridian.client.mixins.json",
+            "environment": "client"
+        }
     ],
     "depends": {
         "fabricloader": ">=0.16.10",

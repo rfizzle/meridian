@@ -25,9 +25,7 @@
         "TetherMixin",
         "TemptGoalMixin"
     ],
-    "client": [
-        "EnchantmentTooltipMixin"
-    ],
+    "client": [],
     "injectors": {
         "defaultRequire": 1
     }
