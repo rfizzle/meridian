@@ -45,3 +45,4 @@ src/main/generated/.cache/
 
 # glyph render previews (regenerable from the .glyph source)
 art/glyphs/*.png
+art/glyphs/**/*.png

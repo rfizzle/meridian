@@ -34,7 +34,8 @@
 | Infused Breath (animated, 8 frames) | `art/glyphs/infused_breath.glyph` | `assets/meridian/textures/item/infused_breath.png` (+ `.png.mcmeta`) |
 | Prismatic Web | `art/glyphs/prismatic_web.glyph` | `assets/meridian/textures/item/prismatic_web.png` |
 | Warden Tendril | `art/glyphs/warden_tendril.glyph` | `assets/meridian/textures/item/warden_tendril.png` |
-| Enchanting shelf + library blocks (≈40 textures) | **MISSING** | `assets/meridian/textures/block/*.png` — shelves (`hellshelf`, `seashelf`, `deepshelf`, `endshelf`, `sculkshelf`, variants…), `library/`, `ender_library/`, `filtering_shelf/`, `rectifier*`, sight/treasure shelves. Sourced from Zenith (orig. Apotheosis) per README attribution — not glyph-authored |
+| Sea-family shelves (`seashelf`, `crystal_seashelf`, `heart_seashelf`) + shared `prismarine_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{seashelf,crystal_seashelf,heart_seashelf,prismarine_shelf_top}.png` |
+| Remaining shelf + library blocks (≈38 textures) | **MISSING** | `assets/meridian/textures/block/*.png` — nether/deep/end/sculk shelves + variants, `library/`, `ender_library/`, `filtering_shelf/`, `rectifier*`, sight/treasure shelves. Sourced from Zenith (orig. Apotheosis) per README attribution — not yet glyph-authored |
 | Enchanting table GUI | **MISSING** | `assets/meridian/textures/gui/enchanting_table.png` |
 | Library GUI | **MISSING** | `assets/meridian/textures/gui/library.png` |
 | SGA rune particles (104: a–z × fire/water/sculk/end) | `art/glyphs/sga/*.glyph` (26 shapes) + `render-sga.py` | `assets/meridian/textures/particle/sga_*.png` |
