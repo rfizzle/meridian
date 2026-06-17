@@ -42,3 +42,6 @@ Thumbs.db
 # so committing them would make `./gradlew runDatagen` non-idempotent against
 # git. The actual generated assets/data under src/main/generated are committed.
 src/main/generated/.cache/
+
+# glyph render previews (regenerable from the .glyph source)
+art/glyphs/*.png
