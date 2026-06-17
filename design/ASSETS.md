@@ -19,21 +19,21 @@
 
 ## In-game pixel art
 
-`art/tome/` holds each tome's `.glyph` plus its rendered `.png` and `@16x.png` ladder beside it.
+`art/glyphs/` holds every glyph's `.glyph` source; rendered `.png`/`@16x.png` previews there are gitignored review artifacts (the shipped masters live under `assets/`).
 
 | Asset | `.glyph` source | Final asset |
 |---|---|---|
-| XP Tome | `art/tome/xp_tome.glyph` | `assets/meridian/textures/item/tome/xp_tome.png` |
-| XP Tome T1 | `art/tome/xp_tome_t1.glyph` | `assets/meridian/textures/item/tome/xp_tome_t1.png` |
-| XP Tome T2 | `art/tome/xp_tome_t2.glyph` | `assets/meridian/textures/item/tome/xp_tome_t2.png` |
-| XP Tome T3 | `art/tome/xp_tome_t3.glyph` | `assets/meridian/textures/item/tome/xp_tome_t3.png` |
-| Dormant XP Tome | `art/tome/dormant_xp_tome.glyph` | `assets/meridian/textures/item/tome/dormant_xp_tome.png` |
-| Scrap Tome | **MISSING** | `assets/meridian/textures/item/tome/scrap_tome.png` |
-| Improved Scrap Tome | **MISSING** | `assets/meridian/textures/item/tome/improved_scrap_tome.png` |
-| Extraction Tome | **MISSING** | `assets/meridian/textures/item/tome/extraction_tome.png` |
-| Infused Breath | **MISSING** | `assets/meridian/textures/item/infused_breath.png` |
-| Prismatic Web | **MISSING** | `assets/meridian/textures/item/prismatic_web.png` |
-| Warden Tendril | **MISSING** | `assets/meridian/textures/item/warden_tendril.png` |
+| XP Tome | `art/glyphs/xp_tome.glyph` | `assets/meridian/textures/item/tome/xp_tome.png` |
+| XP Tome T1 | `art/glyphs/xp_tome_t1.glyph` | `assets/meridian/textures/item/tome/xp_tome_t1.png` |
+| XP Tome T2 | `art/glyphs/xp_tome_t2.glyph` | `assets/meridian/textures/item/tome/xp_tome_t2.png` |
+| XP Tome T3 | `art/glyphs/xp_tome_t3.glyph` | `assets/meridian/textures/item/tome/xp_tome_t3.png` |
+| Dormant XP Tome | `art/glyphs/dormant_xp_tome.glyph` | `assets/meridian/textures/item/tome/dormant_xp_tome.png` |
+| Scrap Tome | `art/glyphs/scrap_tome.glyph` | `assets/meridian/textures/item/tome/scrap_tome.png` |
+| Improved Scrap Tome | `art/glyphs/improved_scrap_tome.glyph` | `assets/meridian/textures/item/tome/improved_scrap_tome.png` |
+| Extraction Tome | `art/glyphs/extraction_tome.glyph` | `assets/meridian/textures/item/tome/extraction_tome.png` |
+| Infused Breath (animated, 8 frames) | `art/glyphs/infused_breath.glyph` | `assets/meridian/textures/item/infused_breath.png` (+ `.png.mcmeta`) |
+| Prismatic Web | `art/glyphs/prismatic_web.glyph` | `assets/meridian/textures/item/prismatic_web.png` |
+| Warden Tendril | `art/glyphs/warden_tendril.glyph` | `assets/meridian/textures/item/warden_tendril.png` |
 | Enchanting shelf + library blocks (≈40 textures) | **MISSING** | `assets/meridian/textures/block/*.png` — shelves (`hellshelf`, `seashelf`, `deepshelf`, `endshelf`, `sculkshelf`, variants…), `library/`, `ender_library/`, `filtering_shelf/`, `rectifier*`, sight/treasure shelves. Sourced from Zenith (orig. Apotheosis) per README attribution — not glyph-authored |
 | Enchanting table GUI | **MISSING** | `assets/meridian/textures/gui/enchanting_table.png` |
 | Library GUI | **MISSING** | `assets/meridian/textures/gui/library.png` |

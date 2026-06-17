@@ -1,0 +1,44 @@
+# prismatic_web — sage-green crosshatch spider-web item icon (16x16).
+# Faithful trace of the shipped texture: soft web strands in graded
+# emerald/sage greens with darker accent nodes, bleeding to the frame
+# edges with transparent gaps between strands.
+size: 16
+
+legend:
+  . transparent
+  A #7FB8A4
+  B #9FCBBC
+  C #7CB3A4
+  D #91C2AC
+  E #73B5AA
+  F #83B9A5
+  G #91C2B1
+  H #8AC0B3
+  I #559A8A
+  J #9ECABB
+  K #8EBFB0
+  L #6BB0A3
+  M #97C6B6
+  N #539882
+  O #669C8D
+  P #75AA99
+  Q #447B6B
+  R #CECECE
+
+grid:
+  B.......B......D
+  .K....AICBA...E.
+  ..CBGA..E..F.A..
+  ...O...AL...B...
+  ...FM.HB.H.P.Q..
+  ..B..E.C..E...I.
+  ..C.E.FA.C.G..D.
+  DCEABGJBA...N..A
+  .A..A..DDFFMBAIA
+  ..A..ACD.C..A..H
+  ..B..C.A..J.H.C.
+  ...D.A.A.JCD..E.
+  ...AC.AHG...NA..
+  ..L..JK...FAIB..
+  .B....ECBG....K.
+  R.....F........C
