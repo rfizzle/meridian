@@ -84,6 +84,18 @@ Three tomes for moving enchantments between items, each with a different cost/re
 
 Tomes are used in the anvil: place the enchanted item on the left, the tome on the right.
 
+### XP Tomes
+
+A ladder of consumables that bank experience levels for later. Right-click to deposit one level into the tome; shift-right-click to withdraw one back to yourself. A lime durability bar shows how full the tome is. Craft each tier at the enchanting table from a Dormant XP Tome — higher tiers need a higher Eterna shelf and hold more:
+
+| Tome | Capacity |
+|------|----------|
+| **XP Tome I** | 10 levels |
+| **XP Tome II** | 30 levels |
+| **XP Tome III** | 50 levels |
+
+The Dormant XP Tome itself stores nothing — it's the crafting base for the active tiers.
+
 ### Anvil Upgrades
 
 - **Prismatic Web** — Strips all curses from an item (30 levels, 1 web consumed). Non-curse enchantments are preserved.
