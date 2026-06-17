@@ -47,30 +47,11 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 
 ---
 
-## 2. Asset Inventory
+## 2. Assets
 
-### Existing Assets
-
-| Asset | Location | Size | Status |
-|-------|----------|------|--------|
-| Logo master | `art/logo.png` | 2760×1504 | Final |
-| Icon master | `art/icon-128.png` | 128×128 | Final |
-| Site Logo | `site/assets/logo.png` | 1280×698 | Derived from master |
-| Site Icon | `site/assets/icon.png` | 256×256 | Derived from master |
-| In-Game Icon | `src/main/resources/assets/meridian/icon.png` | 128×128 | Final — pixel-art spellbook |
-
-### Needed Assets
-
-| Asset | Generator | Priority | Spec |
-|-------|-----------|----------|------|
-| Recipe browser icon (EMI/REI/JEI tab) | `/glyph` | High | 16×16 or 32×32 pixel art, compass rose or enchanting table motif, violet/gold palette |
-| Shelf progression icons (per tier) | `/glyph` | Medium | 16×16 pixel art icons for each shelf tier, used in tooltips/docs |
-| Website hero background | Gemini | Medium | Wide banner (1920×600) — runic brickwork with constellation overlay, dark violet |
-| Open Graph image | Gemini | Medium | 1200×630, logo centered on dark background with subtle glow |
-| CurseForge gallery screenshots | Screenshot | High | 1920×1080, Complementary Shaders, showing enchanting table with shelves |
-| Favicon (`.ico` / `.svg`) | Derived | Low | 32×32 / 16×16 from icon |
-| Apple Touch Icon | Derived | Low | 180×180 from icon |
-| Discord embed banner | Gemini | Low | 1280×640, logo on dark background |
+The full asset manifest — every `.glyph` source under `art/`, the final
+resource/site path it ships as, and what is still `MISSING` a glyph source —
+lives in [`ASSETS.md`](ASSETS.md).
 
 ---
 
