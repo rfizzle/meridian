@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "minecraft:block/prismarine_bricks",
+    "end": "meridian:block/prismarine_shelf_top",
     "side": "meridian:block/seashelf"
   }
 }
