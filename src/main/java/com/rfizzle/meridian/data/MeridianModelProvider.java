@@ -38,11 +38,11 @@ public class MeridianModelProvider extends FabricModelProvider {
     private static final ResourceLocation MELON_TOP = vanillaBlock("melon_top");
     private static final ResourceLocation POLISHED_ANDESITE = vanillaBlock("polished_andesite");
     private static final ResourceLocation PRISMARINE_BRICKS = vanillaBlock("prismarine_bricks");
-    private static final ResourceLocation END_STONE_BRICKS = vanillaBlock("end_stone_bricks");
     private static final ResourceLocation PURPUR_BLOCK = vanillaBlock("purpur_block");
     private static final ResourceLocation PRISMARINE_SHELF_TOP = fizzleBlock("prismarine_shelf_top");
     private static final ResourceLocation NETHER_BRICK_SHELF_TOP = fizzleBlock("nether_brick_shelf_top");
     private static final ResourceLocation DEEPSLATE_SHELF_TOP = fizzleBlock("deepslate_shelf_top");
+    private static final ResourceLocation END_STONE_SHELF_TOP = fizzleBlock("end_stone_shelf_top");
 
     public MeridianModelProvider(FabricDataOutput output) {
         super(output);
@@ -85,10 +85,10 @@ public class MeridianModelProvider extends FabricModelProvider {
         map.put(MeridianShelves.HEART_SEASHELF, column("heart_seashelf", PRISMARINE_SHELF_TOP));
         map.put(MeridianShelves.CRYSTAL_SEASHELF, column("crystal_seashelf", PRISMARINE_SHELF_TOP));
         map.put(MeridianShelves.INFUSED_SEASHELF, column("infused_seashelf", PRISMARINE_SHELF_TOP));
-        // End
-        map.put(MeridianShelves.ENDSHELF, column("endshelf", END_STONE_BRICKS));
-        map.put(MeridianShelves.PEARL_ENDSHELF, column("pearl_endshelf", END_STONE_BRICKS));
-        map.put(MeridianShelves.DRACONIC_ENDSHELF, column("draconic_endshelf", END_STONE_BRICKS));
+        // End — original Meridian end-stone shelf, custom top
+        map.put(MeridianShelves.ENDSHELF, column("endshelf", END_STONE_SHELF_TOP));
+        map.put(MeridianShelves.PEARL_ENDSHELF, column("pearl_endshelf", END_STONE_SHELF_TOP));
+        map.put(MeridianShelves.DRACONIC_ENDSHELF, column("draconic_endshelf", END_STONE_SHELF_TOP));
         // Deepslate — original Meridian deepslate shelf, custom top
         map.put(MeridianShelves.DEEPSHELF, column("deepshelf", DEEPSLATE_SHELF_TOP));
         map.put(MeridianShelves.DORMANT_DEEPSHELF, column("dormant_deepshelf", DEEPSLATE_SHELF_TOP));
