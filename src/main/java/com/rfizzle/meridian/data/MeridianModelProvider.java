@@ -38,12 +38,12 @@ public class MeridianModelProvider extends FabricModelProvider {
     private static final ResourceLocation BEEHIVE_END = vanillaBlock("beehive_end");
     private static final ResourceLocation MELON_TOP = vanillaBlock("melon_top");
     private static final ResourceLocation POLISHED_ANDESITE = vanillaBlock("polished_andesite");
-    private static final ResourceLocation NETHER_BRICKS = vanillaBlock("nether_bricks");
     private static final ResourceLocation PRISMARINE_BRICKS = vanillaBlock("prismarine_bricks");
     private static final ResourceLocation END_STONE_BRICKS = vanillaBlock("end_stone_bricks");
     private static final ResourceLocation CRACKED_DEEPSLATE_TILES = vanillaBlock("cracked_deepslate_tiles");
     private static final ResourceLocation PURPUR_BLOCK = vanillaBlock("purpur_block");
     private static final ResourceLocation PRISMARINE_SHELF_TOP = fizzleBlock("prismarine_shelf_top");
+    private static final ResourceLocation NETHER_BRICK_SHELF_TOP = fizzleBlock("nether_brick_shelf_top");
 
     public MeridianModelProvider(FabricDataOutput output) {
         super(output);
@@ -76,12 +76,12 @@ public class MeridianModelProvider extends FabricModelProvider {
         map.put(MeridianShelves.MELONSHELF, column("melonshelf", MELON_TOP));
         // Stone tier — baseline
         map.put(MeridianShelves.STONESHELF, column("stoneshelf", POLISHED_ANDESITE));
-        // Nether
-        map.put(MeridianShelves.HELLSHELF, column("hellshelf", NETHER_BRICKS));
-        map.put(MeridianShelves.BLAZING_HELLSHELF, column("blazing_hellshelf", NETHER_BRICKS));
-        map.put(MeridianShelves.GLOWING_HELLSHELF, column("glowing_hellshelf", NETHER_BRICKS));
-        // No infused_hellshelf side texture — Zenith aliases it to the base hellshelf face.
-        map.put(MeridianShelves.INFUSED_HELLSHELF, column("hellshelf", NETHER_BRICKS));
+        // Nether — original Meridian nether-brick shelf, custom top
+        map.put(MeridianShelves.HELLSHELF, column("hellshelf", NETHER_BRICK_SHELF_TOP));
+        map.put(MeridianShelves.BLAZING_HELLSHELF, column("blazing_hellshelf", NETHER_BRICK_SHELF_TOP));
+        map.put(MeridianShelves.GLOWING_HELLSHELF, column("glowing_hellshelf", NETHER_BRICK_SHELF_TOP));
+        // infused_hellshelf has no unique side texture — reuses the base hellshelf face.
+        map.put(MeridianShelves.INFUSED_HELLSHELF, column("hellshelf", NETHER_BRICK_SHELF_TOP));
         // Ocean — original Meridian prismarine shelf, custom top
         map.put(MeridianShelves.SEASHELF, column("seashelf", PRISMARINE_SHELF_TOP));
         map.put(MeridianShelves.HEART_SEASHELF, column("heart_seashelf", PRISMARINE_SHELF_TOP));
