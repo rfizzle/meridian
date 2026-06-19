@@ -1,0 +1,69 @@
+# treasure concept.
+size: 32
+
+legend:
+  . transparent
+  P #d9a72a
+  h #f0c84a
+  m #7a5410
+  H #e8be3a
+  F #a67c1a
+  b #caa030
+  B #8a6a18
+  k #241a08
+  K #160f04
+  S #33240c
+  t #a86a14
+  T #7a4c0e
+  a #c89030
+  A #9a6c1a
+  u #8a6418
+  U #5a3e10
+  g #3fc06a
+  G #1f7a40
+  n #d6c498
+  N #9a8358
+  W #f5ecc0
+  y #ffd23a
+  o #c8901a
+  D #fff0a0
+  c #9fe8f0
+  C #d2f8fc
+  e #4fb0c8
+  l #4fd07a
+  v #1f8a44
+  V #145e30
+
+grid:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  mmmKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkCkkkkkkkkkklkkSFPm
+  hPHKKkkkkkkkkccekkkkkkkklVlkSFPm
+  hPHKKkkkkkkkkkekkkkkkkkkkVkkSFPm
+  hPHKKDyykDyykkkkkkDyykDyykkkSmmm
+  hPHKKoomkoomkkkkkkoomkoomkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkCkkkkkkkSFPm
+  hPHKKkkkkklkkkkkkkkccekkkkkkSFPm
+  mmmKKkkkklVlkkkkCkkkekkkkkkkSFPm
+  hPHKKkkkykVkykkkckkkykkkykkkSFPm
+  hPHKKkoyyoyyoyyoyyoyyoyyoyykSFPm
+  hPHbbyoyoyoyoyoyoyoyoyoyoyoybFPm
+  hPHBBoooooooooooooooooooooooBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm

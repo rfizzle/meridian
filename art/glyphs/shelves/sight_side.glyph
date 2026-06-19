@@ -1,0 +1,73 @@
+# sight t1 concept.
+size: 32
+
+legend:
+  . transparent
+  k #0e0c10
+  K #070608
+  S #16141a
+  t #9a363c
+  T #5a2228
+  a #cf6a26
+  A #8a3a18
+  u #3c333a
+  U #241d22
+  g #3a6f7e
+  G #1f4450
+  n #bba473
+  N #8a7550
+  W #cabfa8
+  i #3a9e64
+  I #1f5e38
+  y #9fe6b0
+  d #0a0c0a
+  l #acd0e8
+  v #4a6e8a
+  r #9a3fd0
+  f #c06af0
+  D #8a5a2a
+  p #b07a3a
+  P #2c1a1c
+  h #4d3032
+  m #150c0d
+  H #5c393b
+  F #1d1112
+  b #46291f
+  B #291712
+  C #ffe080
+  c #ffd23a
+  q #c8901a
+
+grid:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPCPPPPPmPPPPPPPmPPPPPPPmPPPPCPm
+  hcCqHHHHmHHHHHHHmHHHHHHHmHHHcCqm
+  hPqKKKKKKKKKKKKKKKKKKKKKKKKKSqPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkWWWWkkWWWSFPm
+  hPHKKWWWWkkkkkkkkkkaAAAkkuUUSFPm
+  mmmKKuUUUkkWWWkkkkkaAAAkuUUkSFPm
+  hPHKuUUUkkknNNkkkkkaAAAkuUUkSFPm
+  hPHKuUUUkWWknNNkWWkaAAAkuUUkSFPm
+  hPHKuUUUkgGknNNktTkaAAAkuUUkSFPm
+  hPHKuUUUkgGknNNktTkaAAAkuUUkSFPm
+  hPHKuUUUkgGknNNktTkaAAAkuUUkSmmm
+  hPHKuUUUkgGknNNktTkaAAAkuUUkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkIIIkkkkkkkkkkkDkkkkSFPm
+  hPHKKkkkIyiiIkkkkkkkkkkdkkkkSmmm
+  hPHKKkkkIidiIkkkkkkkkkklkkkkSFPm
+  hPHKKkkkIiiiIkkkkkkkkklllkkkSFPm
+  mmmKKkkkkIIIkkkkkkkkklfrrvkkSFPm
+  hPHKKkkkkkkkkkkkkkkkklrrrvkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkvrrrvkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbvrvbbbbFPm
+  hPCBBBBBBBBBBBBBBBBBBBBBBBBBBCPm
+  hcCqmFFFFFFFmFFFFFFFmFFFFFFFcCqm
+  hPqPmPPPPPPPmPPPPPPPmPPPPPPPmqPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm

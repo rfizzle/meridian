@@ -567,4 +567,126 @@ top("melon_shelf_top", MELON, "# melonshelf top/bottom — melon rind, seamless.
 top("stone_shelf_top", STONE, "# stoneshelf top/bottom — polished andesite, seamless.",
     [(6, 5, 'F'), (20, 22, 'm'), (26, 12, 'F')])
 
-print("emitted sea + nether + deepslate + end + sculk families + singles")
+# =================================================================== devices ====
+# Device shelves: the shelf frame + recessed shelves (matching their originals and
+# the rest of the set), filled with thematic items instead of plain books.
+# Recipe-themed: rectifier = sea/purpur-tier frame + orange potion + amethyst crystal;
+# sight = nether frame + corner gems (gold/emerald) + green eye + purple potion;
+# treasure = gold frame + diamond/emerald gems + a gold pile.
+
+def potion(g, cx, cy):
+    # small round-bottomed bottle, blue glass + coloured liquid + cork (base row cy)
+    cells = {(0, -6): 'D', (0, -5): 'd', (0, -4): 'l',
+             (-1, -3): 'l', (0, -3): 'l', (1, -3): 'l',
+             (-2, -2): 'l', (-1, -2): 'f', (0, -2): 'r', (1, -2): 'r', (2, -2): 'v',
+             (-2, -1): 'l', (-1, -1): 'r', (0, -1): 'r', (1, -1): 'r', (2, -1): 'v',
+             (-2, 0): 'v', (-1, 0): 'r', (0, 0): 'r', (1, 0): 'r', (2, 0): 'v',
+             (-1, 1): 'v', (0, 1): 'r', (1, 1): 'v'}
+    for (dx, dy), ch in cells.items():
+        if 0 <= cx + dx < W and 0 <= cy + dy < Hh: g[cy + dy][cx + dx] = ch
+
+def eye(g, cx, cy):
+    # green ender-eye orb with dark pupil and a glint
+    cells = {(-1, -2): 'I', (0, -2): 'I', (1, -2): 'I',
+             (-2, -1): 'I', (-1, -1): 'i', (0, -1): 'i', (1, -1): 'i', (2, -1): 'I',
+             (-2, 0): 'I', (-1, 0): 'i', (0, 0): 'd', (1, 0): 'i', (2, 0): 'I',
+             (-2, 1): 'I', (-1, 1): 'i', (0, 1): 'i', (1, 1): 'i', (2, 1): 'I',
+             (-1, 2): 'I', (0, 2): 'I', (1, 2): 'I'}
+    cells[(-1, -1)] = 'y'
+    for (dx, dy), ch in cells.items(): g[cy + dy][cx + dx] = ch
+
+def _gem(g, cx, cy, hi, mid, dk):
+    for (dx, dy), ch in {(0, -1): hi, (-1, 0): mid, (0, 0): hi, (1, 0): dk, (0, 1): dk}.items():
+        if 0 <= cx + dx < W and 0 <= cy + dy < Hh: g[cy + dy][cx + dx] = ch
+
+def corner_gems(g):
+    for x, y in ((2, 2), (29, 2), (2, 29), (29, 29)): _gem(g, x, y, 'C', 'c', 'q')
+
+# items shared across rectifier tiers (amethyst crystal + orange potion + cool books)
+RECT_ITEMS = {
+ '.': 'transparent', 'k': '#16221f', 'K': '#0d1615', 'S': '#1c2b27',
+ 't': '#2f8a80', 'T': '#1c5a52', 'a': '#3aa6b8', 'A': '#226e7a', 'u': '#34589e', 'U': '#20396b',
+ 'g': '#3f8a55', 'G': '#275e39', 'n': '#bba473', 'N': '#8a7550', 'W': '#dccda8',
+ 'c': '#b58cf0', 'C': '#d9c2ff', 'e': '#8a5fce', 'o': '#5a3596', 'w': '#ece0ff', 'q': '#34205a',
+ 'l': '#acd0e8', 'v': '#4a6e8a', 'r': '#e8731c', 'f': '#ffb347', 'd': '#8a5a2a', 'D': '#b07a3a',
+}
+RECT_FRAME = {
+ 'rectifier':    {'P': '#44726a', 'h': '#84b6a9', 'm': '#22403a', 'H': '#5e8f84', 'F': '#335c54', 'b': '#436a61', 'B': '#2c4a44'},
+ 'rectifier_t2': {'P': '#2c2630', 'h': '#5a4a2e', 'm': '#100d14', 'H': '#3e3844', 'F': '#1a1720', 'b': '#3a3020', 'B': '#221a10'},
+ 'rectifier_t3': {'P': '#7a5e8e', 'h': '#a484b8', 'm': '#3a2848', 'H': '#8e6ea2', 'F': '#5a4070', 'b': '#6a5080', 'B': '#43305a'},
+}
+def rectifier(g, st=0, sb=3, cbig=False):
+    books(g, 14, 5, st, xlo=12, xhi=27); potion(g, 7, 14)
+    books(g, 26, 18, sb, xhi=18); crystal(g, 23, 25, big=cbig)
+
+SIGHT_FRAME = {
+ 'sight':         {'P': '#2c1a1c', 'h': '#4d3032', 'm': '#150c0d', 'H': '#5c393b', 'F': '#1d1112', 'b': '#46291f', 'B': '#291712',
+                   'C': '#ffe080', 'c': '#ffd23a', 'q': '#c8901a'},
+ 'sightshelf_t2': {'P': '#1c1e22', 'h': '#2c2f34', 'm': '#08090b', 'H': '#282b30', 'F': '#121316', 'b': '#33363b', 'B': '#202327',
+                   'C': '#9ff0b0', 'c': '#4fe07a', 'q': '#1f8a44'},
+}
+SIGHT_ITEMS = {
+ '.': 'transparent', 'k': '#0e0c10', 'K': '#070608', 'S': '#16141a',
+ 't': '#9a363c', 'T': '#5a2228', 'a': '#cf6a26', 'A': '#8a3a18', 'u': '#3c333a', 'U': '#241d22',
+ 'g': '#3a6f7e', 'G': '#1f4450', 'n': '#bba473', 'N': '#8a7550', 'W': '#cabfa8',
+ 'i': '#3a9e64', 'I': '#1f5e38', 'y': '#9fe6b0', 'd': '#0a0c0a',           # eye
+ 'l': '#acd0e8', 'v': '#4a6e8a', 'r': '#9a3fd0', 'f': '#c06af0', 'D': '#8a5a2a', 'p': '#b07a3a',  # purple potion
+}
+def sight_dev(g, st=2):
+    corner_gems(g)
+    books(g, 14, 6, st, xhi=27)
+    eye(g, 10, 22); potion(g, 23, 26)
+
+TREASURE = {
+ '.': 'transparent',
+ 'P': '#d9a72a', 'h': '#f0c84a', 'm': '#7a5410', 'H': '#e8be3a', 'F': '#a67c1a', 'b': '#caa030', 'B': '#8a6a18',
+ 'k': '#241a08', 'K': '#160f04', 'S': '#33240c',
+ 't': '#a86a14', 'T': '#7a4c0e', 'a': '#c89030', 'A': '#9a6c1a', 'u': '#8a6418', 'U': '#5a3e10',
+ 'g': '#3fc06a', 'G': '#1f7a40', 'n': '#d6c498', 'N': '#9a8358', 'W': '#f5ecc0',
+ 'y': '#ffd23a', 'o': '#c8901a', 'D': '#fff0a0',
+ 'c': '#9fe8f0', 'C': '#d2f8fc', 'e': '#4fb0c8',                           # diamond
+ 'l': '#4fd07a', 'v': '#1f8a44', 'V': '#145e30',                          # emerald
+}
+def _ingot(g, x, y):
+    g[y][x] = 'D'; g[y][x + 1] = 'y'; g[y][x + 2] = 'y'
+    g[y + 1][x] = 'o'; g[y + 1][x + 1] = 'o'; g[y + 1][x + 2] = 'm'
+def _dia(g, cx, cy):
+    for (dx, dy), ch in {(0, -1): 'C', (-1, 0): 'c', (0, 0): 'c', (1, 0): 'e', (0, 1): 'e'}.items():
+        g[cy + dy][cx + dx] = ch
+def _eme(g, cx, cy):
+    for (dx, dy), ch in {(0, -1): 'l', (-1, 0): 'l', (0, 0): 'V', (1, 0): 'l', (0, 1): 'V'}.items():
+        g[cy + dy][cx + dx] = ch
+def treasure_dev(g):
+    # overflowing hoard — gold ingots, gems, and a heaped pile fill both shelves
+    for x in (5, 9, 18, 22): _ingot(g, x, 13)                       # top-shelf ingot row
+    _dia(g, 14, 11); _eme(g, 25, 11)                                # gems among ingots
+    for x in range(5, 28): g[28][x] = 'o'; g[27][x] = 'y' if x % 2 else 'o'   # heaped pile
+    for x in range(6, 27): g[26][x] = 'y' if x % 3 else 'o'
+    for x in range(8, 25, 4): g[25][x] = 'y'
+    _eme(g, 10, 24); _dia(g, 20, 23)                                # gems on the pile
+    g[24][16] = 'C'; g[25][16] = 'c'
+
+def rect_pal(t): return {**RECT_ITEMS, **RECT_FRAME[t]}
+def sight_pal(t): return {**SIGHT_ITEMS, **SIGHT_FRAME[t]}
+
+# side concepts for direction review
+emit("rectifier", lambda g: rectifier(g, 0, 3, False), rect_pal('rectifier'), "# rectifier t1 concept.")
+emit("rectifier_t2", lambda g: rectifier(g, 4, 1, False), rect_pal('rectifier_t2'), "# rectifier t2 concept.")
+emit("rectifier_t3", lambda g: rectifier(g, 2, 5, True), rect_pal('rectifier_t3'), "# rectifier t3 concept.")
+emit("sight_side", lambda g: sight_dev(g, 2), sight_pal('sight'), "# sight t1 concept.")
+emit("sightshelf_t2", lambda g: sight_dev(g, 5), sight_pal('sightshelf_t2'), "# sight t2 concept.")
+emit("treasure_shelf_side", treasure_dev, TREASURE, "# treasure concept.")
+
+# device tops (rectifier t1 reuses prismarine_shelf_top; others custom)
+TOP_RECT_T2 = {'.': 'transparent', 'P': '#2c2630', 'H': '#3a3442', 'F': '#1a1720', 'm': '#100d14', 'y': '#caa24a'}
+TOP_RECT_T3 = {'.': 'transparent', 'P': '#7a5e8e', 'H': '#9276a8', 'F': '#5a4070', 'm': '#3a2848', 'c': '#c8b0e0'}
+TOP_SIGHT_T1 = {'.': 'transparent', 'P': '#2c1a1c', 'H': '#3c2628', 'F': '#1d1112', 'm': '#150c0d', 'c': '#ffd23a'}
+TOP_SIGHT_T2 = {'.': 'transparent', 'P': '#1c1e22', 'H': '#282b30', 'F': '#121316', 'm': '#08090b', 'c': '#4fe07a'}
+TOP_TREASURE = {'.': 'transparent', 'P': '#d9a72a', 'H': '#e8be3a', 'F': '#a67c1a', 'm': '#7a5410', 'c': '#8a8d92', 'y': '#fff0a0'}
+top("rectifier_t2_top", TOP_RECT_T2, "# rectifier t2 top — gilded blackstone, seamless.", [(6, 5, 'y'), (20, 22, 'y'), (26, 12, 'y')])
+top("rectifier_t3_top", TOP_RECT_T3, "# rectifier t3 top — purpur, seamless.", [(7, 6, 'c'), (21, 20, 'c'), (13, 27, 'c')])
+top("sight_top", TOP_SIGHT_T1, "# sight t1 top — nether brick + gold corner gems, seamless.", [(4, 4, 'c'), (27, 4, 'c'), (4, 27, 'c'), (27, 27, 'c')])
+top("sightshelf_t2_top", TOP_SIGHT_T2, "# sight t2 top — netherite + emerald corner gems, seamless.", [(4, 4, 'c'), (27, 4, 'c'), (4, 27, 'c'), (27, 27, 'c')])
+top("treasure_shelf_top", TOP_TREASURE, "# treasure top — gold with stone flecks, seamless.", [(6, 5, 'c'), (20, 22, 'c'), (13, 27, 'c'), (26, 12, 'y')])
+
+print("emitted families + devices (sides + tops)")

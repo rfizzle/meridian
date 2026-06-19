@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "minecraft:block/purpur_block",
+    "end": "meridian:block/rectifier_t3_top",
     "side": "meridian:block/rectifier_t3"
   }
 }
