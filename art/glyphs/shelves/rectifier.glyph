@@ -1,0 +1,72 @@
+# rectifier t1 concept.
+size: 32
+
+legend:
+  . transparent
+  k #16221f
+  K #0d1615
+  S #1c2b27
+  t #2f8a80
+  T #1c5a52
+  a #3aa6b8
+  A #226e7a
+  u #34589e
+  U #20396b
+  g #3f8a55
+  G #275e39
+  n #bba473
+  N #8a7550
+  W #dccda8
+  c #b58cf0
+  C #d9c2ff
+  e #8a5fce
+  o #5a3596
+  w #ece0ff
+  q #34205a
+  l #acd0e8
+  v #4a6e8a
+  r #e8731c
+  f #ffb347
+  d #8a5a2a
+  D #b07a3a
+  P #44726a
+  h #84b6a9
+  m #22403a
+  H #5e8f84
+  F #335c54
+  b #436a61
+  B #2c4a44
+
+grid:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkWWWkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkktTTkkkkkWWWWkkkkSFPm
+  hPHKKkkkkkkktTTkkkkkuUUUkkkkSFPm
+  mmmKKkkDkkkktTTkWWkuUUUkkkkkSFPm
+  hPHKKkkdkkkktTTkaAkuUUUkkkkkSFPm
+  hPHKKkklkkkktTTkaAkuUUUkWWkkSFPm
+  hPHKKklllkkktTTkaAkuUUUkgGkkSFPm
+  hPHKKlfrrvkktTTkaAkuUUUkgGkkSFPm
+  hPHKKlrrrvkktTTkaAkuUUUkgGkkSmmm
+  hPHKKvrrrvkktTTkaAkuUUUkgGkkSFPm
+  hPHbbbvrvbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkWWWWkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkaAAAkkkkkkkkkkSFPm
+  hPHKKkWWWkkkkkaAAAkkkkkqkkkkSFPm
+  hPHKKknNNkkkkkaAAAkkkkqwqkkkSmmm
+  hPHKWWknNNkWWkaAAAkkkkqCqkkkSFPm
+  hPHKgGknNNktTkaAAAkkqqcceqkkSFPm
+  mmmKgGknNNktTkaAAAkqCqceeCqkSFPm
+  hPHKgGknNNktTkaAAAkqceoeoceqSFPm
+  hPHKgGknNNktTkaAAAkqooqqqooqSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm

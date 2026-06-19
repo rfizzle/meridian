@@ -37,8 +37,6 @@ public class MeridianModelProvider extends FabricModelProvider {
     private static final ResourceLocation HONEYCOMB_SHELF_TOP = fizzleBlock("honeycomb_shelf_top");
     private static final ResourceLocation MELON_SHELF_TOP = fizzleBlock("melon_shelf_top");
     private static final ResourceLocation STONE_SHELF_TOP = fizzleBlock("stone_shelf_top");
-    private static final ResourceLocation PRISMARINE_BRICKS = vanillaBlock("prismarine_bricks");
-    private static final ResourceLocation PURPUR_BLOCK = vanillaBlock("purpur_block");
     private static final ResourceLocation PRISMARINE_SHELF_TOP = fizzleBlock("prismarine_shelf_top");
     private static final ResourceLocation NETHER_BRICK_SHELF_TOP = fizzleBlock("nether_brick_shelf_top");
     private static final ResourceLocation DEEPSLATE_SHELF_TOP = fizzleBlock("deepslate_shelf_top");
@@ -100,10 +98,10 @@ public class MeridianModelProvider extends FabricModelProvider {
         // Utility — clue shelves
         map.put(MeridianShelves.SIGHTSHELF, column(fizzleBlock("sight_side"), fizzleBlock("sight_top")));
         map.put(MeridianShelves.SIGHTSHELF_T2, column("sightshelf_t2", fizzleBlock("sightshelf_t2_top")));
-        // Utility — rectification shelves
-        map.put(MeridianShelves.RECTIFIER, column("rectifier", PRISMARINE_BRICKS));
+        // Utility — rectification shelves (sea / gilded-blackstone / purpur tiers)
+        map.put(MeridianShelves.RECTIFIER, column("rectifier", PRISMARINE_SHELF_TOP));
         map.put(MeridianShelves.RECTIFIER_T2, column("rectifier_t2", fizzleBlock("rectifier_t2_top")));
-        map.put(MeridianShelves.RECTIFIER_T3, column("rectifier_t3", PURPUR_BLOCK));
+        map.put(MeridianShelves.RECTIFIER_T3, column("rectifier_t3", fizzleBlock("rectifier_t3_top")));
         return map;
     }
 
@@ -117,10 +115,6 @@ public class MeridianModelProvider extends FabricModelProvider {
 
     private static ResourceLocation fizzleBlock(String name) {
         return Meridian.id("block/" + name);
-    }
-
-    private static ResourceLocation vanillaBlock(String name) {
-        return ResourceLocation.withDefaultNamespace("block/" + name);
     }
 
     /** Side+end texture pair for a {@code cube_column} shelf model. */
