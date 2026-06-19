@@ -1,0 +1,72 @@
+# hellshelf side (nether family) — nether-brick frame, nether books, nether-wart accent.
+size: 32
+
+legend:
+  . transparent
+  m #150c0d
+  F #1d1113
+  P #2c1a1c
+  H #5c393b
+  h #4d3032
+  K #0c0708
+  k #150d0e
+  S #1b1012
+  b #46291f
+  B #291712
+  t #9a363c
+  T #5a2228
+  a #cf6a26
+  A #8a3a18
+  u #3c333a
+  U #241d22
+  g #2f8f7e
+  G #1f5e54
+  n #c39a44
+  N #7e5f22
+  W #c9bda6
+  M #6e1b26
+  R #a8313c
+  I #cf5560
+  q #250a0e
+  z #ffe7a2
+  y #ffc94e
+  x #c2801f
+  j #3a1c06
+  f #ffd84a
+  l #ff9e2c
+  r #e85a16
+  v #7c2408
+
+grid:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkWWWWkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkaAAAkkkkkkkkkkSFPm
+  hPHKKkWWWkkkkkaAAAkkkkkkkkkkSFPm
+  mmmKKknNNkkkkkaAAAkkkkkkkkkkSFPm
+  hPHKKkknNNkWWkaAAAkkkkkkkkkkSFPm
+  hPHKWWknNNktTkaAAAkkkkkkkkkkSFPm
+  hPHKgGknNNktTkaAAAkkkkkkkkkkSFPm
+  hPHKgGknNNktTkaAAAkkkkkkkkkkSFPm
+  hPHKgGknNNktTkaAAAkkkkkkkkkkSmmm
+  hPHKgGknNNktTkaAAAkkkkkkkkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKkkkkkkkkkkkkkkkkkWWWWkkSFPm
+  hPHKKkkkWWWWkkkkkkkkkkaAAAkkSFPm
+  hPHKKkkkuUUUkkWWWkkkkkaAAAkkSFPm
+  hPHKWWkuUUUkkknNNkkkkkaAAAkkSmmm
+  hPHKaAkuUUUkWWknNNkWWkaAAAkkSFPm
+  hPHKaAkuUUUkgGknNNktTqIRIAkkSFPm
+  mmmKaAkuUUUkgGknNNktTIRRRIqkSFPm
+  hPHKaAkuUUUkgGknNNktTRMRMRqkSFPm
+  hPHKaAkuUUUkgGknNNktTqMMMAkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
