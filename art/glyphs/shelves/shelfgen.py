@@ -29,6 +29,8 @@ LEGEND = {
  'W':'#dccda8',
  'c':'#4eeaed','C':'#c4fcfb','e':'#2bb3c0','o':'#1d6f86',
  'w':'#eafdfd',
+ # heart-of-the-sea orb: dark navy body, pale cyan veins, blue glow
+ 'd':'#0f1d3d','D':'#1b2f5e','V':'#2a4a86','i':'#8fd3e0','J':'#1c3a66',
 }
 
 def frame(g):
@@ -96,13 +98,16 @@ def crystal(g,cx,cy,big=False):
         if 0<=X<W and 0<=Y<Hh: g[Y][X]=ch
 
 def heart(g,cx,cy):
-    shade={(-2,-2):'c',(-1,-2):'C',(1,-2):'C',(2,-2):'c',
-           (-2,-1):'c',(-1,-1):'w',(0,-1):'c',(1,-1):'w',(2,-1):'c',
-           (-2,0):'e',(-1,0):'c',(0,0):'w',(1,0):'c',(2,0):'e',
-           (-1,1):'e',(0,1):'c',(1,1):'e',(0,2):'o'}
+    # Heart of the Sea: round dark-navy orb, pale cyan marbled veins, top-left glint
+    shade={                       (-1,-3):'V',(0,-3):'D',(1,-3):'V',
+                (-2,-2):'V',(-1,-2):'C',(0,-2):'D',(1,-2):'D',(2,-2):'V',
+                (-2,-1):'D',(-1,-1):'i',(0,-1):'i',(1,-1):'D',(2,-1):'V',
+    (-3,0):'V',(-2,0):'D',(-1,0):'d',(0,0):'i',(1,0):'i',(2,0):'D',(3,0):'V',
+                (-2,1):'D',(-1,1):'d',(0,1):'d',(1,1):'i',(2,1):'D',
+                (-2,2):'V',(-1,2):'D',(0,2):'D',(1,2):'D',(2,2):'V',
+                            (-1,3):'V',(0,3):'D',(1,3):'V'}
     pts=[(dx,dy,ch) for (dx,dy),ch in shade.items()]
-    _halo(g,cx,cy,pts,'Q')
-    g[cy][cx+1]='e'  # subtle swirl curl
+    _halo(g,cx,cy,pts,'J')
     for (dx,dy),ch in shade.items(): g[cy+dy][cx+dx]=ch
 
 def emit(name,build):
