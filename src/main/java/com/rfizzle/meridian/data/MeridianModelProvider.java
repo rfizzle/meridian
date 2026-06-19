@@ -94,8 +94,7 @@ public class MeridianModelProvider extends FabricModelProvider {
         map.put(MeridianShelves.DRACONIC_ENDSHELF, column("draconic_endshelf", END_STONE_BRICKS));
         // Deepslate — original Meridian deepslate shelf, custom top
         map.put(MeridianShelves.DEEPSHELF, column("deepshelf", DEEPSLATE_SHELF_TOP));
-        // dormant_deepshelf has no unique side texture — reuses the base deepshelf face.
-        map.put(MeridianShelves.DORMANT_DEEPSHELF, column("deepshelf", DEEPSLATE_SHELF_TOP));
+        map.put(MeridianShelves.DORMANT_DEEPSHELF, column("dormant_deepshelf", DEEPSLATE_SHELF_TOP));
         map.put(MeridianShelves.ECHOING_DEEPSHELF, column("echoing_deepshelf", DEEPSLATE_SHELF_TOP));
         map.put(MeridianShelves.SOUL_TOUCHED_DEEPSHELF, column("soul_touched_deepshelf", DEEPSLATE_SHELF_TOP));
         // Sculk-tier (reanimated bookshelf subtype, shared end texture)

@@ -212,6 +212,17 @@ def echo(g, cx, cy, small=False, level=1):
         X, Y = cx + dx, cy + dy
         if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
 
+DULL = {'p': '#9a90a6', 's': '#6f6678', 'Z': '#4a4453'}  # dormant (unlit) amethyst
+def dull_amethyst(g, cx, cy):
+    # same shard cluster as crystal(), desaturated grey-purple, no glow halo
+    remap = {'w': 'p', 'C': 'p', 'c': 's', 'e': 's', 'o': 'Z'}
+    pts = [(dx, dy, remap[ch]) for (dx, dy, ch) in _shard(0, 0, True)]
+    pts += [(dx - 3, dy + 1, remap[ch]) for (dx, dy, ch) in _shard(0, 0, False)]
+    pts += [(dx + 2, dy + 1, remap[ch]) for (dx, dy, ch) in _shard(0, 0, False)]
+    for dx, dy, ch in pts:
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
 def soul_flame(g, cx, cy, fr=0):
     # blue soul-fire tongue with a white-hot core; upper tongue sways per frame
     sway = [0, 1, 0, -1][fr % 4]
@@ -290,7 +301,9 @@ top("nether_brick_shelf_top", NETHER,
 # ------------------------------------------------------------ deepslate family ----
 DC = "# {} side (deepslate family) — deepslate frame, cool books, {} accent."
 def deep(g):       books(g, 26, 18, 1, xhi=27); books(g, 14, 5, 4); crystal(g, 23, 25)
+def dormant(g):    books(g, 26, 18, 1, xhi=27); books(g, 14, 5, 4); dull_amethyst(g, 23, 25)
 emit("deepshelf", deep, DEEP, DC.format("deepshelf", "amethyst-cluster"))
+emit("dormant_deepshelf", dormant, {**DEEP, **DULL}, DC.format("dormant_deepshelf", "dormant (unlit) amethyst"))
 
 # echoing: shards pulse (slow 4-frame breath); soul-touched: flame sways (livelier)
 def echoing_frame(level):

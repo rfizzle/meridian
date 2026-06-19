@@ -36,7 +36,7 @@
 | Warden Tendril | `art/glyphs/warden_tendril.glyph` | `assets/meridian/textures/item/warden_tendril.png` |
 | Sea-family shelves (`seashelf`, `crystal_seashelf`, `heart_seashelf`) + shared `prismarine_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{seashelf,crystal_seashelf,heart_seashelf,prismarine_shelf_top}.png` |
 | Nether-family shelves (`hellshelf`, `glowing_hellshelf`, `blazing_hellshelf` [animated]) + shared `nether_brick_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{hellshelf,glowing_hellshelf,blazing_hellshelf,nether_brick_shelf_top}.png` |
-| Deepslate-family shelves (`deepshelf`, `echoing_deepshelf` [animated], `soul_touched_deepshelf` [animated]) + shared `deepslate_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{deepshelf,echoing_deepshelf,soul_touched_deepshelf,deepslate_shelf_top}.png` |
+| Deepslate-family shelves (`deepshelf`, `dormant_deepshelf`, `echoing_deepshelf` [animated], `soul_touched_deepshelf` [animated]) + shared `deepslate_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{deepshelf,dormant_deepshelf,echoing_deepshelf,soul_touched_deepshelf,deepslate_shelf_top}.png` |
 | Remaining shelf + library blocks (≈30 textures) | **MISSING** | `assets/meridian/textures/block/*.png` — end/sculk shelves + variants, `library/`, `ender_library/`, `filtering_shelf/`, `rectifier*`, sight/treasure shelves. Sourced from Zenith (orig. Apotheosis) per README attribution — not yet glyph-authored |
 | Enchanting table GUI | **MISSING** | `assets/meridian/textures/gui/enchanting_table.png` |
 | Library GUI | **MISSING** | `assets/meridian/textures/gui/library.png` |

@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "meridian:block/deepslate_shelf_top",
-    "side": "meridian:block/deepshelf"
+    "side": "meridian:block/dormant_deepshelf"
   }
 }
