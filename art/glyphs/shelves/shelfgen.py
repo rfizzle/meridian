@@ -56,6 +56,24 @@ NETHER = {
  'f': '#ffd84a', 'l': '#ff9e2c', 'r': '#e85a16', 'v': '#7c2408',
 }
 
+DEEP = {
+ '.': 'transparent',
+ # deepslate frame (cool grey, lit top/left)
+ 'm': '#15161b', 'F': '#212329', 'P': '#3a3e46', 'H': '#565b66', 'h': '#4e535d',
+ # cold-dark interior + ledges
+ 'K': '#0c0d10', 'k': '#16181d', 'S': '#1c1e24', 'b': '#3a3a42', 'B': '#222329',
+ # books: teal / steel-blue / slate / amethyst / pale stone
+ 't': '#2f8f8a', 'T': '#1c5a58', 'a': '#3f74a6', 'A': '#27496e',
+ 'u': '#444b57', 'U': '#2a2e36', 'g': '#6a47a0', 'G': '#3f2a63', 'n': '#9aa0aa', 'N': '#6a6f78',
+ 'W': '#cfd3da',
+ # amethyst shards (reuses crystal() chars, recoloured purple)
+ 'c': '#b58cf0', 'C': '#d9c2ff', 'e': '#8a5fce', 'o': '#5a3596', 'w': '#ece0ff', 'q': '#34205a',
+ # echo shard: dark teal body, bright cyan core, teal glow
+ 'i': '#46e9ed', 'D': '#1f5a64', 'd': '#123238', 'V': '#bdf6f8', 'J': '#0e3b42',
+ # soul fire: blue flame, white-hot core, blue glow halo
+ 'f': '#d4f7ff', 'l': '#62d8f6', 'r': '#2f97d6', 'v': '#1b4f86', 'j': '#0d2c4e',
+}
+
 # -------------------------------------------------------------- shared parts ----
 def frame(g):
     rect(g, 0, 0, 31, 31, 'P')
@@ -172,6 +190,44 @@ def blaze_fire(g, fr, xlo=4, xhi=27, base=26):
             g[y][x] = ch
         if top - 1 >= 3 and g[top - 1][x] == 'k': g[top - 1][x] = 'j'
 
+# -------------------------------------------------------------- deep accents ----
+def echo(g, cx, cy, small=False, level=1):
+    # dark teal shard with a glowing cyan core; level 0/1/2 = dim/normal/peak pulse
+    if small:
+        shade = {(0, -1): 'i' if level else 'D', (-1, 0): 'D', (0, 0): 'i', (1, 0): 'D', (0, 1): 'd'}
+    else:
+        shade = {(0, -3): 'V', (-1, -2): 'D', (0, -2): 'i', (1, -2): 'D',
+                 (-2, -1): 'd', (-1, -1): 'i', (0, -1): 'i', (1, -1): 'i', (2, -1): 'D',
+                 (-2, 0): 'd', (-1, 0): 'D', (0, 0): 'i', (1, 0): 'D', (2, 0): 'd',
+                 (-1, 1): 'd', (0, 1): 'D', (1, 1): 'd', (0, 2): 'd'}
+        if level == 2:                       # peak: arms brighten, spark above
+            for k in ((-1, -2), (1, -2), (-1, 0), (1, 0)): shade[k] = 'i'
+            shade[(0, -4)] = 'V'
+        elif level == 0:                     # dim: arms recede to mid/dark
+            for k in ((-1, -2), (1, -2), (-1, -1), (1, -1)): shade[k] = 'D'
+            shade[(0, -3)] = 'd'
+    pts = [(dx, dy, ch) for (dx, dy), ch in shade.items()]
+    _halo(g, cx, cy, pts, 'J')
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
+def soul_flame(g, cx, cy, fr=0):
+    # blue soul-fire tongue with a white-hot core; upper tongue sways per frame
+    sway = [0, 1, 0, -1][fr % 4]
+    base = {(-2, 0): 'v', (-1, 0): 'r', (0, 0): 'r', (1, 0): 'r', (2, 0): 'v',
+            (-2, -1): 'v', (-1, -1): 'r', (0, -1): 'l', (1, -1): 'r', (2, -1): 'v'}
+    upper = {(-1, -2): 'l', (0, -2): 'f', (1, -2): 'l',
+             (-1, -3): 'r', (0, -3): 'l', (1, -3): 'r',
+             (0, -4): 'l', (-1, -4): 'v', (0, -5): 'l'}
+    cells = dict(base)
+    for (dx, dy), ch in upper.items(): cells[(dx + sway, dy)] = ch
+    pts = [(dx, dy, ch) for (dx, dy), ch in cells.items()]
+    _halo(g, cx, cy, pts, 'j')
+    for (dx, dy), ch in cells.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
 # -------------------------------------------------------------------- emit ----
 def _legend(palette): return [f"  {k} {v}" for k, v in palette.items()]
 
@@ -231,4 +287,28 @@ top("nether_brick_shelf_top", NETHER,
     "# shared nether-brick shelf top/bottom (nether family), seamless.",
     [(6, 5, 'r'), (20, 22, 'v'), (26, 12, 'r')])
 
-print("emitted sea + nether families")
+# ------------------------------------------------------------ deepslate family ----
+DC = "# {} side (deepslate family) — deepslate frame, cool books, {} accent."
+def deep(g):       books(g, 26, 18, 1, xhi=27); books(g, 14, 5, 4); crystal(g, 23, 25)
+emit("deepshelf", deep, DEEP, DC.format("deepshelf", "amethyst-cluster"))
+
+# echoing: shards pulse (slow 4-frame breath); soul-touched: flame sways (livelier)
+def echoing_frame(level):
+    def build(g):
+        books(g, 14, 6, 2, xhi=18); books(g, 26, 18, 0, xhi=18)
+        echo(g, 22, 24, level=level); echo(g, 24, 12, small=True, level=level)
+    return build
+emit_anim("echoing_deepshelf", [echoing_frame(l) for l in (1, 2, 1, 0)], DEEP,
+          DC.format("echoing_deepshelf", "echo-shard (4-frame pulse)"), frametime=6)
+
+def soul_frame(fr):
+    def build(g):
+        books(g, 14, 6, 3); books(g, 26, 18, 1, xhi=17); soul_flame(g, 22, 26, fr)
+    return build
+emit_anim("soul_touched_deepshelf", [soul_frame(i) for i in range(4)], DEEP,
+          DC.format("soul_touched_deepshelf", "soul-fire (4-frame flicker)"), frametime=3)
+top("deepslate_shelf_top", DEEP,
+    "# shared deepslate-tile shelf top/bottom (deepslate family), seamless.",
+    [(7, 6, 'm'), (8, 6, 'm'), (22, 21, 'm'), (19, 11, 'c')])
+
+print("emitted sea + nether + deepslate families")

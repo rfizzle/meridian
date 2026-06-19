@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "minecraft:block/cracked_deepslate_tiles",
+    "end": "meridian:block/deepslate_shelf_top",
     "side": "meridian:block/echoing_deepshelf"
   }
 }
