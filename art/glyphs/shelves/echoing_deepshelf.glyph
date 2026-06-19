@@ -1,0 +1,177 @@
+# echoing_deepshelf side (deepslate family) — deepslate frame, cool books, echo-shard (4-frame pulse) accent.
+size: 32
+frametime: 6
+interpolate: true
+
+legend:
+  . transparent
+  m #15161b
+  F #212329
+  P #3a3e46
+  H #565b66
+  h #4e535d
+  K #0c0d10
+  k #16181d
+  S #1c1e24
+  b #3a3a42
+  B #222329
+  t #2f8f8a
+  T #1c5a58
+  a #3f74a6
+  A #27496e
+  u #444b57
+  U #2a2e36
+  g #6a47a0
+  G #3f2a63
+  n #9aa0aa
+  N #6a6f78
+  W #cfd3da
+  c #b58cf0
+  C #d9c2ff
+  e #8a5fce
+  o #5a3596
+  w #ece0ff
+  q #34205a
+  i #46e9ed
+  D #1f5a64
+  d #123238
+  V #bdf6f8
+  J #0e3b42
+  f #d4f7ff
+  l #62d8f6
+  r #2f97d6
+  v #1b4f86
+  j #0d2c4e
+
+frame:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKWWWWkkkkkkkkkkkkkkkkkkkSFPm
+  mmmKKuUUUkkWWWkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkkknNNkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkWWknNNkWWkkkkkkJkkkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJiJkkSFPm
+  hPHKuUUUkgGknNNktTkkkkJDiDJkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJdJkkSmmm
+  hPHKuUUUkgGknNNktTkkkkkkJkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKWWWkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkWWWWkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkuUUUkkkkkkJkkkkkSFPm
+  hPHKtTTkWWkuUUUkkkkkkJVJkkkkSmmm
+  hPHKtTTkaAkuUUUkWWkkJDiDJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkJdiiiDJkkSFPm
+  mmmKtTTkaAkuUUUkgGkJdDiDdJkkSFPm
+  hPHKtTTkaAkuUUUkgGkkJdDdJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkkkJdJkkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+frame:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKWWWWkkkkkkkkkkkkkkkkkkkSFPm
+  mmmKKuUUUkkWWWkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkkknNNkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkWWknNNkWWkkkkkkJkkkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJiJkkSFPm
+  hPHKuUUUkgGknNNktTkkkkJDiDJkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJdJkkSmmm
+  hPHKuUUUkgGknNNktTkkkkkkJkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKWWWkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkWWWWkkkkkkJkkkkkSFPm
+  hPHKtTTkkkkkuUUUkkkkkJVJkkkkSFPm
+  hPHKtTTkWWkuUUUkkkkkkJVJkkkkSmmm
+  hPHKtTTkaAkuUUUkWWkkJiiiJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkJdiiiDJkkSFPm
+  mmmKtTTkaAkuUUUkgGkJdiiidJkkSFPm
+  hPHKtTTkaAkuUUUkgGkkJdDdJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkkkJdJkkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+frame:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKWWWWkkkkkkkkkkkkkkkkkkkSFPm
+  mmmKKuUUUkkWWWkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkkknNNkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkWWknNNkWWkkkkkkJkkkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJiJkkSFPm
+  hPHKuUUUkgGknNNktTkkkkJDiDJkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJdJkkSmmm
+  hPHKuUUUkgGknNNktTkkkkkkJkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKWWWkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkWWWWkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkuUUUkkkkkkJkkkkkSFPm
+  hPHKtTTkWWkuUUUkkkkkkJVJkkkkSmmm
+  hPHKtTTkaAkuUUUkWWkkJDiDJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkJdiiiDJkkSFPm
+  mmmKtTTkaAkuUUUkgGkJdDiDdJkkSFPm
+  hPHKtTTkaAkuUUUkgGkkJdDdJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkkkJdJkkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+frame:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPHHHHHHmHHHHHHHmHHHHHHHmHHHHFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKKKKKKKKKKKKKKKKKKKKKKKKSFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSmmm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKKWWWWkkkkkkkkkkkkkkkkkkkSFPm
+  mmmKKuUUUkkWWWkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkkknNNkkkkkkkkkkkkkkSFPm
+  hPHKuUUUkWWknNNkWWkkkkkkJkkkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJDJkkSFPm
+  hPHKuUUUkgGknNNktTkkkkJDiDJkSFPm
+  hPHKuUUUkgGknNNktTkkkkkJdJkkSmmm
+  hPHKuUUUkgGknNNktTkkkkkkJkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  mmmBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPHKKkkkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKWWWkkkkkkkkkkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkWWWWkkkkkkkkkkkkSFPm
+  hPHKtTTkkkkkuUUUkkkkkkJkkkkkSFPm
+  hPHKtTTkWWkuUUUkkkkkkJdJkkkkSmmm
+  hPHKtTTkaAkuUUUkWWkkJDiDJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkJdDiDDJkkSFPm
+  mmmKtTTkaAkuUUUkgGkJdDiDdJkkSFPm
+  hPHKtTTkaAkuUUUkgGkkJdDdJkkkSFPm
+  hPHKtTTkaAkuUUUkgGkkkJdJkkkkSFPm
+  hPHbbbbbbbbbbbbbbbbbbbbbbbbbbFPm
+  hPHBBBBBBBBBBBBBBBBBBBBBBBBBBFPm
+  hPFFmFFFFFFFmFFFFFFFmFFFFFFFmmmm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm
