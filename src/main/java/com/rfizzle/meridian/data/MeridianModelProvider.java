@@ -34,9 +34,9 @@ import net.minecraft.world.level.block.Block;
  */
 public class MeridianModelProvider extends FabricModelProvider {
 
-    private static final ResourceLocation BEEHIVE_END = vanillaBlock("beehive_end");
-    private static final ResourceLocation MELON_TOP = vanillaBlock("melon_top");
-    private static final ResourceLocation POLISHED_ANDESITE = vanillaBlock("polished_andesite");
+    private static final ResourceLocation HONEYCOMB_SHELF_TOP = fizzleBlock("honeycomb_shelf_top");
+    private static final ResourceLocation MELON_SHELF_TOP = fizzleBlock("melon_shelf_top");
+    private static final ResourceLocation STONE_SHELF_TOP = fizzleBlock("stone_shelf_top");
     private static final ResourceLocation PRISMARINE_BRICKS = vanillaBlock("prismarine_bricks");
     private static final ResourceLocation PURPUR_BLOCK = vanillaBlock("purpur_block");
     private static final ResourceLocation PRISMARINE_SHELF_TOP = fizzleBlock("prismarine_shelf_top");
@@ -70,11 +70,11 @@ public class MeridianModelProvider extends FabricModelProvider {
      */
     public static Map<Block, ColumnTextures> shelfTextures() {
         Map<Block, ColumnTextures> map = new LinkedHashMap<>();
-        // Wood tier — vanilla organic ends
-        map.put(MeridianShelves.BEESHELF, column("beeshelf", BEEHIVE_END));
-        map.put(MeridianShelves.MELONSHELF, column("melonshelf", MELON_TOP));
+        // Wood tier — original Meridian shelves, custom tops
+        map.put(MeridianShelves.BEESHELF, column("beeshelf", HONEYCOMB_SHELF_TOP));
+        map.put(MeridianShelves.MELONSHELF, column("melonshelf", MELON_SHELF_TOP));
         // Stone tier — baseline
-        map.put(MeridianShelves.STONESHELF, column("stoneshelf", POLISHED_ANDESITE));
+        map.put(MeridianShelves.STONESHELF, column("stoneshelf", STONE_SHELF_TOP));
         // Nether — original Meridian nether-brick shelf, custom top
         map.put(MeridianShelves.HELLSHELF, column("hellshelf", NETHER_BRICK_SHELF_TOP));
         map.put(MeridianShelves.BLAZING_HELLSHELF, column("blazing_hellshelf", NETHER_BRICK_SHELF_TOP));

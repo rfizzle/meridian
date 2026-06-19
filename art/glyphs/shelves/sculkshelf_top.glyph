@@ -1,0 +1,71 @@
+# shared sculk shelf top/bottom — dark with glowing veins, seamless.
+size: 32
+
+legend:
+  . transparent
+  m #060c0f
+  F #0a1418
+  P #0e1a1f
+  H #1d4450
+  h #16323a
+  K #05090c
+  k #0a1015
+  S #0f1a20
+  b #16323a
+  B #0c1c22
+  t #27a0a0
+  T #155a5a
+  a #2cc0d4
+  A #1a6e7e
+  u #33424f
+  U #1a2630
+  g #356a9e
+  G #1c3a5e
+  n #b8b8a2
+  N #7a7a6a
+  W #c0ccc8
+  C #29dfeb
+  i #33e6ec
+  D #1a5a64
+  d #0e2e34
+  V #bdf6f8
+  J #0a2e34
+  f #d4f7ff
+  l #5fd6f5
+  r #2f97d6
+  v #1b4f86
+  j #0d2c4e
+
+grid:
+  PPPPkkkkFFFFkkkkPPPPkkkkFFFFkkkk
+  PPPPkkkkFFFFkkkkPPPPkkkkFFFFkkkk
+  PPPPkkkkFFFFkkkkPPPCkkkkFFFFkkkk
+  PPPPkkkkFFFFkkkkPPPDkkkkFFFFkkkk
+  PPPCkkkkFFFFkkkkPPPPkkkkFFFFkkkk
+  kkkDFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkCPPPPkkkkFFFFkkkkPPPP
+  FFFFkkkkPPPDkkkkFFFFkkkkPPPPkkkk
+  FFFFkkkkPPPPkkkkFFFFkkkkPPPPkkkk
+  FFFFkkkkPPPPkkkkFFFFkkkkPPPPkkkk
+  FFFFkkkkPPPPkkkkFFFFkkkkPPPPkkkk
+  FFFFkkkkPPPPkkkkFFFFkkkkPPPCkkkk
+  kkkkPPPPkkkkFFFFkkkkPPPPkkkDFFFF
+  kkkkPPPPkkkkFFFFkkkkPPPPkkkkFFFF
+  kkkkPPPPkkkkFFFFkkkkPPPPkkkkFFFF
+  kkkkPPPPkkkkFFFFkkkkPPPPkkkkFFFF
+  kkkkPPPPkkkkFFFFkkkkPPPPkkkkFFFF
+  PPPPkkCkFFFFkkkkPPPPkkkkFFFFkkkk
+  PPPPkkDkFFFFkkkkPPPPkkkkFFFFkkkk
+  PPPPkkkkFFFFkkkkPPPPkkkkFFFFkkCk
+  PPPPkkkkFFFFkkkkPPPPkkkkFFFFkkDk
+  PPPPkkkkFFFFkkkkPPPPkkkkFFFFkkkk
+  kkkkFFFFkkkkPPPPkkkkFFCFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFDFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkkPPPPkkkkFFFFkkkkPPPP
+  kkkkFFFFkkkkPPCPkkkkFFFFkkkkPPPP
+  FFFFkkkkPPPPkkDkFFFFkkkkPPPPkkkk
+  FFFFkkkkPPPPkkkkFFFFkkkkPPPPkkkk
