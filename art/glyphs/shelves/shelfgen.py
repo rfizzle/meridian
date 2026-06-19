@@ -74,6 +74,23 @@ DEEP = {
  'f': '#d4f7ff', 'l': '#62d8f6', 'r': '#2f97d6', 'v': '#1b4f86', 'j': '#0d2c4e',
 }
 
+END = {
+ '.': 'transparent',
+ # end-stone-brick frame (pale yellow-tan, lit top/left)
+ 'm': '#908b62', 'F': '#a8a374', 'P': '#d4cf94', 'H': '#e0dba8', 'h': '#e6e1b4',
+ # dark neutral interior + pale ledges
+ 'K': '#0e0e12', 'k': '#1a1a20', 'S': '#222230', 'b': '#b6b07e', 'B': '#827d56',
+ # books: ender-teal / slate / purpur / sage / bone + chorus / amber / ender-blue
+ 't': '#36a596', 'T': '#1f6b62', 'a': '#5a6678', 'A': '#3a4250',
+ 'u': '#8a6aa6', 'U': '#5a3f73', 'g': '#9aa67e', 'G': '#6f7a5e', 'n': '#cfc4a0', 'N': '#9a8f72',
+ 'x': '#c06a96', 'X': '#7a3358', 'y': '#d8b056', 'Y': '#9a7a32', 'z': '#42588a', 'Z': '#26314e',
+ 'W': '#efe9c6',
+ # ender pearl: teal orb, pale glint, teal glow halo
+ 'c': '#3fd6c0', 'C': '#9af2e4', 'e': '#28a08e', 'o': '#176b5e', 'w': '#d6fff7', 'q': '#0e3b34',
+ # dragon egg: black-purple body, magenta speckles, purple glow halo
+ 'd': '#1a0f24', 'D': '#2c1a3e', 'V': '#43285e', 'i': '#e03ca0', 'I': '#ff8fd0', 'J': '#2a0e3e',
+}
+
 # -------------------------------------------------------------- shared parts ----
 def frame(g):
     rect(g, 0, 0, 31, 31, 'P')
@@ -93,8 +110,8 @@ def interior(g):
     for y in (15, 27):                                            # ledges
         rect(g, 3, y, 28, y, 'b'); rect(g, 3, y + 1, 28, y + 1, 'B')
 
-def books(g, y_base, y_top, seed, xlo=4, xhi=27):
-    pal = [('T', 't'), ('A', 'a'), ('U', 'u'), ('G', 'g'), ('N', 'n')]
+def books(g, y_base, y_top, seed, xlo=4, xhi=27, pal=None):
+    if pal is None: pal = [('T', 't'), ('A', 'a'), ('U', 'u'), ('G', 'g'), ('N', 'n')]
     widths = [3, 2, 4, 2, 3, 2, 4, 3]; leans = [0, 0, 1, 0, -1, 0, 0, 1]
     hmax = y_base - y_top
     heights = [hmax, hmax - 3, hmax - 1, hmax - 5, hmax - 2, hmax - 4, hmax]
@@ -250,6 +267,54 @@ def soul_flame(g, cx, cy, fr=0):
         X, Y = cx + dx, cy + dy
         if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
 
+# --------------------------------------------------------------- end accents ----
+def ender_pearl(g, cx, cy, small=False):
+    # rounded teal pearl with top-left glint and a darker swirl
+    if small:
+        shade = {(0, -1): 'C', (-1, -1): 'c', (1, -1): 'e',
+                 (-1, 0): 'c', (0, 0): 'c', (1, 0): 'o', (0, 1): 'o'}
+    else:
+        shade = {(0, -2): 'C', (-1, -2): 'c', (1, -2): 'c',
+                 (-2, -1): 'c', (-1, -1): 'w', (0, -1): 'C', (1, -1): 'c', (2, -1): 'e',
+                 (-2, 0): 'e', (-1, 0): 'c', (0, 0): 'c', (1, 0): 'e', (2, 0): 'o',
+                 (-2, 1): 'e', (-1, 1): 'e', (0, 1): 'o', (1, 1): 'o', (2, 1): 'o',
+                 (-1, 2): 'o', (0, 2): 'o', (1, 2): 'o'}
+    pts = [(dx, dy, ch) for (dx, dy), ch in shade.items()]
+    _halo(g, cx, cy, pts, 'q')
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
+def dragon_egg(g, cx, cy, level=1):
+    # black-purple ovoid with magenta speckles; level 0/1/2 = dim/normal/peak glow
+    spk = {0: 'D', 1: 'i', 2: 'I'}[level]
+    shade = {(0, -5): 'V',
+             (-1, -4): 'D', (0, -4): 'V', (1, -4): 'D',
+             (-2, -3): 'd', (-1, -3): 'D', (0, -3): 'D', (1, -3): 'V', (2, -3): 'd',
+             (-2, -2): 'd', (-1, -2): spk, (0, -2): 'D', (1, -2): 'D', (2, -2): 'd',
+             (-2, -1): 'd', (-1, -1): 'D', (0, -1): spk, (1, -1): 'D', (2, -1): 'd',
+             (-2, 0): 'd', (-1, 0): 'D', (0, 0): 'D', (1, 0): spk, (2, 0): 'd',
+             (-1, 1): 'd', (0, 1): 'D', (1, 1): 'd'}
+    pts = [(dx, dy, ch) for (dx, dy), ch in shade.items()]
+    if level > 0: _halo(g, cx, cy, pts, 'J')
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
+def dragon_skull(g, cx, cy):
+    # front-facing dragon skull silhouette with glowing magenta eyes + horns
+    shade = {(-3, -3): 'D', (3, -3): 'D', (-2, -3): 'D', (2, -3): 'D',
+             (-2, -2): 'V', (-1, -2): 'D', (0, -2): 'D', (1, -2): 'D', (2, -2): 'V',
+             (-2, -1): 'D', (-1, -1): 'i', (0, -1): 'd', (1, -1): 'i', (2, -1): 'D',
+             (-1, 0): 'V', (0, 0): 'D', (1, 0): 'V',
+             (-1, 1): 'D', (0, 1): 'D', (1, 1): 'D',
+             (0, 2): 'd'}
+    pts = [(dx, dy, ch) for (dx, dy), ch in shade.items()]
+    _halo(g, cx, cy, pts, 'J')
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
 # -------------------------------------------------------------------- emit ----
 def _legend(palette): return [f"  {k} {v}" for k, v in palette.items()]
 
@@ -341,4 +406,28 @@ top("deepslate_shelf_top", DEEP,
     "# shared deepslate-tile shelf top/bottom (deepslate family), seamless.",
     [(7, 6, 'm'), (8, 6, 'm'), (22, 21, 'm'), (19, 11, 'c')])
 
-print("emitted sea + nether + deepslate families")
+# ------------------------------------------------------------------ end family ----
+EC = "# {} side (end family) — end-stone frame, varied books, {} accent."
+EB = [('T', 't'), ('A', 'a'), ('U', 'u'), ('G', 'g'), ('N', 'n'), ('X', 'x'), ('Y', 'y'), ('Z', 'z')]
+def endsh(g):      books(g, 14, 5, 0, xhi=20, pal=EB); books(g, 26, 18, 2, xhi=27, pal=EB); ender_pearl(g, 24, 9)
+def pearlsh(g):    # pearl-rich: a cluster of large + small pearls
+    books(g, 14, 7, 3, xhi=20, pal=EB); books(g, 26, 19, 5, xhi=14, pal=EB)
+    ender_pearl(g, 24, 10); ender_pearl(g, 22, 25); ender_pearl(g, 26, 24, small=True); ender_pearl(g, 19, 26, small=True)
+emit("endshelf", endsh, END, EC.format("endshelf", "ender-pearl"))
+emit("pearl_endshelf", pearlsh, END, EC.format("pearl_endshelf", "ender-pearl cluster"))
+
+# draconic: static dragon skull (top shelf) + pulsing dragon egg (bottom shelf)
+def draconic_frame(level):
+    def build(g):
+        dragon_skull(g, 8, 11)
+        books(g, 14, 6, 2, xlo=13, xhi=27, pal=EB)
+        books(g, 26, 18, 4, xhi=15, pal=EB)
+        dragon_egg(g, 22, 27, level)
+    return build
+emit_anim("draconic_endshelf", [draconic_frame(l) for l in (1, 2, 1, 0)], END,
+          EC.format("draconic_endshelf", "dragon-skull + pulsing dragon-egg"), frametime=5)
+top("end_stone_shelf_top", END,
+    "# shared end-stone shelf top/bottom (end family), seamless.",
+    [(6, 5, 'm'), (21, 20, 'm'), (12, 26, 'u')])
+
+print("emitted sea + nether + deepslate + end families")
