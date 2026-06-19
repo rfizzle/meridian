@@ -602,11 +602,6 @@ def _gem(g, cx, cy, hi, mid, dk):
 def corner_gems(g):
     for x, y in ((2, 2), (29, 2), (2, 29), (29, 29)): _gem(g, x, y, 'C', 'c', 'q')
 
-def gold_pile(g):
-    for x in range(5, 28): g[28][x] = 'o'
-    for x in range(5, 28, 2): g[27][x] = 'y'
-    for x in range(6, 27, 3): g[26][x] = 'y'; g[27][x] = 'o'
-
 # items shared across rectifier tiers (amethyst crystal + orange potion + cool books)
 RECT_ITEMS = {
  '.': 'transparent', 'k': '#16221f', 'K': '#0d1615', 'S': '#1c2b27',
