@@ -1,0 +1,65 @@
+# filtering_shelf empty slots (atlas).
+size: 32
+
+legend:
+  . transparent
+  P #44726a
+  h #84b6a9
+  m #22403a
+  H #5e8f84
+  F #335c54
+  k #12201d
+  K #0a1614
+  b #436a61
+  B #2c4a44
+  S #1c2b27
+  c #c7e8df
+  C #eafdfd
+  d #4eeaed
+  e #2bb3c0
+  o #1d6f86
+  t #2f8a80
+  T #1c5a52
+  a #3aa6b8
+  A #226e7a
+  u #8a5fce
+  U #5a3596
+  g #caa030
+  G #8a6a18
+  n #b8485a
+  N #7a2838
+  W #e8e0cf
+
+grid:
+  hhhhhhhhmhhhhhhhmhhhhhhhmhhhhhhm
+  hPPPPPPPmPPPPPPPmPPPPPPPmPPPPPPm
+  hPKKKKKKKKKKKKKKKKKKKKKKKKKKKKPm
+  hPKKKKKKKKKKKKKKKKKKKKKKKKKKKKPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPbbbbbbbbbbbbbbbbbbbbbbbbbbbbPm
+  hPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPm
+  hPKKKKKKKKKKKKKKKKKKKKKKKKKKKKPm
+  hPKKKKKKKKKKKKKKKKKKKKKKKKKKKKPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPkkkkkkkkkkkkkkkkkkkkkkkkkkkkPm
+  hPbbbbbbbbbbbbbbbbbbbbbbbbbbbbPm
+  hPBBBBBBBBBBBBBBBBBBBBBBBBBBBBPm
+  hPPPmPPPPPPPmPPPPPPPmPPPPPPPmPPm
+  mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm

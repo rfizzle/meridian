@@ -690,3 +690,146 @@ top("sightshelf_t2_top", TOP_SIGHT_T2, "# sight t2 top — netherite + emerald c
 top("treasure_shelf_top", TOP_TREASURE, "# treasure top — gold with stone flecks, seamless.", [(6, 5, 'c'), (20, 22, 'c'), (13, 27, 'c'), (26, 12, 'y')])
 
 print("emitted families + devices (sides + tops)")
+
+# =============================================================== library set ====
+# Decorative enchantment-library blocks (custom multi-face models). 32px faces on
+# the existing UVs; books.png stays a UV atlas (book covers in baked regions).
+LIBRARY = {
+ '.': 'transparent',
+ # dark wood frame/carcass
+ 'P': '#4a3018', 'h': '#6a4828', 'm': '#241608', 'H': '#5c3c20', 'F': '#33210e',
+ 'k': '#1c1208', 'K': '#0f0904',
+ # purple cloth drape + gold trim (Meridian identity)
+ 'p': '#7b2fbe', 'q': '#5a2090', 'Q': '#3a1460', 'l': '#9d5fd3', 'y': '#ffd700', 'o': '#c8a020',
+ # book spines (purple / gold / teal / blue / crimson) + pages
+ 't': '#3aa6b8', 'T': '#226e7a', 'a': '#8a5fce', 'A': '#5a3596', 'u': '#3f74a6', 'U': '#27496e',
+ 'g': '#caa030', 'G': '#8a6a18', 'n': '#b8485a', 'N': '#7a2838', 'W': '#e8e0cf', 'w': '#bcae90',
+}
+def _planks(g, base, hi, dark):
+    for y in range(32):
+        for x in range(32):
+            g[y][x] = base
+            if y % 8 == 0: g[y][x] = dark
+            if x % 16 == (0 if (y // 8) % 2 == 0 else 8): g[y][x] = dark
+        if y % 8 == 1:
+            for x in range(32): g[y][x] = hi
+def lib_bottom(g): _planks(g, 'P', 'h', 'm')
+def lib_top(g):
+    rect(g, 0, 0, 31, 31, 'q')                                   # purple cloth
+    rect(g, 0, 0, 31, 1, 'l'); rect(g, 0, 0, 1, 31, 'l')
+    rect(g, 0, 30, 31, 31, 'Q'); rect(g, 30, 0, 31, 31, 'Q')
+    rect(g, 3, 3, 28, 28, 'p')
+    for x, y in ((6, 6), (25, 6), (6, 25), (25, 25)): g[y][x] = 'y'  # gold studs
+def lib_side(g):
+    _planks(g, 'P', 'h', 'm')                                    # wood carcass
+    rect(g, 9, 0, 22, 31, 'q')                                   # central drape
+    rect(g, 9, 0, 9, 31, 'l'); rect(g, 22, 0, 22, 31, 'Q')
+    rect(g, 11, 0, 20, 31, 'p')
+    rect(g, 9, 0, 22, 1, 'y'); rect(g, 9, 2, 22, 2, 'o')         # gold top rail
+    # gold arcane sigil (diamond eye) mid-drape
+    sig = {(0, -3): 'y', (-2, -1): 'y', (-1, -1): 'o', (0, -1): 'y', (1, -1): 'o', (2, -1): 'y',
+           (-1, 0): 'o', (0, 0): 'l', (1, 0): 'o', (-2, 1): 'y', (0, 1): 'y', (2, 1): 'y', (0, 3): 'y'}
+    for (dx, dy), ch in sig.items(): g[16 + dy][15 + dx] = ch
+    rect(g, 11, 26, 20, 31, 'Q')                                 # drape fold shadow
+    for x in range(12, 20, 2): g[31][x] = 'q'; g[30][x] = 'l'    # fringe
+def _bookrow(g, y, seed):
+    pal = [('A', 'a'), ('G', 'g'), ('T', 't'), ('U', 'u'), ('N', 'n')]
+    x = 3; i = seed
+    while x <= 28:
+        w = (2, 3, 2, 4, 3)[i % 5]
+        if x + w - 1 > 28: break
+        sd, sl = pal[i % 5]
+        for yy in range(y, y + 5):
+            for xx in range(x, x + w): g[yy][xx] = sl if xx == x else sd
+        g[y][min(28, x + w - 1)] = 'W'
+        x += w + 1; i += 1
+def lib_side2(g):
+    rect(g, 0, 0, 31, 31, 'F')                                   # back of shelf
+    rect(g, 0, 0, 31, 2, 'P'); rect(g, 0, 29, 31, 31, 'P')       # wood frame
+    rect(g, 0, 0, 2, 31, 'P'); rect(g, 29, 0, 31, 31, 'P')
+    for y in (3, 13, 23): rect(g, 3, y + 7, 28, y + 7, 'H')      # shelf ledges
+    _bookrow(g, 4, 0); _bookrow(g, 14, 3); _bookrow(g, 24, 1)
+def lib_books(g):
+    # UV atlas (book covers in the model's baked regions, ×2 for 32px)
+    rect(g, 0, 0, 31, 31, '.')
+    def cover(x0, y0, x1, y1, base, trim):
+        rect(g, x0, y0, x1, y1, base)
+        rect(g, x0, y0, x1, y0 + 1, trim); rect(g, x0, y1 - 1, x1, y1, trim)
+    cover(0, 0, 11, 13, 'a', 'y')          # purple book + gold trim (bottom-left stack)
+    g[6][5] = 'y'; g[7][5] = 'y'; g[6][6] = 'o'  # clasp
+    cover(0, 20, 9, 31, 'N', 'W')          # crimson book
+    cover(12, 22, 23, 31, 'A', 'o')        # purple book
+    cover(0, 0, 11, 11, 'G', 'W')          # (up-region) green book
+    rect(g, 12, 0, 23, 9, 'T'); rect(g, 12, 0, 23, 1, 'W')  # teal book
+    cover(24, 0, 31, 13, 'u', 'g')         # blue book + gold
+emit_grid("library/side", lib_side, LIBRARY, "# library front — purple drape + gold sigil.")
+emit_grid("library/side2", lib_side2, LIBRARY, "# library bookshelf face.")
+emit_grid("library/top", lib_top, LIBRARY, "# library top — purple cloth.")
+emit_grid("library/bottom", lib_bottom, LIBRARY, "# library bottom — planks.")
+emit_grid("library/books", lib_books, LIBRARY, "# library books atlas (UV-mapped to book stacks).")
+print("emitted library set")
+
+# ender_library — same geometry, end-tier palette (teal cloth, end-stone wood)
+ENDER_LIBRARY = {
+ '.': 'transparent',
+ 'P': '#9a9670', 'h': '#bcb890', 'm': '#6a6650', 'H': '#aaa67e', 'F': '#7e7a5e',
+ 'k': '#16201d', 'K': '#0c1410',
+ 'p': '#2f8f8a', 'q': '#1c5a56', 'Q': '#103a36', 'l': '#4fc0b8', 'y': '#e6d68a', 'o': '#b0a050',
+ 't': '#3aa6b8', 'T': '#226e7a', 'a': '#8a5fce', 'A': '#5a3596', 'u': '#4fb0a0', 'U': '#2a7068',
+ 'g': '#caa030', 'G': '#8a6a18', 'n': '#b8485a', 'N': '#7a2838', 'W': '#e4ecd8', 'w': '#b6c0a8',
+}
+emit_grid("ender_library/side", lib_side, ENDER_LIBRARY, "# ender_library front — teal drape + pale sigil.")
+emit_grid("ender_library/side2", lib_side2, ENDER_LIBRARY, "# ender_library bookshelf face.")
+emit_grid("ender_library/top", lib_top, ENDER_LIBRARY, "# ender_library top — teal cloth.")
+emit_grid("ender_library/bottom", lib_bottom, ENDER_LIBRARY, "# ender_library bottom — end-stone.")
+emit_grid("ender_library/books", lib_books, ENDER_LIBRARY, "# ender_library books atlas.")
+print("emitted ender_library set")
+
+# =========================================================== filtering_shelf ====
+# Prismarine item shelf. empty/occupied are coherent front faces (vanilla
+# chiseled-bookshelf slot UVs keep each slot in place); side/top are full faces.
+FILTERING = {
+ '.': 'transparent',
+ 'P': '#44726a', 'h': '#84b6a9', 'm': '#22403a', 'H': '#5e8f84', 'F': '#335c54',
+ 'k': '#12201d', 'K': '#0a1614', 'b': '#436a61', 'B': '#2c4a44', 'S': '#1c2b27',
+ 'c': '#c7e8df', 'C': '#eafdfd', 'd': '#4eeaed', 'e': '#2bb3c0', 'o': '#1d6f86',
+ 't': '#2f8a80', 'T': '#1c5a52', 'a': '#3aa6b8', 'A': '#226e7a', 'u': '#8a5fce', 'U': '#5a3596',
+ 'g': '#caa030', 'G': '#8a6a18', 'n': '#b8485a', 'N': '#7a2838', 'W': '#e8e0cf',
+}
+def _filt_frame(g):
+    rect(g, 0, 0, 31, 31, 'P')
+    rect(g, 0, 0, 31, 0, 'h'); rect(g, 0, 0, 0, 31, 'h')
+    rect(g, 31, 0, 31, 31, 'm'); rect(g, 0, 31, 31, 31, 'm')
+    for x in (8, 16, 24): rect(g, x, 0, x, 1, 'm')
+    for x in (4, 12, 20, 28): rect(g, x, 30, x, 31, 'm')
+def filt_side(g):
+    _filt_frame(g)
+    for x in range(2, 30):                                        # prismarine wave band
+        y = 15 + (1 if (x // 2) % 2 == 0 else -1)
+        g[y][x] = 'c'; g[y + 1][x] = 'e'
+def filt_top(g):
+    _filt_frame(g)
+    dia = {(0, -2): 'C', (-1, -1): 'd', (0, -1): 'C', (1, -1): 'd', (-2, 0): 'd', (-1, 0): 'd',
+           (0, 0): 'C', (1, 0): 'd', (2, 0): 'e', (-1, 1): 'd', (0, 1): 'e', (1, 1): 'e', (0, 2): 'o'}
+    for (dx, dy), ch in dia.items(): g[15 + dy][15 + dx] = ch
+def _filt_shelves(g):
+    _filt_frame(g)
+    rect(g, 2, 2, 29, 14, 'k'); rect(g, 2, 2, 29, 3, 'K')         # top recess
+    rect(g, 2, 16, 29, 28, 'k'); rect(g, 2, 16, 29, 17, 'K')      # bottom recess
+    rect(g, 2, 14, 29, 15, 'b'); rect(g, 2, 28, 29, 29, 'b')      # ledges
+    rect(g, 2, 15, 29, 15, 'B'); rect(g, 2, 29, 29, 29, 'B')
+def filt_empty(g): _filt_shelves(g)
+def filt_occupied(g):
+    _filt_shelves(g)
+    items = [('A', 'u'), ('N', 'n'), ('G', 'g'), ('T', 't'), ('U', 'u'), ('A', 'a')]
+    slots = [(4, 13), (13, 13), (22, 13), (4, 27), (13, 27), (22, 27)]  # (x, base_y)
+    for i, (x, by) in enumerate(slots):
+        sd, sl = items[i]; w = (5, 4, 6)[i % 3]; ht = (8, 6, 9, 7)[i % 4]
+        for yy in range(by - ht, by):
+            for xx in range(x, x + w): g[yy][xx] = sl if xx == x else sd
+        g[by - ht][min(x + w - 1, 28)] = 'W'                      # page top
+emit_grid("filtering_shelf/side", filt_side, FILTERING, "# filtering_shelf side — prismarine wave.")
+emit_grid("filtering_shelf/top", filt_top, FILTERING, "# filtering_shelf top — prismarine + diamond.")
+emit_grid("filtering_shelf/empty", filt_empty, FILTERING, "# filtering_shelf empty slots (atlas).")
+emit_grid("filtering_shelf/occupied", filt_occupied, FILTERING, "# filtering_shelf occupied slots (atlas).")
+print("emitted filtering_shelf set")
