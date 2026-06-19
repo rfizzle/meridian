@@ -2,6 +2,6 @@
   "parent": "minecraft:block/cube_column",
   "textures": {
     "end": "meridian:block/nether_brick_shelf_top",
-    "side": "meridian:block/hellshelf"
+    "side": "meridian:block/infused_hellshelf"
   }
 }

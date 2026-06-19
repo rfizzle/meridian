@@ -119,6 +119,17 @@ def _halo(g, cx, cy, pts, tok):
             X, Y = cx + hx, cy + hy
             if 0 <= X < W and 0 <= Y < Hh and g[Y][X] in ('k', 'S', 'K'): g[Y][X] = tok
 
+def mote(g, cx, cy, core, br, arm, halo):
+    # radiant 4-point infusion star: bright core, ringed, long thin arms, glow
+    cells = {(0, 0): core, (0, -1): br, (0, 1): br, (-1, 0): br, (1, 0): br,
+             (0, -2): arm, (0, 2): arm, (-2, 0): arm, (2, 0): arm,
+             (0, -3): arm, (-3, 0): arm, (3, 0): arm}
+    pts = [(dx, dy, ch) for (dx, dy), ch in cells.items()]
+    _halo(g, cx, cy, pts, halo)
+    for (dx, dy), ch in cells.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
 # --------------------------------------------------------------- sea accents ----
 def _shard(cx, base, tall):
     if tall:
@@ -274,7 +285,10 @@ def top(name, palette, comment, speckle):
 def sea(g):       books(g, 26, 18, 2, xhi=19); books(g, 14, 5, 0); crystal(g, 23, 25)
 def crystalsh(g): books(g, 14, 7, 3, xhi=13); crystal(g, 20, 13); crystal(g, 22, 26, big=True); crystal(g, 8, 26)
 def heartsh(g):   books(g, 14, 6, 1); books(g, 26, 18, 4, xlo=4, xhi=16); heart(g, 22, 23)
+def infusedsea(g): books(g, 14, 5, 0, xhi=18); books(g, 26, 18, 2, xhi=19); crystal(g, 23, 25); mote(g, 22, 9, 'w', 'C', 'c', 'q')
 emit("seashelf", sea); emit("crystal_seashelf", crystalsh); emit("heart_seashelf", heartsh)
+emit("infused_seashelf", infusedsea, SEA,
+     "# infused_seashelf side (sea family) — base seashelf empowered with a cyan infusion mote.")
 top("prismarine_shelf_top", SEA,
     "# shared prismarine shelf top/bottom (sea family), seamless.",
     [(5, 3, 'c'), (21, 19, 'c'), (27, 11, 'C'), (11, 27, 'c')])
@@ -283,8 +297,11 @@ top("prismarine_shelf_top", SEA,
 NC = "# {} side (nether family) — nether-brick frame, nether books, {} accent."
 def hell(g):     books(g, 26, 18, 1, xhi=27); books(g, 14, 5, 3, xhi=19); wart(g, 23, 26)
 def glowing(g):  books(g, 14, 6, 2, xhi=18); books(g, 26, 18, 0, xhi=18); glowstone(g, 22, 23, big=True)
+def infusedhell(g): books(g, 26, 18, 1, xhi=27); books(g, 14, 5, 3, xhi=18); wart(g, 23, 26); mote(g, 23, 9, 'z', 'f', 'y', 'j')
 emit("hellshelf", hell, NETHER, NC.format("hellshelf", "nether-wart"))
 emit("glowing_hellshelf", glowing, NETHER, NC.format("glowing_hellshelf", "glowstone"))
+emit("infused_hellshelf", infusedhell, NETHER,
+     "# infused_hellshelf side (nether family) — base hellshelf empowered with a gold infusion mote.")
 
 def blazing_frame(fr):
     def build(g):
