@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "minecraft:block/polished_andesite",
+    "end": "meridian:block/stone_shelf_top",
     "side": "meridian:block/stoneshelf"
   }
 }

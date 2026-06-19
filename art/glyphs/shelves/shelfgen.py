@@ -91,6 +91,54 @@ END = {
  'd': '#1a0f24', 'D': '#2c1a3e', 'V': '#43285e', 'i': '#e03ca0', 'I': '#ff8fd0', 'J': '#2a0e3e',
 }
 
+SCULK = {
+ '.': 'transparent',
+ # sculk frame (black-blue, lit edges dark teal)
+ 'm': '#060c0f', 'F': '#0a1418', 'P': '#0e1a1f', 'H': '#1d4450', 'h': '#16323a',
+ # near-black interior + ledges
+ 'K': '#05090c', 'k': '#0a1015', 'S': '#0f1a20', 'b': '#16323a', 'B': '#0c1c22',
+ # books: teal / sculk-cyan / slate / deep-blue / bone
+ 't': '#27a0a0', 'T': '#155a5a', 'a': '#2cc0d4', 'A': '#1a6e7e',
+ 'u': '#33424f', 'U': '#1a2630', 'g': '#356a9e', 'G': '#1c3a5e', 'n': '#b8b8a2', 'N': '#7a7a6a',
+ 'W': '#c0ccc8',
+ # sculk veins
+ 'C': '#29dfeb',
+ # echo shard: bright cyan core, teal body, teal glow
+ 'i': '#33e6ec', 'D': '#1a5a64', 'd': '#0e2e34', 'V': '#bdf6f8', 'J': '#0a2e34',
+ # soul fire: blue flame, white-hot core, blue glow halo
+ 'f': '#d4f7ff', 'l': '#5fd6f5', 'r': '#2f97d6', 'v': '#1b4f86', 'j': '#0d2c4e',
+}
+
+BEE = {
+ '.': 'transparent',
+ 'm': '#7a5410', 'F': '#b07e18', 'P': '#e0a72a', 'H': '#f0c040', 'h': '#f3c84e',
+ 'K': '#190f04', 'k': '#2a1d08', 'S': '#33240c', 'b': '#caa030', 'B': '#8a6a18',
+ 't': '#e0a030', 'T': '#a86a14', 'a': '#f0c84a', 'A': '#c88a1a',
+ 'u': '#8a6418', 'U': '#5a3e10', 'g': '#e8d088', 'G': '#c8a050', 'n': '#d6c498', 'N': '#9a8358',
+ 'W': '#f5ecc0',
+ 'y': '#ffd23a', 'x': '#2a1c06', 'w': '#fff4d2', 'o': '#8a5a10',  # bee
+}
+
+MELON = {
+ '.': 'transparent',
+ 'm': '#274516', 'F': '#356020', 'P': '#4a7a2a', 'H': '#7ab84a', 'h': '#6fa83e',
+ 'K': '#0c1407', 'k': '#16220e', 'S': '#1d2c12', 'b': '#4a7a2a', 'B': '#2c4d18',
+ 't': '#d8584a', 'T': '#a83228', 'a': '#e87058', 'A': '#c0402e',
+ 'u': '#5a8a30', 'U': '#356020', 'g': '#e89886', 'G': '#c86a5a', 'n': '#cfcf9a', 'N': '#8a8a5a',
+ 'W': '#f0e8c0',
+ 'r': '#e8604c', 'q': '#a02e24', 'l': '#6fa83e', 'o': '#3a6b1e', 'x': '#241404', 'w': '#ffd0c0',  # slice
+}
+
+STONE = {
+ '.': 'transparent',
+ 'm': '#54565b', 'F': '#6a6d72', 'P': '#8a8d92', 'H': '#9da0a6', 'h': '#a8abb0',
+ 'K': '#101113', 'k': '#1c1d20', 'S': '#252629', 'b': '#7a7d82', 'B': '#4e5054',
+ 't': '#5a7088', 'T': '#3a4a5e', 'a': '#a85a4e', 'A': '#7a3a32',
+ 'u': '#5e6e52', 'U': '#3f4a3a', 'g': '#9a7e54', 'G': '#6a563a', 'n': '#b6b0a0', 'N': '#7a766a',
+ 'W': '#d8d4ca',
+ 'C': '#c4c8ce', 'd': '#34363a', 'D': '#4a4d52',  # carved rune
+}
+
 # -------------------------------------------------------------- shared parts ----
 def frame(g):
     rect(g, 0, 0, 31, 31, 'P')
@@ -315,6 +363,54 @@ def dragon_skull(g, cx, cy):
         X, Y = cx + dx, cy + dy
         if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
 
+def bee(g, cx, cy):
+    # small striped bee facing right, pale wings, dark head
+    shade = {(-1, -2): 'w', (0, -2): 'w', (1, -2): 'w',
+             (-2, -1): 'y', (-1, -1): 'y', (0, -1): 'y', (1, -1): 'y', (2, -1): 'x',
+             (-2, 0): 'x', (-1, 0): 'y', (0, 0): 'x', (1, 0): 'y', (2, 0): 'x',
+             (-2, 1): 'y', (-1, 1): 'x', (0, 1): 'y', (1, 1): 'o'}
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
+def melon_slice(g, cx, cy):
+    # triangular melon wedge: red flesh, green rind base, dark seeds
+    shade = {(0, -3): 'r',
+             (-1, -2): 'r', (0, -2): 'w', (1, -2): 'r',
+             (-2, -1): 'r', (-1, -1): 'r', (0, -1): 'x', (1, -1): 'r', (2, -1): 'r',
+             (-3, 0): 'r', (-2, 0): 'r', (-1, 0): 'x', (0, 0): 'r', (1, 0): 'r', (2, 0): 'q', (3, 0): 'r',
+             (-3, 1): 'o', (-2, 1): 'l', (-1, 1): 'o', (0, 1): 'l', (1, 1): 'o', (2, 1): 'l', (3, 1): 'o'}
+    for (dx, dy), ch in shade.items():
+        X, Y = cx + dx, cy + dy
+        if 0 <= X < W and 0 <= Y < Hh: g[Y][X] = ch
+
+def rune(g, cx, cy):
+    # small carved stone plaque with an engraved glyph
+    for dy in range(-2, 3):
+        for dx in range(-2, 3):
+            g[cy + dy][cx + dx] = 'd'
+    for dx, dy in ((0, -1), (0, 0), (0, 1), (-1, -1), (1, 1)):
+        g[cy + dy][cx + dx] = 'C'
+    for dx, dy in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+        g[cy + dy][cx + dx] = 'D'
+
+def sculk_veins(g, level=1):
+    # glowing cyan freckles scattered on the sculk frame; dim at level 0
+    ch = 'C' if level else 'D'
+    for x, y in ((5, 1), (1, 9), (10, 2), (30, 6), (31, 17), (29, 25),
+                 (6, 31), (18, 30), (25, 31), (2, 22)):
+        g[y][x] = ch
+
+def sculk_top(g, level=1):
+    # dark sculk top with scattered glowing veins; seamless
+    for y in range(32):
+        for x in range(32):
+            g[y][x] = ['P', 'k', 'F', 'k'][((x // 4) + (y // 5)) % 4]
+    vein = 'C' if level else 'D'
+    for x, y in ((3, 4), (11, 9), (19, 2), (27, 14), (6, 20), (22, 25), (14, 29), (30, 22)):
+        g[y][x] = vein
+        if 0 <= y + 1 < 32: g[y + 1][x] = 'D'
+
 # -------------------------------------------------------------------- emit ----
 def _legend(palette): return [f"  {k} {v}" for k, v in palette.items()]
 
@@ -430,4 +526,45 @@ top("end_stone_shelf_top", END,
     "# shared end-stone shelf top/bottom (end family), seamless.",
     [(6, 5, 'm'), (21, 20, 'm'), (12, 26, 'u')])
 
-print("emitted sea + nether + deepslate + end families")
+# ---------------------------------------------------------------- sculk family ----
+def emit_grid(name, drawfn, palette, comment):
+    g = grid(); drawfn(g)
+    out = [comment, "size: 32", "", "legend:"] + _legend(palette) + ["", "grid:"]
+    out += ["  " + "".join(r) for r in g]
+    open(f"{OUT}/{name}.glyph", "w").write("\n".join(out) + "\n")
+
+SC = "# {} side (sculk family) — sculk frame + glowing veins, cyan books, {} accent."
+def echoing_sculk(level):
+    def build(g):
+        sculk_veins(g, level)
+        books(g, 14, 6, 1, xhi=18); books(g, 26, 18, 4, xhi=18)
+        echo(g, 22, 24, level=level); echo(g, 24, 12, small=True, level=level)
+    return build
+emit_anim("echoing_sculkshelf", [echoing_sculk(l) for l in (1, 2, 1, 0)], SCULK,
+          SC.format("echoing_sculkshelf", "echo-shard (pulsing) + pulsing veins"), frametime=6)
+def soul_sculk(fr):
+    def build(g):
+        sculk_veins(g, 1)
+        books(g, 14, 6, 3); books(g, 26, 18, 1, xhi=17)
+        soul_flame(g, 22, 26, fr)
+    return build
+emit_anim("soul_touched_sculkshelf", [soul_sculk(i) for i in range(4)], SCULK,
+          SC.format("soul_touched_sculkshelf", "soul-fire (flicker)"), frametime=3)
+emit_grid("sculkshelf_top", sculk_top, SCULK,
+          "# shared sculk shelf top/bottom — dark with glowing veins, seamless.")
+
+# --------------------------------------------------------------- singles ----
+def beesh(g):   books(g, 14, 5, 0, xhi=20); books(g, 26, 18, 2, xhi=27); bee(g, 23, 9)
+def melonsh(g): books(g, 14, 6, 3, xhi=20); books(g, 26, 18, 1, xhi=19); melon_slice(g, 23, 24)
+def stonesh(g): books(g, 14, 5, 2, xhi=20); books(g, 26, 18, 4, xhi=27); rune(g, 23, 10)
+emit("beeshelf", beesh, BEE, "# beeshelf side (single) — honeycomb frame, honey books, bee accent.")
+emit("melonshelf", melonsh, MELON, "# melonshelf side (single) — melon-rind frame, flesh books, melon-slice accent.")
+emit("stoneshelf", stonesh, STONE, "# stoneshelf side (single) — andesite frame, muted books, carved-rune accent.")
+top("honeycomb_shelf_top", BEE, "# beeshelf top/bottom — honeycomb, seamless.",
+    [(6, 5, 'h'), (20, 22, 'h'), (26, 12, 'h')])
+top("melon_shelf_top", MELON, "# melonshelf top/bottom — melon rind, seamless.",
+    [(7, 6, 'x'), (21, 20, 'x'), (13, 27, 'x')])
+top("stone_shelf_top", STONE, "# stoneshelf top/bottom — polished andesite, seamless.",
+    [(6, 5, 'F'), (20, 22, 'm'), (26, 12, 'F')])
+
+print("emitted sea + nether + deepslate + end + sculk families + singles")
