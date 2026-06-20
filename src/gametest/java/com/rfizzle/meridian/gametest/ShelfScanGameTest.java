@@ -460,22 +460,24 @@ public class ShelfScanGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    // --- S-2.2j: two sightshelf_t2 → clues clamped from 4 to MAX_CLUES (3) ---
+    // --- S-2.2j: three sightshelf_t2 → clues clamped from 6 to MAX_CLUES (5) ---
 
     @GameTest(template = "meridian:shelf_scan_9x4x9")
-    public void twoSightshelfT2ClampCluesAtMax(GameTestHelper helper) {
+    public void threeSightshelfT2ClampCluesAtMax(GameTestHelper helper) {
         helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
         BlockPos offsetA = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
         BlockPos offsetB = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(1);
+        BlockPos offsetC = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(2);
         helper.setBlock(TABLE_POS.offset(offsetA), MeridianShelves.SIGHTSHELF_T2.defaultBlockState());
         helper.setBlock(TABLE_POS.offset(offsetB), MeridianShelves.SIGHTSHELF_T2.defaultBlockState());
+        helper.setBlock(TABLE_POS.offset(offsetC), MeridianShelves.SIGHTSHELF_T2.defaultBlockState());
 
         BlockPos absTablePos = helper.absolutePos(TABLE_POS);
         StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
 
         if (stats.clues() != EnchantingStatRegistry.MAX_CLUES) {
             helper.fail("Expected clues=" + EnchantingStatRegistry.MAX_CLUES
-                    + " (clamped from 4), got " + stats.clues());
+                    + " (clamped from 6), got " + stats.clues());
             return;
         }
         helper.succeed();
