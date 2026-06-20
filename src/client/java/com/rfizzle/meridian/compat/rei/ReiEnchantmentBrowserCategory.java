@@ -69,12 +69,14 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
         widgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) ->
                 EnchantmentBrowserCardRenderer.draw(graphics, Minecraft.getInstance().font, bounds.x, bounds.y, record)));
 
-        if (!display.getInputEntries().isEmpty()) {
+        // Draw the enchanted book(s) as the output so "view recipe" on a book navigates here;
+        // compatible items stay searchable via the display's input entries but are not drawn.
+        if (!display.getOutputEntries().isEmpty()) {
             widgets.add(Widgets.createSlot(new Point(
                             bounds.x + EnchantmentBrowserCardRenderer.SLOT_X,
                             bounds.y + EnchantmentBrowserCardRenderer.SLOT_Y))
-                    .entries(display.getInputEntries().get(0))
-                    .markInput());
+                    .entries(display.getOutputEntries().get(0))
+                    .markOutput());
         }
 
         widgets.add(Widgets.createTooltip(bounds, getTooltip(record)));

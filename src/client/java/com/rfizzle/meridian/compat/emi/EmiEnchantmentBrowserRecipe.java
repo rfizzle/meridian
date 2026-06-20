@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.emi;
 
+import com.rfizzle.meridian.compat.client.EnchantmentBrowserBooks;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
@@ -11,6 +12,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +30,13 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
         super(category, record.ench().unwrapKey().orElseThrow().location(),
                 EnchantmentBrowserCardRenderer.WIDTH, EnchantmentBrowserCardRenderer.HEIGHT);
         this.record = record;
+        // Compatible items as inputs keep "search enchantments by item" working; the enchanted
+        // book(s) as outputs let "show recipe" on a book navigate to this entry.
         for (var itemHolder : record.compatibleItems()) {
             this.inputs.add(EmiStack.of(itemHolder.value()));
+        }
+        for (ItemStack book : EnchantmentBrowserBooks.forRecord(record)) {
+            this.outputs.add(EmiStack.of(book));
         }
     }
 
@@ -40,11 +47,11 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
                                 EnchantmentBrowserCardRenderer.draw(graphics, Minecraft.getInstance().font, 0, 0, record))
                 .tooltip((mx, my) -> getTooltip());
 
-        if (!record.compatibleItems().isEmpty()) {
-            widgets.addSlot(
-                    EmiIngredient.of(record.compatibleItems().stream()
-                            .map(h -> EmiStack.of(h.value())).toList()),
-                    EnchantmentBrowserCardRenderer.SLOT_X, EnchantmentBrowserCardRenderer.SLOT_Y);
+        List<ItemStack> books = EnchantmentBrowserBooks.forRecord(record);
+        if (!books.isEmpty()) {
+            widgets.addSlot(EmiIngredient.of(books.stream().map(EmiStack::of).toList()),
+                            EnchantmentBrowserCardRenderer.SLOT_X, EnchantmentBrowserCardRenderer.SLOT_Y)
+                    .recipeContext(this);
         }
     }
 

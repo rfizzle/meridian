@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.jei;
 
+import com.rfizzle.meridian.compat.client.EnchantmentBrowserBooks;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import mezz.jei.api.constants.VanillaTypes;
@@ -33,7 +34,11 @@ public final class JeiEnchantmentBrowserCategory extends AbstractRecipeCategory<
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, EnchantmentBrowserRecord record, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.CATALYST, EnchantmentBrowserCardRenderer.SLOT_X, EnchantmentBrowserCardRenderer.SLOT_Y)
+        // The enchanted book(s) are the OUTPUT so "show recipe" on a book navigates here; the
+        // drawn slot cycles every level. Compatible items stay searchable but undrawn.
+        builder.addSlot(RecipeIngredientRole.OUTPUT, EnchantmentBrowserCardRenderer.SLOT_X, EnchantmentBrowserCardRenderer.SLOT_Y)
+                .addIngredients(VanillaTypes.ITEM_STACK, EnchantmentBrowserBooks.forRecord(record));
+        builder.addInvisibleIngredients(RecipeIngredientRole.INPUT)
                 .addIngredients(VanillaTypes.ITEM_STACK, record.compatibleItems().stream().map(h -> h.value().getDefaultInstance()).toList());
     }
 
