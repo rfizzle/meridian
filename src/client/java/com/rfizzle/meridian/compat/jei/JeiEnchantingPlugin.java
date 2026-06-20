@@ -30,9 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * JEI integration entry point. Mirrors the EMI/REI plugin's single "Infusions" category,
- * populated from the shared {@link TableCraftingDisplayExtractor}, plus one info page per shelf
- * block drawn from {@link EnchantingStatRegistry#blockEntries()}.
+ * JEI integration entry point. Mirrors the EMI/REI plugin's two categories: an "Infusions"
+ * crafting category populated from the shared {@link TableCraftingDisplayExtractor}, and an
+ * "Enchantments" browser category (per-enchantment max level, exclusive sets, treasure flag,
+ * and power windows), plus one info page per shelf block drawn from
+ * {@link EnchantingStatRegistry#blockEntries()}.
  *
  * <p>Discovered by JEI via the {@code jei_mod_plugin} entrypoint declared in
  * {@code fabric.mod.json}. The {@link JeiPlugin} annotation remains for cross-loader parity but
