@@ -55,8 +55,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     /** Vanilla-shelf safety net: applied when a block is in the vanilla power-provider tag but absent from the datapack registry. */
     public static final EnchantingStats VANILLA_FALLBACK = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
 
-    /** Hard ceiling on gathered clues. Matches Zenith's cap — beyond 3 the UI is already saturated. */
-    public static final int MAX_CLUES = 3;
+    /** Hard ceiling on gathered clues. Matches Zenith's cap. */
+    public static final int MAX_CLUES = 5;
 
     private static final String RESOURCE_DIR = "enchanting_stats";
     private static final String JSON_SUFFIX = ".json";
@@ -100,7 +100,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * The final eterna is floored at 0.
      *
      * <p>{@code quanta}, {@code arcana}, and {@code rectification} are clamped to
-     * {@code [0, 100]}; {@code clues} is clamped to {@code [0, MAX_CLUES]}.
+     * {@code [0, 100]}; {@code clues} is clamped to {@code [0, 5]}.
      *
      * <p>Filtering-shelf blacklists and treasure-shelf flags are picked up via the context
      * lookup: any in-range {@link BlockPos} whose block entity implements {@link BlacklistSource}

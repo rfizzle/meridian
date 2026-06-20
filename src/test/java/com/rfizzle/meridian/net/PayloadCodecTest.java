@@ -111,6 +111,19 @@ class PayloadCodecTest {
     }
 
     @Test
+    void statsPayload_fiveClues_roundTrips() {
+        StatsPayload original = new StatsPayload(
+                0F, 0F, 0F, 0F, 5, 0F, List.of(), false, Optional.empty());
+
+        RegistryFriendlyByteBuf buf = newBuf();
+        StatsPayload.CODEC.encode(buf, original);
+        StatsPayload decoded = StatsPayload.CODEC.decode(buf);
+
+        assertEquals(5, decoded.clues());
+        assertEquals(0, buf.readableBytes());
+    }
+
+    @Test
     void statsPayload_typeId_isNamespaced() {
         assertEquals(ResourceLocation.fromNamespaceAndPath("meridian", "stats"),
                 StatsPayload.TYPE.id());
@@ -131,13 +144,15 @@ class PayloadCodecTest {
     }
 
     @Test
-    void cluesPayload_threeEntryList_roundTrips() {
+    void cluesPayload_fiveEntryList_roundTrips() {
         CluesPayload original = new CluesPayload(
                 1,
                 List.of(
                         new EnchantmentClue(enchantKey("minecraft:sharpness"), 5),
                         new EnchantmentClue(enchantKey("minecraft:mending"), 1),
-                        new EnchantmentClue(enchantKey("minecraft:unbreaking"), 3)),
+                        new EnchantmentClue(enchantKey("minecraft:unbreaking"), 3),
+                        new EnchantmentClue(enchantKey("minecraft:fortune"), 2),
+                        new EnchantmentClue(enchantKey("minecraft:efficiency"), 4)),
                 false);
 
         RegistryFriendlyByteBuf buf = newBuf();
@@ -145,7 +160,7 @@ class PayloadCodecTest {
         CluesPayload decoded = CluesPayload.CODEC.decode(buf);
 
         assertEquals(original, decoded);
-        assertEquals(3, decoded.clues().size());
+        assertEquals(5, decoded.clues().size());
         assertEquals(0, buf.readableBytes());
     }
 
