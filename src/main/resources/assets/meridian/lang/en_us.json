@@ -156,7 +156,6 @@
     "gui.meridian.enchant_info.rarity.rare": "Rare",
     "gui.meridian.enchant_info.rarity.very_rare": "Very Rare",
     "gui.meridian.enchant_info.info_button": "View all available enchantments",
-    "gui.meridian.enchant_info.overridden": "Modified by server config",
     "gui.meridian.enchant_info.treasure": "Treasure",
     "gui.meridian.enchant_info.disabled": "Disabled",
     "gui.meridian.enchant_info.power_header": "Eterna per Level",
