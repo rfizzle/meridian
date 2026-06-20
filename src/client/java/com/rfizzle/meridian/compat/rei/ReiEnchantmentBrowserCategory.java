@@ -1,7 +1,9 @@
 package com.rfizzle.meridian.compat.rei;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
+import com.rfizzle.meridian.compat.common.EnchantmentBrowserTooltip;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -9,21 +11,21 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * REI category that renders one {@link ReiEnchantmentBrowserDisplay}.
+ * REI category that renders one {@link ReiEnchantmentBrowserDisplay}. The card face is drawn by
+ * the shared {@link EnchantmentBrowserCardRenderer}; this category adds the REI recipe base, the
+ * compatible-items slot, and the on-hover detail tooltip, keeping it pixel-identical to the JEI
+ * and EMI cards.
  */
 public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiEnchantmentBrowserDisplay> {
-
-    private static final ResourceLocation OVERRIDE_TEXTURE = Meridian.id("textures/gui/enchanting_table.png");
 
     private static final ResourceLocation ICON_TEXTURE = Meridian.id("icon.png");
     private static final Renderer MOD_ICON = (GuiGraphics graphics, Rectangle bounds, int mouseX, int mouseY, float delta) ->
@@ -55,7 +57,7 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
 
     @Override
     public int getDisplayHeight() {
-        return 26;
+        return EnchantmentBrowserCardRenderer.HEIGHT;
     }
 
     @Override
@@ -64,81 +66,21 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
         List<Widget> widgets = new ArrayList<>();
 
         widgets.add(Widgets.createRecipeBase(bounds));
+        widgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) ->
+                EnchantmentBrowserCardRenderer.draw(graphics, Minecraft.getInstance().font, bounds.x, bounds.y, record)));
 
-        MutableComponent name = record.ench().value().description().copy();
-        if (!record.isEnabled()) {
-            name.withStyle(ChatFormatting.STRIKETHROUGH, ChatFormatting.RED);
-        } else if (record.isTreasure()) {
-            name.withStyle(ChatFormatting.GOLD);
+        // Draw the enchanted book(s) as the output so "view recipe" on a book navigates here;
+        // compatible items stay searchable via the display's input entries but are not drawn.
+        if (!display.getOutputEntries().isEmpty()) {
+            widgets.add(Widgets.createSlot(new Point(
+                            bounds.x + EnchantmentBrowserCardRenderer.SLOT_X,
+                            bounds.y + EnchantmentBrowserCardRenderer.SLOT_Y))
+                    .entries(display.getOutputEntries().get(0))
+                    .markOutput());
         }
 
-        widgets.add(Widgets.createLabel(new Point(bounds.x + 2, bounds.y + 2), name).leftAligned().noShadow());
-
-        int x = bounds.x + 2;
-        String levels = "I-" + record.maxLevel();
-        if (record.maxLevel() == 1) levels = "I";
-        Component levelsComp = Component.literal(levels).withStyle(ChatFormatting.GRAY);
-        widgets.add(Widgets.createLabel(new Point(x, bounds.y + 14), levelsComp).leftAligned().noShadow());
-        x += (levels.length() * 6) + 6;
-
-        for (String setName : record.exclusiveSetNames()) {
-            Component tagText = Component.literal("[" + setName + "]").withStyle(ChatFormatting.AQUA);
-            widgets.add(Widgets.createLabel(new Point(x, bounds.y + 14), tagText).leftAligned().noShadow());
-            x += (setName.length() * 6) + 12;
-        }
-
-        if (record.isConfigOverridden()) {
-            widgets.add(Widgets.createDrawableWidget((graphics, mouseX, mouseY, delta) -> {
-                graphics.pose().pushPose();
-                graphics.pose().translate(bounds.x + 128, bounds.y + 2, 0);
-                graphics.pose().scale(0.75f, 0.75f, 1);
-                graphics.blit(OVERRIDE_TEXTURE, 0, 0, 224, 0, 16, 16);
-                graphics.pose().popPose();
-            }));
-        }
-
-        widgets.add(Widgets.createTooltip(bounds, getTooltip(record)));
+        widgets.add(Widgets.createTooltip(bounds, EnchantmentBrowserTooltip.lines(record)));
 
         return widgets;
-    }
-
-    private List<Component> getTooltip(EnchantmentBrowserRecord record) {
-        List<Component> tooltip = new ArrayList<>();
-        tooltip.add(record.ench().value().description().copy().withStyle(ChatFormatting.WHITE));
-
-        if (!record.isEnabled()) {
-            tooltip.add(Component.translatable("tooltip.meridian.enchlib.disabled").withStyle(ChatFormatting.RED, ChatFormatting.BOLD));
-        }
-
-        if (record.isTreasure()) {
-            tooltip.add(Component.translatable("info.meridian.shelf.allows_treasure").withStyle(ChatFormatting.GOLD));
-        }
-
-        if (!record.exclusiveSetNames().isEmpty()) {
-            tooltip.add(Component.empty());
-            tooltip.add(Component.translatable("gui.meridian.enchant_info.exclusive", "").withStyle(ChatFormatting.GRAY));
-            for (String setName : record.exclusiveSetNames()) {
-                tooltip.add(Component.literal(" - " + setName).withStyle(ChatFormatting.AQUA));
-            }
-        }
-
-        tooltip.add(Component.empty());
-        tooltip.add(Component.translatable("gui.meridian.enchant_info.power_header").withStyle(ChatFormatting.GRAY));
-        for (int i = 0; i < record.powerWindows().size(); i++) {
-            int level = i + 1;
-            int[] window = record.powerWindows().get(i);
-            tooltip.add(Component.literal("Level " + level + ": Eterna " + window[0] + " - " + window[1]).withStyle(ChatFormatting.DARK_GREEN));
-        }
-
-        tooltip.add(Component.empty());
-        tooltip.add(Component.translatable("gui.meridian.enchant_info.stats_header").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("gui.meridian.enchant_info.stats_global").withStyle(ChatFormatting.DARK_AQUA));
-
-        if (record.isConfigOverridden()) {
-            tooltip.add(Component.empty());
-            tooltip.add(Component.translatable("gui.meridian.enchant_info.overridden").withStyle(ChatFormatting.ITALIC, ChatFormatting.DARK_GRAY));
-        }
-
-        return tooltip;
     }
 }

@@ -1,16 +1,16 @@
 package com.rfizzle.meridian.compat.rei;
 
+import com.rfizzle.meridian.compat.client.EnchantmentBrowserBooks;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
-import me.shedaniel.rei.api.common.display.DisplaySerializer;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.core.Holder;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * REI-facing adapter over {@link EnchantmentBrowserRecord}.
@@ -40,7 +40,11 @@ public final class ReiEnchantmentBrowserDisplay implements Display {
 
     @Override
     public List<EntryIngredient> getOutputEntries() {
-        return List.of();
+        List<ItemStack> books = EnchantmentBrowserBooks.forRecord(record);
+        if (books.isEmpty()) {
+            return List.of();
+        }
+        return List.of(EntryIngredients.ofItemStacks(books));
     }
 
     @Override

@@ -74,8 +74,7 @@ public final class JeiEnchantingPlugin implements IModPlugin {
         registration.addRecipeCategories(new JeiEnchantmentBrowserCategory(
                 JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS,
                 Component.translatable("gui.meridian.enchant_info.title"),
-                modIcon,
-                registration.getJeiHelpers().getGuiHelper()));
+                modIcon));
     }
 
     @Override
