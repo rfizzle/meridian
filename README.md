@@ -124,7 +124,7 @@ Wardens drop Warden Tendrils (1 guaranteed, +10% per Looting level for a second)
 
 First-class recipe and tooltip adapters ship at launch for:
 
-- **EMI**, **REI**, and **JEI** — enchanting-table crafting recipes, library mechanics
+- **EMI**, **REI**, and **JEI** — two recipe categories: an **Infusions** crafting category (enchanting-table recipes, library mechanics) and an **Enchantments** browser (per-enchantment max level, exclusive sets, treasure flag, and power windows)
 - **Jade** — shelf stat tooltips, library contents
 
 ### Advancement Tree

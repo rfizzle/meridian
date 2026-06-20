@@ -101,7 +101,7 @@ Craftable items include:
 - **Rare items** — Enchanted Golden Apple, Heart of the Sea, Totem of Undying, Golden Apple, Golden Carrot
 - **XP conversion** — Honey to Experience Bottles (three tiers)
 
-Recipes are viewable in EMI, REI, and JEI under the "Infusions" category.
+Recipes are viewable in EMI, REI, and JEI under the **"Infusions"** crafting category. A companion **"Enchantments"** browser category lists every enchantment with its max level, exclusive sets, treasure flag, and per-level power windows.
 
 ---
 
@@ -133,6 +133,20 @@ All costs are configurable.
 
 ---
 
+## XP Tomes
+
+A ladder of consumables that bank experience levels for later. Right-click to deposit one level into the tome; shift-right-click to withdraw one back to yourself. A lime durability bar shows how full the tome is. Each tier is crafted at the enchanting table from a Dormant XP Tome, with higher tiers gated behind higher Eterna.
+
+| Tome | Capacity |
+|---|---|
+| **XP Tome I** | 10 levels |
+| **XP Tome II** | 30 levels |
+| **XP Tome III** | 50 levels |
+
+The Dormant XP Tome itself stores nothing — it's the crafting base for the active tiers.
+
+---
+
 ## Anvil Upgrades
 
 **Prismatic Web** — Place it in the anvil with a cursed item to strip all curses while keeping every other enchantment. Costs 30 XP levels (configurable).
@@ -150,7 +164,7 @@ Wardens now drop **Warden Tendrils** — a crafting material required for sculk-
 ## Compatibility
 
 Meridian ships with first-class integration for:
-- **EMI / REI / JEI** — Enchanting table recipes and library mechanics
+- **EMI / REI / JEI** — Enchanting table recipes and library mechanics under the "Infusions" category, plus an "Enchantments" browser (max level, exclusive sets, treasure flag, power windows)
 - **Jade / WTHIT** — Shelf stat tooltips and library contents via probe
 - **ModMenu + Cloth Config** — In-game configuration screen
 - **Trinkets** — Wearable item compatibility

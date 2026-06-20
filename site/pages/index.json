@@ -7,7 +7,7 @@
   "ogDescription": "A complete enchanting overhaul for Minecraft 1.21.1 Fabric. Five stat axes, 75 original enchantments, themed shelves, libraries, tomes, and more.",
   "hero": {
     "lede": "A complete enchanting overhaul for Minecraft 1.21.1 (Fabric).",
-    "sub": "Five independent stats replace vanilla's single power value. 75 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage tomes, and anvil upgrades \u2014 all fully data-driven.",
+    "sub": "Five independent stats replace vanilla's single power value. 75 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage and XP tomes, and anvil upgrades \u2014 all fully data-driven.",
     "buttons": [
       {
         "label": "Download Latest Release",
@@ -30,7 +30,7 @@
     {
       "title": "Core Systems",
       "band": true,
-      "lede": "Six interlocking systems that transform Minecraft's enchanting from a single-click gamble into a deep progression mechanic. <a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Full enchantment list \u2192</a>",
+      "lede": "Seven interlocking systems that transform Minecraft's enchanting from a single-click gamble into a deep progression mechanic. <a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Full enchantment list \u2192</a>",
       "blocks": [
         {
           "type": "cards",
@@ -71,6 +71,13 @@
               "title": "Salvage Tomes",
               "html": [
                 "Three tomes for extracting enchantments: Scrap (random, destroys item), Improved Scrap (all, destroys item), and Extraction (all, preserves item)."
+              ]
+            },
+            {
+              "icon": "&#128221;",
+              "title": "XP Tomes",
+              "html": [
+                "A ladder of consumables that bank experience levels. Right-click to deposit a level, shift-right-click to withdraw one. Three tiers crafted from a Dormant XP Tome hold 10, 30, and 50 levels."
               ]
             },
             {
