@@ -28,7 +28,7 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
 
     public EmiEnchantmentBrowserRecipe(EmiRecipeCategory category, EnchantmentBrowserRecord record) {
         super(category, record.ench().unwrapKey().orElseThrow().location(),
-                EnchantmentBrowserCardRenderer.WIDTH, EnchantmentBrowserCardRenderer.HEIGHT);
+                EnchantmentBrowserCardRenderer.WIDTH, EnchantmentBrowserCardRenderer.height(record));
         this.record = record;
         // Compatible items as inputs keep "search enchantments by item" working; the enchanted
         // book(s) as outputs let "show recipe" on a book navigate to this entry.
@@ -42,7 +42,7 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
-        widgets.addDrawable(0, 0, EnchantmentBrowserCardRenderer.WIDTH, EnchantmentBrowserCardRenderer.HEIGHT,
+        widgets.addDrawable(0, 0, EnchantmentBrowserCardRenderer.WIDTH, this.height,
                         (graphics, mx, my, delta) ->
                                 EnchantmentBrowserCardRenderer.draw(graphics, Minecraft.getInstance().font, 0, 0, record))
                 .tooltip((mx, my) -> getTooltip());
