@@ -48,40 +48,43 @@ class RealEnchantmentHelperTest {
     }
 
     @Test
-    void getEnchantmentCost_slot2_respectsEternaAsLevel() {
+    void getEnchantmentCost_slot2_isEternaTimesTwo() {
+        // slot 2 = round(eterna * LEVELS_PER_ETERNA), deterministic in eterna.
         for (long seed = 0L; seed < 64L; seed++) {
             int slot2 = RealEnchantmentHelper.getEnchantmentCost(seeded(seed), 2, 50F, ItemStack.EMPTY);
-            assertTrue(slot2 >= 25 && slot2 <= 50,
-                    "eterna=50 slot 2 must be in [25, 50]; got " + slot2);
+            assertEquals(50 * RealEnchantmentHelper.LEVELS_PER_ETERNA, slot2,
+                    "eterna=50 slot 2 must be 100 (50 × 2); got " + slot2);
         }
     }
 
     @Test
     void getEnchantmentCost_slot2_isDeterministicInEterna() {
-        assertEquals(50, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 50F, ItemStack.EMPTY));
-        assertEquals(30, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 30F, ItemStack.EMPTY));
-        assertEquals(15, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 15F, ItemStack.EMPTY));
+        assertEquals(100, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 50F, ItemStack.EMPTY));
+        assertEquals(60, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 30F, ItemStack.EMPTY));
+        assertEquals(30, RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 15F, ItemStack.EMPTY));
     }
 
     @Test
     void getEnchantmentCost_slot0Bounds_matchLowerRange() {
-        int level = 50;
+        int eterna = 50;
+        int enchantLevel = eterna * RealEnchantmentHelper.LEVELS_PER_ETERNA;
         for (long seed = 0L; seed < 256L; seed++) {
-            int cost = RealEnchantmentHelper.getEnchantmentCost(seeded(seed), 0, level, ItemStack.EMPTY);
+            int cost = RealEnchantmentHelper.getEnchantmentCost(seeded(seed), 0, eterna, ItemStack.EMPTY);
             assertTrue(cost >= 1, "slot 0 must be floored at 1; got " + cost);
-            assertTrue(cost <= Math.round(level * 0.4F),
+            assertTrue(cost <= Math.round(enchantLevel * 0.4F),
                     "slot 0 must be <= 40% of slot 2; got " + cost);
         }
     }
 
     @Test
     void getEnchantmentCost_slot1Bounds_matchMidRange() {
-        int level = 50;
+        int eterna = 50;
+        int enchantLevel = eterna * RealEnchantmentHelper.LEVELS_PER_ETERNA;
         for (long seed = 0L; seed < 256L; seed++) {
-            int cost = RealEnchantmentHelper.getEnchantmentCost(seeded(seed), 1, level, ItemStack.EMPTY);
-            assertTrue(cost >= Math.max(1, Math.round(level * 0.6F)),
+            int cost = RealEnchantmentHelper.getEnchantmentCost(seeded(seed), 1, eterna, ItemStack.EMPTY);
+            assertTrue(cost >= Math.max(1, Math.round(enchantLevel * 0.6F)),
                     "slot 1 must be >= 60% of slot 2; got " + cost);
-            assertTrue(cost <= Math.round(level * 0.8F),
+            assertTrue(cost <= Math.round(enchantLevel * 0.8F),
                     "slot 1 must be <= 80% of slot 2; got " + cost);
         }
     }
@@ -98,8 +101,9 @@ class RealEnchantmentHelperTest {
 
     @Test
     void getEnchantmentCost_eternaBeyondConfigCap_clampsToCap() {
-        // Default config cap is 100 (null config falls back to RealEnchantmentHelper.DEFAULT_MAX_ETERNA).
-        assertEquals(RealEnchantmentHelper.DEFAULT_MAX_ETERNA,
+        // Eterna clamps to the config cap (null config falls back to DEFAULT_MAX_ETERNA), then the
+        // level scale doubles it: a 50 Eterna cap yields a top enchanting level of 100.
+        assertEquals(RealEnchantmentHelper.DEFAULT_MAX_ETERNA * RealEnchantmentHelper.LEVELS_PER_ETERNA,
                 RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 200F, ItemStack.EMPTY));
     }
 

@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.common;
 
+import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -43,7 +44,10 @@ public final class EnchantmentBrowserTooltip {
         for (int i = 0; i < record.powerWindows().size(); i++) {
             int level = i + 1;
             int[] window = record.powerWindows().get(i);
-            tooltip.add(Component.literal("Level " + level + ": Eterna " + window[0] + " - " + window[1]).withStyle(ChatFormatting.DARK_GREEN));
+            // window holds enchanting-level power bounds; show the Eterna needed to reach them.
+            int loEterna = RealEnchantmentHelper.powerToEterna(window[0]);
+            int hiEterna = RealEnchantmentHelper.powerToEterna(window[1]);
+            tooltip.add(Component.literal("Level " + level + ": Eterna " + loEterna + " - " + hiEterna).withStyle(ChatFormatting.DARK_GREEN));
         }
 
         tooltip.add(Component.empty());

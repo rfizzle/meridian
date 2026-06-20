@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.compat.client;
 
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
+import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -81,8 +82,11 @@ public final class EnchantmentBrowserCardRenderer {
                 COLOR_MAX_LEVEL, false);
 
         if (!record.powerWindows().isEmpty()) {
-            int lo = record.powerWindows().get(0)[0];
-            int hi = record.powerWindows().get(record.powerWindows().size() - 1)[1];
+            // Power windows are in enchanting-level units; the card phrases them as the Eterna a
+            // player must reach (level = Eterna × LEVELS_PER_ETERNA), so convert back here.
+            int lo = RealEnchantmentHelper.powerToEterna(record.powerWindows().get(0)[0]);
+            int hi = RealEnchantmentHelper.powerToEterna(
+                    record.powerWindows().get(record.powerWindows().size() - 1)[1]);
             drawLine(graphics, font, x, y, line++,
                     Component.translatable("gui.meridian.enchant_info.eterna_gate", lo + "–" + hi).getString(),
                     COLOR_ETERNA, false);
