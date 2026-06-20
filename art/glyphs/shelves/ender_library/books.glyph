@@ -1,0 +1,64 @@
+# ender_library books atlas.
+size: 32
+
+legend:
+  . transparent
+  P #9a9670
+  h #bcb890
+  m #6a6650
+  H #aaa67e
+  F #7e7a5e
+  k #16201d
+  K #0c1410
+  p #2f8f8a
+  q #1c5a56
+  Q #103a36
+  l #4fc0b8
+  y #e6d68a
+  o #b0a050
+  t #3aa6b8
+  T #226e7a
+  a #8a5fce
+  A #5a3596
+  u #4fb0a0
+  U #2a7068
+  g #caa030
+  G #8a6a18
+  n #b8485a
+  N #7a2838
+  W #e4ecd8
+  w #b6c0a8
+
+grid:
+  WWWWWWWWWWWWWWWWWWWWWWWWgggggggg
+  WWWWWWWWWWWWWWWWWWWWWWWWgggggggg
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  GGGGGGGGGGGGTTTTTTTTTTTTuuuuuuuu
+  WWWWWWWWWWWW............uuuuuuuu
+  WWWWWWWWWWWW............uuuuuuuu
+  yyyyyyyyyyyy............gggggggg
+  yyyyyyyyyyyy............gggggggg
+  ................................
+  ................................
+  ................................
+  ................................
+  ................................
+  ................................
+  WWWWWWWWWW......................
+  WWWWWWWWWW......................
+  NNNNNNNNNN..oooooooooooo........
+  NNNNNNNNNN..oooooooooooo........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  NNNNNNNNNN..AAAAAAAAAAAA........
+  WWWWWWWWWW..oooooooooooo........
+  WWWWWWWWWW..oooooooooooo........
