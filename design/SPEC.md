@@ -2,7 +2,7 @@
 
 Minecraft 1.21.1 Fabric mod. Enchanting overhaul.
 
-**Asset philosophy:** Custom pixel-art textures for mod-specific visuals (authored through Concord's glyph pipeline — `/glyph`, the `mc-textures` skill, concord `design/DESIGN-SYSTEM.md` §8 — with `.glyph` sources kept beside the masters; the XP-tome item ladder ships its `.glyph` sources under `art/tome/`). The shelf and block textures are sourced from Zenith (originally Apotheosis) per the README's attribution, not authored fresh. Sounds stay **fully vanilla** — Meridian ships no custom `SoundEvent`s and no `sounds.json`; every cue (enchanting hum, anvil use, sculk bloom, library interaction) maps to a vanilla `SoundEvent`, which is the right call for organic foley. Custom synthesized cues would be added through the `/sfx` pipeline (concord `design/DESIGN-SYSTEM.md` §9) only where a sound benefits from its own identity; none currently do. Custom particles are used for mod-specific table ambiance: four element-themed enchant-glyph particle families (`enchant_fire`, `enchant_water`, `enchant_sculk`, `enchant_end`) whose textures are per-letter Standard Galactic Alphabet rune sprites (`sga_a_*` … `sga_z_*`) drawn in element palettes, plus vanilla `ParticleTypes.ENCHANT` / `SCULK_SOUL` where vanilla already reads correctly.
+**Asset philosophy:** Custom pixel-art textures for mod-specific visuals (authored through Concord's glyph pipeline — `/glyph`, the `mc-textures` skill, concord `design/DESIGN-SYSTEM.md` §8 — with `.glyph` sources kept beside the masters; the XP-tome item ladder ships its `.glyph` sources under `art/tome/`). The shelf and block textures are likewise original pixel art authored through the glyph pipeline — no asset is Zenith/Apotheosis-derived. Sounds stay **fully vanilla** — Meridian ships no custom `SoundEvent`s and no `sounds.json`; every cue (enchanting hum, anvil use, sculk bloom, library interaction) maps to a vanilla `SoundEvent`, which is the right call for organic foley. Custom synthesized cues would be added through the `/sfx` pipeline (concord `design/DESIGN-SYSTEM.md` §9) only where a sound benefits from its own identity; none currently do. Custom particles are used for mod-specific table ambiance: four element-themed enchant-glyph particle families (`enchant_fire`, `enchant_water`, `enchant_sculk`, `enchant_end`) whose textures are per-letter Standard Galactic Alphabet rune sprites (`sga_a_*` … `sga_z_*`) drawn in element palettes, plus vanilla `ParticleTypes.ENCHANT` / `SCULK_SOUL` where vanilla already reads correctly.
 
 ---
 
@@ -172,7 +172,7 @@ Sightshelves and rectifiers grant no Eterna/Quanta/Arcana and are deliberately *
 ### Implementation Notes
 - Most shelves are plain `EnchantingShelfBlock`; only sculk, filtering, and treasure shelves have custom classes/BEs.
 - Material/strength varies by tier (wood 0.75, stone baseline 1.75, deep 2.5, sculk 3.5, end 4.5–5.0); stone+ shelves require the correct tool to drop.
-- Shelf textures are sourced from Zenith/Apotheosis, not authored via `/glyph`.
+- Shelf textures are original pixel art authored via `/glyph`, not Zenith/Apotheosis-derived.
 
 ---
 
