@@ -30,7 +30,7 @@ The vanilla enchanting table's single "power" value is replaced by five independ
 
 | Stat | Effect |
 |------|--------|
-| **Eterna** | Maximum enchanting level (scales 0–50, replacing vanilla's 0–30 cap) |
+| **Eterna** | Drives the maximum enchanting level — two levels per Eterna point, so the 0–50 Eterna range scales enchanting levels up to 100 (vanilla caps at 30) |
 | **Quanta** | Upper bound of the random power roll — higher means more variance |
 | **Arcana** | Biases selection toward rarer, more obscure enchantments |
 | **Rectification** | Reduces Quanta's negative variance for more consistent results |

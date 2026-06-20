@@ -25,7 +25,7 @@
             },
             {
               "q": "Do vanilla enchantments still exist? Can they go higher than vanilla levels?",
-              "a": "Yes \u2014 vanilla enchantments participate in Meridian's system alongside the 75 original ones, and the table's level range scales to 0\u201350 instead of vanilla's 0\u201330 cap. Per-enchantment overrides work on <strong class='text-bone'>any enchantment, vanilla or modded</strong>: the <a href='/config.html#enchantment-overrides' class='text-accent hover:text-accent2 underline'>config reference</a> includes an example that raises <code class='text-accent2'>minecraft:sharpness</code> to <code class='text-accent2'>maxLevel: 10</code> with custom linear power functions, while capping its loot-table level at 5."
+              "a": "Yes \u2014 vanilla enchantments participate in Meridian's system alongside the 75 original ones, and the table's level range scales up to 100 (two enchanting levels per Eterna point, with Eterna itself capped at 50) instead of vanilla's 0\u201330 cap. Per-enchantment overrides work on <strong class='text-bone'>any enchantment, vanilla or modded</strong>: the <a href='/config.html#enchantment-overrides' class='text-accent hover:text-accent2 underline'>config reference</a> includes an example that raises <code class='text-accent2'>minecraft:sharpness</code> to <code class='text-accent2'>maxLevel: 10</code> with custom linear power functions, while capping its loot-table level at 5."
             }
           ]
         }

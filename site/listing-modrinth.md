@@ -14,7 +14,7 @@ The vanilla enchanting table's single "bookshelf power" is gone. In its place, f
 
 | Stat | What it does |
 |---|---|
-| **Eterna** | Sets the maximum enchanting level (scales up to 50, far beyond vanilla's 30) |
+| **Eterna** | Drives the maximum enchanting level — two levels per Eterna point, scaling up to 100, far beyond vanilla's 30 |
 | **Quanta** | Increases the upper bound of randomness — higher risk, higher reward |
 | **Arcana** | Biases selection toward rarer enchantments and increases the number of enchantments applied |
 | **Rectification** | Tames Quanta's chaos, narrowing the variance for more predictable results |

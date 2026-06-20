@@ -232,8 +232,8 @@ class MeridianEnchantmentLogicTest {
         StatCollection stats = new StatCollection(30F, 0F, 0F, 0F, 0, 30F, Set.of(), false);
         MeridianEnchantmentLogic.SlotState[] states = MeridianEnchantmentLogic.recompute(
                 stats, new ItemStack(Items.DIAMOND_SWORD), 7, 3, false, false, registry, RandomSource.create());
-        assertEquals(30, states[2].cost(),
-                "slot 2 is always round(eterna) — this anchors the level displayed on the top row");
+        assertEquals(30 * RealEnchantmentHelper.LEVELS_PER_ETERNA, states[2].cost(),
+                "slot 2 is round(eterna × 2) — this anchors the level shown on the top row");
     }
 
     @Test

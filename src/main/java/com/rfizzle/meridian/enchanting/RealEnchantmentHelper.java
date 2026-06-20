@@ -30,23 +30,39 @@ import java.util.Set;
 /**
  * Core math for translating enchanting stats into concrete table outputs. Ported from
  * Zenith's {@code RealEnchantmentHelper}, re-authored against 1.21.1's dynamic enchantment
- * registry. The stat semantics are those of our DESIGN.md: {@code eterna} is the target
- * maximum level (0–50) rather than Zenith's doubled "power" scale, so slot 2 maps directly
- * to {@code round(eterna)} with no extra multiplier.
+ * registry. The {@code eterna} stat (0–50) maps to an enchanting level via
+ * {@link #LEVELS_PER_ETERNA} (×2), so slot 2 is {@code round(eterna * 2)} and the Eterna cap
+ * yields a top enchanting level of 100 (22.5 Eterna → 45, 30 → 60, 50 → 100).
  */
 public final class RealEnchantmentHelper {
 
     /** Fallback when called before {@link Meridian#onInitialize} has populated the config. */
     public static final int DEFAULT_MAX_ETERNA = 50;
 
+    /**
+     * Enchanting levels granted per point of Eterna: every Eterna point raises the enchanting level
+     * by two, so the Eterna cap of {@link #DEFAULT_MAX_ETERNA} yields a top enchanting level of 100.
+     */
+    public static final int LEVELS_PER_ETERNA = 2;
+
     private RealEnchantmentHelper() {
+    }
+
+    /**
+     * Inverse of the {@link #LEVELS_PER_ETERNA} power scale: the smallest Eterna stat value that
+     * reaches the given enchanting power level. Used by the recipe-browser displays to phrase an
+     * enchantment's power window as the Eterna a player must accumulate, since the table stat caps
+     * at {@link #DEFAULT_MAX_ETERNA} while raw power windows are expressed in level units.
+     */
+    public static int powerToEterna(int power) {
+        return Math.ceilDiv(Math.max(0, power), LEVELS_PER_ETERNA);
     }
 
     /**
      * Computes the XP-level cost for the given preview slot.
      *
-     * <p>Slot 2 returns {@code round(eterna)} deterministically. Slot 1 and slot 0 scale down
-     * to {@code [60%, 80%]} and {@code [20%, 40%]} of slot 2 respectively, drawn from
+     * <p>Slot 2 returns {@code round(eterna * LEVELS_PER_ETERNA)} deterministically. Slot 1 and
+     * slot 0 scale down to {@code [60%, 80%]} and {@code [20%, 40%]} of slot 2 respectively, drawn from
      * {@code rand}. The returned cost is floored at 1 for slots 0 and 1 to stay inside the
      * vanilla "usable slot" invariant.
      *
@@ -64,7 +80,8 @@ public final class RealEnchantmentHelper {
     public static int getEnchantmentCost(RandomSource rand, int slot, float eterna, ItemStack stack) {
         int maxEternaCfg = resolveMaxEterna();
         float clamped = Mth.clamp(eterna, 0F, (float) maxEternaCfg);
-        int level = Math.round(clamped);
+        // Double before rounding: a fractional Eterna total like 22.5 must read 45, not 46.
+        int level = Math.round(clamped * LEVELS_PER_ETERNA);
         if (slot == 2) {
             return level;
         }

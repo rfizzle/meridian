@@ -105,7 +105,7 @@
               "title": "Eterna",
               "titleTone": "bone",
               "html": [
-                "Maximum enchanting level cap. Replaces vanilla's 0\u201330 range with 0\u201350. Higher Eterna unlocks higher-tier enchantments and table crafting recipes. Each vanilla bookshelf provides +1 Eterna (capped at 15)."
+                "Drives the maximum enchanting level. Each Eterna point grants two enchanting levels, so the 0\u201350 Eterna range yields enchanting levels up to 100 \u2014 far beyond vanilla's 0\u201330. Higher Eterna unlocks higher-tier enchantments and table crafting recipes. Each vanilla bookshelf provides +1 Eterna (capped at 15)."
               ]
             },
             {

@@ -42,7 +42,7 @@
           "type": "list",
           "spacing": 3,
           "items": [
-            "<strong class='text-bone'>Eterna</strong> — your level cap, 0–50 (vanilla stops at 30). Higher Eterna unlocks stronger enchantments and gates the table's crafting recipes. The headline number you're always pushing up.",
+            "<strong class='text-bone'>Eterna</strong> — your level cap. Each point grants two enchanting levels, so the 0–50 Eterna range yields enchanting levels up to 100 (vanilla stops at 30). Higher Eterna unlocks stronger enchantments and gates the table's crafting recipes. The headline number you're always pushing up.",
             "<strong class='text-bone'>Quanta</strong> — variance. It raises the upper bound of the random power roll, so high Quanta means bigger swings: occasionally amazing, occasionally terrible.",
             "<strong class='text-bone'>Arcana</strong> — rarity bias. Higher Arcana shifts the enchantment pool toward rarer, more obscure results, and many crafting recipes require it.",
             "<strong class='text-bone'>Rectification</strong> — the tame for Quanta. It cancels Quanta's negative variance, so high Quanta + high Rectification means consistently strong rolls without the garbage outcomes.",
