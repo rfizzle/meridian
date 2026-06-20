@@ -43,8 +43,8 @@
 | Device shelves — rectifier `t1/t2/t3`, sight `t1/t2`, treasure (sides + tops) | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{rectifier,rectifier_t2,rectifier_t3,sight_side,sightshelf_t2,treasure_shelf_side}.png` + `{rectifier_t2_top,rectifier_t3_top,sight_top,sightshelf_t2_top,treasure_shelf_top}.png` (rectifier t1 reuses `prismarine_shelf_top`) |
 | Enchantment library (`library/`, `ender_library/` — 5 faces each; `books` is a UV atlas mapped to the book stacks) | `art/glyphs/shelves/{library,ender_library}/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{library,ender_library}/{side,side2,top,bottom,books}.png` |
 | Filtering shelf (`filtering_shelf/` — `side`/`top` faces + `empty`/`occupied` slot atlases, vanilla chiseled-bookshelf UVs) | `art/glyphs/shelves/filtering_shelf/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/filtering_shelf/{side,top,empty,occupied}.png` |
-| Enchanting table GUI | **MISSING** | `assets/meridian/textures/gui/enchanting_table.png` |
-| Library GUI | **MISSING** | `assets/meridian/textures/gui/library.png` |
+| Enchanting table GUI | `art/gui/guigen.py` (stitched atlas compositor) | `assets/meridian/textures/gui/enchanting_table.png` |
+| Library GUI | `art/gui/guigen.py` (stitched atlas compositor) | `assets/meridian/textures/gui/library.png` |
 | SGA rune particles (104: a–z × fire/water/sculk/end) | `art/glyphs/sga/*.glyph` (26 shapes) + `render-sga.py` | `assets/meridian/textures/particle/sga_*.png` |
 
 ## Not yet created
