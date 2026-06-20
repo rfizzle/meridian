@@ -244,7 +244,7 @@ if (FabricLoader.getInstance().isModLoaded("meridian")) {
 
 ## Credits & Attribution
 
-Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by TheWinABagel. All code is a fresh 1.21.1 rewrite — no source was copied. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the reference for the enchanting table subsystem.
+Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by TheWinABagel. All code, data, and art are original to Meridian — no source or assets were copied. The enchanting subsystem reimplements the stat schema, shelf roster, and recipe shapes as a fresh design reference only.
 
 All 75 enchantments are original to Meridian — names, IDs, weights, costs, effect definitions, and description text are authored fresh.
 
@@ -264,7 +264,7 @@ Install any, combine all.
 ## License
 
 - **Code:** MIT
-- **Textures:** Sourced from Zenith (originally Apotheosis).
+- **Art & textures:** Original to Meridian.
 - **Enchantment data (75 of 75):** Original to Meridian.
 
 © 2026 rfizzle. Meridian is not affiliated with Mojang Studios or Microsoft.
