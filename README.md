@@ -47,7 +47,7 @@ Stats are contributed by nearby shelf blocks and are fully data-driven — serve
 - **Mid** — Infused and upgraded variants (Infused Hellshelf, Glowing Hellshelf, Blazing Hellshelf, Infused Seashelf, Crystal Seashelf, Heart Seashelf)
 - **Late** — Deepshelf, Echoing Deepshelf, Soul-Touched Deepshelf, Echoing Sculkshelf, Soul-Touched Sculkshelf
 - **End** — Endshelf, Pearl Endshelf, Draconic Endshelf (the only way to reach Eterna 50)
-- **Utility** — Sightshelf (bonus Clues), Rectifier (bonus Rectification), Filtering Shelf (blacklist specific enchantments), Treasure Shelf (unlocks treasure enchantments like Mending)
+- **Utility** — Sightshelf (bonus Clues), Rectifier (bonus Rectification), Filtering Shelf (blacklist specific enchantments), Deepshelf of Arcane Treasures (unlocks treasure enchantments like Mending)
 
 Higher-tier shelves are crafted at the enchanting table itself using stat-gated recipes — building your shelf collection *is* the progression.
 
@@ -58,7 +58,7 @@ The enchanting table doubles as a stat-gated crafting station. When the table's 
 - Tier-2 and tier-3 shelf upgrades
 - Infused Breath (from Dragon's Breath — key material for end-tier shelves)
 - Tome upgrades (Scrap → Improved Scrap → Extraction)
-- Basic Library → Ender Library upgrade
+- Basic Library → Library of Alexandria upgrade
 - Budding Amethyst, Experience Bottles, Echo Shards, and more
 
 ### Enchantment Library
@@ -66,7 +66,7 @@ The enchanting table doubles as a stat-gated crafting station. When the table's 
 A two-tier storage block that pools enchanted books into a per-enchantment point bank, then dispenses them deterministically for XP:
 
 - **Basic Library** — stores enchantments up to level 16
-- **Ender Library** — stores enchantments up to level 31 (upgrade preserves stored books)
+- **Library of Alexandria** — stores enchantments up to level 31 (upgrade preserves stored books)
 
 Points follow an exponential curve: `2^(level - 1)` per book deposited. The library tracks both accumulated points *and* the highest level ever deposited per enchantment — you can't grind thousands of Sharpness I books to pull a Sharpness V without first depositing at least one Sharpness V book.
 

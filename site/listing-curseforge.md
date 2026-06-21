@@ -48,7 +48,7 @@ Every shelf contributes a unique combination of stats, and they're organized int
 - Hellshelf of Sight / Hellshelf of Masterful Sight — Boost Clues
 - Shelf of Seabound / Hellbound / End-Fused Rectification — Boost Rectification
 - Filtering Shelf — Blacklist specific enchantments from your table
-- Treasure Shelf — Unlock treasure-tier enchantments (like Mending) at the table
+- Deepshelf of Arcane Treasures — Unlock treasure-tier enchantments (like Mending) at the table
 
 Each shelf tier displays themed enchanting particles — fire, water, end, and sculk.
 
@@ -97,7 +97,7 @@ Craftable items include:
 - **Shelf upgrades** — Infused Hellshelf, Infused Seashelf, Deepshelf, and more
 - **Key materials** — Infused Breath (from Dragon's Breath), Echo Shards, Budding Amethyst
 - **Tome progression** — Scrap Tome → Improved Scrap Tome → Extraction Tome
-- **Library upgrades** — Basic Library → Ender Library (preserves stored books)
+- **Library upgrades** — Basic Library → Library of Alexandria (preserves stored books)
 - **Rare items** — Enchanted Golden Apple, Heart of the Sea, Totem of Undying, Golden Apple, Golden Carrot
 - **XP conversion** — Honey to Experience Bottles (three tiers)
 
@@ -112,7 +112,7 @@ A dedicated storage system for pooling enchanted books. Drop books into the libr
 ### Basic Library
 - Stores enchantments up to level 16.
 
-### Ender Library
+### Library of Alexandria
 - Stores enchantments up to level 31. Upgrading preserves all stored enchantments.
 
 The library tracks both accumulated points and the highest level you've ever deposited. You can't grind thousands of Sharpness I books to pull Sharpness V — you need to deposit at least one Sharpness V first. Hopper automation is supported for bulk deposits.
@@ -233,7 +233,7 @@ Recommended screenshots, roughly in this order:
    slot recipe (e.g., crafting an Infused Hellshelf or Extraction Tome). Include
    the XP cost display.
 
-7. **Enchantment Library** — Both Basic and Ender Library blocks placed, with
+7. **Enchantment Library** — Both Basic Library and Library of Alexandria blocks placed, with
    the library GUI open showing stored enchantments and their point banks.
 
 8. **Tome Usage** — An anvil screen showing an Extraction Tome being applied to

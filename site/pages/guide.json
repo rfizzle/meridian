@@ -1,11 +1,11 @@
 {
   "nav": "Guide",
   "metaTitle": "Getting Started — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "A progression walkthrough — install Meridian, build your first enchanting table setup, learn the five stats, and climb from vanilla bookshelves to the Ender Library.",
+  "metaDescription": "A progression walkthrough — install Meridian, build your first enchanting table setup, learn the five stats, and climb from vanilla bookshelves to the Library of Alexandria.",
   "ogTitle": "Getting Started — Meridian",
   "ogDescription": "Install Meridian, learn the five enchanting stats, and progress from vanilla bookshelves to Eterna 50.",
   "title": "Getting Started",
-  "lede": "A progression walkthrough — install Meridian, build your first table, learn what the five stats actually mean for your rolls, and climb shelf tier by shelf tier toward Eterna 50 and the Ender Library.",
+  "lede": "A progression walkthrough — install Meridian, build your first table, learn what the five stats actually mean for your rolls, and climb shelf tier by shelf tier toward Eterna 50 and the Library of Alexandria.",
   "width": "4xl",
   "scale": "lg",
   "sections": [
@@ -87,7 +87,7 @@
           "items": [
             "<strong class='text-bone'>Rectification Shelves</strong> — pure Rectification, nothing else. Three tiers: <strong class='text-bone'>Seabound +10</strong>, <strong class='text-bone'>Hellbound +15</strong>, <strong class='text-bone'>End-Fused +25</strong> per shelf. Mix in one or two whenever Hellshelves make your results swing wildly.",
             "<strong class='text-bone'>Hellshelves of Sight</strong> — pure Clues (+1, or +2 for the Masterful variant). More of the result revealed in the tooltip before you spend levels.",
-            "<strong class='text-bone'>Treasure Shelf</strong> — easy to miss, and important: <strong class='text-bone'>treasure enchantments like Mending will not appear at the table at all</strong> unless a Treasure Shelf is placed nearby (or you flip the <code class='text-accent2'>allowTreasureWithoutShelf</code> <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config option</a>). If you've been wondering where Mending went — this is where."
+            "<strong class='text-bone'>Deepshelf of Arcane Treasures</strong> — easy to miss, and important: <strong class='text-bone'>treasure enchantments like Mending will not appear at the table at all</strong> unless a Deepshelf of Arcane Treasures is placed nearby (or you flip the <code class='text-accent2'>allowTreasureWithoutShelf</code> <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config option</a>). If you've been wondering where Mending went — this is where."
           ]
         },
         { "type": "note", "html": "All three are detailed under <a href='/shelves.html#utility-shelves' class='text-accent hover:text-accent2 underline'>utility shelves</a>, alongside niche tools like the Stoneshelf, Beeshelf, and Melonshelf for fine-tuning stats." }
@@ -119,7 +119,7 @@
         { "type": "sub", "title": "The End — Eterna 50", "blocks": [
           { "type": "prose", "html": [
             "Endshelves finish the climb. <strong class='text-bone'>Pearlescent Endshelves</strong> give balanced stats (+5 Eterna with Quanta and Arcana alongside); <strong class='text-bone'>Draconic Endshelves</strong> are pure power — <strong class='text-bone'>+10 Eterna each and the only shelf that can reach the Eterna 50 cap</strong>. A typical end-game ring mixes Draconics for the cap with Pearlescents for everything else: see the <a href='/shelves.html#setup-end-game' class='text-accent hover:text-accent2 underline'>end-game setup</a>.",
-            "The aspirational capstone is the <strong class='text-bone'>Ender Library upgrade</strong> — the hardest recipe in the mod, demanding <strong class='text-bone'>Eterna exactly 50, Quanta 45–50, and Arcana exactly 100</strong> simultaneously. Balancing all fifteen slots to hit three thresholds at once is a puzzle in itself; the <a href='/shelves.html#setup-ender-library' class='text-accent hover:text-accent2 underline'>Ender Library strategy</a> walks through it."
+            "The aspirational capstone is the <strong class='text-bone'>Library of Alexandria upgrade</strong> — the hardest recipe in the mod, demanding <strong class='text-bone'>Eterna exactly 50, Quanta 45–50, and Arcana exactly 100</strong> simultaneously. Balancing all fifteen slots to hit three thresholds at once is a puzzle in itself; the <a href='/shelves.html#setup-ender-library' class='text-accent hover:text-accent2 underline'>Library of Alexandria strategy</a> walks through it."
           ] }
         ] }
       ]
@@ -134,7 +134,7 @@
           "type": "list",
           "spacing": 3,
           "items": [
-            "<strong class='text-bone'>Enchantment Libraries</strong> — pooling storage that consolidates enchanted books into per-enchantment point banks, dispensed deterministically for XP. Basic Libraries cap at level 16; the Ender Library doubles that to level 31.",
+            "<strong class='text-bone'>Enchantment Libraries</strong> — pooling storage that consolidates enchanted books into per-enchantment point banks, dispensed deterministically for XP. Basic Libraries cap at level 16; the Library of Alexandria doubles that to level 31.",
             "<strong class='text-bone'>Salvage Tomes</strong> — extract enchantments in the anvil: <strong class='text-bone'>Scrap</strong> (one random, destroys the item), <strong class='text-bone'>Improved Scrap</strong> (all, destroys the item), <strong class='text-bone'>Extraction</strong> (all, preserves the item).",
             "<strong class='text-bone'>XP Tomes</strong> — a ladder of consumables that bank experience for later. Right-click to deposit one level, shift-right-click to withdraw one back to yourself; a lime durability bar shows how full each tome is. Craft each tier at the table from a Dormant XP Tome — <strong class='text-bone'>XP Tome I</strong> holds 10 levels, <strong class='text-bone'>II</strong> holds 30, and <strong class='text-bone'>III</strong> holds 50, with higher tiers gated behind higher Eterna.",
             "<strong class='text-bone'>Anvil upgrades</strong> — a <strong class='text-bone'>Prismatic Web</strong> strips every curse from an item, and an <strong class='text-bone'>Iron Block</strong> repairs a chipped or damaged anvil by one tier.",

@@ -107,7 +107,17 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * Shelves whose midpoint fails the transmitter check contribute neither stats nor context.
      */
     public static StatCollection gatherStats(Level level, BlockPos tablePos) {
-        return INSTANCE.gatherStatsFromOffsets(
+        return gatherRawStats(level, tablePos).clamped();
+    }
+
+    /**
+     * Like {@link #gatherStats(Level, BlockPos)} but returns the raw, <em>unclamped</em> shelf
+     * aggregation so the enchanting menu can fold in the table baselines before the single clamp
+     * (see {@link StatCollection#applyBaselines(int)}). Display/integration callers that only want
+     * the final shelf totals should use {@link #gatherStats(Level, BlockPos)} instead.
+     */
+    public static StatCollection gatherRawStats(Level level, BlockPos tablePos) {
+        return INSTANCE.rawStatsFromOffsets(
                 EnchantingTableBlock.BOOKSHELF_OFFSETS,
                 offset -> {
                     BlockPos shelfPos = tablePos.offset(offset);
@@ -144,6 +154,21 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     StatCollection gatherStatsFromOffsets(
+            List<BlockPos> offsets,
+            Function<BlockPos, EnchantingStats> lookup,
+            Predicate<BlockPos> transmitterCheck,
+            Function<BlockPos, Object> contextLookup) {
+        return rawStatsFromOffsets(offsets, lookup, transmitterCheck, contextLookup).clamped();
+    }
+
+    /**
+     * Raw, <em>unclamped</em> aggregation across {@code offsets}. Eterna uses the step-ladder
+     * (which bounds its own upper end); quanta/arcana/rectification are returned as signed sums
+     * and clues as a raw count, so a caller that folds in table baselines can apply the single
+     * {@link StatCollection#clamped()} pass afterwards (see {@link StatCollection#applyBaselines}).
+     * Most callers want {@link #gatherStatsFromOffsets}, which clamps immediately.
+     */
+    StatCollection rawStatsFromOffsets(
             List<BlockPos> offsets,
             Function<BlockPos, EnchantingStats> lookup,
             Predicate<BlockPos> transmitterCheck,
@@ -194,16 +219,11 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
                 eterna += entry.getValue();
             }
         }
-        float clampedEterna = Math.max(0F, eterna);
-        float clampedQuanta = Math.max(0F, Math.min(quanta, 100F));
-        float clampedArcana = Math.max(0F, Math.min(arcana, 100F));
-        float clampedRectification = Math.max(0F, Math.min(rectification, 100F));
-        int clampedClues = Math.max(0, clues);
         Set<ResourceKey<Enchantment>> finalBlacklist = blacklist == null
                 ? Set.of()
                 : Set.copyOf(blacklist);
         return new StatCollection(
-                clampedEterna, clampedQuanta, clampedArcana, clampedRectification, clampedClues,
+                eterna, quanta, arcana, rectification, clues,
                 maxEterna, finalBlacklist, treasureAllowed);
     }
 
