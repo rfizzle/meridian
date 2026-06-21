@@ -73,7 +73,7 @@ class SightshelfStatsTest {
     }
 
     @Test
-    void threeSightshelfT2_clampedToFiveClues() throws Exception {
+    void threeSightshelfT2_accumulateToSixClues() throws Exception {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         EnchantingStats sightT2 = loadShippedStats("sightshelf_t2.json");
 
@@ -81,11 +81,11 @@ class SightshelfStatsTest {
                 new BlockPos(0, 0, 0), new BlockPos(1, 0, 0), new BlockPos(2, 0, 0));
         StatCollection result = reg.gatherStatsFromOffsets(offsets, pos -> sightT2);
 
-        assertEquals(EnchantingStatRegistry.MAX_CLUES, result.clues(),
-                "three sightshelf_t2 raw clues (6) clamped to MAX_CLUES (5)");
+        assertEquals(6, result.clues(),
+                "three sightshelf_t2 (2 clues each) accumulate to 6 — clues are uncapped");
         assertEquals(0F, result.maxEterna(), 1e-6F,
-                "a pair of sightshelves leaves the Eterna ceiling at zero");
+                "a trio of sightshelves leaves the Eterna ceiling at zero");
         assertEquals(0F, result.eterna(), 1e-6F,
-                "a pair of sightshelves contributes zero Eterna");
+                "a trio of sightshelves contributes zero Eterna");
     }
 }

@@ -460,10 +460,10 @@ public class ShelfScanGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    // --- S-2.2j: three sightshelf_t2 → clues clamped from 6 to MAX_CLUES (5) ---
+    // --- S-2.2j: three sightshelf_t2 → clues accumulate to 6 (uncapped, matching Zenith) ---
 
     @GameTest(template = "meridian:shelf_scan_9x4x9")
-    public void threeSightshelfT2ClampCluesAtMax(GameTestHelper helper) {
+    public void threeSightshelfT2AccumulateClues(GameTestHelper helper) {
         helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
         BlockPos offsetA = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
         BlockPos offsetB = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(1);
@@ -475,9 +475,10 @@ public class ShelfScanGameTest implements FabricGameTest {
         BlockPos absTablePos = helper.absolutePos(TABLE_POS);
         StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
 
-        if (stats.clues() != EnchantingStatRegistry.MAX_CLUES) {
-            helper.fail("Expected clues=" + EnchantingStatRegistry.MAX_CLUES
-                    + " (clamped from 6), got " + stats.clues());
+        int expected = 6;
+        if (stats.clues() != expected) {
+            helper.fail("Expected clues=" + expected
+                    + " (3 sightshelf_t2 × 2, uncapped), got " + stats.clues());
             return;
         }
         helper.succeed();

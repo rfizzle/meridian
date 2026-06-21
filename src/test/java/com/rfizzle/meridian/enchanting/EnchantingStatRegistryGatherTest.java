@@ -316,15 +316,27 @@ class EnchantingStatRegistryGatherTest {
     }
 
     @Test
-    void gather_singleShelfWithHighClues_clampedToMax() {
+    void gather_highClues_notClamped() {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         EnchantingStats overclued = new EnchantingStats(0F, 0F, 0F, 0F, 0F, 10);
 
         StatCollection result = reg.gatherStatsFromOffsets(
                 List.of(new BlockPos(0, 0, 0)), pos -> overclued);
 
-        assertEquals(EnchantingStatRegistry.MAX_CLUES, result.clues(),
-                "clues exceeding MAX_CLUES are clamped to the cap");
+        assertEquals(10, result.clues(),
+                "clues have no upper cap (matching Zenith) — high contributions pass through");
+    }
+
+    @Test
+    void gather_negativeClues_flooredAtZero() {
+        EnchantingStatRegistry reg = new EnchantingStatRegistry();
+        EnchantingStats declued = new EnchantingStats(0F, 0F, 0F, 0F, 0F, -4);
+
+        StatCollection result = reg.gatherStatsFromOffsets(
+                List.of(new BlockPos(0, 0, 0)), pos -> declued);
+
+        assertEquals(0, result.clues(),
+                "clues are floored at 0 even though there is no upper cap");
     }
 
     @Test
