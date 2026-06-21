@@ -39,7 +39,7 @@
             },
             {
               "title": "Clues",
-              "html": ["Reveals extra enchantments in the tooltip preview before you commit. Each point shows one more result."]
+              "html": ["Reveals extra enchantments in the tooltip preview before you commit. Each point shows one more result — stack enough Clues and the preview reveals every enchantment the slot will roll."]
             }
           ]
         }

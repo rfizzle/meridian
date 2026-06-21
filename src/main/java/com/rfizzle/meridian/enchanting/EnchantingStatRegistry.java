@@ -55,9 +55,6 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     /** Vanilla-shelf safety net: applied when a block is in the vanilla power-provider tag but absent from the datapack registry. */
     public static final EnchantingStats VANILLA_FALLBACK = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
 
-    /** Hard ceiling on gathered clues. Matches Zenith's cap — beyond 3 the UI is already saturated. */
-    public static final int MAX_CLUES = 3;
-
     private static final String RESOURCE_DIR = "enchanting_stats";
     private static final String JSON_SUFFIX = ".json";
 
@@ -100,7 +97,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * The final eterna is floored at 0.
      *
      * <p>{@code quanta}, {@code arcana}, and {@code rectification} are clamped to
-     * {@code [0, 100]}; {@code clues} is clamped to {@code [0, MAX_CLUES]}.
+     * {@code [0, 100]}; {@code clues} is floored at 0 (no upper bound — matching Zenith,
+     * the natural limit is the per-slot candidate pool the clue list draws from).
      *
      * <p>Filtering-shelf blacklists and treasure-shelf flags are picked up via the context
      * lookup: any in-range {@link BlockPos} whose block entity implements {@link BlacklistSource}
@@ -200,7 +198,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         float clampedQuanta = Math.max(0F, Math.min(quanta, 100F));
         float clampedArcana = Math.max(0F, Math.min(arcana, 100F));
         float clampedRectification = Math.max(0F, Math.min(rectification, 100F));
-        int clampedClues = Math.min(MAX_CLUES, Math.max(0, clues));
+        int clampedClues = Math.max(0, clues);
         Set<ResourceKey<Enchantment>> finalBlacklist = blacklist == null
                 ? Set.of()
                 : Set.copyOf(blacklist);

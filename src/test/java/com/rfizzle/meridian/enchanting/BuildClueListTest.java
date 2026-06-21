@@ -152,6 +152,18 @@ class BuildClueListTest {
                 "pool exactly matching cluesCount drains the pool → exhausted=true");
     }
 
+    @Test
+    void buildClueList_fiveClues_fromFiveEntryPool() {
+        List<EnchantmentInstance> pool = new ArrayList<>();
+        for (ResourceKey<Enchantment> key : List.of(SHARPNESS, SMITE, BANE, MENDING, UNBREAKING)) {
+            pool.add(new EnchantmentInstance(registry.getHolderOrThrow(key), 1));
+        }
+        RealEnchantmentHelper.ClueBuild result =
+                RealEnchantmentHelper.buildClueList(seeded(0L), pool, 5);
+        assertEquals(5, result.clues().size(), "clue list should have 5 entries from a 5-entry pool");
+        assertTrue(result.exhaustedList(), "pool exactly drained → exhausted=true");
+    }
+
     // ---- Edge cases ----
 
     @Test

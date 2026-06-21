@@ -409,7 +409,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                     list.add(Component.translatable("info.meridian.item_ench",
                             Component.literal("" + enchanting.getItem().getEnchantmentValue()).withStyle(ChatFormatting.GREEN)));
                     list.add(Component.translatable("info.meridian.num_clues",
-                            Component.literal("" + (1 + stats.clues())).withStyle(ChatFormatting.DARK_AQUA)));
+                            Component.literal("" + stats.clues()).withStyle(ChatFormatting.DARK_AQUA)));
                     drawOnLeft(gfx, list, this.topPos + 29);
                     break;
                 }
