@@ -246,32 +246,12 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
                 .allMatch(entry -> entry.getKey().is(EnchantmentTags.CURSE));
     }
 
-    /**
-     * Applies Zenith-equivalent baseline stats on top of raw shelf contributions. The enchanting
-     * table inherently provides quanta, arcana, and a clue independent of surrounding shelves:
-     * <ul>
-     *   <li>{@code +15} quanta (fixed)</li>
-     *   <li>{@code +itemEnchantability / 2} arcana (item-dependent)</li>
-     *   <li>{@code +1} clue (fixed)</li>
-     * </ul>
-     * Without these baselines, recipes ported from Zenith would require unreachable stat thresholds.
-     */
-    private static StatCollection applyBaselines(StatCollection raw, int itemEnchantability) {
-        return new StatCollection(
-                raw.eterna(),
-                Math.max(0F, Math.min(raw.quanta() + 15F, 100F)),
-                Math.max(0F, Math.min(raw.arcana() + itemEnchantability / 2F, 100F)),
-                raw.rectification(),
-                raw.clues() + 1,
-                raw.maxEterna(),
-                raw.blacklist(),
-                raw.treasureAllowed()
-        );
-    }
-
     private void recompute(Level level, BlockPos pos, ItemStack input) {
-        StatCollection rawStats = EnchantingStatRegistry.gatherStats(level, pos);
-        StatCollection stats = applyBaselines(rawStats, input.getItem().getEnchantmentValue());
+        // Gather the raw (unclamped, signed) shelf sum, then fold in the table baselines and clamp
+        // exactly once — see StatCollection#applyBaselines. Clamping the raw sum first would floor a
+        // net-negative contribution (e.g. a Treasure Shelf's −10 quanta) to 0 before the +15 base.
+        StatCollection rawStats = EnchantingStatRegistry.gatherRawStats(level, pos);
+        StatCollection stats = rawStats.applyBaselines(input.getItem().getEnchantmentValue());
         this.lastStats = stats;
         this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats);
 

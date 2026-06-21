@@ -1,34 +1,40 @@
 package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.enchanting.EnchantingStats;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Stone-tier shelf whose only stat-scan effect is to flag the table as treasure-eligible —
- * Mending, Frost Walker, Soul Speed, etc. become rollable when one of these is in range.
- * Backs that flag with a {@link TreasureShelfBlockEntity} that carries no state of its own and
- * implements {@link com.rfizzle.meridian.api.TreasureFlagSource} so the existing
- * gather pipeline picks it up via the standard {@code level.getBlockEntity(offset)} lookup.
+ * Zenith's "Deepshelf of Arcane Treasures" — flags the table as treasure-eligible (Mending, Frost
+ * Walker, Soul Speed, etc. become rollable when one is in range) <em>and</em> trades quanta for
+ * arcana. Matching Zenith's {@code TreasureShelfBlock}, it contributes <b>+10% Arcana / −10%
+ * Quanta</b> and no Eterna. The flag is backed by a {@link TreasureShelfBlockEntity} (carrying no
+ * state of its own) that implements {@link com.rfizzle.meridian.api.TreasureFlagSource}, so the
+ * gather pipeline picks it up via the standard {@code level.getBlockEntity(offset)} lookup; the
+ * stat profile is supplied in code via {@link #getStats} rather than a JSON, since it's fixed.
  *
- * <p>No stat JSON is shipped for {@code treasure_shelf} — DESIGN's "no Eterna contribution of its
- * own" maps directly to {@link com.rfizzle.meridian.enchanting.EnchantingStats#ZERO}
- * which is the registry's default for any block without a matching {@code enchanting_stats}
- * entry. Adding a JSON would be redundant.
- *
- * <p>{@link IEnchantingStatProvider} is implemented for symmetry with the rest of the shelf
- * roster; the default method simply defers to the data-driven registry, so it's a no-op while
- * the JSON is absent and a single-line override if a future iteration wants to give the shelf
- * a non-zero quanta/arcana profile.
+ * <p>The −10% quanta is intentionally signed: the gather sums shelf contributions unclamped, so a
+ * lone Treasure Shelf nets the table's +15% quanta baseline down to 5% (see
+ * {@link com.rfizzle.meridian.api.StatCollection#applyBaselines}).
  */
 public class TreasureShelfBlock extends Block implements EntityBlock, IEnchantingStatProvider {
 
+    /** Fixed contribution: +10% arcana, −10% quanta, no Eterna — matching Zenith. */
+    private static final EnchantingStats STATS = new EnchantingStats(0F, 0F, -10F, 10F, 0F, 0);
+
     public TreasureShelfBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public EnchantingStats getStats(Level level, BlockPos pos, BlockState state) {
+        return STATS;
     }
 
     @Override

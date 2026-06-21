@@ -2,9 +2,11 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.api.StatCollection;
 import com.rfizzle.meridian.shelf.FilteringShelfBlockEntity;
 import com.rfizzle.meridian.shelf.TreasureShelfBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -170,25 +172,34 @@ public class FilteringTreasureGameTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
-    public void treasureShelfZeroEternaContribution(GameTestHelper helper) {
+    public void treasureShelfStatContribution(GameTestHelper helper) {
         helper.setBlock(TEST_POS, MeridianRegistry.TREASURE_SHELF.defaultBlockState());
+        BlockState state = helper.getLevel().getBlockState(helper.absolutePos(TEST_POS));
         var be = helper.getLevel().getBlockEntity(helper.absolutePos(TEST_POS));
 
+        // Use the raw (unclamped) aggregation so the −10 quanta is visible, and route the lookup
+        // through the block's own IEnchantingStatProvider#getStats — exactly as the real scan does.
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
-        StatCollection result = reg.gatherStatsFromOffsets(
+        StatCollection result = reg.rawStatsFromOffsets(
                 List.of(new BlockPos(0, 0, 0)),
-                pos -> EnchantingStats.ZERO,
+                pos -> state.getBlock() instanceof IEnchantingStatProvider provider
+                        ? provider.getStats(helper.getLevel(), helper.absolutePos(TEST_POS), state)
+                        : EnchantingStats.ZERO,
                 pos -> true,
                 pos -> be);
 
-        if (Math.abs(result.eterna()) > 1e-6 || Math.abs(result.maxEterna()) > 1e-6
-                || Math.abs(result.quanta()) > 1e-6 || Math.abs(result.arcana()) > 1e-6) {
-            helper.fail("Treasure shelf should have zero stat contribution, got eterna="
+        if (Math.abs(result.eterna()) > 1e-6 || Math.abs(result.maxEterna()) > 1e-6) {
+            helper.fail("Treasure shelf should contribute no Eterna, got eterna="
                     + result.eterna() + " maxEterna=" + result.maxEterna());
             return;
         }
+        if (Math.abs(result.quanta() + 10F) > 1e-6 || Math.abs(result.arcana() - 10F) > 1e-6) {
+            helper.fail("Treasure shelf should contribute −10 quanta / +10 arcana, got quanta="
+                    + result.quanta() + " arcana=" + result.arcana());
+            return;
+        }
         if (!result.treasureAllowed()) {
-            helper.fail("Treasure flag should still be set despite zero stats");
+            helper.fail("Treasure flag should still be set");
             return;
         }
         helper.succeed();

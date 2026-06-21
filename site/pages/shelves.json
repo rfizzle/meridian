@@ -106,8 +106,8 @@
               "note": "Stats identical to a vanilla bookshelf (Eterna +1, maxEterna 15). Uses a shelf slot but adds filtering control."
             },
             {
-              "title": "Treasure Shelf",
-              "html": ["A block entity that <strong class='text-bone'>unlocks treasure-tier enchantments</strong> (e.g., Mending) at the enchanting table. Without a Treasure Shelf placed nearby (or a <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> override), treasure enchantments will not appear in the enchanting pool."],
+              "title": "Deepshelf of Arcane Treasures",
+              "html": ["A block entity that <strong class='text-bone'>unlocks treasure-tier enchantments</strong> (e.g., Mending) at the enchanting table. Without a Deepshelf of Arcane Treasures placed nearby (or a <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> override), treasure enchantments will not appear in the enchanting pool."],
               "note": "Essential for accessing the most valuable vanilla and Meridian enchantments through the table."
             },
             {
@@ -160,7 +160,7 @@
             ["<span class='text-bone'>Dragon's Breath</span>", "3x Infused Breath", "≥40", "15–25", "≥60", "Key material for End-tier shelves"],
             ["<span class='text-bone'>Golden Apple</span>", "Enchanted Golden Apple", "≥45", "≥40", "≥75", "—"],
             ["<span class='text-bone'>Emerald Block</span>", "Totem of Undying", "≥50", "≥45", "≥85", "Requires max Eterna"],
-            ["<span class='text-bone'>Enchantment Library</span>", "Ender Library", "=50", "45–50", "=100", "Preserves stored data. Hardest recipe"]
+            ["<span class='text-bone'>Enchantment Library</span>", "Library of Alexandria", "=50", "45–50", "=100", "Preserves stored data. Hardest recipe"]
           ],
           "note": "Ranges (e.g., 25–50) indicate a minimum and maximum — Quanta must be within that window. Single values with ≥ are minimum thresholds. Values with = must be hit exactly."
         }
@@ -226,12 +226,12 @@
               "type": "prose",
               "html": [
                 "<strong class='text-bone'>Shelves:</strong> Mix of <strong class='text-bone'>Blazing Hellshelves</strong> (high Eterna + Quanta) and <strong class='text-bone'>Crystalline Seashelves</strong> (balanced Quanta + Arcana). Add <strong class='text-bone'>Rectification Shelves</strong> to counter the Quanta variance and <strong class='text-bone'>Hellshelves of Sight</strong> for preview visibility.",
-                "Example: 8x Blazing Hellshelf + 3x Crystalline Seashelf + 2x Shelf of Seabound Rectification + 1x Hellshelf of Masterful Sight + 1x Treasure Shelf",
+                "Example: 8x Blazing Hellshelf + 3x Crystalline Seashelf + 2x Shelf of Seabound Rectification + 1x Hellshelf of Masterful Sight + 1x Deepshelf of Arcane Treasures",
                 "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>~30</strong> · Quanta <strong class='text-bone'>high</strong> · Arcana <strong class='text-bone'>moderate</strong> · Rectification <strong class='text-bone'>+20</strong> · Clues <strong class='text-bone'>+2</strong>",
                 "<strong class='text-bone'>Unlocks:</strong> Deepshelf awakening (Dormant Deepshelf to Deepshelf). Golden Apple crafting. Extraction Tome crafting. Budding Amethyst transmutation. 8x XP Bottle crafting. Most mid-tier table recipes."
               ]
             },
-            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is where Rectification Shelves become critical. Blazing Hellshelves add +5 Quanta each, and without Rectification your results will swing wildly. Note that Blazing Hellshelves give -1 Clue each, so Hellshelves of Sight help compensate. Add a Treasure Shelf if you want Mending and other treasure enchantments to appear." }
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is where Rectification Shelves become critical. Blazing Hellshelves add +5 Quanta each, and without Rectification your results will swing wildly. Note that Blazing Hellshelves give -1 Clue each, so Hellshelves of Sight help compensate. Add a Deepshelf of Arcane Treasures if you want Mending and other treasure enchantments to appear." }
           ]
         },
         {
@@ -260,9 +260,9 @@
               "type": "prose",
               "html": [
                 "<strong class='text-bone'>Shelves:</strong> <strong class='text-bone'>Draconic Endshelves</strong> are required — they are the only shelf with maxEterna 50, making them the only way to reach the Eterna cap. Fill remaining slots with <strong class='text-bone'>Pearlescent Endshelves</strong> for balanced Quanta/Arcana, and utility shelves as needed.",
-                "Example: 5x Draconic Endshelf + 6x Pearlescent Endshelf + 2x Shelf of Hellbound Rectification + 1x Hellshelf of Masterful Sight + 1x Treasure Shelf",
+                "Example: 5x Draconic Endshelf + 6x Pearlescent Endshelf + 2x Shelf of Hellbound Rectification + 1x Hellshelf of Masterful Sight + 1x Deepshelf of Arcane Treasures",
                 "<strong class='text-bone'>Approximate stats:</strong> Eterna <strong class='text-bone'>50</strong> · Quanta <strong class='text-bone'>~45</strong> · Arcana <strong class='text-bone'>~45</strong> · Rectification <strong class='text-bone'>+30</strong> · Clues <strong class='text-bone'>+2</strong>",
-                "<strong class='text-bone'>Unlocks:</strong> 32x XP Bottle crafting. Enchanted Golden Apple and Totem of Undying crafting. Maximum enchantment power for all enchantments. Required Eterna level for the Ender Library upgrade (alongside extreme Arcana)."
+                "<strong class='text-bone'>Unlocks:</strong> 32x XP Bottle crafting. Enchanted Golden Apple and Totem of Undying crafting. Maximum enchantment power for all enchantments. Required Eterna level for the Library of Alexandria upgrade (alongside extreme Arcana)."
               ]
             },
             { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> Draconic Endshelves give +10 Eterna each but zero Quanta/Arcana. They are pure power. Pearlescent Endshelves give +5 Eterna with +7.5 Quanta and +7.5 Arcana each — use them to build up the other stats. You need Draconic Endshelves to push beyond Eterna 45." }
@@ -271,7 +271,7 @@
         {
           "type": "sub",
           "id": "setup-ender-library",
-          "title": "Ender Library Upgrade <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2 align-middle'>E=50 / Q=45–50 / A=100</span>",
+          "title": "Library of Alexandria Upgrade <span class='inline-block ml-1 px-2 py-0.5 text-xs font-semibold rounded bg-accent2/20 border border-accent2/40 text-accent2 align-middle'>E=50 / Q=45–50 / A=100</span>",
           "blocks": [
             {
               "type": "prose",
@@ -292,7 +292,7 @@
                 "Experiment in-game with the tooltip to fine-tune your exact layout"
               ]
             },
-            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is an aspirational end-game goal. The Ender Library doubles the point cap of the Enchantment Library (level 31 vs. level 16) and preserves all stored enchantment data during the upgrade. Plan your shelf layout carefully — trial and error at the table is expected." }
+            { "type": "note", "html": "<strong class='text-ash'>Tip:</strong> This is an aspirational end-game goal. The Library of Alexandria doubles the point cap of the Enchantment Library (level 31 vs. level 16) and preserves all stored enchantment data during the upgrade. Plan your shelf layout carefully — trial and error at the table is expected." }
           ]
         }
       ]

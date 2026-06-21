@@ -17,7 +17,7 @@
           "items": [
             {
               "q": "Why doesn't Mending (or another treasure enchantment) show up at my table?",
-              "a": "Treasure-tier enchantments like Mending are locked behind the <strong class='text-bone'>Treasure Shelf</strong>, a utility shelf block. Without one placed in your shelf ring, treasure enchantments will not appear in the enchanting pool. Either craft and place a Treasure Shelf (see the <a href='/shelves.html#utility-shelves' class='text-accent hover:text-accent2 underline'>utility shelves reference</a>), or set <code class='text-accent2'>allowTreasureWithoutShelf</code> to <code class='text-accent2'>true</code> under <code class='text-accent2'>enchantingTable</code> in the <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config</a> to remove the requirement entirely."
+              "a": "Treasure-tier enchantments like Mending are locked behind the <strong class='text-bone'>Deepshelf of Arcane Treasures</strong>, a utility shelf block. Without one placed in your shelf ring, treasure enchantments will not appear in the enchanting pool. Either craft and place a Deepshelf of Arcane Treasures (see the <a href='/shelves.html#utility-shelves' class='text-accent hover:text-accent2 underline'>utility shelves reference</a>), or set <code class='text-accent2'>allowTreasureWithoutShelf</code> to <code class='text-accent2'>true</code> under <code class='text-accent2'>enchantingTable</code> in the <a href='/config.html#enchanting-table' class='text-accent hover:text-accent2 underline'>config</a> to remove the requirement entirely."
             },
             {
               "q": "My results are wildly inconsistent \u2014 why?",

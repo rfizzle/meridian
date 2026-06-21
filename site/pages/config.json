@@ -17,7 +17,7 @@
           "bottomGap": true,
           "headers": ["Key", "Type", "Default", "Description"],
           "rows": [
-            ["<code class='text-accent2 whitespace-nowrap'>allowTreasureWithoutShelf</code>", "boolean", "false", "Allow treasure enchantments without a Treasure Shelf"],
+            ["<code class='text-accent2 whitespace-nowrap'>allowTreasureWithoutShelf</code>", "boolean", "false", "Allow treasure enchantments without a Deepshelf of Arcane Treasures"],
             ["<code class='text-accent2 whitespace-nowrap'>maxEterna</code>", "int", "50", "Maximum Eterna stat cap (range: 1&ndash;100)"],
             ["<code class='text-accent2 whitespace-nowrap'>showLevelIndicator</code>", "boolean", "true", "Display level indicator on enchanting table UI"],
             ["<code class='text-accent2 whitespace-nowrap'>globalMinEnchantability</code>", "int", "1", "Minimum enchantability requirement (range: 0&ndash;100)"]
