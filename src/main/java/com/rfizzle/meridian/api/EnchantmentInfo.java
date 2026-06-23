@@ -25,7 +25,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  * @param minPower     power function for the minimum enchanting power per level
  * @param enabled      {@code false} when the enchantment is disabled by config
  */
-@ApiStatus.Stable
+@Stable
 public record EnchantmentInfo(
         Holder<Enchantment> ench,
         int maxLevel,

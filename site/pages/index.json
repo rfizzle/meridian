@@ -192,7 +192,7 @@
             "Launch the game. Config generates at <code class='text-accent2'>config/meridian.json</code> on first run.",
             "Adjust settings via the config file or <code class='text-accent2'>/meridian reload</code> in-game."
           ],
-          "note": "Requires <strong class='text-bone'>Java 21</strong>. Compatible with EMI, REI, JEI, Jade, WTHIT, ModMenu, and Trinkets."
+          "note": "Requires <strong class='text-bone'>Java 21</strong>. Compatible with EMI, REI, JEI, Jade, WTHIT, and ModMenu."
         }
       ]
     }

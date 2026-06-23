@@ -46,6 +46,10 @@ public final class JeiEnchantmentBrowserCategory extends AbstractRecipeCategory<
         EnchantmentBrowserCardRenderer.draw(guiGraphics, Minecraft.getInstance().font, 0, 0, record);
     }
 
+    // getTooltipStrings is the tooltip hook on JEI 19.27.x (the targeted JEI line); it carries a
+    // forRemoval deprecation against a future JEI major. Suppressed until that bump lands and the
+    // replacement API ships.
+    @SuppressWarnings("removal")
     @Override
     public List<Component> getTooltipStrings(EnchantmentBrowserRecord record, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (mouseX >= 0 && mouseX <= EnchantmentBrowserCardRenderer.WIDTH

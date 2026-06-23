@@ -1,9 +1,9 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,14 +26,17 @@ public final class MountedEnchantmentHandler {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(MountedEnchantmentHandler::onServerTick);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> trampleCooldowns.clear());
     }
 
+    /**
+     * Trample only fires for a horse a player is actively riding, so the scan walks the (small)
+     * player list and inspects each player's vehicle rather than every entity in every level —
+     * the per-tick cost scales with online players, not world population.
+     */
     private static void onServerTick(MinecraftServer server) {
-        for (ServerLevel level : server.getAllLevels()) {
-            for (Entity entity : level.getAllEntities()) {
-                if (!(entity instanceof AbstractHorse horse)) continue;
-                if (!horse.isVehicle()) continue;
-
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (player.getVehicle() instanceof AbstractHorse horse) {
                 handleTrample(horse);
             }
         }

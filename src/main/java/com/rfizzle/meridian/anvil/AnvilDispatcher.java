@@ -19,7 +19,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p>Handlers register via {@link #register(AnvilHandler)} during mod init and are walked in
  * insertion order. The first handler whose {@link AnvilHandler#handle} returns a non-empty result
  * claims the pairing — later handlers are not consulted, matching the "first non-empty wins"
- * contract from T-4.1.2.
+ * contract.
  */
 public final class AnvilDispatcher {
 
@@ -57,7 +57,7 @@ public final class AnvilDispatcher {
      * Returns the first claim against the given left/right pairing, or {@link Optional#empty()} if
      * no handler takes responsibility. {@code menu} and {@code currentCost} are accepted to keep
      * the mixin call site stable across future handlers, even though the {@link AnvilHandler}
-     * contract in MVP only forwards {@code left}/{@code right}/{@code player}.
+     * contract only forwards {@code left}/{@code right}/{@code player}.
      */
     public static Optional<AnvilResult> handle(
             AnvilMenu menu, ItemStack left, ItemStack right, Player player, int currentCost) {

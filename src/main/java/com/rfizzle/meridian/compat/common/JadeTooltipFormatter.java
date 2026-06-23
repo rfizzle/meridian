@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Pure-text formatters for the Jade probe tooltip (T-7.4.1). Keeps the tooltip content as a
+ * Pure-text formatters for the Jade probe tooltip. Keeps the tooltip content as a
  * plain {@code List<String>} so the strings can be pinned in unit tests without a Jade runtime.
  *
  * <p>Two surfaces:

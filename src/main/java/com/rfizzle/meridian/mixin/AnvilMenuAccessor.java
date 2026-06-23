@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 /**
- * T-4.1.1 — exposes the two {@link AnvilMenu}-private fields the
+ * Exposes the two {@link AnvilMenu}-private fields the
  * {@link com.rfizzle.meridian.anvil.AnvilDispatcher} pipeline needs to write when a
  * handler claims an output: the {@code cost} {@link DataSlot} (XP charge) and the
  * {@code repairItemCountCost} counter (right-slot consumption count).

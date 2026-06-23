@@ -93,7 +93,6 @@ The mod has optional integrations (all `modCompileOnly` — not bundled):
 - **Cloth Config** — settings GUI builder
 - **Jade / WTHIT** — tooltip overlays
 - **EMI / REI / JEI** — recipe viewer support
-- **Trinkets** — wearable item slots
 
 Compat classes live under `com.rfizzle.meridian.compat.<modid>`.
 

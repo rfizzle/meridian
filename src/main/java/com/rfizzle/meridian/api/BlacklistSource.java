@@ -11,7 +11,7 @@ import java.util.Set;
  * stored books). Picked up during the shelf scan ({@link MeridianAPI#gatherStats}) — each
  * in-range contributor's set is union'd into the aggregated {@link StatCollection#blacklist()}.
  */
-@ApiStatus.Stable
+@Stable
 public interface BlacklistSource {
 
     /**

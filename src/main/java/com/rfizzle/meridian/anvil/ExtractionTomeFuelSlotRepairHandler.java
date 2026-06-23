@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
- * T-5.2.4 — Extraction Tome's item-repair side-path. Fires when the left slot holds a damageable,
+ * Extraction Tome's item-repair side-path. Fires when the left slot holds a damageable,
  * damaged item, the right slot holds an {@link ExtractionTomeItem}, and the left has no
  * enchantments (so the extraction path declined). The output is a copy of the left item with its
  * damage reduced by {@code floor(maxDamage * config.tomes.extractionTomeRepairPercent)}, floored at

@@ -49,7 +49,7 @@ import java.util.Optional;
 
 /**
  * Stat-driven enchantment table menu. Replaces vanilla {@link EnchantmentMenu} via
- * {@code EnchantmentTableBlockMixin} (T-2.5.2) — this class only replaces the
+ * {@code EnchantmentTableBlockMixin} — this class only replaces the
  * {@link #slotsChanged}/{@link #clickMenuButton} logic, inheriting slot layout, data-slot sync,
  * and the input/lapis container from vanilla.
  *
@@ -57,7 +57,7 @@ import java.util.Optional;
  * §"Crafting-Result Row". Pure logic lives in {@link MeridianEnchantmentLogic}.
  *
  * <p>The three private fields on {@link EnchantmentMenu} ({@code enchantSlots}, {@code random},
- * {@code enchantmentSeed}) are reached through {@link EnchantmentMenuAccessor} (T-2.5.3); the
+ * {@code enchantmentSeed}) are reached through {@link EnchantmentMenuAccessor}; the
  * {@link EnchantmentMenu} instance doubles as the accessor at runtime.
  */
 public class MeridianEnchantmentMenu extends EnchantmentMenu {
@@ -68,7 +68,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
     private final ContainerLevelAccess access;
     private final Inventory playerInventory;
 
-    /** Last-gathered stats — retained for the client HUD (T-2.5.4) and click-time replay. */
+    /** Last-gathered stats — retained for the client HUD and click-time replay. */
     private StatCollection lastStats = StatCollection.EMPTY;
     /** Slot picks from the most recent {@link #slotsChanged} — consumed on click. */
     private List<List<EnchantmentInstance>> slotPicks = List.of(List.of(), List.of(), List.of());
@@ -151,7 +151,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
     /**
      * Testable seam for the recipe lookup run inside {@link #recompute}. Kept package-private so
      * the menu's {@code slotsChanged} integration can be verified without standing up a full
-     * {@link Level} — T-5.3.1's acceptance test drives this helper directly. Empty input stacks
+     * {@link Level} — the acceptance test drives this helper directly. Empty input stacks
      * short-circuit to avoid scanning the recipe manager for a match that will always miss.
      */
     static Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> lookupCraftingResult(
@@ -165,7 +165,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
     /**
      * Projects the cached {@link #currentRecipe} (if any) into the wire-friendly
      * {@link CraftingResultEntry} carried on {@link StatsPayload}. Static + package-private so
-     * T-5.3.2's round-trip test can drive the projection without instantiating a menu — the
+     * the round-trip test can drive the projection without instantiating a menu — the
      * server-only {@code currentRecipe} field would otherwise need a {@link Level} +
      * {@link Player} chain to populate. Holders whose value isn't an {@link EnchantingRecipe}
      * subclass collapse to empty as a safety net for future recipe types that wander into the

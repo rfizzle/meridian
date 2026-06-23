@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 
 /**
- * T-4.1.1 — RETURN hook on {@code AnvilMenu#createResult} that lets
+ * RETURN hook on {@code AnvilMenu#createResult} that lets
  * {@link AnvilDispatcher} swap in custom outputs for combinations vanilla doesn't handle
  * (prismatic web curse-strip, iron-block anvil repair, the tome families).
  *
@@ -32,7 +32,7 @@ import java.util.Optional;
  * of TAIL ensures our handlers are consulted on every code path. When no handler claims the
  * pairing the mixin is still behaviorally transparent — vanilla's result is left untouched.
  *
- * <p>T-5.2.3 extends the hook with an {@code onTake} tail that reinstates the handler's
+ * <p>An {@code onTake} tail reinstates the handler's
  * {@link AnvilResult#leftReplacement()} into slot 0 after vanilla has cleared it. Most
  * handlers leave {@code leftReplacement} empty — the source item is consumed — but the
  * Extraction Tome returns a damaged, unenchanted copy of the source so the player recovers

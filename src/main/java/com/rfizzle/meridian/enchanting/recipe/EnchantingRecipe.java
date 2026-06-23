@@ -21,20 +21,17 @@ import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
- * Data-driven enchantment-table crafting recipe. Ported from Zenith's
- * {@code dev.shadowsoffire.apotheosis.ench.table.EnchantingRecipe} onto 1.21.1's codec-based
- * recipe API.
+ * Data-driven enchantment-table crafting recipe, built on 1.21.1's codec-based recipe API.
  *
  * <p>The vanilla {@link Recipe#matches(net.minecraft.world.item.crafting.RecipeInput, Level) matches}
  * hook only validates the input ingredient — the stat-threshold half of the match runs against
  * {@link StatCollection} via {@link #matches(ItemStack, float, float, float)}. Call sites:
  * <ul>
- *   <li>{@code MeridianEnchantmentMenu#slotsChanged} (Epic 5) — looks up a result preview.</li>
+ *   <li>{@code MeridianEnchantmentMenu#slotsChanged} — looks up a result preview.</li>
  *   <li>{@code EnchantingRecipeRegistry#findMatch} — the authoritative dual check.</li>
  * </ul>
  *
- * <p>See DESIGN.md § "Enchantment-Table Crafting" for the design intent. Field layout matches
- * TODO T-4.6.1 verbatim.
+ * <p>See DESIGN.md § "Enchantment-Table Crafting" for the design intent.
  */
 public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
 

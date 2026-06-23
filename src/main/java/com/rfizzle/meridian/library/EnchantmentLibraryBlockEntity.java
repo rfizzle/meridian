@@ -30,9 +30,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Shared storage engine for the Basic and Ender library block entities. Ports Zenith's
- * {@code EnchLibraryTile} point-pool model onto 1.21.1's {@code ResourceKey<Enchantment>}-keyed
- * enchantment registry.
+ * Shared storage engine for the Basic and Ender library block entities. A point-pool model keyed
+ * on 1.21.1's {@code ResourceKey<Enchantment>} enchantment registry.
  *
  * <p>Each library tracks two parallel maps per enchantment:
  * <ul>
@@ -42,9 +41,8 @@ import java.util.Set;
  *       "grind commons, extract rares" strategies.</li>
  * </ul>
  *
- * <p>Subclasses (Basic/Ender in T-4.3.2) supply a {@link BlockEntityType} and the tier-specific
- * {@code maxLevel}. NBT persistence lands in T-4.3.4; client sync lands in T-4.3.5. The menu
- * (T-4.4.2) calls {@link #depositBook}, {@link #canExtract}, and {@link #extract} against this
+ * <p>The Basic and Ender subclasses supply a {@link BlockEntityType} and the tier-specific
+ * {@code maxLevel}. The menu calls {@link #depositBook}, {@link #canExtract}, and {@link #extract} against this
  * surface and handles the stack-side mutations separately — keeping the stored-state math pure
  * lets it be unit-tested without a live world.
  */
@@ -183,7 +181,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     /**
      * Debit the extraction cost from the pool. Returns {@code true} on a successful debit,
      * {@code false} if {@link #canExtract} would have declined. Stack-side mutation (setting the
-     * enchantment onto the book in slot 1) is the menu's responsibility (T-4.4.2) — this method
+     * enchantment onto the book in slot 1) is the menu's responsibility — this method
      * only manages the point map, keeping pure state-math in the BE.
      */
     public boolean extract(ResourceKey<Enchantment> key, int target, int currentLevel) {
@@ -228,7 +226,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
      * of the map survives intact so one stale key never eats the whole library.
      *
      * <p>Malformed ids (parse failure on {@link ResourceLocation#tryParse}) are also dropped —
-     * same warn-and-continue contract. No schema version field is serialized in MVP; the maps
+     * same warn-and-continue contract. No schema version field is serialized; the maps
      * self-describe through their keys.
      */
     @Override

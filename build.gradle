@@ -223,11 +223,6 @@ dependencies {
     modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
     modLocalRuntime "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 
-    // Trinkets 3.x — Accessory/trinket slot API. Compile-only so the production jar only links
-    // against the Trinkets API surface (TrinketsApi, TrinketComponent); players who install
-    // Trinkets (or the Accessories Compat Layer) get enchantment support in accessory slots.
-    modCompileOnly "dev.emi:trinkets:${project.trinkets_version}"
-
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")
     testImplementation "org.junit.jupiter:junit-jupiter"

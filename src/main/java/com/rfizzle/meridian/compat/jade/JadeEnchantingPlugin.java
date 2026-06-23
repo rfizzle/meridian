@@ -12,7 +12,7 @@ import snownee.jade.api.IWailaPlugin;
 import snownee.jade.api.WailaPlugin;
 
 /**
- * Jade probe-tooltip integration (T-7.4.1). Registered via the {@code jade} entrypoint in
+ * Jade probe-tooltip integration. Registered via the {@code jade} entrypoint in
  * {@code fabric.mod.json} — Jade scans that list at load time, so the plugin class only links
  * when Jade is actually present in the runtime.
  *

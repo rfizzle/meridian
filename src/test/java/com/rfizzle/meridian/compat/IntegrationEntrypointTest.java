@@ -14,18 +14,20 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * T-7.1-T1 / T-7.2-T1 / T-7.3-T1 / T-7.4-T1: verifies integration entrypoint wiring is
- * consistent between {@code fabric.mod.json} declarations and compiled source files. EMI/REI/JEI
- * plugins live in the client source set ({@code src/client/java/}), Jade in main.
+ * Verifies integration entrypoint wiring is consistent between {@code fabric.mod.json} /
+ * {@code waila_plugins.json} declarations and compiled source files. EMI/REI/JEI and ModMenu
+ * plugins live in the client source set ({@code src/client/java/}); Jade and WTHIT in main.
  */
 class IntegrationEntrypointTest {
 
     private static final Path FABRIC_MOD_JSON = Path.of("src/main/resources/fabric.mod.json");
+    private static final Path WAILA_PLUGINS_JSON = Path.of("src/main/resources/waila_plugins.json");
 
     private static JsonObject loadFabricModJson() throws Exception {
         assertTrue(Files.exists(FABRIC_MOD_JSON), "fabric.mod.json must exist at project root");
@@ -90,6 +92,51 @@ class IntegrationEntrypointTest {
                 "com.rfizzle.meridian.compat.emi.EmiEnchantingPlugin");
         assertEntrypointClass(entrypoints, "jade",
                 "com.rfizzle.meridian.compat.jade.JadeEnchantingPlugin");
+    }
+
+    @Test
+    void fabricModJson_declaresModMenuEntrypoint() throws Exception {
+        JsonObject root = loadFabricModJson();
+        JsonObject entrypoints = root.getAsJsonObject("entrypoints");
+        assertTrue(entrypoints.has("modmenu"), "fabric.mod.json must declare the modmenu entrypoint");
+        assertEntrypointClass(entrypoints, "modmenu",
+                "com.rfizzle.meridian.compat.modmenu.ModMenuIntegration");
+    }
+
+    @Test
+    void fabricModJson_suggestsModMenuAndWthit() throws Exception {
+        JsonObject suggests = loadFabricModJson().getAsJsonObject("suggests");
+        assertNotNull(suggests, "fabric.mod.json must have a suggests block");
+        for (String modId : List.of("modmenu", "wthit")) {
+            assertTrue(suggests.has(modId), "suggests must declare optional dep: " + modId);
+        }
+    }
+
+    @Test
+    void wailaPluginsJson_declaresWthitEntrypoints() throws Exception {
+        assertTrue(Files.exists(WAILA_PLUGINS_JSON), "waila_plugins.json must exist");
+        JsonObject root;
+        try (BufferedReader reader = Files.newBufferedReader(WAILA_PLUGINS_JSON, StandardCharsets.UTF_8)) {
+            root = JsonParser.parseReader(reader).getAsJsonObject();
+        }
+        assertTrue(root.has("meridian:wthit"), "waila_plugins.json must declare the meridian:wthit plugin");
+        JsonObject entrypoints = root.getAsJsonObject("meridian:wthit").getAsJsonObject("entrypoints");
+        assertNotNull(entrypoints, "wthit plugin must declare entrypoints");
+        assertEquals("com.rfizzle.meridian.compat.wthit.WthitCommonPlugin",
+                entrypoints.get("common").getAsString(), "wthit common entrypoint");
+        assertEquals("com.rfizzle.meridian.compat.wthit.WthitClientPlugin",
+                entrypoints.get("client").getAsString(), "wthit client entrypoint");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "src/main/java/com/rfizzle/meridian/compat/wthit/WthitCommonPlugin.java",
+            "src/main/java/com/rfizzle/meridian/compat/wthit/WthitClientPlugin.java",
+            "src/client/java/com/rfizzle/meridian/compat/modmenu/ModMenuIntegration.java"
+    })
+    void optionalPlugin_sourceFileExists(String path) {
+        assertTrue(Files.exists(Path.of(path)),
+                "Integration plugin source must exist: " + path);
     }
 
     private static void assertEntrypointClass(JsonObject entrypoints, String key, String expected) {

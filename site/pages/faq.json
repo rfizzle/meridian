@@ -62,8 +62,8 @@
           "type": "faq",
           "items": [
             {
-              "q": "Does Meridian work with EMI / REI / JEI / Jade / WTHIT / ModMenu / Trinkets?",
-              "a": "Yes. Meridian ships first-class integration adapters for <strong class='text-bone'>EMI, REI, and JEI</strong> (enchanting-table crafting recipes and library mechanics) and <strong class='text-bone'>Jade</strong> (shelf stat tooltips and library contents), plus a ModMenu entry, and is compatible with WTHIT and Trinkets. All of these are <strong class='text-bone'>optional</strong> \u2014 none are bundled or required, and Meridian runs fine without any of them installed."
+              "q": "Does Meridian work with EMI / REI / JEI / Jade / WTHIT / ModMenu?",
+              "a": "Yes. Meridian ships first-class integration adapters for <strong class='text-bone'>EMI, REI, and JEI</strong> (enchanting-table crafting recipes and library mechanics) and <strong class='text-bone'>Jade</strong> (shelf stat tooltips and library contents), plus a ModMenu entry, and is compatible with WTHIT. All of these are <strong class='text-bone'>optional</strong> \u2014 none are bundled or required, and Meridian runs fine without any of them installed."
             },
             {
               "q": "Do I install it on the server, the client, or both?",

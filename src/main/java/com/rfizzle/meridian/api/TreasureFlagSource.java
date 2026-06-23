@@ -6,6 +6,6 @@ package com.rfizzle.meridian.api;
  * Any single in-range contributor flips {@link StatCollection#treasureAllowed()} to {@code true}
  * during the shelf scan ({@link MeridianAPI#gatherStats}).
  */
-@ApiStatus.Stable
+@Stable
 public interface TreasureFlagSource {
 }
