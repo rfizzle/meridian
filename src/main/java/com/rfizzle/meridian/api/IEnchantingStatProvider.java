@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * inherit registry-backed stats, or override {@link #getStats} for dynamic (state- or
  * position-dependent) stat contributions.
  */
-@ApiStatus.Stable
+@Stable
 public interface IEnchantingStatProvider {
 
     /**

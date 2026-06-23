@@ -14,8 +14,7 @@ import java.util.OptionalInt;
  * into its host viewer's display type — keeping the extraction pass shared so a recipe added to
  * the table only has to be plumbed through one place.
  *
- * <p>Designed as part of T-7.1.2 to seed the shared source-of-truth that S-7.2.2 (REI) and
- * the JEI plugin will both consume.
+ * <p>Seeds the shared source-of-truth that the REI and JEI plugins both consume.
  */
 public record TableCraftingDisplay(
         ResourceLocation recipeId,

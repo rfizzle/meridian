@@ -62,8 +62,11 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
 
     private static volatile boolean registered = false;
 
-    private final Map<ResourceLocation, EnchantingStats> byBlock = new HashMap<>();
-    private final List<TagBinding> byTag = new ArrayList<>();
+    // Read paths (resolve/blockEntries) run on the server thread but a datapack reload rebuilds
+    // both views off-thread; publishing immutable snapshots through a single volatile write per
+    // field means a reader always sees a fully-built, internally-consistent map/list.
+    private volatile Map<ResourceLocation, EnchantingStats> byBlock = Map.of();
+    private volatile List<TagBinding> byTag = List.of();
 
     EnchantingStatRegistry() {
     }
@@ -249,16 +252,20 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     void registerBlock(ResourceLocation blockId, EnchantingStats stats) {
-        byBlock.put(blockId, stats);
+        Map<ResourceLocation, EnchantingStats> next = new HashMap<>(byBlock);
+        next.put(blockId, stats);
+        byBlock = Map.copyOf(next);
     }
 
     void registerTag(TagKey<Block> tag, EnchantingStats stats) {
-        byTag.add(new TagBinding(tag, stats));
+        List<TagBinding> next = new ArrayList<>(byTag);
+        next.add(new TagBinding(tag, stats));
+        byTag = List.copyOf(next);
     }
 
     void clear() {
-        byBlock.clear();
-        byTag.clear();
+        byBlock = Map.of();
+        byTag = List.of();
     }
 
     int blockEntryCount() {
@@ -275,7 +282,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * in the viewer.
      */
     public Map<ResourceLocation, EnchantingStats> blockEntries() {
-        return Map.copyOf(byBlock);
+        return byBlock;
     }
 
     @Override
@@ -285,32 +292,41 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
 
     @Override
     public void onResourceManagerReload(ResourceManager manager) {
-        clear();
+        Map<ResourceLocation, EnchantingStats> blocks = new HashMap<>();
+        List<TagBinding> tags = new ArrayList<>();
         manager.listResources(RESOURCE_DIR, rl -> rl.getPath().endsWith(JSON_SUFFIX))
                 .forEach((rl, resource) -> {
                     try (Reader reader = resource.openAsReader()) {
                         JsonElement json = JsonParser.parseReader(reader);
-                        parseAndRegister(rl, json);
+                        StatEntry entry = parseEntry(rl, json);
+                        entry.block().ifPresent(id -> blocks.put(id, entry.stats()));
+                        entry.tag().ifPresent(tag -> tags.add(new TagBinding(tag, entry.stats())));
                     } catch (Exception e) {
                         Meridian.LOGGER.warn(
                                 "Failed to load enchanting_stats entry {}: {}", rl, e.getMessage(), e);
                     }
                 });
+        this.byBlock = Map.copyOf(blocks);
+        this.byTag = List.copyOf(tags);
         Meridian.LOGGER.info(
                 "Loaded enchanting stats: {} block entries, {} tag entries",
-                byBlock.size(), byTag.size());
+                blocks.size(), tags.size());
     }
 
     void parseAndRegister(ResourceLocation source, JsonElement json) {
+        StatEntry entry = parseEntry(source, json);
+        entry.block().ifPresent(id -> registerBlock(id, entry.stats()));
+        entry.tag().ifPresent(tag -> registerTag(tag, entry.stats()));
+    }
+
+    private static StatEntry parseEntry(ResourceLocation source, JsonElement json) {
         DataResult<StatEntry> result = StatEntry.CODEC.parse(JsonOps.INSTANCE, json);
         Optional<DataResult.Error<StatEntry>> error = result.error();
         if (error.isPresent()) {
             throw new JsonParseException(
                     "Invalid enchanting_stats entry " + source + ": " + error.get().message());
         }
-        StatEntry entry = result.result().orElseThrow();
-        entry.block().ifPresent(id -> registerBlock(id, entry.stats()));
-        entry.tag().ifPresent(tag -> registerTag(tag, entry.stats()));
+        return result.result().orElseThrow();
     }
 
     private record TagBinding(TagKey<Block> tag, EnchantingStats stats) {

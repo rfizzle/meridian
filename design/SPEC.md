@@ -310,8 +310,6 @@ A tiered consumable that banks experience levels. Crafted at the enchanting tabl
 - The item's durability bar shows the fill fraction in lime green (HSV hue 0.4).
 - On a failed action, an action-bar message displays `message.meridian.xp_tome.full` / `.empty`.
 
-> **Discrepancy:** the XP Tome ladder is shipped (registry, recipes, lang, `.glyph` art) but is **not listed in the README feature summary**, which mentions only the three salvage tomes. The README is incomplete here; the code is the source of truth.
-
 ---
 
 ## 7. Anvil Upgrades
@@ -351,7 +349,7 @@ Each file is a standard 1.21.1 enchantment definition: `description` (translatio
 | Shield | Retribution, Pummel, Fortify | `EnchantmentEffectHandler`, `ShieldFortifyMixin` |
 | Utility | Mason's Reach, Aurify, Tether | `AurifyHandler`, `TetherHandler` |
 
-`EnchantmentEffects` holds ~49 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`). `TrinketsCompat` (isolated single file, guarded for Trinkets absence) lets handlers read accessory-slot enchantments.
+`EnchantmentEffects` holds ~49 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`).
 
 ### Exclusive Sets
 Six exclusive-set tags constrain mutually exclusive picks: `exclusive_set/mining`, `/size`, `/arrow_impact`, `/glass_cannon`, `/aspect`, `/mending`.
@@ -494,7 +492,6 @@ Must be installed on **both client and server** — a client missing the mod des
 - **EMI / REI / JEI** — two recipe categories each: an **Infusions** category (enchanting-table crafting recipes, with stat requirements, extracted by `TableCraftingDisplayExtractor`) and an **Enchantments** browser category (per-enchantment max level, exclusive sets, treasure flag, enabled state, per-level power windows, compatible items, extracted by `EnchantmentBrowserExtractor`), plus one info page per block-keyed `enchanting_stats` entry. Both categories use the vanilla enchanting table as workstation.
 - **Jade / WTHIT** — enchanting-table tooltip showing the gathered stats (server provider computes via `EnchantingStatRegistry`), and an enchantment-library tooltip showing stored contents.
 - **ModMenu** — config screen entry (`ModMenuIntegration`).
-- **Trinkets** — accessory-slot enchantment effects (isolated compat).
 
 All optional dependencies are `suggests` in `fabric.mod.json`; the mod runs without any of them.
 
@@ -572,4 +569,3 @@ The custom enchant-glyph particles route through the vanilla `ParticleEngine`, s
 
 ## Future Considerations
 - Cloth Config GUI for the structured config (currently a ModMenu entry over the JSON file).
-- Surfacing the XP Tome ladder in the README feature list.

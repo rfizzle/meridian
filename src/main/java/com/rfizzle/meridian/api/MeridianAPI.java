@@ -21,7 +21,7 @@ import java.util.OptionalInt;
  * guard every call site with
  * {@code FabricLoader.getInstance().isModLoaded("meridian")}.
  */
-@ApiStatus.Stable
+@Stable
 public final class MeridianAPI {
 
     private MeridianAPI() {

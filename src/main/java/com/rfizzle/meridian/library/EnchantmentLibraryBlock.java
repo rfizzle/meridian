@@ -25,8 +25,8 @@ import net.minecraft.world.phys.BlockHitResult;
  * it, the {@code maxLevel}/{@code maxPoints} caps stored in NBT).
  *
  * <p>{@link BaseEntityBlock} gives us the {@code newBlockEntity} + ticker scaffolding plus the
- * abstract {@link #codec()} contract. The block's own state has no directional property in MVP
- * (deferred to polish — DESIGN "full-map resend" syncs state independent of block orientation),
+ * abstract {@link #codec()} contract. The block's own state has no directional property
+ * (DESIGN "full-map resend" syncs state independent of block orientation),
  * so the codec only needs to round-trip {@link Properties} via {@link #simpleCodec}. The encoded
  * form binds to a null tile supplier: a datapack reconstruction path that goes through this codec
  * could not spawn a functional library, but we never register the block datapack-side — it exists

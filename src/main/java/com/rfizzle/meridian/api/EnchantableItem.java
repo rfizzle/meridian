@@ -14,7 +14,7 @@ import java.util.List;
  * <p>Implementations must be deterministic with respect to the random seed — the same seed
  * must produce the same result every time.
  */
-@ApiStatus.Stable
+@Stable
 public interface EnchantableItem {
 
     /**

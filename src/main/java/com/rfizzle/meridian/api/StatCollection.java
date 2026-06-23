@@ -22,7 +22,7 @@ import java.util.Set;
  * @param blacklist       union of every in-range {@link BlacklistSource} contribution; never {@code null}
  * @param treasureAllowed {@code true} when any in-range shelf is a {@link TreasureFlagSource}
  */
-@ApiStatus.Stable
+@Stable
 public record StatCollection(
         float eterna,
         float quanta,

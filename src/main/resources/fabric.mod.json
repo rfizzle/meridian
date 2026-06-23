@@ -5,7 +5,11 @@
     "name": "Meridian",
     "description": "Zenith-style enchanting overhaul — stat-driven shelves, anvil tweaks, library storage, and tomes.",
     "authors": ["rfizzle"],
-    "contact": {},
+    "contact": {
+        "homepage": "https://meridian.rfizzle.com",
+        "sources": "https://github.com/rfizzle/meridian",
+        "issues": "https://github.com/rfizzle/meridian/issues"
+    },
     "license": "MIT",
     "icon": "assets/meridian/icon.png",
     "environment": "*",
@@ -64,7 +68,7 @@
         "fabricloader": ">=0.16.10",
         "minecraft": "~1.21.1",
         "java": ">=21",
-        "fabric-api": "*"
+        "fabric-api": ">=0.116.1"
     },
     "suggests": {
         "emi": "*",
@@ -72,7 +76,6 @@
         "jei": "*",
         "jade": "*",
         "wthit": "*",
-        "modmenu": "*",
-        "trinkets": "*"
+        "modmenu": "*"
     }
 }

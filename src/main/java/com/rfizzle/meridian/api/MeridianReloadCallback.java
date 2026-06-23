@@ -19,7 +19,7 @@ import net.minecraft.server.MinecraftServer;
  * <p>Listener exceptions are caught and logged by Meridian (host-side error isolation per the
  * Concord API Standard) — a misbehaving listener cannot break the reload or other listeners.
  */
-@ApiStatus.Stable
+@Stable
 @FunctionalInterface
 public interface MeridianReloadCallback {
 

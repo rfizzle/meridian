@@ -28,14 +28,14 @@ import java.util.Map;
 
 /**
  * EMI integration entry point. Registers the "Infusions" display category and populates it with
- * the two shipped recipe types plus per-shelf stat info panels (T-7.1.3).
+ * the two shipped recipe types plus per-shelf stat info panels.
  *
  * <p>This class only loads when EMI itself loads it (via the {@code emi} entry point in
  * {@code fabric.mod.json}), so the static EMI references here are safe even when EMI is absent
  * from the runtime — Fabric never resolves the entry point.
  *
  * <p>Recipe extraction lives in {@link TableCraftingDisplayExtractor} so REI/JEI plugins share the
- * same source of truth (S-7.2.2).
+ * same source of truth.
  */
 public final class EmiEnchantingPlugin implements EmiPlugin {
 

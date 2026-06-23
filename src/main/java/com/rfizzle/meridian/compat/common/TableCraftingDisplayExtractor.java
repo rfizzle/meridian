@@ -16,7 +16,7 @@ import java.util.List;
  * components-preserving variant differently.
  *
  * <p>Stays Minecraft-only on purpose — no recipe-viewer types in the signature — so the same
- * extractor feeds the EMI plugin (T-7.1.2), the REI plugin (S-7.2), and the JEI plugin (S-7.3).
+ * extractor feeds the EMI plugin, the REI plugin, and the JEI plugin.
  */
 public final class TableCraftingDisplayExtractor {
 

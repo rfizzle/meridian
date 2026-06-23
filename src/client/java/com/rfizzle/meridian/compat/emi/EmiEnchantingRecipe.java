@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * EMI display for one {@code meridian:enchanting} or {@code keep_nbt_enchanting}
- * recipe (T-7.1.3 "each recipe shows input, output, stat requirements, XP cost").
+ * recipe — each recipe shows input, output, stat requirements, and XP cost.
  *
  * <p>Layout:
  * <pre>

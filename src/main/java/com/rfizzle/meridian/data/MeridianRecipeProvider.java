@@ -27,33 +27,29 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 
 /**
- * Ports the vanilla-shape shelf recipes from Zenith 1:1 — same patterns, same keys, same results,
- * only the result namespace rewritten to {@code meridian}. Sources are under
- * {@code /home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/recipes/} (see DESIGN.md
- * "Shelf Blocks").
+ * Emits the vanilla-shape shelf recipes, matching Zenith's patterns, keys, and results under the
+ * {@code meridian} namespace (see DESIGN.md "Shelf Blocks").
  *
- * <p>Potion-based ingredients use Fabric's {@code DefaultCustomIngredients.components} in place of
- * Zenith's legacy {@code fabric:nbt} ingredient type — 1.21.1 stores potion identity as a
- * {@link PotionContents} data component, so the equivalent match is a component-patch predicate
- * against {@code minecraft:potion}. The Zenith regeneration/water/night-vision recipes route
- * through {@link #potionIngredient(Holder)}.
+ * <p>Potion-based ingredients use Fabric's {@code DefaultCustomIngredients.components} — 1.21.1
+ * stores potion identity as a {@link PotionContents} data component, so the match is a
+ * component-patch predicate against {@code minecraft:potion}. The regeneration/water/night-vision
+ * recipes route through {@link #potionIngredient(Holder)}.
  *
- * <p>Every shelf that can be built from registered items gets its Zenith-matched shaped recipe
+ * <p>Every shelf that can be built from registered items gets its shaped recipe
  * here, including the sculk-tier shelves ({@code echoing_sculkshelf},
  * {@code soul_touched_sculkshelf}) which use {@code warden_tendril}.
  *
- * <p>The Zenith {@code zenith:deepslate} item tag (used by {@code dormant_deepshelf}) ships
- * verbatim as {@code data/meridian/tags/item/deepslate.json}; see {@link #DEEPSLATE_TAG}.
+ * <p>The {@code meridian:deepslate} item tag (used by {@code dormant_deepshelf}) lives at
+ * {@code data/meridian/tags/item/deepslate.json}; see {@link #DEEPSLATE_TAG}.
  * The library and the three enchanting-table crafts
- * ({@code infused_hellshelf}, {@code infused_seashelf}, {@code deepshelf}) are hand-shipped —
- * custom-recipe-type JSONs land in Epic 4 (T-4.6.4), and the vanilla-shape {@code library} recipe
- * is hand-shipped in T-4.4.1.
+ * ({@code infused_hellshelf}, {@code infused_seashelf}, {@code deepshelf}) use custom recipe-type
+ * JSONs, and the vanilla-shape {@code library} recipe is hand-shipped.
  */
 public class MeridianRecipeProvider extends FabricRecipeProvider {
 
     /**
      * Item tag covering every deepslate variant that can craft a {@code dormant_deepshelf} —
-     * the same 8-entry list Zenith ships under {@code zenith:deepslate}. Backed by
+     * an 8-entry list matching Zenith's economy. Backed by
      * {@code data/meridian/tags/item/deepslate.json}.
      */
     public static final TagKey<Item> DEEPSLATE_TAG =
@@ -192,7 +188,7 @@ public class MeridianRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_endshelf", has(MeridianShelves.ENDSHELF))
                 .save(exporter);
 
-        // === Deep family — deepshelf itself comes from enchanting-table craft (T-4.6.4) ===
+        // === Deep family — deepshelf itself comes from enchanting-table craft ===
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, MeridianShelves.DORMANT_DEEPSHELF)
                 .pattern("EEE")
                 .pattern("BBB")
@@ -334,17 +330,15 @@ public class MeridianRecipeProvider extends FabricRecipeProvider {
                 .save(exporter);
 
         // === Prismatic Web ===
-        // Recipe ships hand-written at src/main/resources/data/meridian/recipe/prismatic_web.json
-        // per T-4.1.3 (ported verbatim from Zenith). Not emitted here so datagen output stays scoped
-        // to shelf crafts — the prismatic_web crafting is a single static file and re-emitting it
-        // through ShapedRecipeBuilder would just add churn.
+        // Recipe ships hand-written at src/main/resources/data/meridian/recipe/prismatic_web.json.
+        // Not emitted here so datagen output stays scoped to shelf crafts — the prismatic_web
+        // crafting is a single static file and re-emitting it through ShapedRecipeBuilder would
+        // just add churn.
     }
 
     /**
      * Builds an {@link Ingredient} that matches a potion bottle whose
      * {@link net.minecraft.world.item.alchemy.PotionContents} identifies the requested potion.
-     * Replaces Zenith 1.20.1's {@code fabric:nbt} strict-match ingredient, which predates 1.21's
-     * component model.
      *
      * <p>Protected so unit tests can substitute a mixin-free stub — Fabric's custom-ingredient
      * machinery un-finals {@link Ingredient} through {@code IngredientMixin}, so classloading

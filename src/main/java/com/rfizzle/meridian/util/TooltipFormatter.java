@@ -15,16 +15,15 @@ import java.util.Set;
  * Pure logic shared by {@code OverLeveledTooltipHandler} — no Fabric-client deps, so tests can
  * exercise the cap lookup and color parser without booting the client or registering events.
  *
- * <p>T-8.2.1 ships the MVP hardcoded cap map (the 16 enchantments Iteration 1 will raise beyond
- * vanilla via BeyondEnchant absorption). Iteration 1 replaces this static map with a config-fed
- * provider so operators can raise or lower individual caps without editing the jar.
+ * <p>Holds the hardcoded cap map (the 16 enchantments raised beyond vanilla via BeyondEnchant
+ * absorption).
  */
 public final class TooltipFormatter {
 
     /**
      * Vanilla level caps for enchantments the pack can exceed. Keys are restricted to the 16
      * BeyondEnchant targets — any enchantment absent from this map never triggers over-leveled
-     * coloring (additions ship in Iteration 1 alongside the config-fed override hook).
+     * coloring.
      */
     public static final Map<ResourceKey<Enchantment>, Integer> VANILLA_CAPS = Map.ofEntries(
             Map.entry(Enchantments.SHARPNESS, 5),
@@ -66,7 +65,7 @@ public final class TooltipFormatter {
 
     /**
      * Parses the config-supplied hex string ({@code #RRGGBB}) into a {@link TextColor}. The
-     * config validator in T-1.3.3 already falls back to {@code #FF6600} on mismatch, so this
+     * config validator already falls back to {@code #FF6600} on mismatch, so this
      * method is a second-layer guard: any {@link TextColor#parseColor} failure (e.g. concurrent
      * mutation that slipped past validation) resolves to {@link #DEFAULT_COLOR} rather than
      * painting the line with whatever happens to decode next.

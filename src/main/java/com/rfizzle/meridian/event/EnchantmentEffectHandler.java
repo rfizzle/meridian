@@ -4,6 +4,7 @@ import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.mixin.CreeperEntityAccessor;
 import com.rfizzle.meridian.mixin.LivingEntityLootInvoker;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -46,12 +47,103 @@ public final class EnchantmentEffectHandler {
     private static final Set<UUID> CLEAVE_PROCESSING = Collections.synchronizedSet(new HashSet<>());
     private static final Set<UUID> PUMMEL_PROCESSING = Collections.synchronizedSet(new HashSet<>());
 
+    // Per-effect balance tuning. Grouped here so a balance pass touches one block instead of
+    // hunting inline literals across the handlers. Naming: BASE_* is the level-0 term and
+    // *_PER_LEVEL the per-enchantment-level increment unless noted.
+    private static final int ABYSS_WARD_LEVITATION_TICKS = 60;
+    private static final int ABYSS_WARD_LEVITATION_AMPLIFIER = 2;
+    private static final double ABYSS_WARD_UPWARD_BOOST = 0.5;
+
+    private static final float FINAL_GAMBIT_DAMAGE_FRACTION = 0.15f;
+
+    private static final float SIPHON_BASE_CHANCE = 0.20f;
+    private static final float SIPHON_CHANCE_PER_LEVEL = 0.10f;
+    private static final float SIPHON_HEAL_PER_LEVEL = 2.0f;
+
+    private static final int SOUL_TAX_BASE_XP_COST = 3;
+    private static final int SOUL_TAX_XP_COST_PER_LEVEL = 2;
+    private static final float SOUL_TAX_BASE_DAMAGE = 2.0f;
+    private static final float SOUL_TAX_DAMAGE_PER_LEVEL = 1.5f;
+
+    private static final double CLEAVE_BASE_RANGE = 1.5;
+    private static final double CLEAVE_RANGE_PER_LEVEL = 0.5;
+    private static final float CLEAVE_BASE_DAMAGE = 2.0f;
+    private static final float CLEAVE_DAMAGE_PER_LEVEL = 1.0f;
+
+    private static final double REPULSE_RANGE_SQ = 16.0;
+    private static final double REPULSE_BASE_FORCE = 0.6;
+    private static final double REPULSE_FORCE_PER_LEVEL = 0.3;
+    private static final double REPULSE_BASE_LIFT = 0.2;
+    private static final double REPULSE_LIFT_PER_LEVEL = 0.05;
+
+    private static final double FROSTGUARD_RANGE_SQ = 16.0;
+    private static final int FROSTGUARD_BASE_SLOW_TICKS = 40;
+    private static final int FROSTGUARD_SLOW_TICKS_PER_LEVEL = 20;
+
+    private static final float RALLY_HEALTH_THRESHOLD = 0.2f;
+    private static final int RALLY_BASE_REGEN_TICKS = 60;
+    private static final int RALLY_REGEN_TICKS_PER_LEVEL = 40;
+
+    private static final int BLOODRAGE_BASE_BUFF_TICKS = 80;
+    private static final int BLOODRAGE_BUFF_TICKS_PER_LEVEL = 40;
+    private static final float BLOODRAGE_BASE_HP_COST = 1.5f;
+    private static final float BLOODRAGE_HP_COST_PER_LEVEL = 0.5f;
+
+    private static final float MACE_SLAM_MIN_FALL_DISTANCE = 1.5f;
+
+    private static final int TEMPEST_BASE_FIRE_RES_TICKS = 40;
+    private static final int TEMPEST_FIRE_RES_TICKS_PER_LEVEL = 20;
+
+    private static final double SEISMIC_SLAM_RADIUS = 4.0;
+    private static final float SEISMIC_SLAM_DAMAGE = 6.0f;
+    private static final double SEISMIC_SLAM_KNOCKBACK = 1.2;
+    private static final double SEISMIC_SLAM_LIFT = 0.4;
+
+    private static final double UPDRAFT_BASE_VELOCITY = 0.8;
+    private static final double UPDRAFT_VELOCITY_PER_LEVEL = 0.4;
+
+    private static final float RETRIBUTION_BASE_CHANCE = 0.20f;
+    private static final float RETRIBUTION_CHANCE_PER_LEVEL = 0.08f;
+    private static final float RETRIBUTION_BASE_REFLECT = 0.10f;
+    private static final float RETRIBUTION_REFLECT_PER_LEVEL = 0.10f;
+
+    private static final float PUMMEL_BASE_DAMAGE = 1.5f;
+    private static final float PUMMEL_DAMAGE_PER_LEVEL = 1.0f;
+    private static final int PUMMEL_DURABILITY_COST = 2;
+
+    private static final float PLUNDER_CHANCE_PER_LEVEL = 0.025f;
+
+    private static final float SNARE_CHANCE = 0.05f;
+
     private EnchantmentEffectHandler() {}
 
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(EnchantmentEffectHandler::onAllowDamage);
         ServerLivingEntityEvents.AFTER_DAMAGE.register(EnchantmentEffectHandler::onAfterDamage);
         ServerLivingEntityEvents.AFTER_DEATH.register(EnchantmentEffectHandler::onAfterDeath);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            rallyCooldowns.clear();
+            abyssWardCooldowns.clear();
+            BLOODRAGE_PROCESSING.clear();
+            FINAL_GAMBIT_PROCESSING.clear();
+            SOUL_TAX_PROCESSING.clear();
+            CLEAVE_PROCESSING.clear();
+            PUMMEL_PROCESSING.clear();
+        });
+    }
+
+    /**
+     * Runs {@code action} with {@code id} held in {@code guard}, removing it afterward even if the
+     * action throws. The guard breaks the recursion that arises when an effect's own
+     * {@link LivingEntity#hurt} call re-enters the damage event for the same attacker.
+     */
+    private static void withReentrancyGuard(Set<UUID> guard, UUID id, Runnable action) {
+        guard.add(id);
+        try {
+            action.run();
+        } finally {
+            guard.remove(id);
+        }
     }
 
     private static boolean onAllowDamage(LivingEntity entity, DamageSource source, float amount) {
@@ -66,8 +158,8 @@ public final class EnchantmentEffectHandler {
         if (lastUsed != null && (currentTick - lastUsed) < ABYSS_WARD_COOLDOWN_TICKS) return true;
 
         abyssWardCooldowns.put(entity, currentTick);
-        entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 60, 2, true, true, true));
-        entity.setDeltaMovement(entity.getDeltaMovement().add(0, 0.5, 0));
+        entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, ABYSS_WARD_LEVITATION_TICKS, ABYSS_WARD_LEVITATION_AMPLIFIER, true, true, true));
+        entity.setDeltaMovement(entity.getDeltaMovement().add(0, ABYSS_WARD_UPWARD_BOOST, 0));
         if (entity instanceof ServerPlayer sp) {
             sp.hurtMarked = true;
         }
@@ -121,7 +213,7 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.FINAL_GAMBIT);
         if (level <= 0) return;
 
-        float bonusDamage = weapon.getMaxDamage() * 0.15f;
+        float bonusDamage = weapon.getMaxDamage() * FINAL_GAMBIT_DAMAGE_FRACTION;
 
         // FinalGambit sacrifices the weapon for the bonus hit. Damage it to the break
         // threshold first so the real break effects (sound, particles, break callbacks)
@@ -133,12 +225,8 @@ public final class EnchantmentEffectHandler {
             weapon.setCount(0);
         }
 
-        FINAL_GAMBIT_PROCESSING.add(livingAttacker.getUUID());
-        try {
-            entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage);
-        } finally {
-            FINAL_GAMBIT_PROCESSING.remove(livingAttacker.getUUID());
-        }
+        withReentrancyGuard(FINAL_GAMBIT_PROCESSING, livingAttacker.getUUID(),
+                () -> entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
     }
 
     private static void handleSiphon(LivingEntity entity, DamageSource source) {
@@ -148,10 +236,10 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.SIPHON);
         if (level <= 0) return;
 
-        float chance = 0.20f + 0.10f * level;
+        float chance = SIPHON_BASE_CHANCE + SIPHON_CHANCE_PER_LEVEL * level;
         if (livingAttacker.getRandom().nextFloat() >= chance) return;
 
-        float healAmount = 2.0f * level;
+        float healAmount = SIPHON_HEAL_PER_LEVEL * level;
         livingAttacker.heal(healAmount);
     }
 
@@ -163,18 +251,14 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(player.getMainHandItem(), EnchantmentEffects.SOUL_TAX);
         if (level <= 0) return;
 
-        int xpCost = 3 + 2 * level;
+        int xpCost = SOUL_TAX_BASE_XP_COST + SOUL_TAX_XP_COST_PER_LEVEL * level;
         if (player.totalExperience < xpCost) return;
 
         player.giveExperiencePoints(-xpCost);
 
-        float bonusDamage = 2.0f + 1.5f * level;
-        SOUL_TAX_PROCESSING.add(player.getUUID());
-        try {
-            entity.hurt(player.damageSources().mobAttack(player), bonusDamage);
-        } finally {
-            SOUL_TAX_PROCESSING.remove(player.getUUID());
-        }
+        float bonusDamage = SOUL_TAX_BASE_DAMAGE + SOUL_TAX_DAMAGE_PER_LEVEL * level;
+        withReentrancyGuard(SOUL_TAX_PROCESSING, player.getUUID(),
+                () -> entity.hurt(player.damageSources().mobAttack(player), bonusDamage));
     }
 
     private static void handleCleave(LivingEntity entity, DamageSource source) {
@@ -185,21 +269,18 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.CLEAVE);
         if (level <= 0) return;
 
-        double range = 1.5 + 0.5 * level;
-        float damage = 2.0f + 1.0f * level;
+        double range = CLEAVE_BASE_RANGE + CLEAVE_RANGE_PER_LEVEL * level;
+        float damage = CLEAVE_BASE_DAMAGE + CLEAVE_DAMAGE_PER_LEVEL * level;
 
         AABB area = entity.getBoundingBox().inflate(range);
         List<LivingEntity> nearby = entity.level().getEntitiesOfClass(LivingEntity.class, area,
                 e -> e != entity && e != livingAttacker && e.isAlive());
 
-        CLEAVE_PROCESSING.add(livingAttacker.getUUID());
-        try {
+        withReentrancyGuard(CLEAVE_PROCESSING, livingAttacker.getUUID(), () -> {
             for (LivingEntity target : nearby) {
                 target.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), damage);
             }
-        } finally {
-            CLEAVE_PROCESSING.remove(livingAttacker.getUUID());
-        }
+        });
     }
 
     private static void handleRepulse(LivingEntity entity, DamageSource source) {
@@ -211,11 +292,11 @@ public final class EnchantmentEffectHandler {
         if (attacker == null) return;
 
         double distSq = attacker.distanceToSqr(entity);
-        if (distSq > 16.0) return;
+        if (distSq > REPULSE_RANGE_SQ) return;
 
         Vec3 knockback = attacker.position().subtract(entity.position()).normalize();
-        double force = 0.6 + 0.3 * level;
-        attacker.push(knockback.x * force, 0.2 + 0.05 * level, knockback.z * force);
+        double force = REPULSE_BASE_FORCE + REPULSE_FORCE_PER_LEVEL * level;
+        attacker.push(knockback.x * force, REPULSE_BASE_LIFT + REPULSE_LIFT_PER_LEVEL * level, knockback.z * force);
 
         if (attacker instanceof ServerPlayer sp) {
             sp.hurtMarked = true;
@@ -231,9 +312,9 @@ public final class EnchantmentEffectHandler {
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
 
         double distSq = attacker.distanceToSqr(entity);
-        if (distSq > 16.0) return;
+        if (distSq > FROSTGUARD_RANGE_SQ) return;
 
-        int duration = 40 + 20 * level;
+        int duration = FROSTGUARD_BASE_SLOW_TICKS + FROSTGUARD_SLOW_TICKS_PER_LEVEL * level;
         livingAttacker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, level - 1));
     }
 
@@ -241,7 +322,7 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.RALLY, EquipmentSlot.CHEST);
         if (level <= 0) return;
 
-        float threshold = entity.getMaxHealth() * 0.2f;
+        float threshold = entity.getMaxHealth() * RALLY_HEALTH_THRESHOLD;
         if (entity.getHealth() > threshold) return;
 
         long currentTick = entity.level().getGameTime();
@@ -250,7 +331,7 @@ public final class EnchantmentEffectHandler {
 
         rallyCooldowns.put(entity, currentTick);
 
-        int duration = 60 + 40 * level;
+        int duration = RALLY_BASE_REGEN_TICKS + RALLY_REGEN_TICKS_PER_LEVEL * level;
         entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, duration, 1, true, true, true));
     }
 
@@ -261,18 +342,14 @@ public final class EnchantmentEffectHandler {
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
 
-        int buffDuration = 80 + 40 * level;
+        int buffDuration = BLOODRAGE_BASE_BUFF_TICKS + BLOODRAGE_BUFF_TICKS_PER_LEVEL * level;
         entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, buffDuration, 0, true, false, true));
         entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, buffDuration, level - 1, true, false, true));
         entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, buffDuration, 0, true, false, true));
 
-        float hpCost = 1.5f + 0.5f * level;
-        BLOODRAGE_PROCESSING.add(entity.getUUID());
-        try {
-            entity.hurt(entity.damageSources().magic(), hpCost);
-        } finally {
-            BLOODRAGE_PROCESSING.remove(entity.getUUID());
-        }
+        float hpCost = BLOODRAGE_BASE_HP_COST + BLOODRAGE_HP_COST_PER_LEVEL * level;
+        withReentrancyGuard(BLOODRAGE_PROCESSING, entity.getUUID(),
+                () -> entity.hurt(entity.damageSources().magic(), hpCost));
     }
 
     private static void handleMaceSlam(LivingEntity entity, DamageSource source) {
@@ -281,7 +358,7 @@ public final class EnchantmentEffectHandler {
 
         ItemStack weapon = player.getMainHandItem();
         if (!weapon.is(Items.MACE)) return;
-        if (player.fallDistance < 1.5f) return;
+        if (player.fallDistance < MACE_SLAM_MIN_FALL_DISTANCE) return;
 
         handleTempest(entity, player, weapon);
         handleSeismicSlam(entity, player, weapon);
@@ -302,7 +379,7 @@ public final class EnchantmentEffectHandler {
         lightning.setCause(player);
         serverLevel.addFreshEntity(lightning);
 
-        int immunityTicks = 40 + 20 * level;
+        int immunityTicks = TEMPEST_BASE_FIRE_RES_TICKS + TEMPEST_FIRE_RES_TICKS_PER_LEVEL * level;
         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, immunityTicks, 0));
     }
 
@@ -312,9 +389,9 @@ public final class EnchantmentEffectHandler {
         if (!player.isShiftKeyDown()) return;
 
         Vec3 pos = entity.position();
-        double radius = 4.0;
-        float damage = 6.0f;
-        double force = 1.2;
+        double radius = SEISMIC_SLAM_RADIUS;
+        float damage = SEISMIC_SLAM_DAMAGE;
+        double force = SEISMIC_SLAM_KNOCKBACK;
 
         AABB area = new AABB(pos.x - radius, pos.y - radius, pos.z - radius,
                 pos.x + radius, pos.y + radius, pos.z + radius);
@@ -324,7 +401,7 @@ public final class EnchantmentEffectHandler {
         for (LivingEntity target : nearby) {
             target.hurt(player.damageSources().mobAttack(player), damage);
             Vec3 knockDir = target.position().subtract(pos).normalize();
-            target.push(knockDir.x * force, 0.4, knockDir.z * force);
+            target.push(knockDir.x * force, SEISMIC_SLAM_LIFT, knockDir.z * force);
             if (target instanceof ServerPlayer sp) {
                 sp.hurtMarked = true;
             }
@@ -338,7 +415,7 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.UPDRAFT);
         if (level <= 0) return;
 
-        double launchVelocity = 0.8 + 0.4 * level;
+        double launchVelocity = UPDRAFT_BASE_VELOCITY + UPDRAFT_VELOCITY_PER_LEVEL * level;
         player.push(0, launchVelocity, 0);
         player.hurtMarked = true;
         player.resetFallDistance();
@@ -353,10 +430,10 @@ public final class EnchantmentEffectHandler {
         Entity attacker = source.getDirectEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
 
-        float procChance = 0.20f + 0.08f * level;
+        float procChance = RETRIBUTION_BASE_CHANCE + RETRIBUTION_CHANCE_PER_LEVEL * level;
         if (entity.getRandom().nextFloat() >= procChance) return;
 
-        float reflectRatio = 0.10f + 0.10f * level;
+        float reflectRatio = RETRIBUTION_BASE_REFLECT + RETRIBUTION_REFLECT_PER_LEVEL * level;
         float reflectDamage = blockedAmount * reflectRatio;
 
         if (reflectDamage > 0) {
@@ -373,15 +450,11 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(offhand, EnchantmentEffects.PUMMEL);
         if (level <= 0) return;
 
-        float bonusDamage = 1.5f + 1.0f * level;
-        offhand.hurtAndBreak(2, livingAttacker, EquipmentSlot.OFFHAND);
+        float bonusDamage = PUMMEL_BASE_DAMAGE + PUMMEL_DAMAGE_PER_LEVEL * level;
+        offhand.hurtAndBreak(PUMMEL_DURABILITY_COST, livingAttacker, EquipmentSlot.OFFHAND);
 
-        PUMMEL_PROCESSING.add(livingAttacker.getUUID());
-        try {
-            entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage);
-        } finally {
-            PUMMEL_PROCESSING.remove(livingAttacker.getUUID());
-        }
+        withReentrancyGuard(PUMMEL_PROCESSING, livingAttacker.getUUID(),
+                () -> entity.hurt(livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
     }
 
     private static void onAfterDeath(LivingEntity entity, DamageSource source) {
@@ -397,7 +470,7 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(livingKiller.getMainHandItem(), EnchantmentEffects.PLUNDER);
         if (level <= 0) return;
 
-        float chance = 0.025f * level;
+        float chance = PLUNDER_CHANCE_PER_LEVEL * level;
         if (entity.getRandom().nextFloat() >= chance) return;
 
         boolean hitByPlayer = entity.getKillCredit() != null;
@@ -411,7 +484,7 @@ public final class EnchantmentEffectHandler {
         int level = EnchantmentEffects.getEnchantmentLevel(livingKiller.getMainHandItem(), EnchantmentEffects.SNARE);
         if (level <= 0) return;
 
-        float chance = 0.05f;
+        float chance = SNARE_CHANCE;
         if (entity.getRandom().nextFloat() >= chance) return;
 
         SpawnEggItem egg = SpawnEggItem.byId(entity.getType());

@@ -167,7 +167,6 @@ Meridian ships with first-class integration for:
 - **EMI / REI / JEI** — Enchanting table recipes and library mechanics under the "Infusions" category, plus an "Enchantments" browser (max level, exclusive sets, treasure flag, power windows)
 - **Jade / WTHIT** — Shelf stat tooltips and library contents via probe
 - **ModMenu + Cloth Config** — In-game configuration screen
-- **Trinkets** — Wearable item compatibility
 
 ---
 

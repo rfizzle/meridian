@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -39,6 +40,10 @@ public final class ArmorTickHandler {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(ArmorTickHandler::onServerTick);
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            tickCounter = 0;
+            cinderwalkBlocks.clear();
+        });
     }
 
     private static void onServerTick(MinecraftServer server) {

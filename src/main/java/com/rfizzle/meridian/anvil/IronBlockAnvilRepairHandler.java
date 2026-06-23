@@ -15,7 +15,7 @@ import java.util.function.Supplier;
 /**
  * Repairs a damaged or chipped anvil one tier when a block of iron is placed in slot B, matching
  * Zenith's iron-block repair behaviour but with the flat XP cost mandated by DESIGN.md
- * (§ "Anvil tweaks (MVP)" — "Cost: 1 level, 1 iron block consumed"). Damaged → chipped, chipped →
+ * (§ "Anvil tweaks" — "Cost: 1 level, 1 iron block consumed"). Damaged → chipped, chipped →
  * normal; a pristine anvil has nothing to repair so the handler declines.
  *
  * <p>Any {@link ItemEnchantments} component on the input anvil is copied onto the output stack so
@@ -24,12 +24,12 @@ import java.util.function.Supplier;
  * vanilla feature, and no other component is meaningful on a block-form anvil.
  *
  * <p>The {@code Items.IRON_BLOCK} check is an exact item match on purpose: Zenith uses the
- * {@code #c:iron_blocks} tag, but DESIGN.md and T-4.2.1 both single out "a block of iron" /
+ * {@code #c:iron_blocks} tag, but DESIGN.md singles out "a block of iron" /
  * {@code IRON_BLOCK}. Narrowing the trigger here keeps iron **ingots**, iron nuggets, and
  * other-metal storage blocks out — the task's explicit "iron ingot in right → declines"
  * acceptance pins that.
  *
- * <p>The handler also respects {@code config.anvil.ironBlockRepairsAnvil} (T-4.2.2): operators can
+ * <p>The handler also respects {@code config.anvil.ironBlockRepairsAnvil}: operators can
  * disable iron-block repairs without unregistering the handler, and a missing config (e.g. before
  * {@link Meridian#onInitialize} has finished loading) is treated as "feature off" rather
  * than throwing.

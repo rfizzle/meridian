@@ -135,7 +135,7 @@ public final class MeridianRegistry {
             BlockEntityType.Builder.of(TreasureShelfBlockEntity::new, TREASURE_SHELF).build(null);
 
     /**
-     * Curse-stripping anvil ingredient. The {@code PrismaticWebHandler} lookup in T-4.1.4 keys
+     * Curse-stripping anvil ingredient. The {@code PrismaticWebHandler} lookup keys
      * off this exact {@link Item} instance, so it is exposed on the registry for handler wiring
      * and for datagen / compat consumers to reference without re-resolving by id.
      */
@@ -157,7 +157,7 @@ public final class MeridianRegistry {
      * ({@code echoing_sculkshelf}, {@code soul_touched_sculkshelf}). Rarity is left at the
      * default — tendrils are a routine Warden reward, not an epic find, so the inventory name
      * colouring matches other bulk crafting ingredients. Drop distribution is wired by
-     * {@code WardenLootHandler} (T-5.4.3), not by item-side state.
+     * {@code WardenLootHandler}, not by item-side state.
      */
     public static final WardenTendrilItem WARDEN_TENDRIL =
             new WardenTendrilItem(new Item.Properties());
@@ -167,7 +167,7 @@ public final class MeridianRegistry {
      * enchanted book. Single-stack because the anvil interaction is one tome per use, and
      * a higher stack cap would let players misread "how many salvages" from the slot count.
      * No durability: the item is destroyed on use by
-     * {@code ScrapTomeHandler} (S-5.2), not ticked down per use.
+     * {@code ScrapTomeHandler}, not ticked down per use.
      */
     public static final ScrapTomeItem SCRAP_TOME =
             new ScrapTomeItem(new Item.Properties().stacksTo(16));
@@ -183,7 +183,7 @@ public final class MeridianRegistry {
     /**
      * Extraction tome — most expensive tier; preserves the source item (unenchanted, damaged)
      * and produces a book with every enchantment. Single-stack, no durability: the anvil
-     * fuel-slot repair path handled in {@code ExtractionTomeFuelSlotRepairHandler} (S-5.2.4)
+     * fuel-slot repair path handled in {@code ExtractionTomeFuelSlotRepairHandler}
      * consumes the whole tome and is handler-side, not item-data state.
      */
     public static final ExtractionTomeItem EXTRACTION_TOME =
