@@ -98,7 +98,8 @@ public class CraftingButtonGameTest implements FabricGameTest {
         ItemStack seashelfItem = new ItemStack(seashelfBlock);
 
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.experienceLevel = 30;
+        // infused_seashelf costs round(22.5 * LEVELS_PER_ETERNA) = 45 levels.
+        player.experienceLevel = 50;
         BlockPos absTable = helper.absolutePos(TABLE_POS);
         MeridianEnchantmentMenu menu = new MeridianEnchantmentMenu(
                 1, player.getInventory(),
@@ -238,7 +239,8 @@ public class CraftingButtonGameTest implements FabricGameTest {
         }
 
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.experienceLevel = 30;
+        // infused_hellshelf costs round(22.5 * LEVELS_PER_ETERNA) = 45 levels.
+        player.experienceLevel = 50;
         BlockPos absTable = helper.absolutePos(TABLE_POS);
         MeridianEnchantmentMenu menu = new MeridianEnchantmentMenu(
                 1, player.getInventory(),
@@ -311,7 +313,8 @@ public class CraftingButtonGameTest implements FabricGameTest {
         libraryItem.set(DataComponents.ENCHANTMENTS, mutable.toImmutable());
 
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.experienceLevel = 50;
+        // ender_library costs round(50 * LEVELS_PER_ETERNA) = 100 levels.
+        player.experienceLevel = 100;
         BlockPos absTable = helper.absolutePos(TABLE_POS);
         MeridianEnchantmentMenu menu = new MeridianEnchantmentMenu(
                 1, player.getInventory(),
@@ -388,7 +391,8 @@ public class CraftingButtonGameTest implements FabricGameTest {
         }
 
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
-        player.experienceLevel = 30;
+        // improved_scrap_tome costs round(22.5 * LEVELS_PER_ETERNA) = 45 levels.
+        player.experienceLevel = 50;
         BlockPos absTable = helper.absolutePos(TABLE_POS);
         MeridianEnchantmentMenu menu = new MeridianEnchantmentMenu(
                 1, player.getInventory(),

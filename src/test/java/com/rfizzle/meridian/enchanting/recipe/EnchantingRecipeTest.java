@@ -287,6 +287,32 @@ class EnchantingRecipeTest {
                 "budding amethyst eterna should be uncapped");
     }
 
+    @Test
+    void effectiveXpCost_derivesFromEternaOnTheDoubledScale() {
+        // No explicit xp_cost → cost tracks the slot-2 enchant scale: round(eterna * 2).
+        EnchantingRecipe enderLibrary = makeRecipe(Ingredient.of(Items.BOOK),
+                new StatRequirements(50F, 45F, 100F), StatRequirements.NO_MAX,
+                new ItemStack(Items.ENCHANTED_BOOK));
+        assertEquals(100, enderLibrary.getEffectiveXpCost(),
+                "50 Eterna must cost 100 levels — the same as a maxed table enchant");
+
+        // Fractional Eterna doubles before rounding: 22.5 -> 45, not round(22.5)*2 = 46.
+        EnchantingRecipe infusedShelf = makeRecipe(Ingredient.of(Items.BOOKSHELF),
+                new StatRequirements(22.5F, 30F, 0F), StatRequirements.NO_MAX,
+                new ItemStack(Items.BOOKSHELF));
+        assertEquals(45, infusedShelf.getEffectiveXpCost(),
+                "22.5 Eterna must double before rounding (45), matching getEnchantmentCost");
+    }
+
+    @Test
+    void effectiveXpCost_explicitOverrideTakesPrecedence() {
+        EnchantingRecipe recipe = makeRecipe(Ingredient.of(Items.DIAMOND_SWORD),
+                new StatRequirements(40F, 0F, 0F), StatRequirements.NO_MAX,
+                new ItemStack(Items.NETHERITE_INGOT), OptionalInt.empty(), 12);
+        assertEquals(12, recipe.getEffectiveXpCost(),
+                "an explicit xp_cost must be used verbatim, not the derived doubled value");
+    }
+
     private static EnchantingRecipe makeRecipe(Ingredient input, StatRequirements req,
                                                StatRequirements max, ItemStack result) {
         return makeRecipe(input, req, max, result, OptionalInt.empty(), 0);
