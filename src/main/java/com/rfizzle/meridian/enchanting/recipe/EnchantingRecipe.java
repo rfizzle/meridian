@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
 import com.rfizzle.meridian.api.StatCollection;
+import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -85,12 +86,13 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
     /**
      * Returns the XP level cost to perform this infusion. If the recipe specifies an explicit
      * {@code xp_cost}, that value is used. Otherwise, derives the cost from the recipe's eterna
-     * requirement — matching Zenith's slot-2 behavior where the level cost equals
-     * {@code Math.round(eterna)}.
+     * requirement on the same scale as a table enchant: the slot-2 level is
+     * {@code round(eterna * }{@link RealEnchantmentHelper#LEVELS_PER_ETERNA}{@code )}, so an
+     * infusion priced off its Eterna gate stays consistent with what enchanting at that Eterna costs.
      */
     public int getEffectiveXpCost() {
         if (xpCost > 0) return xpCost;
-        return Math.max(1, Math.round(requirements.eterna()));
+        return Math.max(1, Math.round(requirements.eterna() * RealEnchantmentHelper.LEVELS_PER_ETERNA));
     }
 
     /**
