@@ -52,9 +52,9 @@ Loom's `splitEnvironmentSourceSets()` is enabled — three source sets:
 
 | Source set | Root | Purpose |
 |---|---|---|
-| `main` | `src/main/java` | Server + common logic. Entrypoint: `Meridian.java` |
+| `main` | `src/main/java` | Server + common logic. Entrypoint: `Meridian.java`. Also hosts the datagen providers under `com.rfizzle.meridian.data` (entrypoint `MeridianDataGenerator`, run with `runDatagen`). |
 | `client` | `src/client/java` | Client-only code. Entrypoint: `MeridianClient.java` |
-| `gametest` | `src/gametest/java` | Fabric gametests (run with `runGametest`). Has `main` on its classpath but is NOT included in the jar. Also hosts the datagen entrypoint (`MeridianDataGenerator`, run with `runDatagen`). |
+| `gametest` | `src/gametest/java` | Fabric gametests (run with `runGametest`). Has `main` on its classpath but is NOT included in the jar. The `runDatagen` run is sourced from this set, picking the providers up off `main`'s classpath. |
 
 JUnit tests go in the standard `src/test/java` directory. The test classpath
 includes `fabric-loader-junit` but excludes `fabric-api` — tests that need
