@@ -12,7 +12,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -46,7 +46,7 @@ public record EnchantmentInfoPayload(
         if (size < 0 || size > 1024) {
             throw new DecoderException("EnchantmentInfoPayload size out of bounds: " + size);
         }
-        Map<ResourceKey<Enchantment>, EnchantmentInfo> map = new HashMap<>(size);
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> map = new LinkedHashMap<>(size);
         for (int i = 0; i < size; i++) {
             ResourceKey<Enchantment> key = KEY_CODEC.decode(buf);
             EnchantmentInfo info = EnchantmentInfo.STREAM_CODEC.decode(buf);

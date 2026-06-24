@@ -10,8 +10,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -109,9 +111,14 @@ public final class EnchantmentInfoRegistry {
     }
 
     /**
-     * Builds the payload to sync the full registry to a client.
+     * Builds the payload to sync the full registry to a client. Entries are ordered by
+     * enchantment id so the serialized wire form is deterministic across rebuilds.
      */
     public static EnchantmentInfoPayload buildPayload() {
-        return new EnchantmentInfoPayload(new HashMap<>(INFO));
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> ordered = new LinkedHashMap<>();
+        INFO.entrySet().stream()
+                .sorted(Comparator.comparing(e -> e.getKey().location().toString()))
+                .forEach(e -> ordered.put(e.getKey(), e.getValue()));
+        return new EnchantmentInfoPayload(ordered);
     }
 }
