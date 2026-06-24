@@ -135,6 +135,18 @@ First-class recipe and tooltip adapters ship at launch for:
 
 Server operators can override `maxLevel`, `maxLootLevel`, `levelCap`, and `enabled` for any enchantment (vanilla or modded) via the config file. Disabling an enchantment removes it from the table, loot, and tooltips without deleting data from existing items. Changes sync to clients automatically.
 
+### Inline Enchantment Descriptions
+
+With `display.enableInlineEnchDescs` turned on, item and book tooltips show a short gray description under each enchantment — the same lines that appear in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 75 of its own enchantments **and** for every vanilla enchantment.
+
+The descriptions are plain language keys, so any enchantment is covered the moment a matching key exists:
+
+```
+enchantment.<namespace>.<path>.desc
+```
+
+For example, `enchantment.minecraft.mending.desc` or `enchantment.meridian.tempo.desc`. Path segments separated by `/` become `.` in the key. Other mods (or a resource pack) can light up descriptions for their own enchantments simply by shipping that translation key — no dependency on Meridian's API is required, and the key is harmless when Meridian is absent. If no `.desc` key exists for an enchantment, it is silently skipped.
+
 ---
 
 ## Installation
