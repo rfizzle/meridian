@@ -40,7 +40,7 @@ import java.util.Map;
 public final class EmiEnchantingPlugin implements EmiPlugin {
 
     private static final EmiTexture MOD_ICON = new EmiTexture(
-            Meridian.id("icon.png"), 0, 0, 16, 16, 128, 128, 128, 128);
+            Meridian.id("icon.png"), 0, 0, 16, 16, 256, 256, 256, 256);
 
     public static final EmiRecipeCategory INFUSIONS = new EmiRecipeCategory(
             Meridian.id("infusions"),

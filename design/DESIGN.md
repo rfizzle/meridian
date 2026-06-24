@@ -18,9 +18,7 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 
 **Full Logo (`art/logo.png`):** A stone archway frames a glowing compass rose set against a star field. The compass has an eight-pointed design with a golden central star. Runic symbols (enchanting table glyphs) fill the background on dark blue-violet brickwork. Constellation lines and galaxy swirls weave through the scene. Below, the word "MERIDIAN" appears in a blocky pixel font on a stone tablet, with "MINECRAFT ENCHANTING OVERHAUL" as a subtitle. A crescent moon crowns the arch.
 
-**Icon (`art/icon-128.png`):** The compass rose and stone archway isolated — no text. The golden star center radiates against deep blue-violet. The arch has twisted vine/tendril detailing. A purple-blue glow emanates outward.
-
-**In-Game Icon (`assets/meridian/icon.png`):** A pixel-art open spellbook — purple covers with gold trim, glowing white pages, cyan sparkle particles above.
+**Icon (`art/glyphs/astrolabe_logo.glyph`):** A circular astrolabe — a dark stone bezel rings a deep blue-violet night-sky dial; an eight-point compass rose in lavender and purple radiates from a glowing golden central star, with faint stars dusting the dial and a blue rim-glow haloing the bezel. No text. This single glyph is the source for every icon surface: the in-jar mod icon (`assets/meridian/icon.png`, shown in Mod Menu) and the website favicon/nav (`site/assets/icon.png`).
 
 ### Color Palette
 
@@ -138,7 +136,7 @@ Colors: Each uses its biome-appropriate sub-palette while keeping gold (#DAA520)
 | Runic background | Meridian-Logo.png background | Enchanting table glyphs on brickwork |
 | Color temperature | Meridian-Logo.png | Deep violet → cosmic blue gradient |
 | Glow style | Meridian-Icon.png outer glow | Purple-blue radial, not hard-edged |
-| Pixel art item style | `assets/meridian/icon.png` | Open book with sparkles — sets the in-game pixel density |
+| Pixel art item style | `assets/meridian/textures/item/tome/xp_tome.png` | Tome sprite — sets the in-game item pixel density |
 | Shelf textures | `src/main/resources/assets/meridian/textures/block/` | Reference for shelf tier icon colors |
 | Constellation overlay | Meridian-Logo.png background | Thin cyan lines connecting star points |
 | Stone texture | Meridian-Icon.png arch | Dark gray stone with vine/tendril wrapping |

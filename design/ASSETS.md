@@ -10,12 +10,12 @@
 > Final paths are under `src/main/resources/` unless noted. A separate report sweeps
 > the resource tree for any final asset lacking a `.glyph` source.
 
-## Branding masters (`.png` — not glyph-based)
+## Branding masters
 
-| Asset | `art/` master | Final / derived copies |
+| Asset | Source | Final / derived copies |
 |---|---|---|
-| Full logo | `art/logo.png` | `site/assets/logo.png` |
-| Mod icon (128) | `art/icon-128.png` | `assets/meridian/icon.png` (in-jar), `site/assets/icon.png` |
+| Full logo | `art/logo.png` — `.png` master (not glyph-based) | `site/assets/logo.png` |
+| Mod icon | `art/glyphs/astrolabe_logo.glyph` → `art/icon-128.png` (128 native), `art/icon-512.png` (512 store master) | `assets/meridian/icon.png` (256, in-jar Mod Menu + EMI/REI/JEI category tabs), `site/assets/icon.png` (256, favicon/apple-touch/nav) |
 
 ## In-game pixel art
 
@@ -51,7 +51,6 @@
 
 | Asset | Source | Final asset |
 |---|---|---|
-| Recipe browser icon (EMI/REI/JEI tab) | `/glyph` | — (planned) |
 | Shelf progression icons (per tier) | `/glyph` | — (planned, for tooltips/docs) |
 | Website hero background | Gemini | — (planned, `site/`) |
 | Open Graph image | Gemini | — (planned, `site/assets/`) |
