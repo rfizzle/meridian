@@ -1,0 +1,52 @@
+{
+  "enchantment.minecraft.protection.desc": "Reduces most types of incoming damage",
+  "enchantment.minecraft.fire_protection.desc": "Reduces fire damage and burning duration",
+  "enchantment.minecraft.feather_falling.desc": "Reduces fall damage",
+  "enchantment.minecraft.blast_protection.desc": "Reduces explosion damage and knockback",
+  "enchantment.minecraft.projectile_protection.desc": "Reduces damage from arrows and other projectiles",
+  "enchantment.minecraft.respiration.desc": "Extends underwater breathing time",
+  "enchantment.minecraft.aqua_affinity.desc": "Removes the underwater mining speed penalty",
+  "enchantment.minecraft.thorns.desc": "Reflects damage back to attackers",
+  "enchantment.minecraft.depth_strider.desc": "Increases movement speed underwater",
+  "enchantment.minecraft.frost_walker.desc": "Freezes water into ice beneath your feet",
+  "enchantment.minecraft.soul_speed.desc": "Increases walking speed on soul sand and soul soil",
+  "enchantment.minecraft.swift_sneak.desc": "Increases movement speed while sneaking",
+
+  "enchantment.minecraft.sharpness.desc": "Increases melee damage dealt",
+  "enchantment.minecraft.smite.desc": "Deals bonus damage to undead mobs",
+  "enchantment.minecraft.bane_of_arthropods.desc": "Deals bonus damage to arthropods and briefly slows them",
+  "enchantment.minecraft.knockback.desc": "Increases the knockback dealt to enemies",
+  "enchantment.minecraft.fire_aspect.desc": "Sets targets on fire when struck",
+  "enchantment.minecraft.looting.desc": "Increases mob loot and rare drop chances",
+  "enchantment.minecraft.sweeping_edge.desc": "Increases the damage of sweeping attacks",
+
+  "enchantment.minecraft.efficiency.desc": "Increases mining and digging speed",
+  "enchantment.minecraft.silk_touch.desc": "Mines blocks so they drop themselves",
+  "enchantment.minecraft.unbreaking.desc": "Reduces the chance of consuming durability",
+  "enchantment.minecraft.fortune.desc": "Increases block drops from mining",
+
+  "enchantment.minecraft.power.desc": "Increases arrow damage",
+  "enchantment.minecraft.punch.desc": "Increases the knockback dealt by arrows",
+  "enchantment.minecraft.flame.desc": "Sets arrows ablaze, igniting targets",
+  "enchantment.minecraft.infinity.desc": "Shoots arrows without consuming them",
+
+  "enchantment.minecraft.luck_of_the_sea.desc": "Increases the chance of reeling in treasure",
+  "enchantment.minecraft.lure.desc": "Decreases the wait time for fish to bite",
+
+  "enchantment.minecraft.loyalty.desc": "Returns the trident to you after it is thrown",
+  "enchantment.minecraft.impaling.desc": "Deals bonus damage to aquatic mobs",
+  "enchantment.minecraft.riptide.desc": "Launches you with the trident while wet or in rain",
+  "enchantment.minecraft.channeling.desc": "Summons lightning on struck targets during thunderstorms",
+
+  "enchantment.minecraft.multishot.desc": "Fires three arrows from a single shot",
+  "enchantment.minecraft.quick_charge.desc": "Decreases crossbow reload time",
+  "enchantment.minecraft.piercing.desc": "Lets arrows pass through multiple targets",
+
+  "enchantment.minecraft.density.desc": "Increases mace damage dealt per block fallen",
+  "enchantment.minecraft.breach.desc": "Reduces the target's armor effectiveness",
+  "enchantment.minecraft.wind_burst.desc": "Launches you upward when smashing down with the mace",
+
+  "enchantment.minecraft.mending.desc": "Repairs the item using collected experience",
+  "enchantment.minecraft.binding_curse.desc": "Prevents the item from being removed once equipped",
+  "enchantment.minecraft.vanishing_curse.desc": "Destroys the item on death"
+}
