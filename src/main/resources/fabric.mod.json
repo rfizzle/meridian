@@ -48,7 +48,11 @@
             "com.rfizzle.meridian.gametest.enchantments.EdgeCaseEnchantmentTest",
             "com.rfizzle.meridian.gametest.EnchantmentSelectionGameTest",
             "com.rfizzle.meridian.gametest.EnchantmentTagGameTest",
-            "com.rfizzle.meridian.event.ArmorTickHandlerGameTest"
+            "com.rfizzle.meridian.event.ArmorTickHandlerGameTest",
+            "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
+            "com.rfizzle.meridian.event.AurifyHandlerGameTest",
+            "com.rfizzle.meridian.event.MountedEnchantmentHandlerGameTest",
+            "com.rfizzle.meridian.event.TetherHandlerGameTest"
         ],
         "emi": ["com.rfizzle.meridian.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.rfizzle.meridian.compat.rei.ReiEnchantingPlugin"],

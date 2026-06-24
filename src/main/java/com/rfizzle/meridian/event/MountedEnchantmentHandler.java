@@ -42,7 +42,8 @@ public final class MountedEnchantmentHandler {
         }
     }
 
-    private static void handleTrample(AbstractHorse horse) {
+    // Package-private so the per-tick trample effect can be driven directly in a gametest.
+    static void handleTrample(AbstractHorse horse) {
         int level = EnchantmentEffects.getEquippedLevel(horse, EnchantmentEffects.TRAMPLE, EquipmentSlot.BODY);
         if (level <= 0) return;
 
