@@ -294,10 +294,12 @@ processResources {
     }
 
     exclude ".gitkeep"
+    exclude ".cache"
 }
 
 processClientResources {
     exclude ".gitkeep"
+    exclude ".cache"
 }
 
 tasks.withType(JavaCompile).configureEach {
