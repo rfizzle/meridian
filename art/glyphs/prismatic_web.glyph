@@ -1,44 +1,93 @@
-# prismatic_web — sage-green crosshatch spider-web item icon (16x16).
-# Faithful trace of the shipped texture: soft web strands in graded
-# emerald/sage greens with darker accent nodes, bleeding to the frame
-# edges with transparent gaps between strands.
+# Meridian — Prismatic Web (animated, 16x16 item icon). A radial spider web:
+# eight strands anchored corner-to-corner and edge-to-edge through a central
+# hub, bound by two concentric diamond rings. Palette is prismarine-iridescent
+# — a teal/sage-green strand body (the prismarine-shard material) carrying a
+# prismatic shimmer that sweeps the web in cyan and Meridian violet, the
+# signature of its anvil curse-cleansing role. Crafted from prismarine shards +
+# string.
 size: 16
+frametime: 5
 
 legend:
   . transparent
-  A #7FB8A4
-  B #9FCBBC
-  C #7CB3A4
-  D #91C2AC
-  E #73B5AA
-  F #83B9A5
-  G #91C2B1
-  H #8AC0B3
-  I #559A8A
-  J #9ECABB
-  K #8EBFB0
-  L #6BB0A3
-  M #97C6B6
-  N #539882
-  O #669C8D
-  P #75AA99
-  Q #447B6B
-  R #CECECE
+  d #15514a            # deep teal — strand core shadow (prismarine dark)
+  t #2a7d70            # teal midtone strand
+  g #3fae97            # sage-teal base strand
+  l #74d8bf            # light aqua highlight strand
+  c #9bf2df            # cyan shimmer
+  w #e6fff8            # bright glint — brightest shimmer core
+  p #b87fe6            # light violet prismatic shimmer
+  V meridian.purple    # violet accent node (#7b2fbe)
+  C #4fe6e0            # cyan accent node
 
-grid:
-  B.......B......D
-  .K....AICBA...E.
-  ..CBGA..E..F.A..
-  ...O...AL...B...
-  ...FM.HB.H.P.Q..
-  ..B..E.C..E...I.
-  ..C.E.FA.C.G..D.
-  DCEABGJBA...N..A
-  .A..A..DDFFMBAIA
-  ..A..ACD.C..A..H
-  ..B..C.A..J.H.C.
-  ...D.A.A.JCD..E.
-  ...AC.AHG...NA..
-  ..L..JK...FAIB..
-  .B....ECBG....K.
-  R.....F........C
+frame:
+  l..............g
+  .l.....gg.....g.
+  ..l...gg.g...g..
+  ...l.g.g..g.g...
+  ....g..VV..g....
+  ...g.gg..gg.t...
+  ..g..gg..gt..t..
+  .wwcV..VV..V..t.
+  .w..V..VV..Vttt.
+  ..p..gg..tt..t..
+  ...g.gt..tt.t...
+  ....g..VV..t....
+  ...g.t..t.t.d...
+  ..g...t.tt...d..
+  .g.....tt.....d.
+  g..............d
+
+frame:
+  l..............g
+  .l.....wc.....g.
+  ..l...pw.g...g..
+  ...l.g.w..g.g...
+  ....g..CC..g....
+  ...g.gg..gg.t...
+  ..g..gg..gt..t..
+  .gggC..CC..C..t.
+  .g..C..CC..Cttt.
+  ..g..gg..tt..t..
+  ...g.gt..tt.t...
+  ....g..CC..t....
+  ...g.t..t.t.d...
+  ..g...t.tt...d..
+  .g.....tt.....d.
+  g..............d
+
+frame:
+  l..............g
+  .l.....gg.....g.
+  ..l...gg.g...g..
+  ...l.g.g..g.g...
+  ....g..VV..g....
+  ...g.gg..gg.t...
+  ..g..gg..gt..p..
+  .gggV..VV..V..w.
+  .g..V..VV..Vcww.
+  ..g..gg..tt..t..
+  ...g.gt..tt.t...
+  ....g..VV..t....
+  ...g.t..t.t.d...
+  ..g...t.tt...d..
+  .g.....tt.....d.
+  g..............d
+
+frame:
+  l..............g
+  .l.....gg.....g.
+  ..l...gg.g...g..
+  ...l.g.g..g.g...
+  ....g..CC..g....
+  ...g.gg..gg.t...
+  ..g..gg..gt..t..
+  .gggC..CC..C..t.
+  .g..C..CC..Cttt.
+  ..g..gg..tt..t..
+  ...g.gt..tt.t...
+  ....g..CC..t....
+  ...g.t..w.t.d...
+  ..g...t.wp...d..
+  .g.....cw.....d.
+  g..............d
