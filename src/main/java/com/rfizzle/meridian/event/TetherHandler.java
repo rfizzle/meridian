@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.HashMap;
@@ -29,13 +30,18 @@ public final class TetherHandler {
 
     private static void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
         if (alive) return;
+        restoreTetheredItems(newPlayer);
+    }
 
-        List<ItemStack> items = tetheredItems.remove(newPlayer.getUUID());
+    // Package-private: returns any items saved under the player's id to their inventory (dropping
+    // the overflow). Split out from the respawn hook so it can be driven directly in a gametest.
+    static void restoreTetheredItems(Player player) {
+        List<ItemStack> items = tetheredItems.remove(player.getUUID());
         if (items == null || items.isEmpty()) return;
 
         for (ItemStack stack : items) {
-            if (!newPlayer.getInventory().add(stack)) {
-                newPlayer.drop(stack, false);
+            if (!player.getInventory().add(stack)) {
+                player.drop(stack, false);
             }
         }
     }

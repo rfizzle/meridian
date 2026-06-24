@@ -1,7 +1,7 @@
 {
   "nav": "Commands",
   "metaTitle": "Commands — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Command reference for Meridian. The /meridian reload command with permission levels, hot-reload behavior, and permission node details.",
+  "metaDescription": "Command reference for Meridian. The /meridian reload command with permission levels and hot-reload behavior.",
   "ogTitle": "Commands — Meridian",
   "ogDescription": "Command reference for /meridian with permissions and hot-reload details.",
   "title": "Commands",
@@ -80,7 +80,7 @@
             },
             {
               "title": "Permissions Mods",
-              "html": ["If you use a permissions mod (e.g. LuckPerms), the permission node is <code class='text-accent2'>meridian.command.reload</code>."]
+              "html": ["Meridian gates <code class='text-accent2'>reload</code> on the vanilla op level (2) rather than a custom permission node, so a permissions mod such as LuckPerms grants access by setting the player's op level — for example <code class='text-accent2'>/lp user &lt;name&gt; permission set minecraft.command.op</code> or granting op directly."]
             }
           ]
         }
