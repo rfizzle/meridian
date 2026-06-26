@@ -177,7 +177,7 @@ public final class JeiEnchantingPlugin implements IModPlugin {
      * Hides any recipes that were added via a previous runtime call (to avoid duplicates), then
      * adds a fresh set extracted from the now-populated registry.
      */
-    static void notifySync() {
+    public static void notifySync() {
         IJeiRuntime runtime = jeiRuntime;
         if (runtime == null) {
             return;

@@ -24,8 +24,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,6 +37,12 @@ import java.util.Map;
  * <p>Recipes come from {@link TableCraftingDisplayExtractor}; shelf info panels come from
  * {@link EnchantingStatRegistry#blockEntries()}. Both sources are shared with the EMI plugin so a
  * recipe added to the table only has to be plumbed through one place (S-7.2.2).
+ *
+ * <p>Unlike EMI, REI has no safe programmatic reload — only fragile staged-pipeline internals — so
+ * the enchantment browser is not force-refreshed after a late sync. It relies on
+ * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry} being populated before
+ * {@link #registerDisplays} builds the list, which holds on first join (the common case); a live
+ * {@code /reload} is picked up on rejoin or a manual resource reload (F3+T).
  */
 public final class ReiEnchantingPlugin implements REIClientPlugin {
 
@@ -47,12 +51,6 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
 
     public static final CategoryIdentifier<ReiEnchantmentBrowserDisplay> ENCHANTMENTS_ID =
             CategoryIdentifier.of(Meridian.MOD_ID, "enchantments");
-
-    /**
-     * Displays added via the runtime {@link DisplayRegistry} (outside the normal plugin-init
-     * lifecycle). Tracked so they can be removed before re-adding on the next sync notification.
-     */
-    private static final List<ReiEnchantmentBrowserDisplay> runtimeAddedDisplays = new ArrayList<>();
 
     @Override
     public String getPluginProviderName() {
@@ -110,32 +108,6 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
                 info.line(Component.literal(line));
             }
             registry.add(info);
-        }
-    }
-
-    /**
-     * Triggered by {@link com.rfizzle.meridian.client.compat.ViewerRefreshTrigger} after
-     * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry#applyFromPayload} completes.
-     * Removes any displays added via a previous runtime call (to avoid duplicates) and adds a
-     * fresh set extracted from the now-populated registry.
-     */
-    static void notifySync() {
-        Minecraft client = Minecraft.getInstance();
-        if (client == null || client.level == null) {
-            return;
-        }
-        DisplayRegistry registry = DisplayRegistry.getInstance();
-        // Remove stale displays we added in a previous runtime call.
-        runtimeAddedDisplays.forEach(registry::remove);
-        runtimeAddedDisplays.clear();
-        // Add the fresh set. extract() now returns non-empty because hasSyncBeenReceived() == true.
-        List<EnchantmentBrowserRecord> records =
-                EnchantmentBrowserExtractor.extract(client.level.registryAccess());
-        for (EnchantmentBrowserRecord record : records) {
-            ReiEnchantmentBrowserDisplay display =
-                    new ReiEnchantmentBrowserDisplay(record, ENCHANTMENTS_ID);
-            registry.add(display);
-            runtimeAddedDisplays.add(display);
         }
     }
 
