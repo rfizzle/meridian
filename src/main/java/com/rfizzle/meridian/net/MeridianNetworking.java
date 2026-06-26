@@ -1,11 +1,22 @@
 package com.rfizzle.meridian.net;
 
+import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
+import com.rfizzle.meridian.enchanting.EnchantingStats;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+
+import java.util.List;
+import java.util.Map;
 
 /**
- * Registers every S2C payload the enchanting mod sends. Called from the main
- * {@link com.rfizzle.meridian.Meridian#onInitialize} during mod load so the
- * types are resolvable before any play-phase traffic starts.
+ * Registers every S2C payload the enchanting mod sends, and wires the server-side lifecycle
+ * hooks that keep client registries in sync. Called from the main
+ * {@link com.rfizzle.meridian.Meridian#onInitialize} during mod load so the types are
+ * resolvable before any play-phase traffic starts.
  */
 public final class MeridianNetworking {
 
@@ -16,5 +27,39 @@ public final class MeridianNetworking {
         PayloadTypeRegistry.playS2C().register(StatsPayload.TYPE, StatsPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(CluesPayload.TYPE, CluesPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantmentInfoPayload.TYPE, EnchantmentInfoPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(EnchantingStatSyncPayload.TYPE, EnchantingStatSyncPayload.CODEC);
+    }
+
+    /**
+     * Registers the server-side lifecycle hooks that keep {@link EnchantingStatRegistry}
+     * in sync on all connected clients. Must be called during
+     * {@link com.rfizzle.meridian.Meridian#onInitialize} after
+     * {@link #registerPayloads()}.
+     *
+     * <ul>
+     *   <li>{@code END_DATA_PACK_RELOAD} — re-syncs after {@code /reload}.</li>
+     *   <li>{@code JOIN} — sends the current snapshot to each joining player.</li>
+     * </ul>
+     */
+    public static void registerLifecycleHandlers() {
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, resourceManager, success) -> {
+            if (!success) return;
+            EnchantingStatSyncPayload payload = buildSyncPayload();
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                ServerPlayNetworking.send(player, payload);
+            }
+        });
+
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+                ServerPlayNetworking.send(handler.player, buildSyncPayload()));
+    }
+
+    private static EnchantingStatSyncPayload buildSyncPayload() {
+        EnchantingStatRegistry reg = EnchantingStatRegistry.getInstance();
+        Map<ResourceLocation, EnchantingStats> blocks = reg.blockEntries();
+        List<EnchantingStatSyncPayload.TagEntry> tags = reg.tagEntriesForSync().stream()
+                .map(e -> new EnchantingStatSyncPayload.TagEntry(e.getKey(), e.getValue()))
+                .toList();
+        return new EnchantingStatSyncPayload(blocks, tags);
     }
 }

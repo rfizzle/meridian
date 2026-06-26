@@ -57,6 +57,7 @@ public class Meridian implements ModInitializer {
         TetherHandler.register();
         AurifyHandler.register();
         MeridianNetworking.registerPayloads();
+        MeridianNetworking.registerLifecycleHandlers();
         registerLifecycleEvents();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 MeridianCommand.register(dispatcher));
