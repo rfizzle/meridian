@@ -3,6 +3,7 @@ package com.rfizzle.meridian.compat.rei;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -20,10 +21,7 @@ import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.ComponentContents;
-import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -32,7 +30,6 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -140,34 +137,8 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         }
     }
 
-    /**
-     * Returns a lazy {@link MutableComponent} whose text is resolved from
-     * {@link EnchantingStatRegistry#blockEntries()} at render time. Lines are joined with
-     * {@code \n} so REI's word-wrap renders them as separate visual lines.
-     */
     private static MutableComponent lazyShelfComponent(ResourceLocation blockId) {
-        return MutableComponent.create(new ComponentContents() {
-            @Override
-            public <T> Optional<T> visit(FormattedText.ContentConsumer<T> visitor) {
-                return visitor.accept(computeText());
-            }
-
-            @Override
-            public <T> Optional<T> visit(FormattedText.StyledContentConsumer<T> visitor, Style style) {
-                return visitor.accept(style, computeText());
-            }
-
-            private String computeText() {
-                EnchantingStats stats = EnchantingStatRegistry.getInstance().blockEntries()
-                        .getOrDefault(blockId, EnchantingStats.ZERO);
-                return String.join("\n", RecipeInfoFormatter.shelfStatLines(stats));
-            }
-
-            @Override
-            public String toString() {
-                return "lazyShelfStats(" + blockId + ")";
-            }
-        });
+        return LazyShelfStatsContents.component(blockId);
     }
 }
 
