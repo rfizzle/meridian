@@ -51,12 +51,18 @@ public final class JeiEnchantingPlugin implements IModPlugin {
 
     private static final ResourceLocation PLUGIN_UID = Meridian.id("jei_plugin");
 
-    /** JEI runtime reference; {@code null} when JEI has not yet initialised or has shut down. */
+    /**
+     * JEI runtime reference; {@code null} when JEI has not yet initialised or has shut down.
+     * Callers must copy to a local variable before null-checking to avoid TOCTOU races
+     * (see {@link #notifySync()}).
+     */
     private static volatile IJeiRuntime jeiRuntime;
 
     /**
      * Recipes added through the JEI runtime (outside the normal plugin-init lifecycle). Tracked so
-     * they can be hidden before re-adding on the next sync notification.
+     * they can be hidden before re-adding on the next sync notification. Always reassigned to a new
+     * immutable list ({@link List#of()} or the result of {@link #extractEnchantments()}), so the
+     * {@code volatile} reference swap is the only synchronisation needed.
      */
     private static volatile List<EnchantmentBrowserRecord> runtimeAddedRecipes = List.of();
 
