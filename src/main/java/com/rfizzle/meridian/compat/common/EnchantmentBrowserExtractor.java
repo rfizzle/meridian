@@ -26,6 +26,9 @@ public final class EnchantmentBrowserExtractor {
     }
 
     public static List<EnchantmentBrowserRecord> extract(HolderLookup.Provider registries) {
+        if (!EnchantmentInfoRegistry.hasSyncBeenReceived()) {
+            return List.of();
+        }
         HolderLookup.RegistryLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
         Map<ResourceKey<Enchantment>, EnchantmentInfo> infoMap = EnchantmentInfoRegistry.getAll();
 

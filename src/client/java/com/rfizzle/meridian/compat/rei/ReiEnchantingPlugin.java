@@ -43,6 +43,12 @@ import java.util.Set;
  * <p>Recipes come from {@link TableCraftingDisplayExtractor}; shelf info panels come from
  * {@link EnchantingStatRegistry#blockEntries()}. Both sources are shared with the EMI plugin so a
  * recipe added to the table only has to be plumbed through one place (S-7.2.2).
+ *
+ * <p>Unlike EMI, REI has no safe programmatic reload — only fragile staged-pipeline internals — so
+ * the enchantment browser is not force-refreshed after a late sync. It relies on
+ * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry} being populated before
+ * {@link #registerDisplays} builds the list, which holds on first join (the common case); a live
+ * {@code /reload} is picked up on rejoin or a manual resource reload (F3+T).
  */
 public final class ReiEnchantingPlugin implements REIClientPlugin {
 

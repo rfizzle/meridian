@@ -27,6 +27,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +79,35 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
         }
 
         registerShelfInfoPanels(registry);
+    }
+
+    /** Latches off the first time the EMI reload symbol can't be resolved (e.g. a future EMI rename). */
+    private static volatile boolean reloadUnavailable = false;
+
+    /**
+     * Triggers an EMI recipe reload so the enchantment browser repopulates with server-configured
+     * values after {@link com.rfizzle.meridian.net.EnchantmentInfoPayload} has been applied: EMI
+     * re-invokes {@link #register}, which now calls {@link EnchantmentBrowserExtractor#extract} with
+     * the sync guard satisfied and emits the browser cards.
+     *
+     * <p>EMI's only reload entry point is the internal {@code dev.emi.emi.runtime.EmiReloadManager},
+     * absent from the {@code :api} artifact this mod compiles against, so it is reached by reflection.
+     * The call latches off on the first failure (a future EMI that moved or renamed the symbol), after
+     * which the browser simply refreshes on rejoin or a manual resource reload (F3+T).
+     */
+    public static void notifySync() {
+        if (reloadUnavailable) {
+            return;
+        }
+        try {
+            Class<?> reloadManager = Class.forName("dev.emi.emi.runtime.EmiReloadManager");
+            MethodHandle reloadRecipes = MethodHandles.publicLookup()
+                    .findStatic(reloadManager, "reloadRecipes", MethodType.methodType(void.class));
+            reloadRecipes.invokeExact();
+        } catch (Throwable t) {
+            reloadUnavailable = true;
+            Meridian.LOGGER.warn("EMI enchantment-browser reload unavailable; it will refresh on rejoin", t);
+        }
     }
 
     /**
