@@ -77,6 +77,38 @@ class NetworkSecurityTest {
         assertThrows(DecoderException.class, () -> StatsPayload.CODEC.decode(buf));
     }
 
+    // ---- EnchantingStatSyncPayload (blocks + tags each capped at 4096) ------
+
+    @Test
+    void enchantingStatSyncPayload_rejectsOversizedBlockMap() {
+        RegistryFriendlyByteBuf buf = newBuf();
+        ByteBufCodecs.VAR_INT.encode(buf, 5000); // block count > 4096
+        assertThrows(DecoderException.class, () -> EnchantingStatSyncPayload.CODEC.decode(buf));
+    }
+
+    @Test
+    void enchantingStatSyncPayload_rejectsNegativeBlockCount() {
+        RegistryFriendlyByteBuf buf = newBuf();
+        ByteBufCodecs.VAR_INT.encode(buf, -1); // LinkedHashMap(int) would throw on negative capacity
+        assertThrows(DecoderException.class, () -> EnchantingStatSyncPayload.CODEC.decode(buf));
+    }
+
+    @Test
+    void enchantingStatSyncPayload_rejectsOversizedTagList() {
+        RegistryFriendlyByteBuf buf = newBuf();
+        ByteBufCodecs.VAR_INT.encode(buf, 0);    // empty block map
+        ByteBufCodecs.VAR_INT.encode(buf, 5000); // tag count > 4096
+        assertThrows(DecoderException.class, () -> EnchantingStatSyncPayload.CODEC.decode(buf));
+    }
+
+    @Test
+    void enchantingStatSyncPayload_rejectsNegativeTagCount() {
+        RegistryFriendlyByteBuf buf = newBuf();
+        ByteBufCodecs.VAR_INT.encode(buf, 0);  // empty block map
+        ByteBufCodecs.VAR_INT.encode(buf, -1); // ArrayList(int) would throw on negative capacity
+        assertThrows(DecoderException.class, () -> EnchantingStatSyncPayload.CODEC.decode(buf));
+    }
+
     // ---- PowerFunction (discriminator byte bounded by Type enum) -----------
 
     @Test

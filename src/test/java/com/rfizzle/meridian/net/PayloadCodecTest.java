@@ -1,6 +1,7 @@
 // Tier: 2 (fabric-loader-junit)
 package com.rfizzle.meridian.net;
 
+import com.rfizzle.meridian.enchanting.EnchantingStats;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
@@ -16,7 +17,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -185,5 +188,61 @@ class PayloadCodecTest {
     void cluesPayload_typeId_isNamespaced() {
         assertEquals(ResourceLocation.fromNamespaceAndPath("meridian", "clues"),
                 CluesPayload.TYPE.id());
+    }
+
+    // ---- EnchantingStats.STREAM_CODEC --------------------------------------
+
+    @Test
+    void enchantingStats_streamCodec_roundTrips() {
+        EnchantingStats original = new EnchantingStats(12.5F, 3F, 2F, 1.5F, 0.25F, 4);
+
+        RegistryFriendlyByteBuf buf = newBuf();
+        EnchantingStats.STREAM_CODEC.encode(buf, original);
+        EnchantingStats decoded = EnchantingStats.STREAM_CODEC.decode(buf);
+
+        assertEquals(original, decoded);
+        assertEquals(0, buf.readableBytes(), "codec should consume every byte it wrote");
+    }
+
+    // ---- EnchantingStatSyncPayload -----------------------------------------
+
+    @Test
+    void enchantingStatSyncPayload_empty_roundTrips() {
+        EnchantingStatSyncPayload original = new EnchantingStatSyncPayload(Map.of(), List.of());
+
+        RegistryFriendlyByteBuf buf = newBuf();
+        EnchantingStatSyncPayload.CODEC.encode(buf, original);
+        EnchantingStatSyncPayload decoded = EnchantingStatSyncPayload.CODEC.decode(buf);
+
+        assertEquals(original, decoded);
+        assertEquals(0, buf.readableBytes());
+    }
+
+    @Test
+    void enchantingStatSyncPayload_populated_roundTrips() {
+        Map<ResourceLocation, EnchantingStats> blocks = new LinkedHashMap<>();
+        blocks.put(ResourceLocation.parse("meridian:oak_shelf"),
+                new EnchantingStats(15F, 4F, 2F, 1F, 0.5F, 2));
+        blocks.put(ResourceLocation.parse("minecraft:bookshelf"), EnchantingStats.ZERO);
+        List<EnchantingStatSyncPayload.TagEntry> tags = List.of(
+                new EnchantingStatSyncPayload.TagEntry(
+                        ResourceLocation.parse("meridian:shelves"),
+                        new EnchantingStats(1F, 1F, 1F, 1F, 1F, 1)));
+        EnchantingStatSyncPayload original = new EnchantingStatSyncPayload(blocks, tags);
+
+        RegistryFriendlyByteBuf buf = newBuf();
+        EnchantingStatSyncPayload.CODEC.encode(buf, original);
+        EnchantingStatSyncPayload decoded = EnchantingStatSyncPayload.CODEC.decode(buf);
+
+        assertEquals(original, decoded);
+        assertEquals(blocks, decoded.blocks(), "block stats must survive round-trip");
+        assertEquals(tags, decoded.tags(), "tag entries must survive round-trip");
+        assertEquals(0, buf.readableBytes());
+    }
+
+    @Test
+    void enchantingStatSyncPayload_typeId_isNamespaced() {
+        assertEquals(ResourceLocation.fromNamespaceAndPath("meridian", "enchanting_stat_sync"),
+                EnchantingStatSyncPayload.TYPE.id());
     }
 }

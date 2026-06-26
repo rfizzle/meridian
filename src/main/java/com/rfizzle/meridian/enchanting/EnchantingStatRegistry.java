@@ -285,6 +285,47 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         return byBlock;
     }
 
+    /**
+     * Returns the current tag bindings as a list of {@code (tagLocation, stats)} entries,
+     * suitable for building a sync payload. Called server-side only.
+     */
+    public List<Map.Entry<ResourceLocation, EnchantingStats>> tagEntriesForSync() {
+        return byTag.stream()
+                .map(b -> Map.entry(b.tag().location(), b.stats()))
+                .toList();
+    }
+
+    /**
+     * Applies a registry snapshot received from the server. Called on the client thread after
+     * a stat-sync payload arrives. Rebuilds the {@link TagBinding} list from
+     * the raw tag locations and publishes both volatile fields atomically (one write each), so
+     * any concurrent reader always sees a consistent pair.
+     */
+    public void applySync(
+            Map<ResourceLocation, EnchantingStats> blocks,
+            List<Map.Entry<ResourceLocation, EnchantingStats>> tagEntries) {
+        List<TagBinding> newByTag = tagEntries.stream()
+                .map(e -> new TagBinding(TagKey.create(Registries.BLOCK, e.getKey()), e.getValue()))
+                .toList();
+        this.byBlock = Map.copyOf(blocks);
+        this.byTag = List.copyOf(newByTag);
+        Meridian.LOGGER.debug(
+                "Applied enchanting stat sync: {} block entries, {} tag entries",
+                blocks.size(), tagEntries.size());
+    }
+
+    /**
+     * Resets the client-side registry to empty. Called from
+     * {@code ClientPlayConnectionEvents.DISCONNECT} so stale data from one server cannot
+     * bleed into the next connection.
+     *
+     * <p>Distinct from the package-private {@link #clear()} which is used by tests.
+     */
+    public void clearClientState() {
+        byBlock = Map.of();
+        byTag = List.of();
+    }
+
     @Override
     public ResourceLocation getFabricId() {
         return LISTENER_ID;

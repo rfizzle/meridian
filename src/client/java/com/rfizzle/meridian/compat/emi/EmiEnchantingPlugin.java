@@ -1,6 +1,9 @@
 package com.rfizzle.meridian.compat.emi;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -18,6 +21,7 @@ import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -26,8 +30,10 @@ import net.minecraft.world.level.block.Blocks;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * EMI integration entry point. Registers the "Infusions" display category and populates it with
@@ -105,19 +111,48 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
     }
 
     /**
-     * Converts every block-keyed {@code enchanting_stats/*.json} entry into an {@link EmiInfoRecipe}
-     * so hovering a shelf in EMI reveals its stat contribution. Tag-keyed entries are skipped —
-     * their stats flow through whatever concrete block the tag targets, and enumerating those would
-     * double-surface the same info.
+     * Registers one {@link EmiInfoRecipe} per shelf block so hovering a shelf in EMI reveals its
+     * stat contribution.
      *
-     * <p>In dedicated-multiplayer clients the server data listener has not populated the registry
-     * at plugin-register time; {@link EnchantingStatRegistry#blockEntries()} returns an empty map
-     * in that case and no info panels are emitted. Singleplayer and LAN hosts populate the map
-     * from the integrated server's reload pass.
+     * <p>Two passes keep singleplayer and dedicated-server clients correct:
+     * <ol>
+     *   <li><b>Meridian-shelf pass</b> — iterates every {@link IEnchantingStatProvider} block in
+     *       {@link MeridianRegistry#BLOCKS} and registers a lazy info recipe whose text is
+     *       resolved from {@link EnchantingStatRegistry#blockEntries()} at render time. This
+     *       ensures panels exist even when the registry has not yet been populated (dedicated
+     *       server, before the S2C sync arrives).</li>
+     *   <li><b>Fallback pass</b> — iterates any remaining {@link EnchantingStatRegistry#blockEntries()}
+     *       entries not already covered (vanilla blocks such as {@code amethyst_cluster}) and
+     *       registers eager info recipes using the stat text already in the registry. These are
+     *       populated only when the registry is non-empty (singleplayer / LAN host), preserving
+     *       the previous singleplayer behaviour for non-Meridian blocks.</li>
+     * </ol>
+     *
+     * <p>Tag-keyed entries are skipped — their stats flow through whatever concrete block the tag
+     * targets.
      */
     private static void registerShelfInfoPanels(EmiRegistry registry) {
-        Map<ResourceLocation, EnchantingStats> entries = EnchantingStatRegistry.getInstance().blockEntries();
-        for (Map.Entry<ResourceLocation, EnchantingStats> entry : entries.entrySet()) {
+        Set<ResourceLocation> covered = new HashSet<>();
+
+        for (Map.Entry<ResourceLocation, Block> entry : MeridianRegistry.BLOCKS.entrySet()) {
+            if (!(entry.getValue() instanceof IEnchantingStatProvider)) {
+                continue;
+            }
+            ResourceLocation blockId = entry.getKey();
+            covered.add(blockId);
+            EmiIngredient stack = EmiStack.of(entry.getValue());
+            Component lazyText = lazyShelfComponent(blockId);
+            registry.addRecipe(new EmiInfoRecipe(
+                    List.of(stack),
+                    List.of(lazyText),
+                    Meridian.id("/shelf_info/" + blockId.getNamespace() + "/" + blockId.getPath())));
+        }
+
+        for (Map.Entry<ResourceLocation, EnchantingStats> entry :
+                EnchantingStatRegistry.getInstance().blockEntries().entrySet()) {
+            if (covered.contains(entry.getKey())) {
+                continue;
+            }
             Block block = BuiltInRegistries.BLOCK.get(entry.getKey());
             if (block == Blocks.AIR) {
                 continue;
@@ -133,4 +168,9 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
                     Meridian.id("/shelf_info/" + entry.getKey().getNamespace() + "/" + entry.getKey().getPath())));
         }
     }
+
+    private static MutableComponent lazyShelfComponent(ResourceLocation blockId) {
+        return LazyShelfStatsContents.component(blockId);
+    }
 }
+

@@ -4,6 +4,9 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 
 public record EnchantingStats(
         float maxEterna,
@@ -37,4 +40,14 @@ public record EnchantingStats(
     }
 
     public static final Codec<EnchantingStats> CODEC = MAP_CODEC.codec();
+
+    public static final StreamCodec<ByteBuf, EnchantingStats> STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.FLOAT, EnchantingStats::maxEterna,
+                    ByteBufCodecs.FLOAT, EnchantingStats::eterna,
+                    ByteBufCodecs.FLOAT, EnchantingStats::quanta,
+                    ByteBufCodecs.FLOAT, EnchantingStats::arcana,
+                    ByteBufCodecs.FLOAT, EnchantingStats::rectification,
+                    ByteBufCodecs.VAR_INT, EnchantingStats::clues,
+                    EnchantingStats::new);
 }
