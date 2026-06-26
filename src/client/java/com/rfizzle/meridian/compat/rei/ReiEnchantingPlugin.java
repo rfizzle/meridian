@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.compat.rei;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -18,13 +20,20 @@ import me.shedaniel.rei.plugin.common.displays.DefaultInformationDisplay;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * REI integration entry point. Mirrors the EMI plugin's single "Infusions" category and populates
@@ -83,14 +92,40 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
     }
 
     /**
-     * Converts every block-keyed {@code enchanting_stats/*.json} entry into a
-     * {@link DefaultInformationDisplay} so hovering a shelf in REI reveals its stat contribution.
-     * Tag-keyed entries are skipped — their stats flow through whatever concrete block the tag
-     * targets, and enumerating those would double-surface the same info.
+     * Registers one {@link DefaultInformationDisplay} per shelf block so hovering a shelf in REI
+     * reveals its stat contribution.
+     *
+     * <p>Two passes keep singleplayer and dedicated-server clients correct:
+     * <ol>
+     *   <li><b>Meridian-shelf pass</b> — iterates every {@link IEnchantingStatProvider} block in
+     *       {@link MeridianRegistry#BLOCKS} and registers a lazy display whose stat text is
+     *       resolved from {@link EnchantingStatRegistry#blockEntries()} at render time.</li>
+     *   <li><b>Fallback pass</b> — iterates remaining {@link EnchantingStatRegistry#blockEntries()}
+     *       entries (vanilla blocks such as {@code amethyst_cluster}) and registers eager displays
+     *       using already-populated registry data (singleplayer / LAN host only).</li>
+     * </ol>
      */
     private static void registerShelfInfoPanels(DisplayRegistry registry) {
-        Map<ResourceLocation, EnchantingStats> entries = EnchantingStatRegistry.getInstance().blockEntries();
-        for (Map.Entry<ResourceLocation, EnchantingStats> entry : entries.entrySet()) {
+        Set<ResourceLocation> covered = new HashSet<>();
+
+        for (Map.Entry<ResourceLocation, Block> entry : MeridianRegistry.BLOCKS.entrySet()) {
+            if (!(entry.getValue() instanceof IEnchantingStatProvider)) {
+                continue;
+            }
+            ResourceLocation blockId = entry.getKey();
+            covered.add(blockId);
+            DefaultInformationDisplay info = DefaultInformationDisplay.createFromEntry(
+                    EntryStacks.of(entry.getValue()),
+                    Component.translatable(entry.getValue().getDescriptionId()));
+            info.line(lazyShelfComponent(blockId));
+            registry.add(info);
+        }
+
+        for (Map.Entry<ResourceLocation, EnchantingStats> entry :
+                EnchantingStatRegistry.getInstance().blockEntries().entrySet()) {
+            if (covered.contains(entry.getKey())) {
+                continue;
+            }
             Block block = BuiltInRegistries.BLOCK.get(entry.getKey());
             if (block == Blocks.AIR) {
                 continue;
@@ -105,4 +140,34 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         }
     }
 
+    /**
+     * Returns a lazy {@link MutableComponent} whose text is resolved from
+     * {@link EnchantingStatRegistry#blockEntries()} at render time. Lines are joined with
+     * {@code \n} so REI's word-wrap renders them as separate visual lines.
+     */
+    private static MutableComponent lazyShelfComponent(ResourceLocation blockId) {
+        return MutableComponent.create(new ComponentContents() {
+            @Override
+            public <T> Optional<T> visit(FormattedText.ContentConsumer<T> visitor) {
+                return visitor.accept(computeText());
+            }
+
+            @Override
+            public <T> Optional<T> visit(FormattedText.StyledContentConsumer<T> visitor, Style style) {
+                return visitor.accept(style, computeText());
+            }
+
+            private String computeText() {
+                EnchantingStats stats = EnchantingStatRegistry.getInstance().blockEntries()
+                        .getOrDefault(blockId, EnchantingStats.ZERO);
+                return String.join("\n", RecipeInfoFormatter.shelfStatLines(stats));
+            }
+
+            @Override
+            public String toString() {
+                return "lazyShelfStats(" + blockId + ")";
+            }
+        });
+    }
 }
+

@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.compat.jei;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -19,6 +21,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,8 +32,11 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * JEI integration entry point. Mirrors the EMI/REI plugin's two categories: an "Infusions"
@@ -91,19 +100,39 @@ public final class JeiEnchantingPlugin implements IModPlugin {
     }
 
     /**
-     * Converts every block-keyed {@code enchanting_stats/*.json} entry into a JEI info page so
-     * hovering a shelf in JEI reveals its stat contribution. Tag-keyed entries are skipped — their
-     * stats flow through whatever concrete block the tag targets, and enumerating those would
-     * double-surface the same info. Matches the EMI/REI panels line-for-line via
-     * {@link RecipeInfoFormatter#shelfStatLines(EnchantingStats)}.
+     * Registers one JEI info page per shelf block so hovering a shelf in JEI reveals its stat
+     * contribution.
      *
-     * <p>In a dedicated-multiplayer client the stat registry may not have been populated at plugin
-     * register time; in that case {@link EnchantingStatRegistry#blockEntries()} returns an empty
-     * map and no info pages are emitted — matches EMI's and REI's behavior.
+     * <p>Two passes keep singleplayer and dedicated-server clients correct:
+     * <ol>
+     *   <li><b>Meridian-shelf pass</b> — iterates every {@link IEnchantingStatProvider} block in
+     *       {@link MeridianRegistry#BLOCKS} and registers a lazy info page whose stat text is
+     *       resolved from {@link EnchantingStatRegistry#blockEntries()} at render time.</li>
+     *   <li><b>Fallback pass</b> — iterates remaining {@link EnchantingStatRegistry#blockEntries()}
+     *       entries (vanilla blocks such as {@code amethyst_cluster}) and registers eager info pages
+     *       using already-populated registry data (singleplayer / LAN host only).</li>
+     * </ol>
+     *
+     * <p>Tag-keyed entries are skipped — their stats flow through whatever concrete block the tag
+     * targets, and enumerating those would double-surface the same info.
      */
     private static void registerShelfInfoPanels(IRecipeRegistration registration) {
-        Map<ResourceLocation, EnchantingStats> entries = EnchantingStatRegistry.getInstance().blockEntries();
-        for (Map.Entry<ResourceLocation, EnchantingStats> entry : entries.entrySet()) {
+        Set<ResourceLocation> covered = new HashSet<>();
+
+        for (Map.Entry<ResourceLocation, Block> entry : MeridianRegistry.BLOCKS.entrySet()) {
+            if (!(entry.getValue() instanceof IEnchantingStatProvider)) {
+                continue;
+            }
+            ResourceLocation blockId = entry.getKey();
+            covered.add(blockId);
+            registration.addItemStackInfo(new ItemStack(entry.getValue()), lazyShelfComponent(blockId));
+        }
+
+        for (Map.Entry<ResourceLocation, EnchantingStats> entry :
+                EnchantingStatRegistry.getInstance().blockEntries().entrySet()) {
+            if (covered.contains(entry.getKey())) {
+                continue;
+            }
             Block block = BuiltInRegistries.BLOCK.get(entry.getKey());
             if (block == Blocks.AIR) {
                 continue;
@@ -113,6 +142,36 @@ public final class JeiEnchantingPlugin implements IModPlugin {
                     .toArray(Component[]::new);
             registration.addItemStackInfo(new ItemStack(block), lines);
         }
+    }
+
+    /**
+     * Returns a lazy {@link MutableComponent} whose text is resolved from
+     * {@link EnchantingStatRegistry#blockEntries()} at render time. Lines are joined with
+     * {@code \n} so JEI's text renderer splits them into separate visual lines.
+     */
+    private static MutableComponent lazyShelfComponent(ResourceLocation blockId) {
+        return MutableComponent.create(new ComponentContents() {
+            @Override
+            public <T> Optional<T> visit(FormattedText.ContentConsumer<T> visitor) {
+                return visitor.accept(computeText());
+            }
+
+            @Override
+            public <T> Optional<T> visit(FormattedText.StyledContentConsumer<T> visitor, Style style) {
+                return visitor.accept(style, computeText());
+            }
+
+            private String computeText() {
+                EnchantingStats stats = EnchantingStatRegistry.getInstance().blockEntries()
+                        .getOrDefault(blockId, EnchantingStats.ZERO);
+                return String.join("\n", RecipeInfoFormatter.shelfStatLines(stats));
+            }
+
+            @Override
+            public String toString() {
+                return "lazyShelfStats(" + blockId + ")";
+            }
+        });
     }
 
     /**
@@ -144,3 +203,4 @@ public final class JeiEnchantingPlugin implements IModPlugin {
         return EnchantmentBrowserExtractor.extract(level.registryAccess());
     }
 }
+
