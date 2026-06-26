@@ -2,7 +2,6 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.api.EnchantmentInfo;
-import com.rfizzle.meridian.enchanting.PowerFunction;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
