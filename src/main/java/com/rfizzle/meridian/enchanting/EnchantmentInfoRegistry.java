@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Stores per-enchantment configuration ({@link EnchantmentInfo}) for every registered enchantment.
@@ -23,23 +24,50 @@ import java.util.Map;
  * config overrides with vanilla defaults.
  *
  * <p>Client-side: populated by {@link #applyFromPayload} when the server sends
- * {@link EnchantmentInfoPayload}.
+ * {@link EnchantmentInfoPayload}. {@link #hasSyncBeenReceived()} returns {@code true} only after
+ * {@link #applyFromPayload} has been called at least once.
+ *
+ * <p>Both maps and the sync flag are published as a single atomic snapshot via an
+ * {@link AtomicReference}, eliminating the consistency window between two separate volatile writes.
  */
 public final class EnchantmentInfoRegistry {
 
-    private static volatile Map<ResourceKey<Enchantment>, EnchantmentInfo> INFO = Map.of();
-    private static volatile Map<Enchantment, EnchantmentInfo> INSTANCE_INFO = Map.of();
+    /**
+     * Immutable snapshot of the registry contents. Published as a single unit so readers always
+     * observe a consistent pair of maps together with the {@code syncReceived} flag.
+     */
+    record EnchantmentInfoSnapshot(
+            Map<ResourceKey<Enchantment>, EnchantmentInfo> byKey,
+            Map<Enchantment, EnchantmentInfo> byInstance,
+            boolean syncReceived) {
+
+        static final EnchantmentInfoSnapshot EMPTY =
+                new EnchantmentInfoSnapshot(Map.of(), Map.of(), false);
+    }
+
+    private static final AtomicReference<EnchantmentInfoSnapshot> SNAPSHOT =
+            new AtomicReference<>(EnchantmentInfoSnapshot.EMPTY);
 
     private EnchantmentInfoRegistry() {
+    }
+
+    /**
+     * Returns {@code true} if the client has received at least one {@link EnchantmentInfoPayload}
+     * from the server. Always {@code false} before the first {@link #applyFromPayload} call and
+     * after {@link #clear()}.
+     */
+    public static boolean hasSyncBeenReceived() {
+        return SNAPSHOT.get().syncReceived();
     }
 
     /**
      * Returns the info for the given enchantment, falling back to vanilla defaults if not present.
      */
     public static EnchantmentInfo getInfo(Holder<Enchantment> ench) {
+        EnchantmentInfoSnapshot snap = SNAPSHOT.get();
         ResourceKey<Enchantment> key = ench.unwrapKey().orElse(null);
         if (key != null) {
-            EnchantmentInfo info = INFO.get(key);
+            EnchantmentInfo info = snap.byKey().get(key);
             if (info != null) return info;
         }
         return EnchantmentInfo.fallback(ench);
@@ -51,11 +79,11 @@ public final class EnchantmentInfoRegistry {
      * bare instance is available (no {@link Holder}).
      */
     public static EnchantmentInfo getInfoByInstance(Enchantment ench) {
-        return INSTANCE_INFO.get(ench);
+        return SNAPSHOT.get().byInstance().get(ench);
     }
 
     public static Map<ResourceKey<Enchantment>, EnchantmentInfo> getAll() {
-        return Collections.unmodifiableMap(INFO);
+        return SNAPSHOT.get().byKey();
     }
 
     /**
@@ -63,8 +91,8 @@ public final class EnchantmentInfoRegistry {
      * start and after datapack reload.
      */
     public static void rebuild(Registry<Enchantment> registry, MeridianConfig config) {
-        Map<ResourceKey<Enchantment>, EnchantmentInfo> newInfo = new HashMap<>();
-        Map<Enchantment, EnchantmentInfo> newInstanceInfo = new IdentityHashMap<>();
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> newByKey = new HashMap<>();
+        Map<Enchantment, EnchantmentInfo> newByInstance = new IdentityHashMap<>();
         Map<String, MeridianConfig.EnchantmentOverride> overrides =
                 config.enchantmentOverrides != null ? config.enchantmentOverrides : Map.of();
         int overrideCount = 0;
@@ -80,34 +108,38 @@ public final class EnchantmentInfoRegistry {
             } else {
                 info = EnchantmentInfo.fallback(holder);
             }
-            newInfo.put(key, info);
-            newInstanceInfo.put(holder.value(), info);
+            newByKey.put(key, info);
+            newByInstance.put(holder.value(), info);
         }
-        INFO = Map.copyOf(newInfo);
-        INSTANCE_INFO = Collections.unmodifiableMap(newInstanceInfo);
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> immutableByKey = Map.copyOf(newByKey);
+        Map<Enchantment, EnchantmentInfo> immutableByInstance = Collections.unmodifiableMap(newByInstance);
+        int total = immutableByKey.size();
+        SNAPSHOT.set(new EnchantmentInfoSnapshot(immutableByKey, immutableByInstance, false));
         Meridian.LOGGER.info(
                 "Rebuilt enchantment info registry: {} enchantments, {} overrides",
-                INFO.size(), overrideCount);
+                total, overrideCount);
     }
 
     /**
-     * Client-side: replaces the local registry with data received from the server.
+     * Client-side: replaces the local registry with data received from the server and marks
+     * {@link #hasSyncBeenReceived()} as {@code true}.
      */
     public static void applyFromPayload(Map<ResourceKey<Enchantment>, EnchantmentInfo> data) {
-        Map<Enchantment, EnchantmentInfo> newInstanceInfo = new IdentityHashMap<>();
+        Map<Enchantment, EnchantmentInfo> newByInstance = new IdentityHashMap<>();
         for (EnchantmentInfo info : data.values()) {
-            newInstanceInfo.put(info.ench().value(), info);
+            newByInstance.put(info.ench().value(), info);
         }
-        INFO = Map.copyOf(data);
-        INSTANCE_INFO = Collections.unmodifiableMap(newInstanceInfo);
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> immutableByKey = Map.copyOf(data);
+        Map<Enchantment, EnchantmentInfo> immutableByInstance = Collections.unmodifiableMap(newByInstance);
+        SNAPSHOT.set(new EnchantmentInfoSnapshot(immutableByKey, immutableByInstance, true));
     }
 
     /**
-     * Clears the registry.
+     * Clears the registry and resets {@link #hasSyncBeenReceived()} to {@code false}. Called on
+     * client disconnect.
      */
     public static void clear() {
-        INFO = Map.of();
-        INSTANCE_INFO = Map.of();
+        SNAPSHOT.set(EnchantmentInfoSnapshot.EMPTY);
     }
 
     /**
@@ -115,8 +147,9 @@ public final class EnchantmentInfoRegistry {
      * enchantment id so the serialized wire form is deterministic across rebuilds.
      */
     public static EnchantmentInfoPayload buildPayload() {
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> info = SNAPSHOT.get().byKey();
         Map<ResourceKey<Enchantment>, EnchantmentInfo> ordered = new LinkedHashMap<>();
-        INFO.entrySet().stream()
+        info.entrySet().stream()
                 .sorted(Comparator.comparing(e -> e.getKey().location().toString()))
                 .forEach(e -> ordered.put(e.getKey(), e.getValue()));
         return new EnchantmentInfoPayload(ordered);

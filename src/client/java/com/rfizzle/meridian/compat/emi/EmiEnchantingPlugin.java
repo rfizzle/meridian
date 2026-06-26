@@ -8,6 +8,7 @@ import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplayExtractor;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
+import dev.emi.emi.api.EmiApi;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiInfoRecipe;
@@ -70,6 +71,16 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
         }
 
         registerShelfInfoPanels(registry);
+    }
+
+    /**
+     * Triggers an EMI plugin reload so the enchantment browser repopulates with server-configured
+     * values after {@link com.rfizzle.meridian.net.EnchantmentInfoPayload} has been applied.
+     * EMI will re-invoke {@link #register} which now calls
+     * {@link EnchantmentBrowserExtractor#extract} with the sync guard satisfied.
+     */
+    static void notifySync() {
+        EmiApi.reloadPlugins();
     }
 
     /**

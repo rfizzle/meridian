@@ -24,6 +24,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,6 +47,12 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
 
     public static final CategoryIdentifier<ReiEnchantmentBrowserDisplay> ENCHANTMENTS_ID =
             CategoryIdentifier.of(Meridian.MOD_ID, "enchantments");
+
+    /**
+     * Displays added via the runtime {@link DisplayRegistry} (outside the normal plugin-init
+     * lifecycle). Tracked so they can be removed before re-adding on the next sync notification.
+     */
+    private static final List<ReiEnchantmentBrowserDisplay> runtimeAddedDisplays = new ArrayList<>();
 
     @Override
     public String getPluginProviderName() {
@@ -102,6 +110,32 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
                 info.line(Component.literal(line));
             }
             registry.add(info);
+        }
+    }
+
+    /**
+     * Triggered by {@link com.rfizzle.meridian.client.compat.ViewerRefreshTrigger} after
+     * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry#applyFromPayload} completes.
+     * Removes any displays added via a previous runtime call (to avoid duplicates) and adds a
+     * fresh set extracted from the now-populated registry.
+     */
+    static void notifySync() {
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.level == null) {
+            return;
+        }
+        DisplayRegistry registry = DisplayRegistry.getInstance();
+        // Remove stale displays we added in a previous runtime call.
+        runtimeAddedDisplays.forEach(registry::remove);
+        runtimeAddedDisplays.clear();
+        // Add the fresh set. extract() now returns non-empty because hasSyncBeenReceived() == true.
+        List<EnchantmentBrowserRecord> records =
+                EnchantmentBrowserExtractor.extract(client.level.registryAccess());
+        for (EnchantmentBrowserRecord record : records) {
+            ReiEnchantmentBrowserDisplay display =
+                    new ReiEnchantmentBrowserDisplay(record, ENCHANTMENTS_ID);
+            registry.add(display);
+            runtimeAddedDisplays.add(display);
         }
     }
 

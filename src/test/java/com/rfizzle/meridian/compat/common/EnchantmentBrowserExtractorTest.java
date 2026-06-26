@@ -9,6 +9,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
@@ -18,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,8 +45,26 @@ class EnchantmentBrowserExtractorTest {
         return lookup.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SHARPNESS);
     }
 
+    /** Simulates a full vanilla sync so that {@code hasSyncBeenReceived()} returns {@code true}. */
+    private static void simulateVanillaSync() {
+        Map<ResourceKey<Enchantment>, EnchantmentInfo> allVanilla =
+                lookup.lookupOrThrow(Registries.ENCHANTMENT).listElements()
+                        .collect(Collectors.toMap(Holder.Reference::key, EnchantmentInfo::fallback));
+        EnchantmentInfoRegistry.applyFromPayload(allVanilla);
+    }
+
+    @Test
+    void extract_returnsEmptyBeforeSyncReceived() {
+        // Registry was just cleared by @AfterEach / @BeforeAll — syncReceived is false.
+        List<EnchantmentBrowserRecord> records = EnchantmentBrowserExtractor.extract(lookup);
+
+        assertTrue(records.isEmpty(),
+                "extract() must return an empty list when hasSyncBeenReceived() is false");
+    }
+
     @Test
     void extract_surfacesAllEnchantments() {
+        simulateVanillaSync();
         List<EnchantmentBrowserRecord> records = EnchantmentBrowserExtractor.extract(lookup);
 
         long registrySize = lookup.lookupOrThrow(Registries.ENCHANTMENT).listElements().count();
@@ -75,6 +95,7 @@ class EnchantmentBrowserExtractorTest {
     @Test
     void extract_noOverrideWhenStatsMatchVanilla() {
         Holder.Reference<Enchantment> sharp = sharpness();
+        simulateVanillaSync();
 
         List<EnchantmentBrowserRecord> records = EnchantmentBrowserExtractor.extract(lookup);
         EnchantmentBrowserRecord sharpRecord = findRecord(records, sharp);
@@ -85,6 +106,7 @@ class EnchantmentBrowserExtractorTest {
     @Test
     void extract_calculatesPowerWindows() {
         Holder.Reference<Enchantment> sharp = sharpness();
+        simulateVanillaSync();
 
         List<EnchantmentBrowserRecord> records = EnchantmentBrowserExtractor.extract(lookup);
         EnchantmentBrowserRecord sharpRecord = findRecord(records, sharp);

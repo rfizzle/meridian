@@ -14,6 +14,7 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -50,9 +51,29 @@ public final class JeiEnchantingPlugin implements IModPlugin {
 
     private static final ResourceLocation PLUGIN_UID = Meridian.id("jei_plugin");
 
+    /** JEI runtime reference; {@code null} when JEI has not yet initialised or has shut down. */
+    private static volatile IJeiRuntime jeiRuntime;
+
+    /**
+     * Recipes added through the JEI runtime (outside the normal plugin-init lifecycle). Tracked so
+     * they can be hidden before re-adding on the next sync notification.
+     */
+    private static volatile List<EnchantmentBrowserRecord> runtimeAddedRecipes = List.of();
+
     @Override
     public ResourceLocation getPluginUid() {
         return PLUGIN_UID;
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime runtime) {
+        jeiRuntime = runtime;
+    }
+
+    @Override
+    public void onRuntimeUnavailable() {
+        jeiRuntime = null;
+        runtimeAddedRecipes = List.of();
     }
 
     @Override
@@ -142,5 +163,33 @@ public final class JeiEnchantingPlugin implements IModPlugin {
             return List.of();
         }
         return EnchantmentBrowserExtractor.extract(level.registryAccess());
+    }
+
+    /**
+     * Triggered by {@link com.rfizzle.meridian.client.compat.ViewerRefreshTrigger} after
+     * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry#applyFromPayload} completes.
+     * Hides any recipes that were added via a previous runtime call (to avoid duplicates), then
+     * adds a fresh set extracted from the now-populated registry.
+     */
+    static void notifySync() {
+        IJeiRuntime runtime = jeiRuntime;
+        if (runtime == null) {
+            return;
+        }
+        Minecraft client = Minecraft.getInstance();
+        if (client == null || client.level == null) {
+            return;
+        }
+        // Hide any recipes we added at runtime in an earlier sync notification.
+        List<EnchantmentBrowserRecord> stale = runtimeAddedRecipes;
+        if (!stale.isEmpty()) {
+            runtime.getRecipeManager().hideRecipes(JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS, stale);
+        }
+        // Add the fresh set. extractEnchantments() now returns non-empty because hasSyncBeenReceived() == true.
+        List<EnchantmentBrowserRecord> fresh = extractEnchantments();
+        if (!fresh.isEmpty()) {
+            runtime.getRecipeManager().addRecipes(JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS, fresh);
+        }
+        runtimeAddedRecipes = fresh;
     }
 }

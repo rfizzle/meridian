@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.client.net;
 
+import com.rfizzle.meridian.client.compat.ViewerRefreshTrigger;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.net.CluesPayload;
@@ -12,7 +13,9 @@ import net.minecraft.client.player.LocalPlayer;
  * S2C receivers for the enchanting payloads. The stats payload is forwarded to the open
  * {@link MeridianEnchantmentMenu} so {@code MeridianEnchantmentScreen} can read live stat values from
  * the menu instance. Clues are forwarded to the menu's per-slot clue cache for tooltip rendering.
- * The enchantment info payload updates the client-side {@link EnchantmentInfoRegistry}.
+ * The enchantment info payload updates the client-side {@link EnchantmentInfoRegistry} and then
+ * triggers a recipe-viewer refresh so the enchantment browser repopulates with server-configured
+ * values without requiring a manual viewer reload.
  */
 public final class ClientPayloadHandlers {
 
@@ -37,7 +40,9 @@ public final class ClientPayloadHandlers {
                 }));
 
         ClientPlayNetworking.registerGlobalReceiver(EnchantmentInfoPayload.TYPE,
-                (payload, context) -> context.client().execute(() ->
-                        EnchantmentInfoRegistry.applyFromPayload(payload.info())));
+                (payload, context) -> context.client().execute(() -> {
+                    EnchantmentInfoRegistry.applyFromPayload(payload.info());
+                    ViewerRefreshTrigger.notifySync();
+                }));
     }
 }
