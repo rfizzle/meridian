@@ -264,7 +264,7 @@ All 75 enchantments are original to Meridian — names, IDs, weights, costs, eff
 
 ## Part of Concord
 
-Part of [Concord](https://github.com/rfizzle/concord) — a Vanilla+ collection.
+Part of [Concord](https://github.com/rfizzle/concord) — a modular collection of system overhauls.
 Install any, combine all.
 
 - [Mercantile](https://mercantile.rfizzle.com) — Every villager remembers.
