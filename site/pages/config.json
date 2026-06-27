@@ -130,7 +130,7 @@
           "rows": [
             ["<code class='text-accent2 whitespace-nowrap'>enabled</code>", "boolean", "true", "Whether this enchantment can appear"],
             ["<code class='text-accent2 whitespace-nowrap'>maxLevel</code>", "int", "-1", "Override maximum level (1&ndash;127, or -1 for default)"],
-            ["<code class='text-accent2 whitespace-nowrap'>maxLootLevel</code>", "int", "-1", "Override maximum level from loot tables (1&ndash;127, or -1)"],
+            ["<code class='text-accent2 whitespace-nowrap'>maxLootLevel</code>", "int", "-1", "Clamp on the level granted by loot tables and trades (1&ndash;127); rolls above it are clamped down, and -1 leaves vanilla behavior untouched"],
             ["<code class='text-accent2 whitespace-nowrap'>levelCap</code>", "int", "-1", "Hard cap on level (1&ndash;127, or -1)"],
             ["<code class='text-accent2 whitespace-nowrap'>minPowerFunction</code>", "object", "null", "Custom min power function (see below)"],
             ["<code class='text-accent2 whitespace-nowrap'>maxPowerFunction</code>", "object", "null", "Custom max power function (see below)"]

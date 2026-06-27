@@ -1,8 +1,8 @@
 package com.rfizzle.meridian.mixin;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
-import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
+import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
@@ -34,13 +34,14 @@ public class EnchantmentHelperMixin {
         List<EnchantmentInstance> result = cir.getReturnValue();
         if (result == null || result.isEmpty()) return;
         List<EnchantmentInstance> filtered = result.stream()
-                .filter(inst -> {
-                    EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(inst.enchantment);
-                    return info.enabled();
-                })
+                .filter(inst -> EnchantmentInfoRegistry.getInfo(inst.enchantment).enabled())
                 .toList();
-        if (filtered.size() != result.size()) {
-            cir.setReturnValue(filtered);
+        // Clamp survivors to their configured maxLootLevel: loot rolls bypass the table's
+        // stat-driven selection, so this hook is where Meridian's loot cap is enforced.
+        List<EnchantmentInstance> clamped = RealEnchantmentHelper.clampToMaxLootLevel(
+                filtered, ench -> EnchantmentInfoRegistry.getInfo(ench).getMaxLootLevel());
+        if (filtered.size() != result.size() || clamped != filtered) {
+            cir.setReturnValue(clamped);
         }
     }
 }

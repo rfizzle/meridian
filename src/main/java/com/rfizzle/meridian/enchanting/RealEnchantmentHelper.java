@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * Core math for translating enchanting stats into concrete table outputs. Ported from
@@ -325,6 +326,51 @@ public final class RealEnchantmentHelper {
             factor = Mth.nextFloat(rand, rectPercent - 1F, 1F);
         }
         return quanta * factor / 100F;
+    }
+
+    /**
+     * Clamps a rolled enchantment list to each entry's configured loot cap, used to enforce
+     * {@code maxLootLevel} on loot-table and trade rolls (which never pass through the table's
+     * stat-driven selection).
+     *
+     * <p>For each entry the {@code maxLootLevelLookup} yields that enchantment's effective loot
+     * cap ({@link EnchantmentInfo#getMaxLootLevel()} at the live call sites):
+     * <ul>
+     *     <li>{@code -1} — explicit pass-through; the entry is kept unchanged (vanilla behavior).</li>
+     *     <li>{@code >= 1} — the entry's level is clamped down to the cap if it exceeds it.</li>
+     *     <li>{@code <= 0} (and not {@code -1}) — the entry is dropped entirely.</li>
+     * </ul>
+     *
+     * <p>Pure and deterministic: it never consumes randomness and depends only on the input list
+     * and the lookup. Returns the input list unchanged (same reference) when no entry needs
+     * clamping or dropping, so callers can cheaply detect a no-op.
+     *
+     * @param list                the rolled enchantments to post-process; {@code null} is treated as empty
+     * @param maxLootLevelLookup  resolves an enchantment's effective loot cap
+     * @return the clamped list, or the input list itself when nothing changed (never {@code null})
+     */
+    public static List<EnchantmentInstance> clampToMaxLootLevel(
+            List<EnchantmentInstance> list,
+            Function<Holder<Enchantment>, Integer> maxLootLevelLookup) {
+        if (list == null || list.isEmpty()) {
+            return list == null ? List.of() : list;
+        }
+        List<EnchantmentInstance> clamped = new ArrayList<>(list.size());
+        boolean changed = false;
+        for (EnchantmentInstance inst : list) {
+            int cap = maxLootLevelLookup.apply(inst.enchantment);
+            if (cap == -1) {
+                clamped.add(inst);
+            } else if (cap <= 0) {
+                changed = true; // drop
+            } else if (inst.level > cap) {
+                clamped.add(new EnchantmentInstance(inst.enchantment, cap));
+                changed = true;
+            } else {
+                clamped.add(inst);
+            }
+        }
+        return changed ? clamped : list;
     }
 
     /** Removes enchantments in {@code list} that are incompatible with {@code data}. */
