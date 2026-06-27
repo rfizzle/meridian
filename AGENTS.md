@@ -17,7 +17,7 @@ section below.
 
 ## Suite standards (Concord)
 
-This mod is a member of Concord, the Vanilla+ collection. Suite-wide standards live in
+This mod is a member of Concord, a modular collection of system overhauls. Suite-wide standards live in
 the [concord repo](https://github.com/rfizzle/concord) — checked out at `../concord/`
 in the local workspace. Normative for this repo:
 
