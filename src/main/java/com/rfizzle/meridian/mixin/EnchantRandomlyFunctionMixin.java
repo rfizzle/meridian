@@ -26,11 +26,24 @@ public class EnchantRandomlyFunctionMixin {
         net.minecraft.world.item.enchantment.ItemEnchantments.Mutable mutable = null;
         for (var entry : enchantments.entrySet()) {
             EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(entry.getKey());
+            int level = entry.getIntValue();
+            int newLevel = level;
             if (!info.enabled()) {
+                newLevel = 0;
+            } else {
+                // Enforce the configured loot cap: -1 passes through, <= 0 strips, > 0 clamps.
+                int cap = info.getMaxLootLevel();
+                if (cap != -1 && cap <= 0) {
+                    newLevel = 0;
+                } else if (cap != -1 && level > cap) {
+                    newLevel = cap;
+                }
+            }
+            if (newLevel != level) {
                 if (mutable == null) {
                     mutable = new net.minecraft.world.item.enchantment.ItemEnchantments.Mutable(enchantments);
                 }
-                mutable.set(entry.getKey(), 0);
+                mutable.set(entry.getKey(), newLevel);
             }
         }
 
