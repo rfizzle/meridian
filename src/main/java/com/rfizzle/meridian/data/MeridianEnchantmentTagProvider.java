@@ -36,11 +36,73 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
     private static final TagKey<Enchantment> MENDING_EXCLUSIVE = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/mending"));
 
+    /**
+     * Curated subset of Meridian enchants that are balanced to appear on hostile-mob equipment.
+     * This is a provider contract for sibling mods (e.g. Tribulation scaling mob gear) — Meridian
+     * itself never reads it. Consumers hardcode the {@code meridian:mob_equipment} id and roll from
+     * this pool, with vanilla item/exclusivity rules filtering what actually applies to a given mob.
+     */
+    public static final TagKey<Enchantment> MOB_EQUIPMENT = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("mob_equipment"));
+
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         appendVanillaTags();
         addMeridianExclusiveSets();
         addMeridianObtainabilityTags();
+        addMobEquipmentTag();
+    }
+
+    /**
+     * Populates {@link #MOB_EQUIPMENT}. Inclusion criteria: melee combat (bonus damage, on-hit
+     * debuffs, reach/speed), armor protection (damage reduction, defensive retaliation, bonus
+     * health), and ranged combat meaningful on a mob that shoots. Everything else is excluded:
+     * <ul>
+     *   <li>mobility/mount — {@code alacrity, clamber, slipstream, skybound, true_flight, updraft,
+     *       vault, gallop, trample, saddleguard}</li>
+     *   <li>mining/terrain/farming — {@code excavate, prospect, terrasculpt, masons_reach,
+     *       steadfast, furrow, beckon, bounty, prismatic, renewal, cinderwalk}</li>
+     *   <li>no meaningful mob behavior — {@code impact_ward} & {@code ironwing} (elytra-only),
+     *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
+     *       crouch-slam input), {@code quell, gravitas, luminance, premonition, snare, tether,
+     *       aurify}</li>
+     *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
+     *       {@code antidote, ricochet, permafrost, glacial_lance}</li>
+     *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
+     *       detonation, diminish, rally, plunder, abyss_ward, vital_mend} (kept out of the
+     *       baseline pool; a future {@code mob_equipment/elite} sub-tag could carry them)</li>
+     *   <li>curses — {@code curse_of_decay, curse_of_sealing}</li>
+     * </ul>
+     * All entries use {@code addOptional} so the tag loads cleanly regardless of which enchants a
+     * given world-state has registered.
+     */
+    private void addMobEquipmentTag() {
+        getOrCreateTagBuilder(MOB_EQUIPMENT)
+                // Melee combat — bonus damage, on-hit debuffs, reach & speed
+                .addOptional(Meridian.id("blight"))
+                .addOptional(Meridian.id("cleave"))
+                .addOptional(Meridian.id("decay"))
+                .addOptional(Meridian.id("keen_edge"))
+                .addOptional(Meridian.id("nightfall"))
+                .addOptional(Meridian.id("outreach"))
+                .addOptional(Meridian.id("pummel"))
+                .addOptional(Meridian.id("rift_strike"))
+                .addOptional(Meridian.id("sanctify"))
+                .addOptional(Meridian.id("sentinel"))
+                .addOptional(Meridian.id("shackle"))
+                .addOptional(Meridian.id("siphon"))
+                .addOptional(Meridian.id("tempo"))
+                .addOptional(Meridian.id("voidbane"))
+                // Armor — damage reduction, defensive retaliation, bonus health
+                .addOptional(Meridian.id("bulwark"))
+                .addOptional(Meridian.id("frostguard"))
+                .addOptional(Meridian.id("repulse"))
+                .addOptional(Meridian.id("spellguard"))
+                .addOptional(Meridian.id("vitality"))
+                // Ranged combat — meaningful on mobs that shoot
+                .addOptional(Meridian.id("gale_shot"))
+                .addOptional(Meridian.id("resonance"))
+                .addOptional(Meridian.id("stormcall"));
     }
 
     private void addMeridianObtainabilityTags() {
