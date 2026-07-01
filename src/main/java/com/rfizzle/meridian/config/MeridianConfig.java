@@ -3,11 +3,13 @@ package com.rfizzle.meridian.config;
 import com.rfizzle.meridian.Meridian;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,9 +27,8 @@ public class MeridianConfig {
     private static final Pattern HEX_COLOR = Pattern.compile("^#[0-9A-Fa-f]{6}$");
     private static final String DEFAULT_OVER_LEVELED_COLOR = "#FF6600";
     private static final Set<String> VALID_POWER_FUNCTION_TYPES = Set.of("default", "linear", "fixed");
-    private static final int CURRENT_VERSION = 1;
 
-    public int configVersion = 1;
+    public int configVersion = ConfigMigrator.CURRENT_VERSION;
     public EnchantingTable enchantingTable = new EnchantingTable();
     public Shelves shelves = new Shelves();
     public Anvil anvil = new Anvil();
@@ -48,15 +49,19 @@ public class MeridianConfig {
             config.save(path);
             return config;
         }
-        try (Reader reader = Files.newBufferedReader(path)) {
-            MeridianConfig config = GSON.fromJson(reader, MeridianConfig.class);
-            if (config == null) {
-                Meridian.LOGGER.warn("Config file at {} was empty; using defaults", path);
+        try {
+            JsonElement element = JsonParser.parseString(Files.readString(path));
+            if (element == null || !element.isJsonObject()) {
+                Meridian.LOGGER.warn("Config file at {} was empty or not a JSON object; using defaults", path);
                 MeridianConfig fresh = new MeridianConfig();
                 fresh.save(path);
                 return fresh;
             }
-            boolean migrated = config.migrate();
+            // Migrate the raw JSON tree before deserialize so a renamed key survives (a lenient
+            // Gson deserialize would drop it). A file without configVersion is treated as v0.
+            JsonObject raw = element.getAsJsonObject();
+            boolean migrated = ConfigMigrator.migrate(raw);
+            MeridianConfig config = GSON.fromJson(raw, MeridianConfig.class);
             config.fillDefaults();
             config.validate();
             if (migrated) {
@@ -98,19 +103,6 @@ public class MeridianConfig {
 
     private static Path configPath() {
         return FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME);
-    }
-
-    boolean migrate() {
-        if (configVersion >= CURRENT_VERSION) return false;
-        int from = configVersion;
-        while (configVersion < CURRENT_VERSION) {
-            switch (configVersion) {
-                // case 1 -> migrateV1toV2();
-                default -> configVersion = CURRENT_VERSION;
-            }
-        }
-        Meridian.LOGGER.info("Migrated config from version {} to {}", from, configVersion);
-        return true;
     }
 
     private void fillDefaults() {
