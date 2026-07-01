@@ -2,6 +2,7 @@ package com.rfizzle.meridian;
 
 import com.rfizzle.meridian.anvil.MeridianAnvilHandlers;
 import com.rfizzle.meridian.api.MeridianReloadCallback;
+import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.command.MeridianCommand;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.advancement.ModTriggers;
@@ -42,6 +43,7 @@ public class Meridian implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Meridian initialized");
         config = MeridianConfig.load();
+        MeridianAttachments.init();
         ModParticles.register();
         ModTriggers.register();
         EnchantingStatRegistry.bootstrap();

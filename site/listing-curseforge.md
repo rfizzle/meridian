@@ -172,6 +172,9 @@ Wardens now drop **Warden Tendrils** — a crafting material required for sculk-
 
 ## Compatibility
 
+**Requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api).**
+Meridian will not load without it — install Fabric API alongside the mod.
+
 Meridian ships with first-class integration for:
 - **EMI / REI / JEI** — Enchanting table recipes and library mechanics under the "Infusions" category, plus an "Enchantments" browser (max level, exclusive sets, treasure flag, power windows)
 - **Jade / WTHIT** — Shelf stat tooltips and library contents via probe

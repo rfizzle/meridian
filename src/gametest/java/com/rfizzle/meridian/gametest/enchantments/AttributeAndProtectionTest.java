@@ -178,21 +178,27 @@ public class AttributeAndProtectionTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "masons_reach");
         if (ench == null) { helper.fail("masons_reach not in registry"); return; }
 
-        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
-        double baseRange = mob.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
-
-        ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
-        chest.enchant(ench, 3);
-        mob.setItemSlot(EquipmentSlot.CHEST, chest);
-
-        helper.runAfterDelay(1, () -> {
-            double modified = mob.getAttributeValue(Attributes.BLOCK_INTERACTION_RANGE);
-            if (modified <= baseRange) {
-                helper.fail("Mason's Reach III should increase block interaction range. Base: " + baseRange + ", got: " + modified);
+        // block_interaction_range is a player-only attribute (absent from a generic mob's attribute
+        // map), so assert on the enchantment's own attribute modifier — the pattern the sibling
+        // attribute tests use — rather than reading the value off a spawned mob.
+        var attrEffects = ench.value().getEffects(EnchantmentEffectComponents.ATTRIBUTES);
+        for (var effect : attrEffects) {
+            if (effect.attribute().is(Attributes.BLOCK_INTERACTION_RANGE)) {
+                var mod1 = effect.getModifier(1, EquipmentSlot.CHEST);
+                var mod3 = effect.getModifier(3, EquipmentSlot.CHEST);
+                if (mod1.amount() <= 0) {
+                    helper.fail("Mason's Reach should add positive block interaction range, got " + mod1.amount());
+                    return;
+                }
+                if (mod3.amount() <= mod1.amount()) {
+                    helper.fail("Mason's Reach III should exceed I. L1: " + mod1.amount() + ", L3: " + mod3.amount());
+                    return;
+                }
+                helper.succeed();
                 return;
             }
-            helper.succeed();
-        });
+        }
+        helper.fail("Mason's Reach should define a block_interaction_range attribute");
     }
 
     // --- Spellguard: has damage_protection effect ---

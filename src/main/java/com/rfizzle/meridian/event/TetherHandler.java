@@ -1,47 +1,48 @@
 package com.rfizzle.meridian.event;
 
+import com.rfizzle.meridian.attachment.MeridianAttachments;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public final class TetherHandler {
-
-    private static final Map<UUID, List<ItemStack>> tetheredItems = new HashMap<>();
 
     private TetherHandler() {}
 
     public static void register() {
         ServerPlayerEvents.COPY_FROM.register(TetherHandler::onPlayerRespawn);
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> tetheredItems.remove(handler.player.getUUID()));
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> tetheredItems.clear());
     }
 
-    public static void saveTetheredItems(UUID playerId, List<ItemStack> items) {
-        tetheredItems.put(playerId, items);
+    /**
+     * Stashes tether-enchanted items on the player so they survive death — and, because the
+     * attachment persists with the player entity, a disconnect on the death screen or a mid-death
+     * server stop. The items are returned on the next respawn.
+     */
+    public static void saveTetheredItems(Player player, List<ItemStack> items) {
+        if (items.isEmpty()) return;
+        player.setAttached(MeridianAttachments.TETHERED_ITEMS, List.copyOf(items));
     }
 
     private static void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
         if (alive) return;
-        restoreTetheredItems(newPlayer);
+        restoreTetheredItems(oldPlayer, newPlayer);
     }
 
-    // Package-private: returns any items saved under the player's id to their inventory (dropping
-    // the overflow). Split out from the respawn hook so it can be driven directly in a gametest.
-    static void restoreTetheredItems(Player player) {
-        List<ItemStack> items = tetheredItems.remove(player.getUUID());
-        if (items == null || items.isEmpty()) return;
+    // Package-private: moves any items stashed on `from` into `to`'s inventory (dropping the
+    // overflow), consuming the stash so a second restore is a no-op. Split from the respawn hook so
+    // it can be driven directly in a gametest.
+    static void restoreTetheredItems(Player from, Player to) {
+        List<ItemStack> items = from.getAttachedOrElse(MeridianAttachments.TETHERED_ITEMS, List.of());
+        if (items.isEmpty()) return;
+        from.removeAttached(MeridianAttachments.TETHERED_ITEMS);
 
         for (ItemStack stack : items) {
-            if (!player.getInventory().add(stack)) {
-                player.drop(stack, false);
+            ItemStack copy = stack.copy();
+            if (!to.getInventory().add(copy)) {
+                to.drop(copy, false);
             }
         }
     }

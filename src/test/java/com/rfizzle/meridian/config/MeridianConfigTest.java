@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.config;
 
+import com.google.gson.JsonObject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -216,16 +217,53 @@ class MeridianConfigTest {
     }
 
     @Test
-    void migrate_versionOne_isNoOp() {
-        MeridianConfig cfg = new MeridianConfig();
-        cfg.configVersion = 1;
-        cfg.enchantingTable.maxEterna = 42;
+    void load_preVersionedFile_migratesAndStampsVersion(@TempDir Path tmp) throws IOException {
+        // A file written before configVersion existed carries no version key. It must be treated as
+        // v0 and migrated — the pre-fix code left configVersion at the POJO default and never ran.
+        Path path = tmp.resolve("meridian.json");
+        Files.writeString(path, "{\"enchantingTable\":{\"maxEterna\":42}}");
 
-        boolean migrated = cfg.migrate();
+        MeridianConfig loaded = MeridianConfig.load(path);
 
-        assertEquals(false, migrated);
-        assertEquals(1, cfg.configVersion);
-        assertEquals(42, cfg.enchantingTable.maxEterna);
+        assertEquals(ConfigMigrator.CURRENT_VERSION, loaded.configVersion);
+        assertEquals(42, loaded.enchantingTable.maxEterna);
+        // The upgraded schema is persisted back so the on-disk file now carries the version.
+        assertTrue(Files.readString(path).contains("\"configVersion\""),
+                "migrated config should be re-saved with configVersion stamped");
+    }
+
+    @Test
+    void load_currentVersionFile_notRewritten(@TempDir Path tmp) throws IOException {
+        // A file already at CURRENT_VERSION must not be treated as a migration (no needless re-save).
+        Path path = tmp.resolve("meridian.json");
+        Files.writeString(path, "{\"configVersion\":" + ConfigMigrator.CURRENT_VERSION
+                + ",\"enchantingTable\":{\"maxEterna\":7}}");
+        String before = Files.readString(path);
+
+        MeridianConfig loaded = MeridianConfig.load(path);
+
+        assertEquals(ConfigMigrator.CURRENT_VERSION, loaded.configVersion);
+        assertEquals(7, loaded.enchantingTable.maxEterna);
+        assertEquals(before, Files.readString(path), "an already-current file must not be rewritten on load");
+    }
+
+    @Test
+    void migrate_currentVersion_isNoOp() {
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", ConfigMigrator.CURRENT_VERSION);
+
+        assertEquals(false, ConfigMigrator.migrate(json));
+    }
+
+    @Test
+    void migrate_preVersioned_stampsCurrentAndReportsChange() {
+        JsonObject json = new JsonObject();
+
+        assertTrue(ConfigMigrator.migrate(json), "a pre-versioned object should report a change");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
+
+        // Idempotent: a second pass over the stamped object is a no-op.
+        assertEquals(false, ConfigMigrator.migrate(json));
     }
 
     @Test
