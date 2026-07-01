@@ -16,7 +16,8 @@
     "commands",
     "config",
     "guide",
-    "faq"
+    "faq",
+    "changelog"
   ],
   "theme": {
     "accent": "#DAA520",
