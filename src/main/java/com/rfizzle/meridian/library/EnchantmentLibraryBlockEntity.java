@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -205,17 +206,23 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
         super.saveAdditional(tag, registries);
-        CompoundTag pointsTag = new CompoundTag();
-        for (Object2IntMap.Entry<ResourceKey<Enchantment>> entry : this.points.object2IntEntrySet()) {
-            pointsTag.putInt(entry.getKey().location().toString(), entry.getIntValue());
-        }
-        tag.put(TAG_POINTS, pointsTag);
+        tag.put(TAG_POINTS, writeSortedMap(this.points));
+        tag.put(TAG_LEVELS, writeSortedMap(this.maxLevels));
+    }
 
-        CompoundTag levelsTag = new CompoundTag();
-        for (Object2IntMap.Entry<ResourceKey<Enchantment>> entry : this.maxLevels.object2IntEntrySet()) {
-            levelsTag.putInt(entry.getKey().location().toString(), entry.getIntValue());
-        }
-        tag.put(TAG_LEVELS, levelsTag);
+    /**
+     * Serializes an enchantment→int map into a compound tag keyed by {@link ResourceLocation#toString()},
+     * writing keys in lexicographic order. {@link CompoundTag} preserves insertion order, so sorting here
+     * keeps the on-disk bytes deterministic regardless of the source map's hash-iteration order — a
+     * cosmetically identical library never rewrites its region file on save.
+     */
+    private static CompoundTag writeSortedMap(Object2IntMap<ResourceKey<Enchantment>> map) {
+        CompoundTag out = new CompoundTag();
+        map.object2IntEntrySet().stream()
+                .map(entry -> Map.entry(entry.getKey().location().toString(), entry.getIntValue()))
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> out.putInt(entry.getKey(), entry.getValue()));
+        return out;
     }
 
     /**

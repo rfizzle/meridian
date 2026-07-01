@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.client.net;
 
-import com.rfizzle.meridian.client.compat.ViewerRefreshTrigger;
+import com.rfizzle.meridian.compat.client.ViewerRefreshTrigger;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;

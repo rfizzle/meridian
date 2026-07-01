@@ -78,6 +78,8 @@ public final class ArmorTickHandler {
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
 
+        if (tickCounter % 2 != 0) return;
+
         double radius = 3.0 + 2.0 * level;
         AABB area = player.getBoundingBox().inflate(radius);
         List<ItemEntity> items = player.serverLevel().getEntitiesOfClass(ItemEntity.class, area,

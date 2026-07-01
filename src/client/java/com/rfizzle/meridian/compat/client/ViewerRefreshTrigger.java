@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.client.compat;
+package com.rfizzle.meridian.compat.client;
 
 import com.rfizzle.meridian.compat.emi.EmiEnchantingPlugin;
 import com.rfizzle.meridian.compat.jei.JeiEnchantingPlugin;
