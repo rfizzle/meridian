@@ -202,7 +202,7 @@ public final class JeiEnchantingPlugin implements IModPlugin {
     }
 
     /**
-     * Triggered by {@link com.rfizzle.meridian.client.compat.ViewerRefreshTrigger} after
+     * Triggered by {@link com.rfizzle.meridian.compat.client.ViewerRefreshTrigger} after
      * {@link com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry#applyFromPayload} completes.
      * Hides any recipes that were added via a previous runtime call (to avoid duplicates), then
      * adds a fresh set extracted from the now-populated registry.
