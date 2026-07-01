@@ -45,7 +45,7 @@ public abstract class TetherMixin {
         }
 
         if (!saved.isEmpty()) {
-            TetherHandler.saveTetheredItems(player.getUUID(), saved);
+            TetherHandler.saveTetheredItems(player, saved);
         }
     }
 }
