@@ -15,6 +15,7 @@
     "tooltip.meridian.enchlib.unavailable": "Cannot extract \u2014 insufficient max level",
     "tooltip.meridian.enchlib.disabled": "Disabled by server configuration",
     "emi.category.meridian.infusions": "Infusions",
+    "emi.category.meridian.enchantments": "Enchantments",
     "emi.meridian.recipe.keep_nbt": "Preserves enchantments",
     "rei.meridian.category.infusions": "Infusions",
     "rei.meridian.recipe.keep_nbt": "Preserves enchantments",
