@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -294,6 +295,31 @@ public class MechanicsEnchantmentTest implements FabricGameTest {
         boolean onArmor = ench.value().canEnchant(new ItemStack(Items.DIAMOND_CHESTPLATE));
         if (!onSword || !onPick || !onArmor) {
             helper.fail("Tether should be enchantable on all durability items. sword=" + onSword + ", pick=" + onPick + ", armor=" + onArmor);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- Tether: member of the #c:soulbound convention tag, and matched through it ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void tetherIsMatchedBySoulboundConventionTag(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "tether");
+        if (ench == null) { helper.fail("tether not in registry"); return; }
+
+        if (!ench.is(EnchantmentEffects.SOULBOUND)) {
+            helper.fail("tether should be in #c:soulbound");
+            return;
+        }
+
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        if (EnchantmentEffects.hasEnchantmentIn(sword, EnchantmentEffects.SOULBOUND)) {
+            helper.fail("Unenchanted sword must not match #c:soulbound");
+            return;
+        }
+        sword.enchant(ench, 1);
+        if (!EnchantmentEffects.hasEnchantmentIn(sword, EnchantmentEffects.SOULBOUND)) {
+            helper.fail("Tether-enchanted sword should match #c:soulbound");
             return;
         }
         helper.succeed();
