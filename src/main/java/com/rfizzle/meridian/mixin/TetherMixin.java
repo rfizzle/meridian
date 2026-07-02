@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.mixin;
 
+import com.rfizzle.meridian.compat.tribulation.TribulationCompat;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.event.TetherHandler;
 import net.minecraft.world.entity.player.Inventory;
@@ -34,11 +35,14 @@ public abstract class TetherMixin {
     @Inject(method = "dropAll", at = @At("HEAD"))
     private void meridian$saveTetheredItems(CallbackInfo ci) {
         if (player.level().isClientSide()) return;
+        // When Tribulation's soul-inventory is active it owns keep-on-death for #c:soulbound
+        // items; capturing here too would hand the item back twice on respawn.
+        if (TribulationCompat.isSoulInventoryActive()) return;
 
         List<ItemStack> saved = new ArrayList<>();
         for (int i = 0; i < getContainerSize(); i++) {
             ItemStack stack = getItem(i);
-            if (!stack.isEmpty() && EnchantmentEffects.getEnchantmentLevel(stack, EnchantmentEffects.TETHER) > 0) {
+            if (!stack.isEmpty() && EnchantmentEffects.hasEnchantmentIn(stack, EnchantmentEffects.SOULBOUND)) {
                 saved.add(stack.copy());
                 setItem(i, ItemStack.EMPTY);
             }

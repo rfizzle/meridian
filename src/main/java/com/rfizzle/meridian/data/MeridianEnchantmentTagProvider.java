@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.data;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -48,9 +49,21 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         appendVanillaTags();
+        addConventionTags();
         addMeridianExclusiveSets();
         addMeridianObtainabilityTags();
         addMobEquipmentTag();
+    }
+
+    /**
+     * Meridian's contribution to the {@code c:} convention namespace. {@code #c:soulbound} is the
+     * keep-on-death contract shared with sibling mods (Tribulation adds its own
+     * {@code tribulation:soulbound} to the same tag); each mod contributes only its own enchant,
+     * and Fabric merges the memberships when both are installed.
+     */
+    private void addConventionTags() {
+        getOrCreateTagBuilder(EnchantmentEffects.SOULBOUND)
+                .addOptional(Meridian.id("tether"));
     }
 
     /**

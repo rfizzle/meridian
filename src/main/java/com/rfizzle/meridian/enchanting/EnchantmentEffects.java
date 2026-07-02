@@ -1,14 +1,26 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public final class EnchantmentEffects {
+
+    /**
+     * The {@code c:} convention tag for the keep-on-death contract. Every mod with a
+     * keep-on-death enchant contributes its own enchant to this tag (Meridian adds
+     * {@code meridian:tether}); death handling keys off the tag so sibling mods' enchants
+     * (e.g. {@code tribulation:soulbound}) are honored without referencing their ids.
+     */
+    public static final TagKey<Enchantment> SOULBOUND = TagKey.create(
+            Registries.ENCHANTMENT, ResourceLocation.fromNamespaceAndPath("c", "soulbound"));
 
     public static final ResourceKey<Enchantment> PRISMATIC = key("prismatic");
     public static final ResourceKey<Enchantment> RENEWAL = key("renewal");
@@ -70,6 +82,14 @@ public final class EnchantmentEffects {
             }
         }
         return 0;
+    }
+
+    public static boolean hasEnchantmentIn(ItemStack stack, TagKey<Enchantment> tag) {
+        if (stack == null || stack.isEmpty()) return false;
+        for (Holder<Enchantment> holder : stack.getEnchantments().keySet()) {
+            if (holder.is(tag)) return true;
+        }
+        return false;
     }
 
     public static int getEquippedLevel(LivingEntity entity, ResourceKey<Enchantment> key, EquipmentSlot... slots) {
