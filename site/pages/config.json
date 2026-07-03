@@ -91,6 +91,21 @@
       ]
     },
     {
+      "id": "everfeast",
+      "title": "everfeast",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>bites</code>", "int", "128", "Bites a newly-infused Everfeast Ration holds (1&ndash;4096); existing rations keep the count they were made with"]
+          ]
+        },
+        { "type": "code", "small": true, "code": "{\n  \"everfeast\": {\n    \"bites\": 128\n  }\n}" }
+      ]
+    },
+    {
       "id": "warden",
       "title": "warden",
       "blocks": [
@@ -155,7 +170,7 @@
       "plainTitle": true,
       "intro": "The complete default <code class='text-accent2'>config/meridian.json</code> generated on first launch.",
       "blocks": [
-        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 1,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
+        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 1,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"everfeast\": {\n    \"bites\": 128\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
       ]
     }
   ]

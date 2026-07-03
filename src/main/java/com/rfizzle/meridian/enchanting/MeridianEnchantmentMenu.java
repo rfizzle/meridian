@@ -6,6 +6,7 @@ import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.advancement.ModTriggers;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
+import com.rfizzle.meridian.item.EverfeastRationItem;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.mixin.EnchantmentMenuAccessor;
 import com.rfizzle.meridian.net.CluesPayload;
@@ -446,6 +447,11 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         if (input.isEmpty()) return;
 
         ItemStack result = holder.value().assemble(new SingleRecipeInput(input), level.registryAccess());
+        if (result.getItem() instanceof EverfeastRationItem) {
+            // Size the ration's bite pool from live config at infusion time; the count then lives
+            // in the stack, so later config changes don't retroactively resize existing rations.
+            EverfeastRationItem.stampBites(result);
+        }
 
         if (input.getCount() > 1) {
             ItemStack excess = input.copyWithCount(input.getCount() - 1);

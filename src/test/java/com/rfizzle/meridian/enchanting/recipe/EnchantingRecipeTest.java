@@ -233,6 +233,9 @@ class EnchantingRecipeTest {
         assertTypeField("budding_amethyst.json", "meridian:enchanting");
         assertTypeField("everfull_flask.json", "meridian:enchanting");
         assertTypeField("tempered_core.json", "meridian:enchanting");
+        for (String food : EVERFEAST_FOODS) {
+            assertTypeField("everfeast_" + food + ".json", "meridian:enchanting");
+        }
 
         // Spot-check stat values match Zenith on the ones we can fully read without item lookup.
         JsonElement infusedBreath = readResource("infused_breath.json");
@@ -246,6 +249,30 @@ class EnchantingRecipeTest {
         assertEquals(-1F, ibMax.eterna());
         assertEquals(25F, ibMax.quanta());
         assertEquals(-1F, ibMax.arcana());
+    }
+
+    private static final String[] EVERFEAST_FOODS = {
+            "cooked_beef", "cooked_porkchop", "cooked_mutton", "cooked_chicken", "cooked_rabbit",
+            "cooked_cod", "cooked_salmon", "bread", "baked_potato", "golden_carrot"
+    };
+
+    @Test
+    void everfeastRecipes_shareTheStatedGateAndConsumeTheirBaseFood() throws Exception {
+        for (String food : EVERFEAST_FOODS) {
+            JsonObject json = readResource("everfeast_" + food + ".json").getAsJsonObject();
+            JsonObject req = json.getAsJsonObject("requirements");
+            assertEquals(27F, req.get("eterna").getAsFloat(),
+                    "everfeast_" + food + " must gate at eterna 27");
+            assertEquals(15F, req.get("quanta").getAsFloat(),
+                    "everfeast_" + food + " must gate at quanta 15");
+            assertEquals(30, json.get("xp_cost").getAsInt(),
+                    "everfeast_" + food + " must cost 30 levels");
+            assertEquals("minecraft:" + food,
+                    json.getAsJsonObject("input").get("item").getAsString(),
+                    "everfeast_" + food + " must consume its base food");
+            assertEquals("meridian:everfeast_" + food,
+                    json.getAsJsonObject("result").get("id").getAsString());
+        }
     }
 
     @Test

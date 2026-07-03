@@ -28,7 +28,11 @@ public class RegistryGameTest implements FabricGameTest {
     private static final String[] STANDALONE_ITEM_IDS = {
             "prismatic_web", "infused_breath", "warden_tendril",
             "scrap_tome", "improved_scrap_tome", "extraction_tome",
-            "everfull_flask", "dormant_core", "tempered_core"
+            "everfull_flask", "dormant_core", "tempered_core",
+            "everfeast_cooked_beef", "everfeast_cooked_porkchop", "everfeast_cooked_mutton",
+            "everfeast_cooked_chicken", "everfeast_cooked_rabbit", "everfeast_cooked_cod",
+            "everfeast_cooked_salmon", "everfeast_bread", "everfeast_baked_potato",
+            "everfeast_golden_carrot"
     };
 
     private static final String[] MENU_TYPE_IDS = {

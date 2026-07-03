@@ -1,0 +1,102 @@
+# everfeast_cooked_rabbit — the vanilla cooked rabbit sprite, transmuted gold by
+# the Everfeast infusion. Vanilla silhouette and shading structure kept so the
+# base food stays recognizable; the ramp is re-hued onto the shared everfeast
+# bronze->gold gradient, with a slow pulse that lifts the tones and crests a
+# glint on the upper-left light edge. Family scheme: everfeast_cooked_beef.
+size: 16
+frametime: 6
+interpolate: true
+
+legend:
+  . transparent
+  A #452f04
+  B #61430a
+  C #76520d
+  D #9b7217
+  E #c89e29
+  F #daaf34
+  G #eec847
+  a #4e3809
+  b #6e5012
+  c #846016
+  d #a98223
+  e #d3ac37
+  f #e2bb41
+  g #f2ce50
+  W #fff0a8      # glint crest, near-white gold
+
+# frame 1 — base
+frame:
+  ................
+  ..........BBB...
+  ...BBBB..BEFEB..
+  ..BEFFEBBEGGFEB.
+  .BDFFGGGGGGGFFCA
+  .BEEFGGGGGGFFFDA
+  .BEDDFGGFDDEEFDA
+  ..BGEDECDEGGEECA
+  ..AGGDCADGGGGEA.
+  ..AEGCACAEGGEA..
+  ...AEA.AAAEEDA..
+  ....AA...ACDDCA.
+  ..........AACCA.
+  ............AAA.
+  ................
+  ................
+
+# frame 2 — warming
+frame:
+  ................
+  ..........bbb...
+  ...bbbb..befeb..
+  ..beffebbeggfeb.
+  .bdffgggggggffca
+  .beefggggggfffda
+  .beddfggfddeefda
+  ..bgedecdeggeeca
+  ..aggdcadggggea.
+  ..aegcacaeggea..
+  ...aea.aaaeeda..
+  ....aa...acddca.
+  ..........aacca.
+  ............aaa.
+  ................
+  ................
+
+# frame 3 — peak glint
+frame:
+  ................
+  ..........bbb...
+  ...bbbb..befeb..
+  ..beffebbeWgfeb.
+  .bdffWggWgggffca
+  .beefggggggfffda
+  .beddfWgfddeefda
+  ..bWedecdeggeeca
+  ..aggdcadggggea.
+  ..aeWcacaeggea..
+  ...aea.aaaeeda..
+  ....aa...acddca.
+  ..........aacca.
+  ............aaa.
+  ................
+  ................
+
+# frame 4 — cooling
+frame:
+  ................
+  ..........bbb...
+  ...bbbb..befeb..
+  ..beffebbeggfeb.
+  .bdffgggggggffca
+  .beefggggggfffda
+  .beddfggfddeefda
+  ..bgedecdeggeeca
+  ..aggdcadggggea.
+  ..aegcacaeggea..
+  ...aea.aaaeeda..
+  ....aa...acddca.
+  ..........aacca.
+  ............aaa.
+  ................
+  ................
