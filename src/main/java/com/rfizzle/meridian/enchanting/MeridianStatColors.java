@@ -8,9 +8,9 @@ package com.rfizzle.meridian.enchanting;
  */
 public final class MeridianStatColors {
 
-    public static final int ETERNA = 0xFF7BE0A0;
+    public static final int ETERNA = 0xFF3DB53D;
     public static final int QUANTA = 0xFFFC5454;
-    public static final int ARCANA = 0xFFC060E0;
+    public static final int ARCANA = 0xFFA800A8;
     public static final int RECTIFICATION = 0xFF5AD6D6;
     public static final int CLUES = 0xFFFFC24B;
 
