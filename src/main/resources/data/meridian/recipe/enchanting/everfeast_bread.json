@@ -1,0 +1,14 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:bread"
+    },
+    "requirements": {
+        "eterna": 27,
+        "quanta": 15
+    },
+    "result": {
+        "id": "meridian:everfeast_bread"
+    },
+    "xp_cost": 30
+}

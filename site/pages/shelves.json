@@ -155,6 +155,7 @@
             ["<span class='text-bone'>Apple</span>", "Golden Apple", "=25", "20–40", "≥15", "—"],
             ["<span class='text-bone'>Improved Scrap Tome</span>", "4x Extraction Tome", "≥30", "25–75", "≥45", "—"],
             ["<span class='text-bone'>Dormant Deepshelf</span>", "Deepshelf", "≥30", "≥40", "≥40", "—"],
+            ["<span class='text-bone'>Cooked meats, fish, Bread, Baked Potato, Golden Carrot</span>", "Everfeast Ration", "≥27", "≥15", "—", "One recipe per food (10 total); 30 levels each. Ration feeds 128 times (configurable)"],
             ["<span class='text-bone'>Amethyst Block</span>", "Budding Amethyst", "≥30", "30–50", "≥50", "—"],
             ["<span class='text-bone'>Echo Shard</span>", "4x Echo Shard", "≥35", "≥50", "≥50", "—"],
             ["<span class='text-bone'>Nautilus Shell</span>", "Heart of the Sea", "≥35", "≥30", "≥60", "Key for Heart-Forged Seashelf"],

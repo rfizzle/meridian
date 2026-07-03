@@ -1,0 +1,14 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:golden_carrot"
+    },
+    "requirements": {
+        "eterna": 27,
+        "quanta": 15
+    },
+    "result": {
+        "id": "meridian:everfeast_golden_carrot"
+    },
+    "xp_cost": 30
+}

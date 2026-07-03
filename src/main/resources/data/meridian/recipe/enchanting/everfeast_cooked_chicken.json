@@ -1,0 +1,14 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:cooked_chicken"
+    },
+    "requirements": {
+        "eterna": 27,
+        "quanta": 15
+    },
+    "result": {
+        "id": "meridian:everfeast_cooked_chicken"
+    },
+    "xp_cost": 30
+}

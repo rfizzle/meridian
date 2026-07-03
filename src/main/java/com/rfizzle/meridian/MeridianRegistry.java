@@ -4,6 +4,7 @@ import com.rfizzle.meridian.anvil.PrismaticWebItem;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.event.WardenPoolCondition;
 import com.rfizzle.meridian.item.DormantCoreItem;
+import com.rfizzle.meridian.item.EverfeastRationItem;
 import com.rfizzle.meridian.item.EverfullFlaskItem;
 import com.rfizzle.meridian.item.InfusedBreathItem;
 import com.rfizzle.meridian.item.TemperedCoreItem;
@@ -30,6 +31,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.dispenser.BlockSource;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -46,7 +48,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -61,6 +65,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -203,6 +208,28 @@ public final class MeridianRegistry {
             new TemperedCoreItem(new Item.Properties().rarity(Rarity.EPIC));
 
     /**
+     * Everfeast rations, keyed by the base food each is infused from (insertion order = creative
+     * tab order). Each ration carries the base food's {@code FOOD} component verbatim, so eating
+     * restores exactly the base item's nutrition/saturation. Single-stack: the whole point is one
+     * slot feeding many times, and the per-stack bite components can't stack anyway.
+     * {@link Rarity#RARE} matches the other mid-tier infusion result, {@link #EVERFULL_FLASK}.
+     */
+    public static final Map<Item, EverfeastRationItem> EVERFEAST_RATIONS = createEverfeastRations();
+
+    private static Map<Item, EverfeastRationItem> createEverfeastRations() {
+        Map<Item, EverfeastRationItem> rations = new LinkedHashMap<>();
+        for (Item base : List.of(
+                Items.COOKED_BEEF, Items.COOKED_PORKCHOP, Items.COOKED_MUTTON,
+                Items.COOKED_CHICKEN, Items.COOKED_RABBIT, Items.COOKED_COD,
+                Items.COOKED_SALMON, Items.BREAD, Items.BAKED_POTATO, Items.GOLDEN_CARROT)) {
+            FoodProperties food = base.components().get(DataComponents.FOOD);
+            rations.put(base, new EverfeastRationItem(
+                    new Item.Properties().stacksTo(1).rarity(Rarity.RARE).food(food)));
+        }
+        return Collections.unmodifiableMap(rations);
+    }
+
+    /**
      * Scrap tome — consumed at the anvil to salvage one random enchantment onto a fresh
      * enchanted book. Single-stack because the anvil interaction is one tome per use, and
      * a higher stack cap would let players misread "how many salvages" from the slot count.
@@ -326,6 +353,8 @@ public final class MeridianRegistry {
         registerItem("everfull_flask", EVERFULL_FLASK);
         registerItem("dormant_core", DORMANT_CORE);
         registerItem("tempered_core", TEMPERED_CORE);
+        EVERFEAST_RATIONS.forEach((base, ration) ->
+                registerItem("everfeast_" + BuiltInRegistries.ITEM.getKey(base).getPath(), ration));
         registerItem("scrap_tome", SCRAP_TOME);
         registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
         registerItem("extraction_tome", EXTRACTION_TOME);

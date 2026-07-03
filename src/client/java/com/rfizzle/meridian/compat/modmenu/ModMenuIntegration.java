@@ -145,6 +145,17 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setSaveConsumer(v -> current.tomes.extractionTomeRepairPercent = v)
                     .build());
 
+            // Everfeast
+            ConfigCategory everfeastCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.meridian.category.everfeast"));
+            everfeastCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.everfeast_bites"),
+                            current.everfeast.bites)
+                    .setDefaultValue(128)
+                    .setMin(1).setMax(4096)
+                    .setSaveConsumer(v -> current.everfeast.bites = v)
+                    .build());
+
             // Warden
             ConfigCategory wardenCategory = builder.getOrCreateCategory(
                     Component.translatable("config.meridian.category.warden"));

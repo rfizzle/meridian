@@ -34,6 +34,7 @@ public class MeridianConfig {
     public Anvil anvil = new Anvil();
     public Library library = new Library();
     public Tomes tomes = new Tomes();
+    public Everfeast everfeast = new Everfeast();
     public Warden warden = new Warden();
     public Display display = new Display();
     public Map<String, EnchantmentOverride> enchantmentOverrides = new HashMap<>();
@@ -111,6 +112,7 @@ public class MeridianConfig {
         if (anvil == null) anvil = new Anvil();
         if (library == null) library = new Library();
         if (tomes == null) tomes = new Tomes();
+        if (everfeast == null) everfeast = new Everfeast();
         if (warden == null) warden = new Warden();
         if (display == null) display = new Display();
         if (enchantmentOverrides == null) enchantmentOverrides = new HashMap<>();
@@ -134,6 +136,8 @@ public class MeridianConfig {
         tomes.extractionTomeXpCost = clampNonNegative("tomes.extractionTomeXpCost", tomes.extractionTomeXpCost);
         tomes.extractionTomeItemDamage = clampNonNegative("tomes.extractionTomeItemDamage", tomes.extractionTomeItemDamage);
         tomes.extractionTomeRepairPercent = clampUnit("tomes.extractionTomeRepairPercent", tomes.extractionTomeRepairPercent);
+
+        everfeast.bites = clampIntRange("everfeast.bites", everfeast.bites, 1, 4096);
 
         warden.tendrilDropChance = clampUnit("warden.tendrilDropChance", warden.tendrilDropChance);
         warden.tendrilLootingBonus = clampUnit("warden.tendrilLootingBonus", warden.tendrilLootingBonus);
@@ -240,6 +244,11 @@ public class MeridianConfig {
         public int extractionTomeXpCost = 10;
         public int extractionTomeItemDamage = 50;
         public double extractionTomeRepairPercent = 0.25;
+    }
+
+    public static class Everfeast {
+        /** Bites a newly-infused Everfeast ration is created with; existing rations keep theirs. */
+        public int bites = 128;
     }
 
     public static class Warden {
