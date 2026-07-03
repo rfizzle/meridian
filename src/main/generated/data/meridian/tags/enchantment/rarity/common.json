@@ -1,0 +1,24 @@
+{
+  "values": [
+    {
+      "id": "meridian:alacrity",
+      "required": false
+    },
+    {
+      "id": "meridian:beckon",
+      "required": false
+    },
+    {
+      "id": "meridian:bulwark",
+      "required": false
+    },
+    {
+      "id": "meridian:clamber",
+      "required": false
+    },
+    {
+      "id": "meridian:insight",
+      "required": false
+    }
+  ]
+}

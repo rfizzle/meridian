@@ -1,0 +1,108 @@
+{
+  "values": [
+    {
+      "id": "meridian:cinderwalk",
+      "required": false
+    },
+    {
+      "id": "meridian:cleave",
+      "required": false
+    },
+    {
+      "id": "meridian:decay",
+      "required": false
+    },
+    {
+      "id": "meridian:excavate",
+      "required": false
+    },
+    {
+      "id": "meridian:frostguard",
+      "required": false
+    },
+    {
+      "id": "meridian:glacial_lance",
+      "required": false
+    },
+    {
+      "id": "meridian:keen_edge",
+      "required": false
+    },
+    {
+      "id": "meridian:nightfall",
+      "required": false
+    },
+    {
+      "id": "meridian:premonition",
+      "required": false
+    },
+    {
+      "id": "meridian:prospect",
+      "required": false
+    },
+    {
+      "id": "meridian:pummel",
+      "required": false
+    },
+    {
+      "id": "meridian:renewal",
+      "required": false
+    },
+    {
+      "id": "meridian:repulse",
+      "required": false
+    },
+    {
+      "id": "meridian:resonance",
+      "required": false
+    },
+    {
+      "id": "meridian:ricochet",
+      "required": false
+    },
+    {
+      "id": "meridian:rift_strike",
+      "required": false
+    },
+    {
+      "id": "meridian:seismic_slam",
+      "required": false
+    },
+    {
+      "id": "meridian:siphon",
+      "required": false
+    },
+    {
+      "id": "meridian:skybound",
+      "required": false
+    },
+    {
+      "id": "meridian:slipstream",
+      "required": false
+    },
+    {
+      "id": "meridian:soul_tax",
+      "required": false
+    },
+    {
+      "id": "meridian:steadfast",
+      "required": false
+    },
+    {
+      "id": "meridian:stormcall",
+      "required": false
+    },
+    {
+      "id": "meridian:tempest",
+      "required": false
+    },
+    {
+      "id": "meridian:terrasculpt",
+      "required": false
+    },
+    {
+      "id": "meridian:true_flight",
+      "required": false
+    }
+  ]
+}

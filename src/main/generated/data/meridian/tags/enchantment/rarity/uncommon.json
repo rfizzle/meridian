@@ -1,0 +1,116 @@
+{
+  "values": [
+    {
+      "id": "meridian:animus",
+      "required": false
+    },
+    {
+      "id": "meridian:antidote",
+      "required": false
+    },
+    {
+      "id": "meridian:blight",
+      "required": false
+    },
+    {
+      "id": "meridian:bounty",
+      "required": false
+    },
+    {
+      "id": "meridian:fortify",
+      "required": false
+    },
+    {
+      "id": "meridian:furrow",
+      "required": false
+    },
+    {
+      "id": "meridian:gale_shot",
+      "required": false
+    },
+    {
+      "id": "meridian:gallop",
+      "required": false
+    },
+    {
+      "id": "meridian:gravitas",
+      "required": false
+    },
+    {
+      "id": "meridian:impact_ward",
+      "required": false
+    },
+    {
+      "id": "meridian:ironwing",
+      "required": false
+    },
+    {
+      "id": "meridian:luminance",
+      "required": false
+    },
+    {
+      "id": "meridian:masons_reach",
+      "required": false
+    },
+    {
+      "id": "meridian:outreach",
+      "required": false
+    },
+    {
+      "id": "meridian:permafrost",
+      "required": false
+    },
+    {
+      "id": "meridian:prismatic",
+      "required": false
+    },
+    {
+      "id": "meridian:quell",
+      "required": false
+    },
+    {
+      "id": "meridian:saddleguard",
+      "required": false
+    },
+    {
+      "id": "meridian:sanctify",
+      "required": false
+    },
+    {
+      "id": "meridian:sentinel",
+      "required": false
+    },
+    {
+      "id": "meridian:shackle",
+      "required": false
+    },
+    {
+      "id": "meridian:spellguard",
+      "required": false
+    },
+    {
+      "id": "meridian:tempo",
+      "required": false
+    },
+    {
+      "id": "meridian:trample",
+      "required": false
+    },
+    {
+      "id": "meridian:updraft",
+      "required": false
+    },
+    {
+      "id": "meridian:vault",
+      "required": false
+    },
+    {
+      "id": "meridian:vitality",
+      "required": false
+    },
+    {
+      "id": "meridian:voidbane",
+      "required": false
+    }
+  ]
+}

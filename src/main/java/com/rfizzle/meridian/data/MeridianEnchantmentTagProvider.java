@@ -2,8 +2,22 @@ package com.rfizzle.meridian.data;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -46,6 +60,29 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
     public static final TagKey<Enchantment> MOB_EQUIPMENT = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("mob_equipment"));
 
+    /**
+     * Published rarity classification of the non-curse enchantment catalog — a provider contract
+     * for sibling mods and datapacks (Prosperity's tag-sourced loot injection is the driving
+     * consumer). Indexed by {@link RealEnchantmentHelper#rarityBucket(int)}: common, uncommon,
+     * rare, very_rare. Each non-curse enchantment lands in exactly one tag, derived from its
+     * registered {@code weight}, so the tags and the enchanting table's Arcana buckets can never
+     * disagree. Consumers reference them as e.g. {@code #meridian:rarity/rare} in a vanilla
+     * {@code minecraft:enchant_randomly} loot function.
+     */
+    public static final List<TagKey<Enchantment>> RARITY_TAGS = List.of(
+            TagKey.create(Registries.ENCHANTMENT, Meridian.id("rarity/common")),
+            TagKey.create(Registries.ENCHANTMENT, Meridian.id("rarity/uncommon")),
+            TagKey.create(Registries.ENCHANTMENT, Meridian.id("rarity/rare")),
+            TagKey.create(Registries.ENCHANTMENT, Meridian.id("rarity/very_rare")));
+
+    /**
+     * Meridian's curses. Single source of truth for curse-ness in datagen: members go into
+     * {@code #minecraft:curse} and are excluded from every {@link #RARITY_TAGS} tag.
+     */
+    private static final List<ResourceLocation> CURSES = List.of(
+            Meridian.id("curse_of_decay"),
+            Meridian.id("curse_of_sealing"));
+
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
         appendVanillaTags();
@@ -53,6 +90,54 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
         addMeridianExclusiveSets();
         addMeridianObtainabilityTags();
         addMobEquipmentTag();
+        addRarityTags(wrapperLookup);
+    }
+
+    /**
+     * Populates {@link #RARITY_TAGS} by enumerating every {@code meridian:} enchantment definition
+     * and bucketing it by its registered weight — a newly added enchantment lands in the correct
+     * tag on the next datagen run with no tag edit here. The definitions are read straight from
+     * {@code data/meridian/enchantment/*.json} on the classpath: the datagen registry lookup only
+     * contains vanilla and {@code buildRegistry}-generated dynamic entries, not a mod's
+     * hand-written data files.
+     */
+    private void addRarityTags(HolderLookup.Provider wrapperLookup) {
+        var byRarity = loadEnchantmentWeights().entrySet().stream()
+                .filter(entry -> !CURSES.contains(entry.getKey()))
+                .collect(Collectors.groupingBy(
+                        entry -> RealEnchantmentHelper.rarityBucket(entry.getValue()),
+                        LinkedHashMap::new,
+                        Collectors.mapping(Map.Entry::getKey, Collectors.toList())));
+        for (int bucket = 0; bucket < RARITY_TAGS.size(); bucket++) {
+            var builder = getOrCreateTagBuilder(RARITY_TAGS.get(bucket));
+            byRarity.getOrDefault(bucket, List.of()).forEach(builder::addOptional);
+        }
+    }
+
+    /**
+     * Reads each enchantment definition's {@code weight} from {@code data/meridian/enchantment/}
+     * on the classpath, keyed by enchantment id in sorted order (deterministic tag output).
+     */
+    private static Map<ResourceLocation, Integer> loadEnchantmentWeights() {
+        URL url = MeridianEnchantmentTagProvider.class.getClassLoader()
+                .getResource("data/" + Meridian.MOD_ID + "/enchantment");
+        if (url == null || !"file".equals(url.getProtocol())) {
+            throw new IllegalStateException(
+                    "enchantment definitions not found as a directory on the datagen classpath: " + url);
+        }
+        try (var files = Files.list(Path.of(url.toURI()))) {
+            Map<ResourceLocation, Integer> weights = new LinkedHashMap<>();
+            for (Path file : files.filter(f -> f.getFileName().toString().endsWith(".json"))
+                    .sorted(Comparator.comparing(f -> f.getFileName().toString())).toList()) {
+                String name = file.getFileName().toString();
+                JsonObject json = JsonParser.parseString(Files.readString(file)).getAsJsonObject();
+                weights.put(Meridian.id(name.substring(0, name.length() - ".json".length())),
+                        json.getAsJsonPrimitive("weight").getAsInt());
+            }
+            return weights;
+        } catch (IOException | URISyntaxException e) {
+            throw new IllegalStateException("failed to read enchantment definitions", e);
+        }
     }
 
     /**
@@ -196,9 +281,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("tether"))
                 .addOptional(Meridian.id("vital_mend"));
 
-        getOrCreateTagBuilder(EnchantmentTags.CURSE)
-                .addOptional(Meridian.id("curse_of_decay"))
-                .addOptional(Meridian.id("curse_of_sealing"));
+        var curseBuilder = getOrCreateTagBuilder(EnchantmentTags.CURSE);
+        CURSES.forEach(curseBuilder::addOptional);
 
         getOrCreateTagBuilder(EnchantmentTags.TRADEABLE)
                 .addOptional(Meridian.id("abyss_ward"))
