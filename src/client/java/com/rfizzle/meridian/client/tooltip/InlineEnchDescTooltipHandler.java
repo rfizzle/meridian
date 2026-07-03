@@ -6,11 +6,9 @@ import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -54,14 +52,12 @@ public final class InlineEnchDescTooltipHandler {
             Holder<Enchantment> holder = entry.getKey();
             if (!EnchantmentInfoRegistry.getInfo(holder).enabled()) continue;
             int level = entry.getIntValue();
-            Optional<ResourceKey<Enchantment>> keyOpt = holder.unwrapKey();
-            if (keyOpt.isEmpty()) continue;
-            String descKey = keyOpt.get().location().toLanguageKey("enchantment") + ".desc";
-            if (!I18n.exists(descKey)) continue;
+            Optional<Component> desc = EnchantmentDescriptions.resolve(holder);
+            if (desc.isEmpty()) continue;
             String nameStr = Enchantment.getFullname(holder, level).getString();
             entries.add(new EnchDescEntry(
                     nameStr,
-                    Component.translatable(descKey).withStyle(ChatFormatting.DARK_GRAY)
+                    desc.get().copy().withStyle(ChatFormatting.DARK_GRAY)
             ));
         }
     }

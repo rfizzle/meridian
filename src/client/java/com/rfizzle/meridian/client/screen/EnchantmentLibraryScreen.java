@@ -4,6 +4,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlockEntity;
 import com.rfizzle.meridian.library.EnchantmentLibraryMenu;
+import com.rfizzle.meridian.client.tooltip.EnchantmentDescriptions;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -12,7 +13,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -112,13 +112,11 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
                 .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFF80)).withUnderlined(true));
         lines.add(displayName);
 
-        String descKey = "enchantment." + slot.key().location().getNamespace()
-                + "." + slot.key().location().getPath().replace('/', '.') + ".desc";
-        if (I18n.exists(descKey)) {
-            lines.add(Component.translatable(descKey)
+        EnchantmentDescriptions.resolve(slot.key()).ifPresent(desc -> {
+            lines.add(desc.copy()
                     .setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(true)));
             lines.add(Component.literal(""));
-        }
+        });
 
         if (slot.disabled()) {
             lines.add(Component.translatable("tooltip.meridian.enchlib.disabled")

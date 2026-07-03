@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.rei;
 
+import com.rfizzle.meridian.client.tooltip.EnchantmentDescriptions;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
@@ -79,7 +80,7 @@ public final class ReiEnchantmentBrowserCategory implements DisplayCategory<ReiE
                     .markOutput());
         }
 
-        widgets.add(Widgets.createTooltip(bounds, EnchantmentBrowserTooltip.lines(record)));
+        widgets.add(Widgets.createTooltip(bounds, EnchantmentBrowserTooltip.lines(record, EnchantmentDescriptions::resolve)));
 
         return widgets;
     }

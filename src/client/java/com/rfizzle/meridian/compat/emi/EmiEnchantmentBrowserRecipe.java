@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.emi;
 
+import com.rfizzle.meridian.client.tooltip.EnchantmentDescriptions;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserBooks;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
@@ -54,7 +55,7 @@ public final class EmiEnchantmentBrowserRecipe extends BasicEmiRecipe {
     }
 
     private List<ClientTooltipComponent> getTooltip() {
-        return EnchantmentBrowserTooltip.lines(record).stream()
+        return EnchantmentBrowserTooltip.lines(record, EnchantmentDescriptions::resolve).stream()
                 .map(c -> ClientTooltipComponent.create(c.getVisualOrderText()))
                 .toList();
     }

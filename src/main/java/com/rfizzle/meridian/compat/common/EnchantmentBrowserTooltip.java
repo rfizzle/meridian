@@ -3,24 +3,37 @@ package com.rfizzle.meridian.compat.common;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Builds the hover-tooltip body for one {@link EnchantmentBrowserRecord}, shared by the JEI, EMI,
- * and REI "Enchantments" browser categories so the three stay in sync. The last line is the source
- * mod's display name (blue italic, the conventional recipe-viewer footer), separated by a blank
- * line.
+ * and REI "Enchantments" browser categories so the three stay in sync. The first line is the
+ * enchantment's plain-language description when it has one — resolved through a caller-supplied
+ * function, because lang lookups ({@code I18n}) are client-only and this class lives in common
+ * code. The last line is the source mod's display name (blue italic, the conventional
+ * recipe-viewer footer), separated by a blank line.
  */
 public final class EnchantmentBrowserTooltip {
 
     private EnchantmentBrowserTooltip() {
     }
 
-    public static List<Component> lines(EnchantmentBrowserRecord record) {
+    /**
+     * @param descResolver resolves an enchantment's plain-language {@code .desc} lore; when empty
+     *                     the description line is omitted entirely
+     */
+    public static List<Component> lines(EnchantmentBrowserRecord record,
+                                        Function<Holder<Enchantment>, Optional<Component>> descResolver) {
         List<Component> tooltip = new ArrayList<>();
+        descResolver.apply(record.ench())
+                .ifPresent(desc -> tooltip.add(desc.copy().withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC)));
         tooltip.add(record.ench().value().description().copy().withStyle(ChatFormatting.WHITE));
 
         if (!record.isEnabled()) {

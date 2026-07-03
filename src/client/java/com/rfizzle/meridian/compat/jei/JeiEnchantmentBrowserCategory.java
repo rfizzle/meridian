@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.jei;
 
+import com.rfizzle.meridian.client.tooltip.EnchantmentDescriptions;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserBooks;
 import com.rfizzle.meridian.compat.client.EnchantmentBrowserCardRenderer;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
@@ -54,7 +55,7 @@ public final class JeiEnchantmentBrowserCategory extends AbstractRecipeCategory<
     public List<Component> getTooltipStrings(EnchantmentBrowserRecord record, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY) {
         if (mouseX >= 0 && mouseX <= EnchantmentBrowserCardRenderer.WIDTH
                 && mouseY >= 0 && mouseY <= EnchantmentBrowserCardRenderer.HEIGHT) {
-            return EnchantmentBrowserTooltip.lines(record);
+            return EnchantmentBrowserTooltip.lines(record, EnchantmentDescriptions::resolve);
         }
         return List.of();
     }
