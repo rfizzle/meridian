@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.compat.emi;
 
-import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
+import com.rfizzle.meridian.compat.client.InfusionCardRenderer;
+import com.rfizzle.meridian.compat.common.InfusionBars;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import dev.emi.emi.api.recipe.BasicEmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -8,44 +9,26 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 
 import java.util.List;
 
 /**
- * EMI display for one {@code meridian:enchanting} or {@code keep_nbt_enchanting}
- * recipe — each recipe shows input, output, stat requirements, and XP cost.
- *
- * <p>Layout:
- * <pre>
- *   [input] → [output]     (y = 0; 18-tall slot row)
- *   Eterna: N               (y = 22+, x = 0; full width)
- *   Quanta: N
- *   Arcana: N
- *   XP cost: L levels
- * </pre>
- *
- * <p>Height is computed from {@link RecipeInfoFormatter#requirementLines} so recipes with fewer
- * gated axes shrink to fit — a recipe with only an Eterna floor leaves no empty Quanta/Arcana
- * rows. {@code keep_nbt_enchanting} recipes get an extra italic "preserves enchantments" badge.
+ * EMI display for one {@code meridian:enchanting} or {@code keep_nbt_enchanting} recipe. The
+ * card body — colored stat-requirement bars, XP cost, keep-NBT badge — is drawn by the shared
+ * {@link InfusionCardRenderer}, keeping it pixel-identical to the REI and JEI entries; this class
+ * only adds EMI's native slots and per-bar hover tooltips. Height is computed per recipe so an
+ * entry with one gated axis leaves no empty rows.
  */
 public final class EmiEnchantingRecipe extends BasicEmiRecipe {
 
-    private static final int LINE_HEIGHT = 10;
-    private static final int SLOT_ROW_HEIGHT = 22;
-    private static final int PADDING = 4;
-
     private final TableCraftingDisplay display;
-    private final List<String> lines;
 
     public EmiEnchantingRecipe(EmiRecipeCategory category, TableCraftingDisplay display) {
-        super(category, display.recipeId(), 144, 0);
+        super(category, display.recipeId(),
+                InfusionCardRenderer.WIDTH, InfusionCardRenderer.height(display));
         this.display = display;
-        this.lines = RecipeInfoFormatter.requirementLines(
-                display.requirements(), display.maxRequirements(), display.xpCost());
-        this.height = SLOT_ROW_HEIGHT + lines.size() * LINE_HEIGHT
-                + (display.keepNbt() ? LINE_HEIGHT : 0) + PADDING;
 
         this.inputs.add(EmiIngredient.of(display.input()));
         this.outputs.add(EmiStack.of(display.result()));
@@ -57,24 +40,26 @@ public final class EmiEnchantingRecipe extends BasicEmiRecipe {
         widgets.addTexture(EmiTexture.EMPTY_ARROW, 22, 1);
         widgets.addSlot(EmiStack.of(display.result()), 50, 0).recipeContext(this);
 
-        int y = SLOT_ROW_HEIGHT;
-        for (String raw : lines) {
-            widgets.addText(Component.literal(raw), 0, y, 0x404040, false);
-            y += LINE_HEIGHT;
-        }
-        if (display.keepNbt()) {
-            widgets.addText(
-                    Component.translatable("emi.meridian.recipe.keep_nbt")
-                            .withStyle(ChatFormatting.ITALIC),
-                    0, y, 0x555555, false);
+        widgets.addDrawable(0, 0, InfusionCardRenderer.WIDTH, this.height,
+                (graphics, mouseX, mouseY, delta) ->
+                        InfusionCardRenderer.draw(graphics, Minecraft.getInstance().font, 0, 0, display));
+
+        // One empty drawable per bar row carries its hover tooltip — bounds-based, so no
+        // coordinate math against EMI's tooltip callback is needed.
+        List<InfusionBars.Bar> bars = InfusionCardRenderer.bars(display);
+        for (int i = 0; i < bars.size(); i++) {
+            InfusionBars.Bar bar = bars.get(i);
+            widgets.addDrawable(0, InfusionCardRenderer.barRowY(i),
+                            InfusionCardRenderer.WIDTH, InfusionCardRenderer.BAR_ROW_STEP,
+                            (graphics, mouseX, mouseY, delta) -> {
+                            })
+                    .tooltip((mouseX, mouseY) -> InfusionBars.tooltip(bar).stream()
+                            .map(c -> ClientTooltipComponent.create(c.getVisualOrderText()))
+                            .toList());
         }
     }
 
     public TableCraftingDisplay display() {
         return display;
-    }
-
-    public List<String> lines() {
-        return lines;
     }
 }

@@ -401,7 +401,8 @@ public final class RealEnchantmentHelper {
         return list.get(list.size() - 1);
     }
 
-    private static int resolveMaxEterna() {
+    /** The table's Eterna cap — the configured value, falling back to {@link #DEFAULT_MAX_ETERNA}. */
+    public static int resolveMaxEterna() {
         MeridianConfig config = Meridian.getConfig();
         return config != null ? config.enchantingTable.maxEterna : DEFAULT_MAX_ETERNA;
     }

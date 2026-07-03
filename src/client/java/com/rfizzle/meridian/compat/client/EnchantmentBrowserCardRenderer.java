@@ -57,6 +57,8 @@ public final class EnchantmentBrowserCardRenderer {
     private static final int COLOR_NAME_TREASURE = 0xFFFFC24B;
     private static final int COLOR_NAME_DISABLED = 0xFFFF6B6B;
     private static final int COLOR_MAX_LEVEL = 0xFFA8C0EE;
+    // Lightened from MeridianStatColors.ETERNA for legibility at card-text size; the browser's
+    // palette alignment is tracked separately (#128/#129).
     private static final int COLOR_ETERNA = 0xFF7BE0A0;
     private static final int COLOR_TREASURE = 0xFFFFC24B;
     private static final int COLOR_EXCLUSIVE = 0xFF6FE0E0;
