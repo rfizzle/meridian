@@ -3,6 +3,7 @@ package com.rfizzle.meridian.client.screen;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import com.rfizzle.meridian.api.StatCollection;
+import com.rfizzle.meridian.client.tooltip.EnchantmentDescriptions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -224,12 +225,8 @@ public class EnchantingInfoScreen extends Screen {
             list.add(Component.translatable("gui.meridian.enchant_info.ench_chance", chance)
                     .withStyle(ChatFormatting.DARK_AQUA));
 
-            hover.getEnch().unwrapKey().ifPresent(key -> {
-                String descKey = key.location().toLanguageKey("enchantment") + ".desc";
-                if (I18n.exists(descKey)) {
-                    list.add(Component.translatable(descKey).withStyle(ChatFormatting.DARK_AQUA));
-                }
-            });
+            EnchantmentDescriptions.resolve(hover.getEnch())
+                    .ifPresent(desc -> list.add(desc.copy().withStyle(ChatFormatting.DARK_AQUA)));
 
             List<Holder<Enchantment>> excls = exclusions.getOrDefault(hover.getEnch(), List.of());
             if (!excls.isEmpty()) {
