@@ -430,7 +430,7 @@ public final class RealEnchantmentHelper {
      * Mirrors vanilla's pre-1.20 Rarity weights (COMMON=10, UNCOMMON=5, RARE=2, VERY_RARE=1) so
      * the EMPTY arcana tier produces vanilla-equivalent rolls.
      */
-    static int rarityBucket(int weight) {
+    public static int rarityBucket(int weight) {
         if (weight >= 10) return 0;
         if (weight >= 5) return 1;
         if (weight >= 2) return 2;
