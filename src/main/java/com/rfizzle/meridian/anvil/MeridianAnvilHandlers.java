@@ -30,5 +30,6 @@ public final class MeridianAnvilHandlers {
         AnvilDispatcher.register(new ImprovedScrapTomeHandler());
         AnvilDispatcher.register(new ExtractionTomeHandler());
         AnvilDispatcher.register(new ExtractionTomeFuelSlotRepairHandler());
+        AnvilDispatcher.register(new TemperedCoreHandler());
     }
 }

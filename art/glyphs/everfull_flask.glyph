@@ -1,0 +1,98 @@
+# everfull_flask — squat corked hip-flask of ever-swirling water. Symmetric
+# container: uniform frame, centered neck and cork. The water animates as a
+# swirl: a light arc orbits the body (top -> right -> bottom -> left) with a
+# white crest, plus a drifting surface fleck. Glass and cork tones shared with
+# infused_breath so the table-crafted vessels read as a family.
+size: 16
+frametime: 3
+interpolate: true
+
+legend:
+  . transparent
+  K #5d8fc2
+  G #b3cfec
+  B #d4e5f7
+  P #ccafa5
+  L #a94725
+  m #d46d49
+  l #8fc4f2
+  W #e6f4ff
+  M #3b8ae8
+  b #1f6ad1
+  N #0e3a80
+
+# frame 1 — swirl arm at top
+frame:
+  ................
+  .......mm.......
+  ......PPLL......
+  ......KBGK......
+  ..KKKKKBGKKKKK..
+  ..KBBBBBBBBGGK..
+  ..KlMlMMMMMMbK..
+  ..KlMMlWlMMbbK..
+  ..KlMMMMMllbNK..
+  ..KlMMMMMbbbNK..
+  ..KlMMMbbbbNNK..
+  ..KlMbbbbNNNNK..
+  ..KlbbNNNNNNNK..
+  ...KbNNNNNNNK...
+  ....KKKKKKKK....
+  ................
+
+# frame 2 — swirl arm at right
+frame:
+  ................
+  .......mm.......
+  ......PPLL......
+  ......KBGK......
+  ..KKKKKBGKKKKK..
+  ..KBBBBBBBBGGK..
+  ..KlMMMlMMMMbK..
+  ..KlMMMMMMMbbK..
+  ..KlMMMMMWlbNK..
+  ..KlMMMMMblbNK..
+  ..KlMMMbbbblNK..
+  ..KlMbbbbNNNNK..
+  ..KlbbNNNNNNNK..
+  ...KbNNNNNNNK...
+  ....KKKKKKKK....
+  ................
+
+# frame 3 — swirl arm at bottom
+frame:
+  ................
+  .......mm.......
+  ......PPLL......
+  ......KBGK......
+  ..KKKKKBGKKKKK..
+  ..KBBBBBBBBGGK..
+  ..KlMMMMMlMMbK..
+  ..KlMMMMMMMbbK..
+  ..KlMMMMMMbbNK..
+  ..KlMMMMMbbbNK..
+  ..KlMMMbbblNNK..
+  ..KlMblWlNNNNK..
+  ..KlbbNNNNNNNK..
+  ...KbNNNNNNNK...
+  ....KKKKKKKK....
+  ................
+
+# frame 4 — swirl arm at left
+frame:
+  ................
+  .......mm.......
+  ......PPLL......
+  ......KBGK......
+  ..KKKKKBGKKKKK..
+  ..KBBBBBBBBGGK..
+  ..KlMMMlMMMMbK..
+  ..KlMMMMMMMbbK..
+  ..KllMMMMMbbNK..
+  ..KlWlMMMbbbNK..
+  ..KlMlMbbbbNNK..
+  ..KlMbbbbNNNNK..
+  ..KlbbNNNNNNNK..
+  ...KbNNNNNNNK...
+  ....KKKKKKKK....
+  ................

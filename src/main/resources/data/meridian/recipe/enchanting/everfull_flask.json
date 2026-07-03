@@ -1,0 +1,13 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "minecraft:water_bucket"
+    },
+    "requirements": {
+        "eterna": 20
+    },
+    "result": {
+        "id": "meridian:everfull_flask"
+    },
+    "xp_cost": 20
+}
