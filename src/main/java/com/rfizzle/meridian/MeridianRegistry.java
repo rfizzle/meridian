@@ -3,7 +3,10 @@ package com.rfizzle.meridian;
 import com.rfizzle.meridian.anvil.PrismaticWebItem;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.event.WardenPoolCondition;
+import com.rfizzle.meridian.item.DormantCoreItem;
+import com.rfizzle.meridian.item.EverfullFlaskItem;
 import com.rfizzle.meridian.item.InfusedBreathItem;
+import com.rfizzle.meridian.item.TemperedCoreItem;
 import com.rfizzle.meridian.item.WardenTendrilItem;
 import com.rfizzle.meridian.library.BasicLibraryBlockEntity;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlock;
@@ -27,7 +30,13 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.dispenser.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
@@ -39,7 +48,12 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.core.cauldron.CauldronInteraction;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -163,6 +177,32 @@ public final class MeridianRegistry {
             new WardenTendrilItem(new Item.Properties());
 
     /**
+     * Infused water vessel produced by the {@code meridian:enchanting} table-crafting recipe on
+     * {@code minecraft:water_bucket} (Eterna 20). Places water without emptying — a permanent
+     * water source earned through the table. Single-stack like every bucket, {@link Rarity#RARE}
+     * so the earned upgrade reads differently from a plain bucket at a glance.
+     */
+    public static final EverfullFlaskItem EVERFULL_FLASK =
+            new EverfullFlaskItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+
+    /**
+     * Loot-only precursor to {@link #TEMPERED_CORE} — registered here with art and lang but no
+     * recipe; loot-pool placement is wired externally. {@link Rarity#RARE} marks it as a find,
+     * not a craft.
+     */
+    public static final DormantCoreItem DORMANT_CORE =
+            new DormantCoreItem(new Item.Properties().rarity(Rarity.RARE));
+
+    /**
+     * Ignited core, produced from {@link #DORMANT_CORE} by the end-tier table-crafting recipe
+     * (Eterna 45 / Arcana 50). Consumed one-per-item at the anvil by
+     * {@code TemperedCoreHandler} to make a damageable item permanently unbreakable.
+     * {@link Rarity#EPIC} matches the other end-tier material, {@link #INFUSED_BREATH}.
+     */
+    public static final TemperedCoreItem TEMPERED_CORE =
+            new TemperedCoreItem(new Item.Properties().rarity(Rarity.EPIC));
+
+    /**
      * Scrap tome — consumed at the anvil to salvage one random enchantment onto a fresh
      * enchanted book. Single-stack because the anvil interaction is one tome per use, and
      * a higher stack cap would let players misread "how many salvages" from the slot count.
@@ -283,6 +323,9 @@ public final class MeridianRegistry {
         registerItem("prismatic_web", PRISMATIC_WEB);
         registerItem("infused_breath", INFUSED_BREATH);
         registerItem("warden_tendril", WARDEN_TENDRIL);
+        registerItem("everfull_flask", EVERFULL_FLASK);
+        registerItem("dormant_core", DORMANT_CORE);
+        registerItem("tempered_core", TEMPERED_CORE);
         registerItem("scrap_tome", SCRAP_TOME);
         registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
         registerItem("extraction_tome", EXTRACTION_TOME);
@@ -291,7 +334,46 @@ public final class MeridianRegistry {
         registerItem("xp_tome_t2", XP_TOME_T2);
         registerItem("xp_tome_t3", XP_TOME_T3);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
+        registerEverfullFlaskBehaviors();
         registerCreativeTab();
+    }
+
+    /**
+     * Wires the Everfull Flask into the two vanilla water-container touchpoints beyond
+     * right-click placement, both preserving the flask (its whole contract):
+     * <ul>
+     *   <li><b>Dispenser</b> — places water in front of the dispenser and keeps the flask in
+     *       the dispenser slot (vanilla's bucket behavior would swap in an empty bucket).</li>
+     *   <li><b>Cauldron</b> — fills an empty or partially-filled water cauldron to the brim.
+     *       Without this, the cauldron click would fall through to the bucket placement path
+     *       and dump a water source next to the cauldron.</li>
+     * </ul>
+     */
+    private static void registerEverfullFlaskBehaviors() {
+        DispenserBlock.registerBehavior(EVERFULL_FLASK, new DefaultDispenseItemBehavior() {
+            @Override
+            protected ItemStack execute(BlockSource source, ItemStack stack) {
+                BlockPos target = source.pos().relative(source.state().getValue(DispenserBlock.FACING));
+                if (EVERFULL_FLASK.emptyContents(null, source.level(), target, null)) {
+                    EVERFULL_FLASK.checkExtraContent(null, source.level(), stack, target);
+                    return stack;
+                }
+                return super.execute(source, stack);
+            }
+        });
+
+        CauldronInteraction fillCauldron = (state, level, pos, player, hand, stack) -> {
+            if (!level.isClientSide) {
+                player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+                level.setBlockAndUpdate(pos, Blocks.WATER_CAULDRON.defaultBlockState()
+                        .setValue(LayeredCauldronBlock.LEVEL, 3));
+                level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.gameEvent(null, GameEvent.FLUID_PLACE, pos);
+            }
+            return ItemInteractionResult.sidedSuccess(level.isClientSide);
+        };
+        CauldronInteraction.EMPTY.map().put(EVERFULL_FLASK, fillCauldron);
+        CauldronInteraction.WATER.map().put(EVERFULL_FLASK, fillCauldron);
     }
 
     private static void registerCreativeTab() {

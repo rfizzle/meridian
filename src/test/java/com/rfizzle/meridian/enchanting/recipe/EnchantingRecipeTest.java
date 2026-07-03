@@ -231,6 +231,8 @@ class EnchantingRecipeTest {
         assertTypeField("heart_of_the_sea.json", "meridian:enchanting");
         assertTypeField("totem_of_undying.json", "meridian:enchanting");
         assertTypeField("budding_amethyst.json", "meridian:enchanting");
+        assertTypeField("everfull_flask.json", "meridian:enchanting");
+        assertTypeField("tempered_core.json", "meridian:enchanting");
 
         // Spot-check stat values match Zenith on the ones we can fully read without item lookup.
         JsonElement infusedBreath = readResource("infused_breath.json");

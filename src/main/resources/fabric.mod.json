@@ -54,6 +54,8 @@
             "com.rfizzle.meridian.gametest.EnchantmentSelectionGameTest",
             "com.rfizzle.meridian.gametest.EnchantmentTagGameTest",
             "com.rfizzle.meridian.gametest.RarityTagGameTest",
+            "com.rfizzle.meridian.gametest.TemperedCoreGameTest",
+            "com.rfizzle.meridian.gametest.EverfullFlaskGameTest",
             "com.rfizzle.meridian.event.ArmorTickHandlerGameTest",
             "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.AurifyHandlerGameTest",

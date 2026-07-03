@@ -27,7 +27,8 @@ public class RegistryGameTest implements FabricGameTest {
 
     private static final String[] STANDALONE_ITEM_IDS = {
             "prismatic_web", "infused_breath", "warden_tendril",
-            "scrap_tome", "improved_scrap_tome", "extraction_tome"
+            "scrap_tome", "improved_scrap_tome", "extraction_tome",
+            "everfull_flask", "dormant_core", "tempered_core"
     };
 
     private static final String[] MENU_TYPE_IDS = {

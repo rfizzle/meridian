@@ -125,6 +125,7 @@ public class MeridianConfig {
         shelves.sculkParticleChance = clampUnit("shelves.sculkParticleChance", shelves.sculkParticleChance);
 
         anvil.prismaticWebLevelCost = clampNonNegative("anvil.prismaticWebLevelCost", anvil.prismaticWebLevelCost);
+        anvil.temperedCoreLevelCost = clampNonNegative("anvil.temperedCoreLevelCost", anvil.temperedCoreLevelCost);
 
         library.ioRateLimitTicks = clampNonNegative("library.ioRateLimitTicks", library.ioRateLimitTicks);
 
@@ -226,6 +227,7 @@ public class MeridianConfig {
         public boolean prismaticWebRemovesCurses = true;
         public int prismaticWebLevelCost = 30;
         public boolean ironBlockRepairsAnvil = true;
+        public int temperedCoreLevelCost = 10;
     }
 
     public static class Library {

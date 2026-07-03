@@ -1,0 +1,14 @@
+{
+    "type": "meridian:enchanting",
+    "input": {
+        "item": "meridian:dormant_core"
+    },
+    "requirements": {
+        "eterna": 45,
+        "arcana": 50
+    },
+    "result": {
+        "id": "meridian:tempered_core"
+    },
+    "xp_cost": 45
+}

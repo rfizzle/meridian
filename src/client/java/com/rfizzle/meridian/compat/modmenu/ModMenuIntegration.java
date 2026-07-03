@@ -92,6 +92,13 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(true)
                     .setSaveConsumer(v -> current.anvil.ironBlockRepairsAnvil = v)
                     .build());
+            anvilCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.tempered_core_level_cost"),
+                            current.anvil.temperedCoreLevelCost)
+                    .setDefaultValue(10)
+                    .setMin(0)
+                    .setSaveConsumer(v -> current.anvil.temperedCoreLevelCost = v)
+                    .build());
 
             // Library
             ConfigCategory libraryCategory = builder.getOrCreateCategory(
