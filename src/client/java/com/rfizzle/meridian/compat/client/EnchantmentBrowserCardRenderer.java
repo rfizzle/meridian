@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.compat.client;
 
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
+import com.rfizzle.meridian.enchanting.MeridianStatColors;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.Font;
@@ -57,7 +58,7 @@ public final class EnchantmentBrowserCardRenderer {
     private static final int COLOR_NAME_TREASURE = 0xFFFFC24B;
     private static final int COLOR_NAME_DISABLED = 0xFFFF6B6B;
     private static final int COLOR_MAX_LEVEL = 0xFFA8C0EE;
-    private static final int COLOR_ETERNA = 0xFF7BE0A0;
+    private static final int COLOR_ETERNA = MeridianStatColors.ETERNA;
     private static final int COLOR_TREASURE = 0xFFFFC24B;
     private static final int COLOR_EXCLUSIVE = 0xFF6FE0E0;
 

@@ -121,7 +121,7 @@ Craftable items include:
 - **Rare items** — Enchanted Golden Apple, Heart of the Sea, Totem of Undying, Golden Apple, Golden Carrot
 - **XP conversion** — Honey to Experience Bottles (three tiers)
 
-Recipes are viewable in EMI, REI, and JEI under the **"Infusions"** crafting category. A companion **"Enchantments"** browser category lists every enchantment with its max level, exclusive sets, treasure flag, and per-level power windows.
+Recipes are viewable in EMI, REI, and JEI under the **"Infusions"** crafting category, with each stat requirement shown as a color-coded bar (hover for exact values). A companion **"Enchantments"** browser category lists every enchantment with its max level, exclusive sets, treasure flag, and per-level power windows.
 
 ### Enchantment Libraries
 
