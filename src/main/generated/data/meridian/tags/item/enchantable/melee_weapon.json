@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/sharp_weapon",
+      "required": false
+    },
+    {
+      "id": "#minecraft:enchantable/mace",
+      "required": false
+    }
+  ]
+}

@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 75 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 80 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "75 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "80 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "75 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "80 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -140,7 +140,7 @@
               "I",
               "Sword / Weapon",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
-              "Slain creatures may drop their spawn egg"
+              "Slain creatures may drop their spawn egg <span class='text-smoke'>(exclusive: trophy)</span>"
             ],
             [
               "<span class='text-bone'>Quell</span>",
@@ -168,7 +168,42 @@
               "III",
               "Sword / Weapon",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
-              "Slain creatures may drop their loot a second time"
+              "Slain creatures may drop their loot a second time <span class='text-smoke'>(exclusive: loot bonus)</span>"
+            ],
+            [
+              "<span class='text-bone'>Ambush</span>",
+              "IV",
+              "Sword / Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Deals bonus damage to healthy targets, fading as they weaken <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Pinpoint</span>",
+              "IV",
+              "Sword / Axe / Mace",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Critical hits deal additional bonus damage <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
+              "<span class='text-bone'>Sunder</span>",
+              "III",
+              "Sword / Axe / Mace",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Chance on hit to knock a piece of the target's equipment loose — mobs only unless <code class='text-accent2'>combat.sunderAffectsPlayers</code> is enabled"
+            ],
+            [
+              "<span class='text-bone'>Trophy</span>",
+              "II",
+              "Sword / Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Slain creatures may drop their head <span class='text-smoke'>(exclusive: trophy)</span>"
+            ],
+            [
+              "<span class='text-bone'>Fortuity</span>",
+              "III",
+              "Sword / Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Slain creatures roll rarer loot, not more of it <span class='text-smoke'>(exclusive: loot bonus)</span>"
             ],
             [
               "<span class='text-bone'>Seismic Slam</span>",
@@ -721,7 +756,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 75 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 80 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

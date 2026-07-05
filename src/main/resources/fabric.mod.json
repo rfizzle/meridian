@@ -48,6 +48,8 @@
             "com.rfizzle.meridian.gametest.enchantments.StatusEffectEnchantmentTest",
             "com.rfizzle.meridian.gametest.enchantments.EdgeCaseEnchantmentTest",
             "com.rfizzle.meridian.gametest.enchantments.MechanicsEnchantmentTest",
+            "com.rfizzle.meridian.gametest.enchantments.CombatEnchantmentGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.SunderConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.AttributeAndProtectionTest",
             "com.rfizzle.meridian.gametest.enchantments.DefinitionVerificationTest",
             "com.rfizzle.meridian.gametest.enchantments.MobEquipmentTagTest",

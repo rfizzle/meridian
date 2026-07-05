@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.trophy"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": {
+    "base": 28,
+    "per_level_above_first": 16
+  },
+  "max_cost": {
+    "base": 68,
+    "per_level_above_first": 16
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "mainhand"
+  ],
+  "exclusive_set": "#meridian:exclusive_set/trophy",
+  "effects": {}
+}

@@ -1,17 +1,16 @@
 {
   "description": {
-    "translate": "enchantment.meridian.plunder"
+    "translate": "enchantment.meridian.fortuity"
   },
-  "supported_items": "#minecraft:enchantable/weapon",
-  "primary_items": "#minecraft:enchantable/sword",
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
   "weight": 1,
   "max_level": 3,
   "min_cost": {
-    "base": 22,
+    "base": 24,
     "per_level_above_first": 14
   },
   "max_cost": {
-    "base": 62,
+    "base": 64,
     "per_level_above_first": 14
   },
   "anvil_cost": 8,

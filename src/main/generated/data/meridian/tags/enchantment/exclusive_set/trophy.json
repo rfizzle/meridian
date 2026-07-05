@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:trophy",
+      "required": false
+    },
+    {
+      "id": "meridian:snare",
+      "required": false
+    }
+  ]
+}

@@ -172,6 +172,16 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setSaveConsumer(v -> current.warden.tendrilLootingBonus = v)
                     .build());
 
+            // Combat
+            ConfigCategory combatCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.meridian.category.combat"));
+            combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.sunder_affects_players"),
+                            current.combat.sunderAffectsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.sunderAffectsPlayers = v)
+                    .build());
+
             // Display
             ConfigCategory displayCategory = builder.getOrCreateCategory(
                     Component.translatable("config.meridian.category.display"));

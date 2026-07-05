@@ -32,20 +32,21 @@ class EnchantmentJsonValidationTest {
             "src/main/resources/assets/meridian/lang/en_us.json");
 
     private static final List<String> ALL_ENCHANTMENT_IDS = List.of(
-            "abyss_ward", "alacrity", "animus", "antidote", "aurify",
-            "beckon", "blight", "bloodrage", "bounty", "bulwark",
-            "cinderwalk", "clamber", "cleave", "colossus", "curse_of_decay",
-            "curse_of_sealing", "decay", "detonation", "diminish", "excavate",
-            "final_gambit", "fortify", "frostguard", "furrow", "gale_shot",
-            "gallop", "glacial_lance", "gravitas", "impact_ward", "insight",
-            "ironwing", "keen_edge", "luminance", "masons_reach", "nightfall",
-            "outreach", "permafrost", "plunder", "premonition", "prismatic",
-            "prospect", "pummel", "quell", "rally", "reckless",
-            "renewal", "repulse", "resonance", "retribution", "ricochet",
-            "rift_strike", "saddleguard", "sanctify", "seismic_slam", "sentinel",
-            "shackle", "siphon", "skybound", "slipstream", "snare",
-            "soul_tax", "spellguard", "steadfast", "stormcall", "tempest",
-            "tempo", "terrasculpt", "tether", "trample", "true_flight",
+            "abyss_ward", "alacrity", "ambush", "animus", "antidote",
+            "aurify", "beckon", "blight", "bloodrage", "bounty",
+            "bulwark", "cinderwalk", "clamber", "cleave", "colossus",
+            "curse_of_decay", "curse_of_sealing", "decay", "detonation", "diminish",
+            "excavate", "final_gambit", "fortify", "fortuity", "frostguard",
+            "furrow", "gale_shot", "gallop", "glacial_lance", "gravitas",
+            "impact_ward", "insight", "ironwing", "keen_edge", "luminance",
+            "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
+            "plunder", "premonition", "prismatic", "prospect", "pummel",
+            "quell", "rally", "reckless", "renewal", "repulse",
+            "resonance", "retribution", "ricochet", "rift_strike", "saddleguard",
+            "sanctify", "seismic_slam", "sentinel", "shackle", "siphon",
+            "skybound", "slipstream", "snare", "soul_tax", "spellguard",
+            "steadfast", "stormcall", "sunder", "tempest", "tempo",
+            "terrasculpt", "tether", "trample", "trophy", "true_flight",
             "updraft", "vault", "vital_mend", "vitality", "voidbane");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
@@ -56,27 +57,32 @@ class EnchantmentJsonValidationTest {
      * Maps each exclusive set tag path (relative to GENERATED_TAGS_DIR) to the
      * Meridian enchantment IDs that must appear in it.
      */
-    private static final Map<String, List<String>> EXCLUSIVE_SET_MEMBERS = Map.of(
-            "minecraft/tags/enchantment/exclusive_set/damage.json",
-            List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge"),
-            "minecraft/tags/enchantment/exclusive_set/armor.json",
-            List.of("spellguard"),
-            "minecraft/tags/enchantment/exclusive_set/boots.json",
-            List.of("cinderwalk"),
-            "minecraft/tags/enchantment/exclusive_set/mace.json",
-            List.of("tempest", "seismic_slam", "updraft"),
-            "meridian/tags/enchantment/exclusive_set/aspect.json",
-            List.of("blight", "decay", "shackle", "nightfall"),
-            "meridian/tags/enchantment/exclusive_set/arrow_impact.json",
-            List.of("gale_shot", "resonance", "permafrost", "detonation", "stormcall"),
-            "meridian/tags/enchantment/exclusive_set/size.json",
-            List.of("diminish", "colossus"),
-            "meridian/tags/enchantment/exclusive_set/mining.json",
-            List.of("excavate", "prospect"),
-            "meridian/tags/enchantment/exclusive_set/glass_cannon.json",
-            List.of("bloodrage", "reckless"),
-            "meridian/tags/enchantment/exclusive_set/mending.json",
-            List.of("vital_mend")
+    private static final Map<String, List<String>> EXCLUSIVE_SET_MEMBERS = Map.ofEntries(
+            Map.entry("minecraft/tags/enchantment/exclusive_set/damage.json",
+                    List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge",
+                            "ambush", "pinpoint")),
+            Map.entry("minecraft/tags/enchantment/exclusive_set/armor.json",
+                    List.of("spellguard")),
+            Map.entry("minecraft/tags/enchantment/exclusive_set/boots.json",
+                    List.of("cinderwalk")),
+            Map.entry("minecraft/tags/enchantment/exclusive_set/mace.json",
+                    List.of("tempest", "seismic_slam", "updraft")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/aspect.json",
+                    List.of("blight", "decay", "shackle", "nightfall")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/arrow_impact.json",
+                    List.of("gale_shot", "resonance", "permafrost", "detonation", "stormcall")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/size.json",
+                    List.of("diminish", "colossus")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/mining.json",
+                    List.of("excavate", "prospect")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/glass_cannon.json",
+                    List.of("bloodrage", "reckless")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/mending.json",
+                    List.of("vital_mend")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/loot_bonus.json",
+                    List.of("fortuity", "plunder")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/trophy.json",
+                    List.of("trophy", "snare"))
     );
 
     /**
@@ -108,7 +114,13 @@ class EnchantmentJsonValidationTest {
             Map.entry("prospect", "#meridian:exclusive_set/mining"),
             Map.entry("bloodrage", "#meridian:exclusive_set/glass_cannon"),
             Map.entry("reckless", "#meridian:exclusive_set/glass_cannon"),
-            Map.entry("vital_mend", "#meridian:exclusive_set/mending")
+            Map.entry("vital_mend", "#meridian:exclusive_set/mending"),
+            Map.entry("ambush", "#minecraft:exclusive_set/damage"),
+            Map.entry("pinpoint", "#minecraft:exclusive_set/damage"),
+            Map.entry("fortuity", "#meridian:exclusive_set/loot_bonus"),
+            Map.entry("plunder", "#meridian:exclusive_set/loot_bonus"),
+            Map.entry("trophy", "#meridian:exclusive_set/trophy"),
+            Map.entry("snare", "#meridian:exclusive_set/trophy")
     );
 
     /**
@@ -148,11 +160,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is75() throws Exception {
+    void enchantmentCount_is80() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(75, count, "expected exactly 75 enchantment JSON files");
+        assertEquals(80, count, "expected exactly 80 enchantment JSON files");
     }
 
     @TestFactory

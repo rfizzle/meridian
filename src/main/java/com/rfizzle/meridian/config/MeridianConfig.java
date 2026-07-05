@@ -36,6 +36,7 @@ public class MeridianConfig {
     public Tomes tomes = new Tomes();
     public Everfeast everfeast = new Everfeast();
     public Warden warden = new Warden();
+    public Combat combat = new Combat();
     public Display display = new Display();
     public Map<String, EnchantmentOverride> enchantmentOverrides = new HashMap<>();
 
@@ -114,6 +115,7 @@ public class MeridianConfig {
         if (tomes == null) tomes = new Tomes();
         if (everfeast == null) everfeast = new Everfeast();
         if (warden == null) warden = new Warden();
+        if (combat == null) combat = new Combat();
         if (display == null) display = new Display();
         if (enchantmentOverrides == null) enchantmentOverrides = new HashMap<>();
     }
@@ -254,6 +256,11 @@ public class MeridianConfig {
     public static class Warden {
         public double tendrilDropChance = 1.0;
         public double tendrilLootingBonus = 0.10;
+    }
+
+    public static class Combat {
+        /** Whether Sunder may knock equipment off player victims; mobs are always eligible. */
+        public boolean sunderAffectsPlayers = false;
     }
 
     public static class Display {

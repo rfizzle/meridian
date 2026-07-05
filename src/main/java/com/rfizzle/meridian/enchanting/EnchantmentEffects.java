@@ -71,6 +71,11 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> RETRIBUTION = key("retribution");
     public static final ResourceKey<Enchantment> PUMMEL = key("pummel");
     public static final ResourceKey<Enchantment> FORTIFY = key("fortify");
+    public static final ResourceKey<Enchantment> AMBUSH = key("ambush");
+    public static final ResourceKey<Enchantment> PINPOINT = key("pinpoint");
+    public static final ResourceKey<Enchantment> SUNDER = key("sunder");
+    public static final ResourceKey<Enchantment> TROPHY = key("trophy");
+    public static final ResourceKey<Enchantment> FORTUITY = key("fortuity");
 
     private EnchantmentEffects() {}
 

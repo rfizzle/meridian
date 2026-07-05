@@ -24,6 +24,7 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_DOG = TagKey.create(Registries.ITEM, Meridian.id("enchantable/dog"));
     private static final TagKey<Item> ENCHANTABLE_ELYTRA = TagKey.create(Registries.ITEM, Meridian.id("enchantable/elytra"));
     private static final TagKey<Item> ENCHANTABLE_HOES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/hoes"));
+    private static final TagKey<Item> ENCHANTABLE_MELEE_WEAPON = TagKey.create(Registries.ITEM, Meridian.id("enchantable/melee_weapon"));
     private static final TagKey<Item> ENCHANTABLE_MINING_AND_DAMAGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/mining_and_damage"));
     private static final TagKey<Item> ENCHANTABLE_MOUNTED = TagKey.create(Registries.ITEM, Meridian.id("enchantable/mounted"));
     private static final TagKey<Item> ENCHANTABLE_SHEARS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shears"));
@@ -61,6 +62,12 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_HOES)
                 .addOptionalTag(ItemTags.HOES);
+
+        // Sword + axe + mace, without the shield that Meridian appends to
+        // #minecraft:enchantable/weapon below.
+        getOrCreateTagBuilder(ENCHANTABLE_MELEE_WEAPON)
+                .addOptionalTag(ItemTags.SHARP_WEAPON_ENCHANTABLE)
+                .addOptionalTag(ItemTags.MACE_ENCHANTABLE);
 
         getOrCreateTagBuilder(ENCHANTABLE_MINING_AND_DAMAGE)
                 .addOptionalTag(ItemTags.MINING_ENCHANTABLE)
