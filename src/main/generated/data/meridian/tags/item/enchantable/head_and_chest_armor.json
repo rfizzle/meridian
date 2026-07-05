@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/head_armor",
+      "required": false
+    },
+    {
+      "id": "#minecraft:enchantable/chest_armor",
+      "required": false
+    }
+  ]
+}

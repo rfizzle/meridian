@@ -29,6 +29,10 @@
       "required": false
     },
     {
+      "id": "meridian:blink",
+      "required": false
+    },
+    {
       "id": "meridian:bounty",
       "required": false
     },
@@ -50,6 +54,10 @@
     },
     {
       "id": "meridian:decay",
+      "required": false
+    },
+    {
+      "id": "meridian:emberward",
       "required": false
     },
     {
@@ -97,6 +105,10 @@
       "required": false
     },
     {
+      "id": "meridian:inexorable",
+      "required": false
+    },
+    {
       "id": "meridian:insight",
       "required": false
     },
@@ -106,6 +118,10 @@
     },
     {
       "id": "meridian:keen_edge",
+      "required": false
+    },
+    {
+      "id": "meridian:loft",
       "required": false
     },
     {
@@ -158,6 +174,10 @@
     },
     {
       "id": "meridian:renewal",
+      "required": false
+    },
+    {
+      "id": "meridian:reprieve",
       "required": false
     },
     {

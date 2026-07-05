@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 83 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 88 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "83 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "88 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "83 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "88 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -435,7 +435,14 @@
               "III",
               "Boots",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
-              "Increases jump height"
+              "Increases jump height <span class='text-smoke'>(exclusive: mobility)</span>"
+            ],
+            [
+              "<span class='text-bone'>Loft</span>",
+              "II",
+              "Boots",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Grants a single mid-air jump and raises the safe fall height <span class='text-smoke'>(exclusive: mobility)</span>"
             ],
             [
               "<span class='text-bone'>Cinderwalk</span>",
@@ -457,6 +464,20 @@
               "Legs / Feet",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
               "Mining speed is unaffected while airborne or flying"
+            ],
+            [
+              "<span class='text-bone'>Inexorable</span>",
+              "I",
+              "Legs / Feet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Immune to slowness, mining fatigue, and clinging terrain — cobwebs, powder snow, honey, and soul sand"
+            ],
+            [
+              "<span class='text-bone'>Emberward</span>",
+              "I",
+              "Legs / Feet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Taking fire or lava damage grants a burst of fire resistance"
             ],
             [
               "<span class='text-bone'>Colossus</span>",
@@ -534,6 +555,20 @@
               "Armor",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
               "Trades armor for raw attack power <span class='text-smoke'>(exclusive: glass_cannon)</span>"
+            ],
+            [
+              "<span class='text-bone'>Reprieve</span>",
+              "II",
+              "Helmet / Chest",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Lengthens the invulnerability window after taking a hit <span class='text-smoke'>(exclusive: glass_cannon)</span>"
+            ],
+            [
+              "<span class='text-bone'>Blink</span>",
+              "I",
+              "Chest Armor",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "A killing blow instead teleports the wearer away, weakened — once per game day"
             ],
             [
               "<span class='text-bone'>Repulse</span>",
@@ -777,7 +812,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 83 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 88 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

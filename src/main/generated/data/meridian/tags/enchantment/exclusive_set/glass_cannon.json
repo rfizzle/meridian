@@ -7,6 +7,10 @@
     {
       "id": "meridian:reckless",
       "required": false
+    },
+    {
+      "id": "meridian:reprieve",
+      "required": false
     }
   ]
 }

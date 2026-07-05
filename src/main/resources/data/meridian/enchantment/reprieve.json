@@ -1,0 +1,23 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.reprieve"
+  },
+  "exclusive_set": "#meridian:exclusive_set/glass_cannon",
+  "supported_items": "#meridian:enchantable/head_and_chest_armor",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 15
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 15
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "head",
+    "chest"
+  ],
+  "effects": {}
+}

@@ -54,6 +54,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/loot_bonus"));
     private static final TagKey<Enchantment> TROPHY_EXCLUSIVE = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/trophy"));
+    private static final TagKey<Enchantment> MOBILITY_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/mobility"));
 
     /**
      * Curated subset of Meridian enchants that are balanced to appear on hostile-mob equipment.
@@ -160,8 +162,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      * debuffs, reach/speed), armor protection (damage reduction, defensive retaliation, bonus
      * health), and ranged combat meaningful on a mob that shoots. Everything else is excluded:
      * <ul>
-     *   <li>mobility/mount — {@code alacrity, clamber, slipstream, skybound, true_flight, updraft,
-     *       vault, gallop, trample, saddleguard}</li>
+     *   <li>mobility/mount — {@code alacrity, clamber, loft, slipstream, skybound, true_flight,
+     *       updraft, vault, gallop, trample, saddleguard}</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
      *       cinderwalk}</li>
@@ -171,10 +173,12 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
      *       path is config-gated off by default, so it would be inert on mob gear)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
-     *       {@code antidote, ricochet, permafrost, glacial_lance}</li>
+     *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
-     *       detonation, diminish, rally, plunder, abyss_ward, vital_mend} (kept out of the
-     *       baseline pool; a future {@code mob_equipment/elite} sub-tag could carry them)</li>
+     *       detonation, diminish, rally, plunder, abyss_ward, vital_mend}, plus {@code blink}
+     *       (a mob that cheats death and teleports away is pure frustration, not challenge)
+     *       (kept out of the baseline pool; a future {@code mob_equipment/elite} sub-tag could
+     *       carry them)</li>
      *   <li>loot/trophy payoff, meaningless when a mob holds it — {@code trophy, fortuity}</li>
      *   <li>curses — {@code curse_of_decay, curse_of_sealing}</li>
      * </ul>
@@ -201,7 +205,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("voidbane"))
                 // Armor — damage reduction, defensive retaliation, bonus health
                 .addOptional(Meridian.id("bulwark"))
+                .addOptional(Meridian.id("emberward"))
                 .addOptional(Meridian.id("frostguard"))
+                .addOptional(Meridian.id("reprieve"))
                 .addOptional(Meridian.id("repulse"))
                 .addOptional(Meridian.id("spellguard"))
                 .addOptional(Meridian.id("vitality"))
@@ -220,12 +226,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("antidote"))
                 .addOptional(Meridian.id("beckon"))
                 .addOptional(Meridian.id("blight"))
+                .addOptional(Meridian.id("blink"))
                 .addOptional(Meridian.id("bounty"))
                 .addOptional(Meridian.id("bulwark"))
                 .addOptional(Meridian.id("cinderwalk"))
                 .addOptional(Meridian.id("clamber"))
                 .addOptional(Meridian.id("cleave"))
                 .addOptional(Meridian.id("decay"))
+                .addOptional(Meridian.id("emberward"))
                 .addOptional(Meridian.id("excavate"))
                 .addOptional(Meridian.id("fortify"))
                 .addOptional(Meridian.id("fortuity"))
@@ -237,9 +245,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("gravitas"))
                 .addOptional(Meridian.id("grind"))
                 .addOptional(Meridian.id("impact_ward"))
+                .addOptional(Meridian.id("inexorable"))
                 .addOptional(Meridian.id("insight"))
                 .addOptional(Meridian.id("ironwing"))
                 .addOptional(Meridian.id("keen_edge"))
+                .addOptional(Meridian.id("loft"))
                 .addOptional(Meridian.id("luminance"))
                 .addOptional(Meridian.id("masons_reach"))
                 .addOptional(Meridian.id("nightfall"))
@@ -253,6 +263,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("quell"))
                 .addOptional(Meridian.id("reclaim"))
                 .addOptional(Meridian.id("renewal"))
+                .addOptional(Meridian.id("reprieve"))
                 .addOptional(Meridian.id("repulse"))
                 .addOptional(Meridian.id("resonance"))
                 .addOptional(Meridian.id("ricochet"))
@@ -367,7 +378,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(GLASS_CANNON_EXCLUSIVE)
                 .addOptional(Meridian.id("bloodrage"))
-                .addOptional(Meridian.id("reckless"));
+                .addOptional(Meridian.id("reckless"))
+                .addOptional(Meridian.id("reprieve"));
 
         getOrCreateTagBuilder(MENDING_EXCLUSIVE)
                 .addOptional(Meridian.id("vital_mend"))
@@ -382,6 +394,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
         getOrCreateTagBuilder(TROPHY_EXCLUSIVE)
                 .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("snare"));
+
+        // One boots mobility pick: extra jump (Loft) vs jump height (Vault). Updraft is
+        // deliberately absent — it's a mace enchant, so it can never share an item with
+        // these, and it must keep #minecraft:exclusive_set/mace against Wind Burst.
+        getOrCreateTagBuilder(MOBILITY_EXCLUSIVE)
+                .addOptional(Meridian.id("loft"))
+                .addOptional(Meridian.id("vault"));
     }
 
     private void appendVanillaTags() {

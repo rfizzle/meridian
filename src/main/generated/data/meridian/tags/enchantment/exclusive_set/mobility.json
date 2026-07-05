@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:loft",
+      "required": false
+    },
+    {
+      "id": "meridian:vault",
+      "required": false
+    }
+  ]
+}

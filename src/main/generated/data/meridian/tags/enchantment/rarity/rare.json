@@ -33,7 +33,15 @@
       "required": false
     },
     {
+      "id": "meridian:inexorable",
+      "required": false
+    },
+    {
       "id": "meridian:keen_edge",
+      "required": false
+    },
+    {
+      "id": "meridian:loft",
       "required": false
     },
     {
@@ -62,6 +70,10 @@
     },
     {
       "id": "meridian:renewal",
+      "required": false
+    },
+    {
+      "id": "meridian:reprieve",
       "required": false
     },
     {

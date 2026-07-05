@@ -1,8 +1,10 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.CombatEnchantMath;
+import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.mixin.CreeperEntityAccessor;
 import com.rfizzle.meridian.mixin.LivingEntityCombatAccessor;
@@ -14,6 +16,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -141,8 +145,9 @@ public final class EnchantmentEffectHandler {
 
     private static final float SNARE_CHANCE = 0.05f;
 
-    // Ambush/Pinpoint/Sunder/Trophy/Fortuity tuning lives in CombatEnchantMath so the
-    // formulas stay reachable from plain JUnit (this class drags in Fabric event types).
+    // Ambush/Pinpoint/Sunder/Trophy/Fortuity tuning lives in CombatEnchantMath, and
+    // Blink/Emberward/Reprieve tuning in DefenseEnchantMath, so the formulas stay
+    // reachable from plain JUnit (this class drags in Fabric event types).
 
     /**
      * Mobs whose head Trophy can drop. Vanilla only ships head items for these types
@@ -161,6 +166,7 @@ public final class EnchantmentEffectHandler {
 
     public static void register() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(EnchantmentEffectHandler::onAllowDamage);
+        ServerLivingEntityEvents.ALLOW_DEATH.register(EnchantmentEffectHandler::onAllowDeath);
         ServerLivingEntityEvents.AFTER_DAMAGE.register(EnchantmentEffectHandler::onAfterDamage);
         ServerLivingEntityEvents.AFTER_DEATH.register(EnchantmentEffectHandler::onAfterDeath);
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
@@ -208,6 +214,69 @@ public final class EnchantmentEffectHandler {
     }
 
     /**
+     * Blink: a blow that would kill instead teleports the wearer clear, once per
+     * {@link DefenseEnchantMath#BLINK_COOLDOWN_GAME_DAYS} game day(s). Hooked at
+     * {@code ALLOW_DEATH}, which Fabric fires on fatal damage <em>before</em> vanilla's
+     * totem check — so a wearer holding a Totem of Undying is deliberately skipped here,
+     * letting the totem consume as vanilla and guaranteeing the two can never fire on the
+     * same death event.
+     */
+    private static boolean onAllowDeath(LivingEntity entity, DamageSource source, float amount) {
+        if (entity.level().isClientSide()) return true;
+        return !tryBlink(entity, source);
+    }
+
+    /** Attempts a Blink rescue; true if it fired and the death must be cancelled. */
+    private static boolean tryBlink(LivingEntity entity, DamageSource source) {
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.BLINK, EquipmentSlot.CHEST);
+        if (level <= 0) return false;
+
+        // Mirror the totem's own escape hatch: /kill and void damage go through.
+        if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return false;
+
+        if (entity.getMainHandItem().is(Items.TOTEM_OF_UNDYING)
+                || entity.getOffhandItem().is(Items.TOTEM_OF_UNDYING)) {
+            return false;
+        }
+
+        long now = entity.level().getGameTime();
+        long lastUsed = entity.getAttachedOrElse(MeridianAttachments.BLINK_LAST_USED, DefenseEnchantMath.BLINK_NEVER_USED);
+        if (!DefenseEnchantMath.blinkOffCooldown(lastUsed, now)) return false;
+
+        entity.setAttached(MeridianAttachments.BLINK_LAST_USED, now);
+        entity.setHealth(DefenseEnchantMath.BLINK_SURVIVAL_HEALTH);
+        entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, DefenseEnchantMath.BLINK_WEAKNESS_TICKS, 0));
+        blinkTeleport(entity);
+        return true;
+    }
+
+    /**
+     * Scatters the wearer chorus-fruit style: random safe landings within
+     * {@link DefenseEnchantMath#BLINK_TELEPORT_RANGE} blocks. If no attempt finds a safe
+     * spot (sealed chambers), the wearer survives in place — the rescue is the contract,
+     * the reposition is best-effort.
+     */
+    private static void blinkTeleport(LivingEntity entity) {
+        if (!(entity.level() instanceof ServerLevel level)) return;
+
+        for (int i = 0; i < DefenseEnchantMath.BLINK_TELEPORT_ATTEMPTS; i++) {
+            double x = entity.getX() + (entity.getRandom().nextDouble() - 0.5) * DefenseEnchantMath.BLINK_TELEPORT_RANGE;
+            double y = Mth.clamp(entity.getY() + (entity.getRandom().nextInt(16) - 8),
+                    level.getMinBuildHeight(), level.getMinBuildHeight() + level.getLogicalHeight() - 1);
+            double z = entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * DefenseEnchantMath.BLINK_TELEPORT_RANGE;
+
+            if (entity.isPassenger()) {
+                entity.stopRiding();
+            }
+            if (entity.randomTeleport(x, y, z, true)) {
+                level.playSound(null, entity.blockPosition(), SoundEvents.ENDERMAN_TELEPORT,
+                        entity.getSoundSource(), 1.0f, 1.0f);
+                return;
+            }
+        }
+    }
+
+    /**
      * Records the victim's health before an Ambush-carrying attacker's hit is applied.
      * Skipped while the attacker is landing a bonus hit, so the nested damage event can't
      * overwrite the snapshot with post-hit health.
@@ -250,6 +319,8 @@ public final class EnchantmentEffectHandler {
         handleFrostguard(entity, source);
         handleRally(entity);
         handleBloodrage(entity);
+        handleEmberward(entity, source);
+        handleReprieve(entity);
     }
 
     /**
@@ -427,6 +498,35 @@ public final class EnchantmentEffectHandler {
         float hpCost = BLOODRAGE_BASE_HP_COST + BLOODRAGE_HP_COST_PER_LEVEL * level;
         withReentrancyGuard(BLOODRAGE_PROCESSING, entity.getUUID(),
                 () -> entity.hurt(entity.damageSources().magic(), hpCost));
+    }
+
+    /**
+     * Emberward: reactive Fire Resistance after fire or lava damage. Not a permanent
+     * immunity — the burst expires, and while it holds no fire damage lands, so it only
+     * re-arms once the wearer burns again.
+     */
+    private static void handleEmberward(LivingEntity entity, DamageSource source) {
+        if (!source.is(DamageTypeTags.IS_FIRE)) return;
+
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.EMBERWARD,
+                EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        if (level <= 0) return;
+
+        entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE,
+                DefenseEnchantMath.EMBERWARD_FIRE_RES_TICKS, 0, true, true, true));
+    }
+
+    /**
+     * Reprieve: stretches the post-hit invulnerability window vanilla just set to 20 in
+     * {@code LivingEntity#hurt}. Overwriting here (after the hit fully resolved) also
+     * covers mod-originated bonus hits, whose nested hurt re-runs this handler.
+     */
+    private static void handleReprieve(LivingEntity entity) {
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.REPRIEVE,
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST);
+        if (level <= 0) return;
+
+        entity.invulnerableTime = DefenseEnchantMath.reprieveInvulnerabilityTicks(level);
     }
 
     private static void handleMaceSlam(LivingEntity entity, DamageSource source) {
