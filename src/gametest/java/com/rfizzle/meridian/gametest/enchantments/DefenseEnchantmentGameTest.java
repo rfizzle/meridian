@@ -211,6 +211,7 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         // Without the enchant, the request is rejected.
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("Air jump must require Loft on the boots");
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
@@ -221,17 +222,20 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
 
         if (!LoftHandler.tryAirJump(player)) {
             helper.fail("Airborne Loft wearer should get a mid-air jump");
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
         if (Math.abs(player.getDeltaMovement().y - DefenseEnchantMath.LOFT_JUMP_VELOCITY) > 1e-6) {
             helper.fail("Air jump should set upward velocity " + DefenseEnchantMath.LOFT_JUMP_VELOCITY
                     + ", found " + player.getDeltaMovement().y);
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("Loft grants exactly one mid-air jump per airtime");
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
@@ -243,11 +247,13 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         if (LoftHandler.isAirJumpSpentForTest(player.getUUID())) {
             helper.fail("Landing on real ground should clear the air-jump budget (grounded="
                     + LoftHandler.isGroundedForTest(player) + ")");
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("A collision-grounded player must not air jump");
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             return;
         }
@@ -256,6 +262,7 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
 
         helper.runAfterDelay(DefenseEnchantMath.LOFT_AIR_JUMP_MIN_INTERVAL_TICKS * 2L, () -> {
             boolean rearmed = LoftHandler.tryAirJump(player);
+            LoftHandler.clearPlayerForTest(player.getUUID());
             player.discard();
             if (!rearmed) {
                 helper.fail("Touching ground should re-arm the mid-air jump");

@@ -12,9 +12,10 @@ import com.google.gson.JsonSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.IOException;
-import java.io.Writer;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -85,7 +86,7 @@ public class MeridianConfig {
             boolean migrated = ConfigMigrator.migrate(raw);
             MeridianConfig config = GSON.fromJson(raw, MeridianConfig.class);
             config.fillDefaults();
-            config.validate();
+            config.clamp();
             if (migrated) {
                 config.save(path);
             }
@@ -94,13 +95,13 @@ public class MeridianConfig {
             Meridian.LOGGER.error("Failed to parse config at {}; using defaults (existing file left untouched)", path, e);
             MeridianConfig fallback = new MeridianConfig();
             fallback.fillDefaults();
-            fallback.validate();
+            fallback.clamp();
             return fallback;
         } catch (IOException e) {
             Meridian.LOGGER.error("Failed to read config at {}; using defaults", path, e);
             MeridianConfig fallback = new MeridianConfig();
             fallback.fillDefaults();
-            fallback.validate();
+            fallback.clamp();
             return fallback;
         }
     }
@@ -110,16 +111,28 @@ public class MeridianConfig {
     }
 
     void save(Path path) {
+        // Write to a sibling temp file then atomically rename, so a crash or kill mid-write can
+        // never leave a truncated/corrupt config.json in place. Fall back to a plain move where the
+        // filesystem can't do an atomic rename, and clean up the orphan temp on failure.
+        Path tmp = path.resolveSibling(path.getFileName() + ".tmp");
         try {
             Path parent = path.getParent();
             if (parent != null) {
                 Files.createDirectories(parent);
             }
-            try (Writer writer = Files.newBufferedWriter(path)) {
-                GSON.toJson(this, writer);
+            Files.writeString(tmp, GSON.toJson(this));
+            try {
+                Files.move(tmp, path, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+            } catch (AtomicMoveNotSupportedException e) {
+                Files.move(tmp, path, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             Meridian.LOGGER.error("Failed to save config to {}", path, e);
+            try {
+                Files.deleteIfExists(tmp);
+            } catch (IOException cleanup) {
+                Meridian.LOGGER.warn("Failed to clean up orphan temp config {}", tmp, cleanup);
+            }
         }
     }
 
@@ -139,7 +152,7 @@ public class MeridianConfig {
     /**
      * Reconstructs a config from a {@link #toSyncJson()} string received from the server. The JSON is
      * already at the current schema version (both sides run the same mod build), so migration is
-     * deliberately skipped — only {@link #fillDefaults()} null-healing and {@link #validate()}
+     * deliberately skipped — only {@link #fillDefaults()} null-healing and {@link #clamp()}
      * warn-and-clamp run, so a hostile or malformed payload can never yield an out-of-range config.
      * A null/unparseable tree falls back to a fresh default rather than throwing.
      */
@@ -155,7 +168,7 @@ public class MeridianConfig {
             config = new MeridianConfig();
         }
         config.fillDefaults();
-        config.validate();
+        config.clamp();
         return config;
     }
 
@@ -172,7 +185,12 @@ public class MeridianConfig {
         if (enchantmentOverrides == null) enchantmentOverrides = new HashMap<>();
     }
 
-    private void validate() {
+    /**
+     * Warn-and-clamp every field into its valid range, logging each correction. Public so the
+     * ModMenu screen can clamp before {@link #save()} — an out-of-range value typed into the config
+     * GUI is corrected rather than persisted verbatim — matching the mc-config skill's pattern.
+     */
+    public void clamp() {
         enchantingTable.maxEterna = clampIntRange("enchantingTable.maxEterna", enchantingTable.maxEterna, 1, 100);
         enchantingTable.globalMinEnchantability = clampIntRange(
                 "enchantingTable.globalMinEnchantability", enchantingTable.globalMinEnchantability, 0, 100);

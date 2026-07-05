@@ -3,6 +3,7 @@ package com.rfizzle.meridian.client.screen;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentLogic;
+import com.rfizzle.meridian.enchanting.MeridianStatColors;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import com.rfizzle.meridian.api.StatCollection;
@@ -184,9 +185,9 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
 
         if (fizzleMenu == null) return;
 
-        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.eterna"), 19, 74, 0x3DB53D, false);
-        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.quanta"), 19, 84, 0xFC5454, false);
-        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.arcana"), 19, 94, 0xA800A8, false);
+        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.eterna"), 19, 74, MeridianStatColors.ETERNA, false);
+        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.quanta"), 19, 84, MeridianStatColors.QUANTA, false);
+        gfx.drawString(this.font, I18n.get("gui.meridian.enchant.arcana"), 19, 94, MeridianStatColors.ARCANA, false);
     }
 
     @Override

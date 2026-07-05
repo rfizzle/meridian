@@ -220,6 +220,11 @@ public class ModMenuIntegration implements ModMenuApi {
                     .build());
 
             builder.setSavingRunnable(() -> {
+                // Clamp before persisting: the number fields let a player type an out-of-range value,
+                // and the setters above write it straight into current.* with no bounds check. Clamping
+                // here mirrors the mc-config skill's "re-clamp on save" so the file never stores an
+                // out-of-range value.
+                current.clamp();
                 current.save();
                 Meridian.reloadConfig();
                 // On an integrated server the editing client is also the host, so refresh the synced

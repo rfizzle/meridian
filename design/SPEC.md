@@ -332,10 +332,10 @@ Left = a damaged anvil (Damaged → Chipped → Anvil), right = an iron block (e
 
 ## 8. Enchantments
 
-75 original enchantments, defined as JSON in `data/meridian/enchantment/` (75 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
+94 original enchantments, defined as JSON in `data/meridian/enchantment/` (94 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
 
 ### JSON Structure
-Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈40) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈35 carry custom behavior driven by Java event handlers.
+Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈28) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈66 carry custom behavior driven by Java event handlers.
 
 ### Categories and Handlers
 | Category | Example enchantments | Handler |
@@ -418,6 +418,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `prismaticWebRemovesCurses` | bool | true | |
 | `prismaticWebLevelCost` | int | 30 | XP levels per curse removal |
 | `ironBlockRepairsAnvil` | bool | true | |
+| `temperedCoreLevelCost` | int | 10 | XP levels for the Tempered Core anvil upgrade |
 
 ### `library`
 | Key | Type | Default | Notes |
@@ -433,11 +434,23 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `extractionTomeItemDamage` | int | 50 | durability damage to preserved item |
 | `extractionTomeRepairPercent` | double | 0.25 | 0.0–1.0; repair-path durability restored |
 
+### `everfeast`
+| Key | Type | Default | Range / Notes |
+|---|---|---|---|
+| `bites` | int | 128 | 1–4096; bites a newly-infused Everfeast ration is created with (existing rations keep theirs) |
+
 ### `warden`
 | Key | Type | Default | Notes |
 |---|---|---|---|
 | `tendrilDropChance` | double | 1.0 | 0.0–1.0 |
 | `tendrilLootingBonus` | double | 0.10 | 0.0–1.0; per Looting level |
+
+### `combat`
+| Key | Type | Default | Notes |
+|---|---|---|---|
+| `sunderAffectsPlayers` | bool | false | Whether Sunder may knock equipment off player victims (mobs always eligible) |
+| `seekerTargetsPlayers` | bool | false | Whether Seeker bolts may lock onto player targets (mobs always eligible) |
+| `harpoonAffectsPlayers` | bool | false | Whether Harpoon may drag player victims toward the thrower (mobs always eligible) |
 
 ### `display` (client-facing tooltip behavior)
 | Key | Type | Default | Notes |
