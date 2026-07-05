@@ -77,4 +77,76 @@ class DefenseEnchantMathTest {
         assertEquals(2 * DefenseEnchantMath.LOFT_SAFE_FALL_PER_LEVEL,
                 DefenseEnchantMath.loftSafeFallReduction(2), 1e-6f);
     }
+
+    // --- Decoy threshold crossing ---
+
+    @Test
+    void decoyCrossing_trueOnlyWhenHitCarriesAcrossHalf() {
+        // 20 max health, threshold at 10: a hit from above half to at/below half crosses.
+        assertTrue(DefenseEnchantMath.decoyThresholdCrossed(12.0f, 8.0f, 20.0f));
+        assertTrue(DefenseEnchantMath.decoyThresholdCrossed(11.0f, 10.0f, 20.0f),
+                "landing exactly on the half line counts as a crossing");
+    }
+
+    @Test
+    void decoyCrossing_falseWhenStartingAtOrBelowHalf() {
+        // Chip damage taken while already low must not re-arm the decoy.
+        assertFalse(DefenseEnchantMath.decoyThresholdCrossed(9.0f, 5.0f, 20.0f));
+        assertFalse(DefenseEnchantMath.decoyThresholdCrossed(10.0f, 8.0f, 20.0f),
+                "pre-hit health already on the line is not a downward crossing");
+    }
+
+    @Test
+    void decoyCrossing_falseWhenHitStaysAboveHalf() {
+        assertFalse(DefenseEnchantMath.decoyThresholdCrossed(20.0f, 15.0f, 20.0f));
+    }
+
+    // --- Bastion resistance duration ---
+
+    @Test
+    void bastionResistance_zeroAtLevelZero() {
+        assertEquals(0, DefenseEnchantMath.bastionResistanceTicks(0));
+    }
+
+    @Test
+    void bastionResistance_scalesPerLevel() {
+        assertEquals(DefenseEnchantMath.BASTION_BASE_RESIST_TICKS
+                        + DefenseEnchantMath.BASTION_RESIST_TICKS_PER_LEVEL,
+                DefenseEnchantMath.bastionResistanceTicks(1));
+        assertEquals(DefenseEnchantMath.BASTION_BASE_RESIST_TICKS
+                        + 2 * DefenseEnchantMath.BASTION_RESIST_TICKS_PER_LEVEL,
+                DefenseEnchantMath.bastionResistanceTicks(2));
+    }
+
+    // --- Everbloom beneficial-duration extension ---
+
+    @Test
+    void everbloom_unchangedAtLevelZero() {
+        assertEquals(600, DefenseEnchantMath.everbloomExtendedDuration(600, 0));
+    }
+
+    @Test
+    void everbloom_extendsByFifteenPercentPerLevel() {
+        assertEquals(690, DefenseEnchantMath.everbloomExtendedDuration(600, 1)); // +15%
+        assertEquals(780, DefenseEnchantMath.everbloomExtendedDuration(600, 2)); // +30%
+        assertEquals(870, DefenseEnchantMath.everbloomExtendedDuration(600, 3)); // +45%
+    }
+
+    @Test
+    void everbloom_maxLevelStaysUnderDoubleDuration() {
+        int extended = DefenseEnchantMath.everbloomExtendedDuration(600, 3);
+        assertTrue(extended < 2 * 600, "max level must stay well short of doubling duration");
+    }
+
+    @Test
+    void everbloom_bonusIsCappedAboveMaxLevel() {
+        // Guards against a future max-level bump: the cap binds before duration doubles.
+        int extended = DefenseEnchantMath.everbloomExtendedDuration(600, 10);
+        assertEquals((int) Math.ceil(600 * (1.0f + DefenseEnchantMath.EVERBLOOM_MAX_DURATION_BONUS)), extended);
+    }
+
+    @Test
+    void everbloom_leavesInfiniteDurationUntouched() {
+        assertEquals(-1, DefenseEnchantMath.everbloomExtendedDuration(-1, 3));
+    }
 }

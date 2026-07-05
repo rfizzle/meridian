@@ -302,6 +302,30 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void bastionDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "bastion", 2, 4);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void decoyDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "decoy", 1, 3);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void everbloomDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "everbloom", 3, 5);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void hushDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "hush", 1, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void allUncoveredEnchantmentsHaveCorrectDefinitions(GameTestHelper helper) {
         Map<String, int[]> expected = Map.ofEntries(
                 Map.entry("animus", new int[]{3, 5}),

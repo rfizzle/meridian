@@ -5,6 +5,10 @@
       "required": false
     },
     {
+      "id": "meridian:bastion",
+      "required": false
+    },
+    {
       "id": "meridian:cinderwalk",
       "required": false
     },
@@ -18,6 +22,10 @@
     },
     {
       "id": "meridian:decay",
+      "required": false
+    },
+    {
+      "id": "meridian:decoy",
       "required": false
     },
     {

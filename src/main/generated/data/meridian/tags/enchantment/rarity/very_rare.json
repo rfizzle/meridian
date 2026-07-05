@@ -41,6 +41,10 @@
       "required": false
     },
     {
+      "id": "meridian:hush",
+      "required": false
+    },
+    {
       "id": "meridian:joust",
       "required": false
     },

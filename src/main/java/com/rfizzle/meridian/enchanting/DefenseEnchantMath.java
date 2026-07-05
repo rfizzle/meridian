@@ -1,11 +1,12 @@
 package com.rfizzle.meridian.enchanting;
 
 /**
- * Pure balance math for the Blink / Inexorable / Emberward / Reprieve / Loft defense and
- * mobility enchantments. Kept free of Minecraft and Fabric imports so plain JUnit tests can
- * exercise the formulas; {@code EnchantmentEffectHandler}, {@code LoftHandler}, and the
- * Inexorable/Loft mixins are the only runtime callers. The per-effect tuning constants live
- * here (not in the handlers) for the same reason.
+ * Pure balance math for the Blink / Inexorable / Emberward / Reprieve / Loft / Bastion /
+ * Decoy / Everbloom defense and mobility enchantments. Kept free of Minecraft and Fabric
+ * imports so plain JUnit tests can exercise the formulas; {@code EnchantmentEffectHandler},
+ * {@code LoftHandler}, {@code DecoyManager}, and the Antidote/Everbloom/Inexorable/Loft mixins
+ * are the only runtime callers. The per-effect tuning constants live here (not in the handlers)
+ * for the same reason.
  */
 public final class DefenseEnchantMath {
 
@@ -56,7 +57,63 @@ public final class DefenseEnchantMath {
      */
     public static final int LOFT_AIR_JUMP_MIN_INTERVAL_TICKS = 10;
 
+    /** Fraction of max health at or below which Decoy deploys — half health. */
+    public static final float DECOY_HEALTH_THRESHOLD = 0.5f;
+
+    /** How long Decoy stays locked out after deploying a decoy. Five minutes. */
+    public static final int DECOY_COOLDOWN_TICKS = 6000;
+
+    /** How long a deployed decoy lives before it despawns on its own. Eight seconds. */
+    public static final int DECOY_LIFETIME_TICKS = 160;
+
+    /** Radius within which a live decoy taunts hostile mobs onto itself. */
+    public static final double DECOY_TAUNT_RADIUS = 12.0;
+
+    /** Resistance pulsed to allies on a Bastion block — level 0 (Resistance I). */
+    public static final int BASTION_RESIST_AMPLIFIER = 0;
+
+    /** Blocks around the blocker that a Bastion pulse reaches. */
+    public static final double BASTION_ALLY_RADIUS = 8.0;
+
+    public static final int BASTION_BASE_RESIST_TICKS = 40;
+    public static final int BASTION_RESIST_TICKS_PER_LEVEL = 80;
+
+    /**
+     * Everbloom's beneficial-duration bonus per level and its cap. Deliberately held well below
+     * doubling (a +100% cap) so it lengthens buffs without trivializing potion economy — at
+     * max level three it lands at +45%, short of the +50% ceiling.
+     */
+    public static final float EVERBLOOM_DURATION_BONUS_PER_LEVEL = 0.15f;
+    public static final float EVERBLOOM_MAX_DURATION_BONUS = 0.50f;
+
     private DefenseEnchantMath() {}
+
+    /**
+     * Whether a hit that took the wearer from {@code preHealth} to {@code postHealth} crossed
+     * Decoy's half-health line. Only the downward crossing counts — a hit that starts already
+     * below the line (chip damage while low) does not re-arm the decoy.
+     */
+    public static boolean decoyThresholdCrossed(float preHealth, float postHealth, float maxHealth) {
+        float threshold = maxHealth * DECOY_HEALTH_THRESHOLD;
+        return preHealth > threshold && postHealth <= threshold;
+    }
+
+    /** Resistance duration in ticks for a Bastion block at the given level. Zero at level 0. */
+    public static int bastionResistanceTicks(int level) {
+        if (level <= 0) return 0;
+        return BASTION_BASE_RESIST_TICKS + BASTION_RESIST_TICKS_PER_LEVEL * level;
+    }
+
+    /**
+     * The lengthened duration Everbloom grants a beneficial effect. Level 0 and infinite
+     * durations ({@code < 0}) are returned unchanged; otherwise the base is scaled by
+     * {@code 1 + min(cap, perLevel * level)} and rounded up.
+     */
+    public static int everbloomExtendedDuration(int baseDuration, int level) {
+        if (level <= 0 || baseDuration < 0) return baseDuration;
+        float bonus = Math.min(EVERBLOOM_MAX_DURATION_BONUS, EVERBLOOM_DURATION_BONUS_PER_LEVEL * level);
+        return (int) Math.ceil(baseDuration * (1.0f + bonus));
+    }
 
     /**
      * Whether Blink may fire given when it last fired ({@link #BLINK_NEVER_USED} if never)
