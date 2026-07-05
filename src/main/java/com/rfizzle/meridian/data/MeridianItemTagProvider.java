@@ -32,6 +32,7 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes"));
     private static final TagKey<Item> ENCHANTABLE_RANGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/range"));
+    private static final TagKey<Item> ENCHANTABLE_CROSSBOW = TagKey.create(Registries.ITEM, Meridian.id("enchantable/crossbow"));
     private static final TagKey<Item> ENCHANTABLE_CHEST_AND_LEG = TagKey.create(Registries.ITEM, Meridian.id("enchantable/chest_and_leg_armor"));
     private static final TagKey<Item> ENCHANTABLE_LEG_AND_FOOT = TagKey.create(Registries.ITEM, Meridian.id("enchantable/leg_and_foot_armor"));
     private static final TagKey<Item> ENCHANTABLE_HEAD_AND_CHEST = TagKey.create(Registries.ITEM, Meridian.id("enchantable/head_and_chest_armor"));
@@ -99,6 +100,9 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_RANGE)
                 .add(Items.BOW)
+                .add(Items.CROSSBOW);
+
+        getOrCreateTagBuilder(ENCHANTABLE_CROSSBOW)
                 .add(Items.CROSSBOW);
 
         getOrCreateTagBuilder(ENCHANTABLE_CHEST_AND_LEG)

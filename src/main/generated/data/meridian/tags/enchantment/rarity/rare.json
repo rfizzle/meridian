@@ -33,6 +33,10 @@
       "required": false
     },
     {
+      "id": "meridian:harpoon",
+      "required": false
+    },
+    {
       "id": "meridian:inexorable",
       "required": false
     },
@@ -42,6 +46,10 @@
     },
     {
       "id": "meridian:loft",
+      "required": false
+    },
+    {
+      "id": "meridian:longshot",
       "required": false
     },
     {

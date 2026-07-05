@@ -57,6 +57,10 @@
       "required": false
     },
     {
+      "id": "meridian:seeker",
+      "required": false
+    },
+    {
       "id": "meridian:snare",
       "required": false
     },

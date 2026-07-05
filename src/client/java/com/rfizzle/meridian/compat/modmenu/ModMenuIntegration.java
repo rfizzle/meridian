@@ -181,6 +181,18 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(false)
                     .setSaveConsumer(v -> current.combat.sunderAffectsPlayers = v)
                     .build());
+            combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.seeker_targets_players"),
+                            current.combat.seekerTargetsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.seekerTargetsPlayers = v)
+                    .build());
+            combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.harpoon_affects_players"),
+                            current.combat.harpoonAffectsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.harpoonAffectsPlayers = v)
+                    .build());
 
             // Display
             ConfigCategory displayCategory = builder.getOrCreateCategory(

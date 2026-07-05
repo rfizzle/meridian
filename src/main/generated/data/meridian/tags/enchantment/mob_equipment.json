@@ -93,6 +93,10 @@
       "required": false
     },
     {
+      "id": "meridian:longshot",
+      "required": false
+    },
+    {
       "id": "meridian:resonance",
       "required": false
     },

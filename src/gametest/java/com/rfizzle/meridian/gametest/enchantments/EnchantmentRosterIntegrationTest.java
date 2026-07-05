@@ -21,21 +21,22 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "cleave", "colossus", "curse_of_decay", "curse_of_sealing", "decay",
             "detonation", "diminish", "emberward", "excavate", "final_gambit",
             "fortify", "fortuity", "frostguard", "furrow", "gale_shot",
-            "gallop", "glacial_lance", "gravitas", "grind", "impact_ward",
-            "inexorable", "insight", "ironwing", "keen_edge", "loft",
-            "luminance", "masons_reach", "nightfall", "outreach", "permafrost",
-            "pinpoint", "plunder", "premonition", "prismatic", "prospect",
-            "pummel", "quell", "rally", "reckless", "reclaim",
-            "renewal", "reprieve", "repulse", "resonance", "retribution",
-            "ricochet", "rift_strike", "saddleguard", "sanctify", "seismic_slam",
-            "sentinel", "shackle", "siphon", "skybound", "slipstream",
-            "snare", "soul_tax", "spellguard", "steadfast", "stormcall",
-            "sunder", "tempest", "tempo", "terrasculpt", "tether",
-            "trample", "trophy", "true_flight", "updraft", "vault",
-            "vital_mend", "vitality", "voidbane");
+            "gallop", "glacial_lance", "gravitas", "grind", "harpoon",
+            "impact_ward", "inexorable", "insight", "ironwing", "keen_edge",
+            "loft", "longshot", "luminance", "masons_reach", "nightfall",
+            "outreach", "permafrost", "pinpoint", "plunder", "premonition",
+            "prismatic", "prospect", "pummel", "quell", "rally",
+            "reckless", "reclaim", "renewal", "reprieve", "repulse",
+            "resonance", "retribution", "ricochet", "rift_strike", "saddleguard",
+            "sanctify", "seeker", "seismic_slam", "sentinel", "shackle",
+            "siphon", "skybound", "slipstream", "snare", "soul_tax",
+            "spellguard", "steadfast", "stormcall", "sunder", "tempest",
+            "tempo", "terrasculpt", "tether", "trample", "trophy",
+            "true_flight", "updraft", "vault", "vital_mend", "vitality",
+            "voidbane");
 
     @GameTest(template = "meridian:empty_3x3")
-    public void all88EnchantmentsResolveInRegistry(GameTestHelper helper) {
+    public void all91EnchantmentsResolveInRegistry(GameTestHelper helper) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
         List<String> missing = new ArrayList<>();
@@ -59,8 +60,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 88) {
-            helper.fail("Expected 88 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 91) {
+            helper.fail("Expected 91 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

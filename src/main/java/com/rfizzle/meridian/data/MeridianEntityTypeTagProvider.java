@@ -19,6 +19,8 @@ public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeT
             TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_sanctify"));
     private static final TagKey<EntityType<?>> SENSITIVE_TO_SENTINEL =
             TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_sentinel"));
+    private static final TagKey<EntityType<?>> HARPOON_IMMUNE =
+            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("harpoon_immune"));
 
     public MeridianEntityTypeTagProvider(FabricDataOutput output,
                                          CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -54,5 +56,12 @@ public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeT
                 .add(EntityType.RAVAGER)
                 .add(EntityType.WITCH)
                 .add(EntityType.VEX);
+
+        // Bosses and anchored fights Harpoon must never reposition.
+        getOrCreateTagBuilder(HARPOON_IMMUNE)
+                .add(EntityType.WITHER)
+                .add(EntityType.ENDER_DRAGON)
+                .add(EntityType.WARDEN)
+                .add(EntityType.ELDER_GUARDIAN);
     }
 }
