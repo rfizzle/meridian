@@ -163,13 +163,15 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      * health), and ranged combat meaningful on a mob that shoots. Everything else is excluded:
      * <ul>
      *   <li>mobility/mount — {@code alacrity, clamber, loft, slipstream, skybound, true_flight,
-     *       updraft, vault, gallop, trample, saddleguard}</li>
+     *       updraft, vault, gallop, trample, saddleguard}, plus {@code joust} (mount-gated,
+     *       inert on an unmounted mob)</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
      *       cinderwalk}</li>
      *   <li>no meaningful mob behavior — {@code impact_ward} & {@code ironwing} (elytra-only),
      *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
-     *       crouch-slam input), {@code pinpoint} (player crit input), {@code quell, gravitas,
+     *       crouch-slam input), {@code pinpoint} (player crit input), {@code riposte}
+     *       (mobs never shield-block, so the window can never open), {@code quell, gravitas,
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
      *       path is config-gated off by default, so it would be inert on mob gear),
      *       {@code seeker} (its player-target path is config-gated off by default, and
@@ -195,6 +197,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("blight"))
                 .addOptional(Meridian.id("cleave"))
+                .addOptional(Meridian.id("crescendo"))
                 .addOptional(Meridian.id("decay"))
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("nightfall"))
@@ -237,6 +240,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("cinderwalk"))
                 .addOptional(Meridian.id("clamber"))
                 .addOptional(Meridian.id("cleave"))
+                .addOptional(Meridian.id("crescendo"))
                 .addOptional(Meridian.id("decay"))
                 .addOptional(Meridian.id("emberward"))
                 .addOptional(Meridian.id("excavate"))
@@ -254,6 +258,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("inexorable"))
                 .addOptional(Meridian.id("insight"))
                 .addOptional(Meridian.id("ironwing"))
+                .addOptional(Meridian.id("joust"))
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("loft"))
                 .addOptional(Meridian.id("longshot"))
@@ -275,6 +280,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("resonance"))
                 .addOptional(Meridian.id("ricochet"))
                 .addOptional(Meridian.id("rift_strike"))
+                .addOptional(Meridian.id("riposte"))
                 .addOptional(Meridian.id("saddleguard"))
                 .addOptional(Meridian.id("sanctify"))
                 .addOptional(Meridian.id("seeker"))
@@ -420,7 +426,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("pinpoint"))
-                .addOptional(Meridian.id("longshot"));
+                .addOptional(Meridian.id("longshot"))
+                .addOptional(Meridian.id("crescendo"));
 
         getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
                 .addOptional(Meridian.id("spellguard"));

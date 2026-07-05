@@ -31,6 +31,10 @@
     {
       "id": "meridian:longshot",
       "required": false
+    },
+    {
+      "id": "meridian:crescendo",
+      "required": false
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.joust"
+  },
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 1,
+  "max_level": 3,
+  "min_cost": {
+    "base": 22,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 62,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

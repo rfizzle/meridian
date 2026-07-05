@@ -35,22 +35,22 @@ class EnchantmentJsonValidationTest {
             "abyss_ward", "adamant", "alacrity", "ambush", "animus",
             "antidote", "aurify", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
-            "cleave", "colossus", "curse_of_decay", "curse_of_sealing", "decay",
-            "detonation", "diminish", "emberward", "excavate", "final_gambit",
-            "fortify", "fortuity", "frostguard", "furrow", "gale_shot",
-            "gallop", "glacial_lance", "gravitas", "grind", "harpoon",
-            "impact_ward", "inexorable", "insight", "ironwing", "keen_edge",
-            "loft", "longshot", "luminance", "masons_reach", "nightfall",
-            "outreach", "permafrost", "pinpoint", "plunder", "premonition",
-            "prismatic", "prospect", "pummel", "quell", "rally",
-            "reckless", "reclaim", "renewal", "reprieve", "repulse",
-            "resonance", "retribution", "ricochet", "rift_strike", "saddleguard",
-            "sanctify", "seeker", "seismic_slam", "sentinel", "shackle",
-            "siphon", "skybound", "slipstream", "snare", "soul_tax",
-            "spellguard", "steadfast", "stormcall", "sunder", "tempest",
-            "tempo", "terrasculpt", "tether", "trample", "trophy",
-            "true_flight", "updraft", "vault", "vital_mend", "vitality",
-            "voidbane");
+            "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
+            "decay", "detonation", "diminish", "emberward", "excavate",
+            "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
+            "gale_shot", "gallop", "glacial_lance", "gravitas", "grind",
+            "harpoon", "impact_ward", "inexorable", "insight", "ironwing",
+            "joust", "keen_edge", "loft", "longshot", "luminance",
+            "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
+            "plunder", "premonition", "prismatic", "prospect", "pummel",
+            "quell", "rally", "reckless", "reclaim", "renewal",
+            "reprieve", "repulse", "resonance", "retribution", "ricochet",
+            "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
+            "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
+            "slipstream", "snare", "soul_tax", "spellguard", "steadfast",
+            "stormcall", "sunder", "tempest", "tempo", "terrasculpt",
+            "tether", "trample", "trophy", "true_flight", "updraft",
+            "vault", "vital_mend", "vitality", "voidbane");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
@@ -63,7 +63,7 @@ class EnchantmentJsonValidationTest {
     private static final Map<String, List<String>> EXCLUSIVE_SET_MEMBERS = Map.ofEntries(
             Map.entry("minecraft/tags/enchantment/exclusive_set/damage.json",
                     List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge",
-                            "ambush", "pinpoint", "longshot")),
+                            "ambush", "pinpoint", "longshot", "crescendo")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/armor.json",
                     List.of("spellguard")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/boots.json",
@@ -127,6 +127,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("ambush", "#minecraft:exclusive_set/damage"),
             Map.entry("pinpoint", "#minecraft:exclusive_set/damage"),
             Map.entry("longshot", "#minecraft:exclusive_set/damage"),
+            Map.entry("crescendo", "#minecraft:exclusive_set/damage"),
             Map.entry("fortuity", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("plunder", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("trophy", "#meridian:exclusive_set/trophy"),
@@ -171,11 +172,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is91() throws Exception {
+    void enchantmentCount_is94() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(91, count, "expected exactly 91 enchantment JSON files");
+        assertEquals(94, count, "expected exactly 94 enchantment JSON files");
     }
 
     @TestFactory
