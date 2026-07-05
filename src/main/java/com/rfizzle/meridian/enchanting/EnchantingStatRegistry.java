@@ -62,11 +62,16 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
 
     private static volatile boolean registered = false;
 
-    // Read paths (resolve/blockEntries) run on the server thread but a datapack reload rebuilds
-    // both views off-thread; publishing immutable snapshots through a single volatile write per
-    // field means a reader always sees a fully-built, internally-consistent map/list.
-    private volatile Map<ResourceLocation, EnchantingStats> byBlock = Map.of();
-    private volatile List<TagBinding> byTag = List.of();
+    // Read paths (resolve/blockEntries) run on the server thread but a datapack reload rebuilds both
+    // views off-thread. The block map and tag list are bound together in one immutable Snapshot
+    // published through a single volatile write, so a reader can never combine a freshly-rebuilt block
+    // map with a stale tag list (or vice versa) — it always sees an internally-consistent pair.
+    private volatile Snapshot snapshot = Snapshot.EMPTY;
+
+    /** Immutable, atomically-swapped pair of the block-keyed and tag-keyed stat views. */
+    private record Snapshot(Map<ResourceLocation, EnchantingStats> byBlock, List<TagBinding> byTag) {
+        static final Snapshot EMPTY = new Snapshot(Map.of(), List.of());
+    }
 
     EnchantingStatRegistry() {
     }
@@ -236,11 +241,12 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     EnchantingStats resolveWith(ResourceLocation blockId, Predicate<TagKey<Block>> inTag) {
-        EnchantingStats direct = byBlock.get(blockId);
+        Snapshot snap = this.snapshot;
+        EnchantingStats direct = snap.byBlock().get(blockId);
         if (direct != null) {
             return direct;
         }
-        for (TagBinding binding : byTag) {
+        for (TagBinding binding : snap.byTag()) {
             if (inTag.test(binding.tag())) {
                 return binding.stats();
             }
@@ -252,28 +258,29 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     }
 
     void registerBlock(ResourceLocation blockId, EnchantingStats stats) {
-        Map<ResourceLocation, EnchantingStats> next = new HashMap<>(byBlock);
+        Snapshot cur = this.snapshot;
+        Map<ResourceLocation, EnchantingStats> next = new HashMap<>(cur.byBlock());
         next.put(blockId, stats);
-        byBlock = Map.copyOf(next);
+        this.snapshot = new Snapshot(Map.copyOf(next), cur.byTag());
     }
 
     void registerTag(TagKey<Block> tag, EnchantingStats stats) {
-        List<TagBinding> next = new ArrayList<>(byTag);
+        Snapshot cur = this.snapshot;
+        List<TagBinding> next = new ArrayList<>(cur.byTag());
         next.add(new TagBinding(tag, stats));
-        byTag = List.copyOf(next);
+        this.snapshot = new Snapshot(cur.byBlock(), List.copyOf(next));
     }
 
     void clear() {
-        byBlock = Map.of();
-        byTag = List.of();
+        this.snapshot = Snapshot.EMPTY;
     }
 
     int blockEntryCount() {
-        return byBlock.size();
+        return this.snapshot.byBlock().size();
     }
 
     int tagEntryCount() {
-        return byTag.size();
+        return this.snapshot.byTag().size();
     }
 
     /**
@@ -282,7 +289,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * in the viewer.
      */
     public Map<ResourceLocation, EnchantingStats> blockEntries() {
-        return byBlock;
+        return this.snapshot.byBlock();
     }
 
     /**
@@ -290,7 +297,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * suitable for building a sync payload. Called server-side only.
      */
     public List<Map.Entry<ResourceLocation, EnchantingStats>> tagEntriesForSync() {
-        return byTag.stream()
+        return this.snapshot.byTag().stream()
                 .map(b -> Map.entry(b.tag().location(), b.stats()))
                 .toList();
     }
@@ -298,8 +305,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     /**
      * Applies a registry snapshot received from the server. Called on the client thread after
      * a stat-sync payload arrives. Rebuilds the {@link TagBinding} list from
-     * the raw tag locations and publishes both volatile fields atomically (one write each), so
-     * any concurrent reader always sees a consistent pair.
+     * the raw tag locations and publishes the block map and tag list together in one
+     * {@link Snapshot} write, so any concurrent reader always sees a consistent pair.
      */
     public void applySync(
             Map<ResourceLocation, EnchantingStats> blocks,
@@ -307,8 +314,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         List<TagBinding> newByTag = tagEntries.stream()
                 .map(e -> new TagBinding(TagKey.create(Registries.BLOCK, e.getKey()), e.getValue()))
                 .toList();
-        this.byBlock = Map.copyOf(blocks);
-        this.byTag = List.copyOf(newByTag);
+        this.snapshot = new Snapshot(Map.copyOf(blocks), List.copyOf(newByTag));
         Meridian.LOGGER.debug(
                 "Applied enchanting stat sync: {} block entries, {} tag entries",
                 blocks.size(), tagEntries.size());
@@ -322,8 +328,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * <p>Distinct from the package-private {@link #clear()} which is used by tests.
      */
     public void clearClientState() {
-        byBlock = Map.of();
-        byTag = List.of();
+        this.snapshot = Snapshot.EMPTY;
     }
 
     @Override
@@ -347,8 +352,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
                                 "Failed to load enchanting_stats entry {}: {}", rl, e.getMessage(), e);
                     }
                 });
-        this.byBlock = Map.copyOf(blocks);
-        this.byTag = List.copyOf(tags);
+        this.snapshot = new Snapshot(Map.copyOf(blocks), List.copyOf(tags));
         Meridian.LOGGER.info(
                 "Loaded enchanting stats: {} block entries, {} tag entries",
                 blocks.size(), tags.size());
