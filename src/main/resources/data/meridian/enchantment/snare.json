@@ -18,5 +18,6 @@
   "slots": [
     "mainhand"
   ],
+  "exclusive_set": "#meridian:exclusive_set/trophy",
   "effects": {}
 }

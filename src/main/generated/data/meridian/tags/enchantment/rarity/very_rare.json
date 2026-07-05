@@ -29,6 +29,10 @@
       "required": false
     },
     {
+      "id": "meridian:fortuity",
+      "required": false
+    },
+    {
       "id": "meridian:plunder",
       "required": false
     },
@@ -49,7 +53,15 @@
       "required": false
     },
     {
+      "id": "meridian:sunder",
+      "required": false
+    },
+    {
       "id": "meridian:tether",
+      "required": false
+    },
+    {
+      "id": "meridian:trophy",
       "required": false
     },
     {

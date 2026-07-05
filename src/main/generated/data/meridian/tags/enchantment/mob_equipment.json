@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:ambush",
+      "required": false
+    },
+    {
       "id": "meridian:blight",
       "required": false
     },

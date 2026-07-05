@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:fortuity",
+      "required": false
+    },
+    {
+      "id": "meridian:plunder",
+      "required": false
+    }
+  ]
+}

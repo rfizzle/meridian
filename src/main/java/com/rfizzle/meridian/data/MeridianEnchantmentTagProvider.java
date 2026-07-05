@@ -50,6 +50,10 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/glass_cannon"));
     private static final TagKey<Enchantment> MENDING_EXCLUSIVE = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/mending"));
+    private static final TagKey<Enchantment> LOOT_BONUS_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/loot_bonus"));
+    private static final TagKey<Enchantment> TROPHY_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/trophy"));
 
     /**
      * Curated subset of Meridian enchants that are balanced to appear on hostile-mob equipment.
@@ -162,13 +166,15 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       steadfast, furrow, beckon, bounty, prismatic, renewal, cinderwalk}</li>
      *   <li>no meaningful mob behavior — {@code impact_ward} & {@code ironwing} (elytra-only),
      *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
-     *       crouch-slam input), {@code quell, gravitas, luminance, premonition, snare, tether,
-     *       aurify}</li>
+     *       crouch-slam input), {@code pinpoint} (player crit input), {@code quell, gravitas,
+     *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
+     *       path is config-gated off by default, so it would be inert on mob gear)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
      *       {@code antidote, ricochet, permafrost, glacial_lance}</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
      *       detonation, diminish, rally, plunder, abyss_ward, vital_mend} (kept out of the
      *       baseline pool; a future {@code mob_equipment/elite} sub-tag could carry them)</li>
+     *   <li>loot/trophy payoff, meaningless when a mob holds it — {@code trophy, fortuity}</li>
      *   <li>curses — {@code curse_of_decay, curse_of_sealing}</li>
      * </ul>
      * All entries use {@code addOptional} so the tag loads cleanly regardless of which enchants a
@@ -177,6 +183,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
     private void addMobEquipmentTag() {
         getOrCreateTagBuilder(MOB_EQUIPMENT)
                 // Melee combat — bonus damage, on-hit debuffs, reach & speed
+                .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("blight"))
                 .addOptional(Meridian.id("cleave"))
                 .addOptional(Meridian.id("decay"))
@@ -206,6 +213,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
     private void addMeridianObtainabilityTags() {
         getOrCreateTagBuilder(EnchantmentTags.NON_TREASURE)
                 .addOptional(Meridian.id("alacrity"))
+                .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("animus"))
                 .addOptional(Meridian.id("antidote"))
                 .addOptional(Meridian.id("beckon"))
@@ -218,6 +226,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("decay"))
                 .addOptional(Meridian.id("excavate"))
                 .addOptional(Meridian.id("fortify"))
+                .addOptional(Meridian.id("fortuity"))
                 .addOptional(Meridian.id("frostguard"))
                 .addOptional(Meridian.id("furrow"))
                 .addOptional(Meridian.id("gale_shot"))
@@ -233,6 +242,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("nightfall"))
                 .addOptional(Meridian.id("outreach"))
                 .addOptional(Meridian.id("permafrost"))
+                .addOptional(Meridian.id("pinpoint"))
                 .addOptional(Meridian.id("premonition"))
                 .addOptional(Meridian.id("prismatic"))
                 .addOptional(Meridian.id("prospect"))
@@ -255,10 +265,12 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("spellguard"))
                 .addOptional(Meridian.id("steadfast"))
                 .addOptional(Meridian.id("stormcall"))
+                .addOptional(Meridian.id("sunder"))
                 .addOptional(Meridian.id("tempest"))
                 .addOptional(Meridian.id("tempo"))
                 .addOptional(Meridian.id("terrasculpt"))
                 .addOptional(Meridian.id("trample"))
+                .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("true_flight"))
                 .addOptional(Meridian.id("updraft"))
                 .addOptional(Meridian.id("vault"))
@@ -355,6 +367,16 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
         getOrCreateTagBuilder(MENDING_EXCLUSIVE)
                 .addOptional(Meridian.id("vital_mend"))
                 .addOptional(mc("mending"));
+
+        // "Better loot" (Fortuity) vs "more loot" (Plunder) — pick one.
+        getOrCreateTagBuilder(LOOT_BONUS_EXCLUSIVE)
+                .addOptional(Meridian.id("fortuity"))
+                .addOptional(Meridian.id("plunder"));
+
+        // Kill trophies: heads (Trophy) vs spawn eggs (Snare) — pick one.
+        getOrCreateTagBuilder(TROPHY_EXCLUSIVE)
+                .addOptional(Meridian.id("trophy"))
+                .addOptional(Meridian.id("snare"));
     }
 
     private void appendVanillaTags() {
@@ -363,7 +385,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("sanctify"))
                 .addOptional(Meridian.id("sentinel"))
                 .addOptional(Meridian.id("rift_strike"))
-                .addOptional(Meridian.id("keen_edge"));
+                .addOptional(Meridian.id("keen_edge"))
+                .addOptional(Meridian.id("ambush"))
+                .addOptional(Meridian.id("pinpoint"));
 
         getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
                 .addOptional(Meridian.id("spellguard"));

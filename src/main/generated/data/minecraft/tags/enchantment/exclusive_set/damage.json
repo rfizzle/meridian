@@ -19,6 +19,14 @@
     {
       "id": "meridian:keen_edge",
       "required": false
+    },
+    {
+      "id": "meridian:ambush",
+      "required": false
+    },
+    {
+      "id": "meridian:pinpoint",
+      "required": false
     }
   ]
 }

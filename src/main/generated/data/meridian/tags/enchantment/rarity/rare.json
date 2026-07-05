@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:ambush",
+      "required": false
+    },
+    {
       "id": "meridian:cinderwalk",
       "required": false
     },
@@ -30,6 +34,10 @@
     },
     {
       "id": "meridian:nightfall",
+      "required": false
+    },
+    {
+      "id": "meridian:pinpoint",
       "required": false
     },
     {
