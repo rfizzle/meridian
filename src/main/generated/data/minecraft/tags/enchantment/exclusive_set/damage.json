@@ -27,6 +27,10 @@
     {
       "id": "meridian:pinpoint",
       "required": false
+    },
+    {
+      "id": "meridian:longshot",
+      "required": false
     }
   ]
 }

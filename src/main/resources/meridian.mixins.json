@@ -30,7 +30,8 @@
         "SheepMixin",
         "ShieldFortifyMixin",
         "TetherMixin",
-        "TemptGoalMixin"
+        "TemptGoalMixin",
+        "ThrownTridentMixin"
     ],
     "client": [],
     "injectors": {

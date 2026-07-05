@@ -171,9 +171,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
      *       crouch-slam input), {@code pinpoint} (player crit input), {@code quell, gravitas,
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
-     *       path is config-gated off by default, so it would be inert on mob gear)</li>
+     *       path is config-gated off by default, so it would be inert on mob gear),
+     *       {@code seeker} (its player-target path is config-gated off by default, and
+     *       aim-assist on mob bolts is pure frustration besides)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
-     *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}</li>
+     *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}, plus
+     *       {@code harpoon} (a drowned dragging players to it is pure frustration,
+     *       not challenge)</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
      *       detonation, diminish, rally, plunder, abyss_ward, vital_mend}, plus {@code blink}
      *       (a mob that cheats death and teleports away is pure frustration, not challenge)
@@ -213,6 +217,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("vitality"))
                 // Ranged combat — meaningful on mobs that shoot
                 .addOptional(Meridian.id("gale_shot"))
+                .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("resonance"))
                 .addOptional(Meridian.id("stormcall"));
     }
@@ -244,12 +249,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("glacial_lance"))
                 .addOptional(Meridian.id("gravitas"))
                 .addOptional(Meridian.id("grind"))
+                .addOptional(Meridian.id("harpoon"))
                 .addOptional(Meridian.id("impact_ward"))
                 .addOptional(Meridian.id("inexorable"))
                 .addOptional(Meridian.id("insight"))
                 .addOptional(Meridian.id("ironwing"))
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("loft"))
+                .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("luminance"))
                 .addOptional(Meridian.id("masons_reach"))
                 .addOptional(Meridian.id("nightfall"))
@@ -270,6 +277,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("rift_strike"))
                 .addOptional(Meridian.id("saddleguard"))
                 .addOptional(Meridian.id("sanctify"))
+                .addOptional(Meridian.id("seeker"))
                 .addOptional(Meridian.id("seismic_slam"))
                 .addOptional(Meridian.id("sentinel"))
                 .addOptional(Meridian.id("shackle"))
@@ -411,7 +419,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("rift_strike"))
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("ambush"))
-                .addOptional(Meridian.id("pinpoint"));
+                .addOptional(Meridian.id("pinpoint"))
+                .addOptional(Meridian.id("longshot"));
 
         getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
                 .addOptional(Meridian.id("spellguard"));

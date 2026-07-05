@@ -84,6 +84,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> EMBERWARD = key("emberward");
     public static final ResourceKey<Enchantment> REPRIEVE = key("reprieve");
     public static final ResourceKey<Enchantment> LOFT = key("loft");
+    public static final ResourceKey<Enchantment> LONGSHOT = key("longshot");
+    public static final ResourceKey<Enchantment> SEEKER = key("seeker");
+    public static final ResourceKey<Enchantment> HARPOON = key("harpoon");
 
     private EnchantmentEffects() {}
 

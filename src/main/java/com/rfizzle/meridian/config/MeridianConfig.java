@@ -261,6 +261,10 @@ public class MeridianConfig {
     public static class Combat {
         /** Whether Sunder may knock equipment off player victims; mobs are always eligible. */
         public boolean sunderAffectsPlayers = false;
+        /** Whether Seeker bolts may lock onto player targets; mobs are always eligible. */
+        public boolean seekerTargetsPlayers = false;
+        /** Whether Harpoon may drag player victims toward the thrower; mobs are always eligible. */
+        public boolean harpoonAffectsPlayers = false;
     }
 
     public static class Display {

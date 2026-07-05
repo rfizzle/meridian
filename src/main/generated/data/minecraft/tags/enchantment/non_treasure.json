@@ -101,6 +101,10 @@
       "required": false
     },
     {
+      "id": "meridian:harpoon",
+      "required": false
+    },
+    {
       "id": "meridian:impact_ward",
       "required": false
     },
@@ -122,6 +126,10 @@
     },
     {
       "id": "meridian:loft",
+      "required": false
+    },
+    {
+      "id": "meridian:longshot",
       "required": false
     },
     {
@@ -202,6 +210,10 @@
     },
     {
       "id": "meridian:sanctify",
+      "required": false
+    },
+    {
+      "id": "meridian:seeker",
       "required": false
     },
     {
