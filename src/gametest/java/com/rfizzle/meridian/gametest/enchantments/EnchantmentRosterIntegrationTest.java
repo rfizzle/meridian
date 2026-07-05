@@ -15,25 +15,26 @@ import java.util.List;
 public class EnchantmentRosterIntegrationTest implements FabricGameTest {
 
     private static final List<String> ALL_IDS = List.of(
-            "abyss_ward", "alacrity", "ambush", "animus", "antidote",
-            "aurify", "beckon", "blight", "bloodrage", "bounty",
-            "bulwark", "cinderwalk", "clamber", "cleave", "colossus",
-            "curse_of_decay", "curse_of_sealing", "decay", "detonation", "diminish",
-            "excavate", "final_gambit", "fortify", "fortuity", "frostguard",
-            "furrow", "gale_shot", "gallop", "glacial_lance", "gravitas",
-            "impact_ward", "insight", "ironwing", "keen_edge", "luminance",
-            "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
-            "plunder", "premonition", "prismatic", "prospect", "pummel",
-            "quell", "rally", "reckless", "renewal", "repulse",
-            "resonance", "retribution", "ricochet", "rift_strike", "saddleguard",
-            "sanctify", "seismic_slam", "sentinel", "shackle", "siphon",
-            "skybound", "slipstream", "snare", "soul_tax", "spellguard",
-            "steadfast", "stormcall", "sunder", "tempest", "tempo",
-            "terrasculpt", "tether", "trample", "trophy", "true_flight",
-            "updraft", "vault", "vital_mend", "vitality", "voidbane");
+            "abyss_ward", "adamant", "alacrity", "ambush", "animus",
+            "antidote", "aurify", "beckon", "blight", "bloodrage",
+            "bounty", "bulwark", "cinderwalk", "clamber", "cleave",
+            "colossus", "curse_of_decay", "curse_of_sealing", "decay", "detonation",
+            "diminish", "excavate", "final_gambit", "fortify", "fortuity",
+            "frostguard", "furrow", "gale_shot", "gallop", "glacial_lance",
+            "gravitas", "grind", "impact_ward", "insight", "ironwing",
+            "keen_edge", "luminance", "masons_reach", "nightfall", "outreach",
+            "permafrost", "pinpoint", "plunder", "premonition", "prismatic",
+            "prospect", "pummel", "quell", "rally", "reckless",
+            "reclaim", "renewal", "repulse", "resonance", "retribution",
+            "ricochet", "rift_strike", "saddleguard", "sanctify", "seismic_slam",
+            "sentinel", "shackle", "siphon", "skybound", "slipstream",
+            "snare", "soul_tax", "spellguard", "steadfast", "stormcall",
+            "sunder", "tempest", "tempo", "terrasculpt", "tether",
+            "trample", "trophy", "true_flight", "updraft", "vault",
+            "vital_mend", "vitality", "voidbane");
 
     @GameTest(template = "meridian:empty_3x3")
-    public void all80EnchantmentsResolveInRegistry(GameTestHelper helper) {
+    public void all83EnchantmentsResolveInRegistry(GameTestHelper helper) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
         List<String> missing = new ArrayList<>();
@@ -57,8 +58,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 80) {
-            helper.fail("Expected 80 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 83) {
+            helper.fail("Expected 83 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

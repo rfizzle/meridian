@@ -8,6 +8,7 @@
         "AntidoteMixin",
         "AnvilMenuAccessor",
         "AnvilMenuMixin",
+        "BlockDropsMixin",
         "CandleBlockMixin",
         "CreeperEntityAccessor",
         "EnchantmentHelperMixin",

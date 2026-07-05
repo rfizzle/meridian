@@ -76,6 +76,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> SUNDER = key("sunder");
     public static final ResourceKey<Enchantment> TROPHY = key("trophy");
     public static final ResourceKey<Enchantment> FORTUITY = key("fortuity");
+    public static final ResourceKey<Enchantment> GRIND = key("grind");
+    public static final ResourceKey<Enchantment> ADAMANT = key("adamant");
+    public static final ResourceKey<Enchantment> RECLAIM = key("reclaim");
 
     private EnchantmentEffects() {}
 

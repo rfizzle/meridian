@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:adamant",
+      "required": false
+    },
+    {
       "id": "meridian:alacrity",
       "required": false
     },
@@ -85,6 +89,10 @@
       "required": false
     },
     {
+      "id": "meridian:grind",
+      "required": false
+    },
+    {
       "id": "meridian:impact_ward",
       "required": false
     },
@@ -142,6 +150,10 @@
     },
     {
       "id": "meridian:quell",
+      "required": false
+    },
+    {
+      "id": "meridian:reclaim",
       "required": false
     },
     {
