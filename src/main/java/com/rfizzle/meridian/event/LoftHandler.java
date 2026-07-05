@@ -84,6 +84,17 @@ public final class LoftHandler {
     }
 
     /**
+     * Test teardown: drop a player's tracking from both sets. Gametests dispose their mock players
+     * with {@code player.discard()}, which never fires the {@code DISCONNECT} listener that cleans up
+     * real players — so without this a mock UUID would linger in {@code airJumpSpent}/{@code lastAirJump}
+     * for the life of the test JVM.
+     */
+    public static void clearPlayerForTest(UUID id) {
+        airJumpSpent.remove(id);
+        lastAirJump.remove(id);
+    }
+
+    /**
      * Validates and performs the mid-air jump. Returns whether it fired. Every check the
      * client makes before sending is repeated here — the packet is a request, not a fact.
      */
