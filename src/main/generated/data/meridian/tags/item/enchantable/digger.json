@@ -1,15 +1,15 @@
 {
   "values": [
     {
-      "id": "meridian:excavate",
+      "id": "#minecraft:pickaxes",
       "required": false
     },
     {
-      "id": "meridian:grind",
+      "id": "#minecraft:axes",
       "required": false
     },
     {
-      "id": "meridian:prospect",
+      "id": "#minecraft:shovels",
       "required": false
     }
   ]

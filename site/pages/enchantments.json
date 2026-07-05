@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 80 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 83 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "80 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "83 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "80 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "83 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -333,6 +333,27 @@
               "Pickaxe",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
               "Breaking an ore shatters the entire connected vein <span class='text-smoke'>(exclusive: mining)</span>"
+            ],
+            [
+              "<span class='text-bone'>Grind</span>",
+              "III",
+              "Pickaxe / Axe / Shovel",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "The harder the block, the faster it breaks — mining speed rises with block hardness, stacking (capped) with Efficiency <span class='text-smoke'>(exclusive: mining)</span>"
+            ],
+            [
+              "<span class='text-bone'>Adamant</span>",
+              "II",
+              "Pickaxe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Harvest blocks one mining tier above the tool's material per level — appears only on high-Eterna rolls"
+            ],
+            [
+              "<span class='text-bone'>Reclaim</span>",
+              "I",
+              "Any tool",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Mined blocks and their drops go straight into your inventory — nothing spawns as a ground item"
             ],
             [
               "<span class='text-bone'>Bounty</span>",
@@ -756,7 +777,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 80 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 83 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

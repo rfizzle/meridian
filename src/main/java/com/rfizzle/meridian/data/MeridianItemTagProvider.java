@@ -21,6 +21,7 @@ import net.minecraft.world.item.Items;
 public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     private static final TagKey<Item> DEEPSLATE = TagKey.create(Registries.ITEM, Meridian.id("deepslate"));
+    private static final TagKey<Item> ENCHANTABLE_DIGGER = TagKey.create(Registries.ITEM, Meridian.id("enchantable/digger"));
     private static final TagKey<Item> ENCHANTABLE_DOG = TagKey.create(Registries.ITEM, Meridian.id("enchantable/dog"));
     private static final TagKey<Item> ENCHANTABLE_ELYTRA = TagKey.create(Registries.ITEM, Meridian.id("enchantable/elytra"));
     private static final TagKey<Item> ENCHANTABLE_HOES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/hoes"));
@@ -53,6 +54,13 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 .add(Items.CRACKED_DEEPSLATE_BRICKS)
                 .add(Items.DEEPSLATE_TILES)
                 .add(Items.CRACKED_DEEPSLATE_TILES);
+
+        // Pickaxe + axe + shovel — the hard-block diggers, without the hoes and shears
+        // that #minecraft:enchantable/mining sweeps in.
+        getOrCreateTagBuilder(ENCHANTABLE_DIGGER)
+                .addOptionalTag(ItemTags.PICKAXES)
+                .addOptionalTag(ItemTags.AXES)
+                .addOptionalTag(ItemTags.SHOVELS);
 
         getOrCreateTagBuilder(ENCHANTABLE_DOG)
                 .add(Items.WOLF_ARMOR);

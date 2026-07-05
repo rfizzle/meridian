@@ -5,6 +5,10 @@
       "required": false
     },
     {
+      "id": "meridian:adamant",
+      "required": false
+    },
+    {
       "id": "meridian:aurify",
       "required": false
     },

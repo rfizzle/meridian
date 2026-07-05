@@ -162,8 +162,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      * <ul>
      *   <li>mobility/mount — {@code alacrity, clamber, slipstream, skybound, true_flight, updraft,
      *       vault, gallop, trample, saddleguard}</li>
-     *   <li>mining/terrain/farming — {@code excavate, prospect, terrasculpt, masons_reach,
-     *       steadfast, furrow, beckon, bounty, prismatic, renewal, cinderwalk}</li>
+     *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
+     *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
+     *       cinderwalk}</li>
      *   <li>no meaningful mob behavior — {@code impact_ward} & {@code ironwing} (elytra-only),
      *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
      *       crouch-slam input), {@code pinpoint} (player crit input), {@code quell, gravitas,
@@ -212,6 +213,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
     private void addMeridianObtainabilityTags() {
         getOrCreateTagBuilder(EnchantmentTags.NON_TREASURE)
+                .addOptional(Meridian.id("adamant"))
                 .addOptional(Meridian.id("alacrity"))
                 .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("animus"))
@@ -233,6 +235,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("gallop"))
                 .addOptional(Meridian.id("glacial_lance"))
                 .addOptional(Meridian.id("gravitas"))
+                .addOptional(Meridian.id("grind"))
                 .addOptional(Meridian.id("impact_ward"))
                 .addOptional(Meridian.id("insight"))
                 .addOptional(Meridian.id("ironwing"))
@@ -248,6 +251,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("prospect"))
                 .addOptional(Meridian.id("pummel"))
                 .addOptional(Meridian.id("quell"))
+                .addOptional(Meridian.id("reclaim"))
                 .addOptional(Meridian.id("renewal"))
                 .addOptional(Meridian.id("repulse"))
                 .addOptional(Meridian.id("resonance"))
@@ -358,6 +362,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(MINING_EXCLUSIVE)
                 .addOptional(Meridian.id("excavate"))
+                .addOptional(Meridian.id("grind"))
                 .addOptional(Meridian.id("prospect"));
 
         getOrCreateTagBuilder(GLASS_CANNON_EXCLUSIVE)
