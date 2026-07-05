@@ -1,18 +1,17 @@
 package com.rfizzle.meridian.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Sheep.class)
 public abstract class SheepMixin {
@@ -26,41 +25,35 @@ public abstract class SheepMixin {
     @Shadow
     public abstract void setSheared(boolean sheared);
 
-    @Unique
-    private DyeColor meridian$originalColor;
-
-    @Inject(method = "mobInteract",
+    /**
+     * Wraps the {@code shear} call inside {@code mobInteract} to fold Prismatic and Renewal into one
+     * exception-safe hook. Prismatic temporarily rerolls the sheep's color so the dropped wool is a
+     * random color, then restores the real color in a {@code finally} — a two-injector pre/post split
+     * cannot guarantee that, so a thrown {@code shear()} used to strand the sheep at the reroll color.
+     * Renewal runs only after a successful shear.
+     */
+    @WrapOperation(method = "mobInteract",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/animal/Sheep;shear(Lnet/minecraft/sounds/SoundSource;)V"))
-    private void meridian$preShear(Player player, InteractionHand hand,
-                                 CallbackInfoReturnable<InteractionResult> cir) {
+    private void meridian$prismaticShear(Sheep self, SoundSource soundSource, Operation<Void> original,
+                                         Player player, InteractionHand hand) {
         ItemStack shears = player.getItemInHand(hand);
 
+        DyeColor originalColor = null;
         if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.PRISMATIC) > 0) {
-            meridian$originalColor = this.getColor();
-            DyeColor randomColor = DyeColor.byId(player.getRandom().nextInt(16));
-            this.setColor(randomColor);
+            originalColor = this.getColor();
+            this.setColor(DyeColor.byId(player.getRandom().nextInt(16)));
         }
-    }
-
-    @Inject(method = "mobInteract",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/animal/Sheep;shear(Lnet/minecraft/sounds/SoundSource;)V",
-                    shift = At.Shift.AFTER))
-    private void meridian$postShear(Player player, InteractionHand hand,
-                                  CallbackInfoReturnable<InteractionResult> cir) {
-        Sheep self = (Sheep) (Object) this;
-        ItemStack shears = player.getItemInHand(hand);
-
-        if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.PRISMATIC) > 0) {
-            if (meridian$originalColor != null) {
-                this.setColor(meridian$originalColor);
-                meridian$originalColor = null;
+        try {
+            original.call(self, soundSource);
+        } finally {
+            if (originalColor != null) {
+                this.setColor(originalColor);
             }
         }
 
-        int growthLevel = EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.RENEWAL);
-        if (growthLevel > 0 && self.getRandom().nextFloat() < 0.5f) {
+        if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.RENEWAL) > 0
+                && self.getRandom().nextFloat() < 0.5f) {
             this.setSheared(false);
         }
     }
