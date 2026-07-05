@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.client;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.client.net.ClientPayloadHandlers;
 import com.rfizzle.meridian.client.net.LoftClientHandler;
 import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
@@ -24,6 +25,7 @@ public class MeridianClient implements ClientModInitializer {
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             EnchantmentInfoRegistry.clear();
             EnchantingStatRegistry.getInstance().clearClientState();
+            ClientMeridianConfig.clear();
         });
         MenuScreens.register(MeridianRegistry.ENCHANTING_TABLE_MENU, MeridianEnchantmentScreen::new);
         MenuScreens.register(MeridianRegistry.LIBRARY_MENU, EnchantmentLibraryScreen::new);

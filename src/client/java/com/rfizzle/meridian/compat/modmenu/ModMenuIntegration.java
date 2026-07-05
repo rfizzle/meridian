@@ -2,12 +2,15 @@ package com.rfizzle.meridian.compat.modmenu;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
+import com.rfizzle.meridian.net.MeridianNetworking;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 
 public class ModMenuIntegration implements ModMenuApi {
 
@@ -219,6 +222,14 @@ public class ModMenuIntegration implements ModMenuApi {
             builder.setSavingRunnable(() -> {
                 current.save();
                 Meridian.reloadConfig();
+                // On an integrated server the editing client is also the host, so refresh the synced
+                // copy the client reads first (#149) — otherwise gameplay-affecting UI keeps showing
+                // the pre-edit values until a rejoin. On a dedicated server the client's local edit is
+                // irrelevant (the server's config stays authoritative), so there is nothing to push.
+                MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
+                if (server != null) {
+                    server.execute(() -> MeridianNetworking.syncConfigToAll(server));
+                }
             });
 
             return builder.build();

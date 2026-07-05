@@ -112,6 +112,7 @@ public class Meridian implements ModInitializer {
         config = MeridianConfig.load();
         rebuildEnchantmentInfo(server);
         syncEnchantmentInfoToAll(server);
+        MeridianNetworking.syncConfigToAll(server);
         MeridianReloadCallback.EVENT.invoker().onReload(server);
     }
 
