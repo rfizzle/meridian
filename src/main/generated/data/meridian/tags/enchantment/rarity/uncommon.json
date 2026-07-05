@@ -17,6 +17,10 @@
       "required": false
     },
     {
+      "id": "meridian:emberward",
+      "required": false
+    },
+    {
       "id": "meridian:fortify",
       "required": false
     },

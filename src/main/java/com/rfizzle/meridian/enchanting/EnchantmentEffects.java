@@ -79,6 +79,11 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> GRIND = key("grind");
     public static final ResourceKey<Enchantment> ADAMANT = key("adamant");
     public static final ResourceKey<Enchantment> RECLAIM = key("reclaim");
+    public static final ResourceKey<Enchantment> BLINK = key("blink");
+    public static final ResourceKey<Enchantment> INEXORABLE = key("inexorable");
+    public static final ResourceKey<Enchantment> EMBERWARD = key("emberward");
+    public static final ResourceKey<Enchantment> REPRIEVE = key("reprieve");
+    public static final ResourceKey<Enchantment> LOFT = key("loft");
 
     private EnchantmentEffects() {}
 

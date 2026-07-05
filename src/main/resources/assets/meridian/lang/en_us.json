@@ -398,5 +398,15 @@
     "enchantment.meridian.curse_of_sealing": "Curse of Sealing",
     "enchantment.meridian.curse_of_sealing.desc": "Item cannot be enchanted or modified",
     "enchantment.meridian.aurify": "Aurify",
-    "enchantment.meridian.aurify.desc": "Sneak-use on a block for a chance to transmute it into gold"
+    "enchantment.meridian.aurify.desc": "Sneak-use on a block for a chance to transmute it into gold",
+    "enchantment.meridian.blink": "Blink",
+    "enchantment.meridian.blink.desc": "A killing blow instead whisks you a short distance away, weakened — once per day",
+    "enchantment.meridian.inexorable": "Inexorable",
+    "enchantment.meridian.inexorable.desc": "Nothing slows your stride — slowness, mining fatigue, cobwebs, honey, and soul sand lose their grip",
+    "enchantment.meridian.emberward": "Emberward",
+    "enchantment.meridian.emberward.desc": "Taking fire or lava damage grants a burst of fire resistance",
+    "enchantment.meridian.reprieve": "Reprieve",
+    "enchantment.meridian.reprieve.desc": "Lengthens the respite after taking a hit before you can be hurt again",
+    "enchantment.meridian.loft": "Loft",
+    "enchantment.meridian.loft.desc": "Grants a second jump in mid-air and softens your landings"
 }

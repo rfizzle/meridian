@@ -2,6 +2,7 @@ package com.rfizzle.meridian.net;
 
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
+import com.rfizzle.meridian.event.LoftHandler;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -28,6 +29,10 @@ public final class MeridianNetworking {
         PayloadTypeRegistry.playS2C().register(CluesPayload.TYPE, CluesPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantmentInfoPayload.TYPE, EnchantmentInfoPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantingStatSyncPayload.TYPE, EnchantingStatSyncPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(LoftJumpPayload.TYPE, LoftJumpPayload.CODEC);
+
+        ServerPlayNetworking.registerGlobalReceiver(LoftJumpPayload.TYPE, (payload, context) ->
+                context.player().server.execute(() -> LoftHandler.tryAirJump(context.player())));
     }
 
     /**

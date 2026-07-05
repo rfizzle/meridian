@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.attachment;
 
+import com.mojang.serialization.Codec;
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.world.item.ItemStack;
@@ -21,6 +23,17 @@ public final class MeridianAttachments {
      */
     public static final AttachmentType<List<ItemStack>> TETHERED_ITEMS =
             AttachmentRegistry.createPersistent(Meridian.id("tethered_items"), ItemStack.OPTIONAL_CODEC.listOf());
+
+    /**
+     * Game time when Blink last fired for this entity, {@link DefenseEnchantMath#BLINK_NEVER_USED}
+     * if never. {@code copyOnDeath()} because the lockout is a once-per-N-game-days budget, not
+     * once-per-life: dying (and respawning) must not hand the wearer a fresh Blink early.
+     */
+    public static final AttachmentType<Long> BLINK_LAST_USED = AttachmentRegistry.<Long>builder()
+            .persistent(Codec.LONG)
+            .copyOnDeath()
+            .initializer(() -> DefenseEnchantMath.BLINK_NEVER_USED)
+            .buildAndRegister(Meridian.id("blink_last_used"));
 
     private MeridianAttachments() {}
 

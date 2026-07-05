@@ -65,7 +65,15 @@
       "required": false
     },
     {
+      "id": "meridian:emberward",
+      "required": false
+    },
+    {
       "id": "meridian:frostguard",
+      "required": false
+    },
+    {
+      "id": "meridian:reprieve",
       "required": false
     },
     {

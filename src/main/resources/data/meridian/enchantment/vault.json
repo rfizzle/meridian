@@ -2,6 +2,7 @@
   "description": {
     "translate": "enchantment.meridian.vault"
   },
+  "exclusive_set": "#meridian:exclusive_set/mobility",
   "supported_items": "#minecraft:enchantable/foot_armor",
   "weight": 5,
   "max_level": 3,

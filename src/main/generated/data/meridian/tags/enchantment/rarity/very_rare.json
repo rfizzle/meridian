@@ -13,6 +13,10 @@
       "required": false
     },
     {
+      "id": "meridian:blink",
+      "required": false
+    },
+    {
       "id": "meridian:bloodrage",
       "required": false
     },

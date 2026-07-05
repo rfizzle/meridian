@@ -2,6 +2,7 @@ package com.rfizzle.meridian.client;
 
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.client.net.ClientPayloadHandlers;
+import com.rfizzle.meridian.client.net.LoftClientHandler;
 import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
 import com.rfizzle.meridian.client.screen.MeridianEnchantmentScreen;
 import com.rfizzle.meridian.client.tooltip.InlineEnchDescTooltipHandler;
@@ -19,6 +20,7 @@ public class MeridianClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPayloadHandlers.register();
+        LoftClientHandler.register();
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             EnchantmentInfoRegistry.clear();
             EnchantingStatRegistry.getInstance().clearClientState();
