@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Tier: 1 (pure JUnit)
@@ -111,5 +112,106 @@ class CombatEnchantMathTest {
             assertEquals(CombatEnchantMath.FORTUITY_LUCK_PER_LEVEL * level,
                     CombatEnchantMath.fortuityLuckBonus(level), EPS);
         }
+    }
+
+    // --- Crescendo: ramp stacks and cap ---
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3})
+    void crescendoMaxStacks_isLevelPlusOne(int level) {
+        assertEquals(level + 1, CombatEnchantMath.crescendoMaxStacks(level));
+    }
+
+    @Test
+    void crescendoMaxStacks_zeroWithoutEnchant() {
+        assertEquals(0, CombatEnchantMath.crescendoMaxStacks(0));
+    }
+
+    @Test
+    void crescendoBonusDamage_openingHitCarriesNoBonus_thenRampsPerStack() {
+        assertEquals(0.0f, CombatEnchantMath.crescendoBonusDamage(3, 0), EPS);
+        assertEquals(CombatEnchantMath.CRESCENDO_DAMAGE_PER_STACK,
+                CombatEnchantMath.crescendoBonusDamage(3, 1), EPS);
+        assertEquals(CombatEnchantMath.CRESCENDO_DAMAGE_PER_STACK * 2,
+                CombatEnchantMath.crescendoBonusDamage(3, 2), EPS);
+    }
+
+    @Test
+    void crescendoBonusDamage_capsAtMaxStacksPerLevel() {
+        for (int level = 1; level <= 3; level++) {
+            float atCap = CombatEnchantMath.crescendoBonusDamage(level,
+                    CombatEnchantMath.crescendoMaxStacks(level));
+            assertEquals(atCap, CombatEnchantMath.crescendoBonusDamage(level, 1000), EPS);
+            assertEquals(CombatEnchantMath.CRESCENDO_DAMAGE_PER_STACK * (level + 1), atCap, EPS);
+        }
+    }
+
+    @Test
+    void crescendoBonusDamage_zeroWithoutEnchant() {
+        assertEquals(0.0f, CombatEnchantMath.crescendoBonusDamage(0, 5), EPS);
+    }
+
+    @Test
+    void crescendoStreakExpired_insideAndOutsideTimeout() {
+        long start = 1000L;
+        assertFalse(CombatEnchantMath.crescendoStreakExpired(start, start));
+        assertFalse(CombatEnchantMath.crescendoStreakExpired(start,
+                start + CombatEnchantMath.CRESCENDO_TIMEOUT_TICKS));
+        assertTrue(CombatEnchantMath.crescendoStreakExpired(start,
+                start + CombatEnchantMath.CRESCENDO_TIMEOUT_TICKS + 1));
+    }
+
+    // --- Riposte: post-block window and flat bonus ---
+
+    @Test
+    void riposteWindowOpen_insideAndOutsideWindow() {
+        long block = 500L;
+        assertTrue(CombatEnchantMath.riposteWindowOpen(block, block));
+        assertTrue(CombatEnchantMath.riposteWindowOpen(block,
+                block + CombatEnchantMath.RIPOSTE_WINDOW_TICKS));
+        assertFalse(CombatEnchantMath.riposteWindowOpen(block,
+                block + CombatEnchantMath.RIPOSTE_WINDOW_TICKS + 1));
+        // A block tick from the future (stale entry across a time skip) never validates.
+        assertFalse(CombatEnchantMath.riposteWindowOpen(block, block - 1));
+    }
+
+    @Test
+    void riposteBonusDamage_zeroWithoutEnchant_linearWithLevel() {
+        assertEquals(0.0f, CombatEnchantMath.riposteBonusDamage(0), EPS);
+        for (int level = 1; level <= 3; level++) {
+            assertEquals(CombatEnchantMath.RIPOSTE_DAMAGE_PER_LEVEL * level,
+                    CombatEnchantMath.riposteBonusDamage(level), EPS);
+        }
+    }
+
+    // --- Joust: mount-speed scaling ---
+
+    @Test
+    void joustBonusDamage_zeroWhenStationaryOrBelowThreshold() {
+        assertEquals(0.0f, CombatEnchantMath.joustBonusDamage(3, 0.0), EPS);
+        assertEquals(0.0f, CombatEnchantMath.joustBonusDamage(3,
+                CombatEnchantMath.JOUST_MIN_SPEED - 0.001), EPS);
+    }
+
+    @Test
+    void joustBonusDamage_scalesLinearlyWithSpeedAndLevel() {
+        double speed = 0.3;
+        for (int level = 1; level <= 3; level++) {
+            float expected = (float) (CombatEnchantMath.JOUST_DAMAGE_PER_SPEED_PER_LEVEL * level * speed);
+            assertEquals(expected, CombatEnchantMath.joustBonusDamage(level, speed), EPS);
+        }
+    }
+
+    @Test
+    void joustBonusDamage_capsPerLevel() {
+        for (int level = 1; level <= 3; level++) {
+            assertEquals(CombatEnchantMath.JOUST_DAMAGE_CAP_PER_LEVEL * level,
+                    CombatEnchantMath.joustBonusDamage(level, 100.0), EPS);
+        }
+    }
+
+    @Test
+    void joustBonusDamage_zeroWithoutEnchant() {
+        assertEquals(0.0f, CombatEnchantMath.joustBonusDamage(0, 0.5), EPS);
     }
 }

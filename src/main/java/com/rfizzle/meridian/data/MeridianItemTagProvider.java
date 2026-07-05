@@ -30,6 +30,7 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_MOUNTED = TagKey.create(Registries.ITEM, Meridian.id("enchantable/mounted"));
     private static final TagKey<Item> ENCHANTABLE_SHEARS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shears"));
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
+    private static final TagKey<Item> ENCHANTABLE_SWORD_OR_MACE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/sword_or_mace"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes"));
     private static final TagKey<Item> ENCHANTABLE_RANGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/range"));
     private static final TagKey<Item> ENCHANTABLE_CROSSBOW = TagKey.create(Registries.ITEM, Meridian.id("enchantable/crossbow"));
@@ -94,6 +95,11 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_SHIELD)
                 .add(Items.SHIELD);
+
+        // Sword + mace, without the axes that #minecraft:enchantable/sharp_weapon carries.
+        getOrCreateTagBuilder(ENCHANTABLE_SWORD_OR_MACE)
+                .addOptionalTag(ItemTags.SWORD_ENCHANTABLE)
+                .addOptionalTag(ItemTags.MACE_ENCHANTABLE);
 
         getOrCreateTagBuilder(ENCHANTABLE_PICKAXES)
                 .addOptionalTag(ItemTags.PICKAXES);

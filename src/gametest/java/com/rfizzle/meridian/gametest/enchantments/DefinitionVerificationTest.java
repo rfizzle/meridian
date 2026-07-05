@@ -134,6 +134,24 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void crescendoDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "crescendo", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void riposteDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "riposte", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void joustDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "joust", 3, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void gravitasDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "gravitas", 3, 5);
         helper.succeed();

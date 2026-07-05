@@ -13,6 +13,10 @@
       "required": false
     },
     {
+      "id": "meridian:crescendo",
+      "required": false
+    },
+    {
       "id": "meridian:decay",
       "required": false
     },
@@ -98,6 +102,10 @@
     },
     {
       "id": "meridian:rift_strike",
+      "required": false
+    },
+    {
+      "id": "meridian:riposte",
       "required": false
     },
     {

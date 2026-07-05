@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/sword",
+      "required": false
+    },
+    {
+      "id": "#minecraft:enchantable/mace",
+      "required": false
+    }
+  ]
+}

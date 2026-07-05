@@ -19,6 +19,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -75,6 +76,24 @@ public final class EnchantmentEffectHandler {
      * barely fade as an armored victim weakens.
      */
     private static final Map<LivingEntity, Float> AMBUSH_PRE_HIT_HEALTH =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
+    /**
+     * Crescendo's ramp state, keyed by attacker: the current target, how many consecutive
+     * follow-up hits the streak carries, and when it last advanced. Transient by design —
+     * a streak surviving a server restart would be meaningless.
+     */
+    private static final Map<LivingEntity, CrescendoStreak> CRESCENDO_STREAKS =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
+    private record CrescendoStreak(UUID targetId, int stacks, long lastHitTick) {}
+
+    /**
+     * Game time of each entity's most recent Riposte-armed shield block. Only written when
+     * the blocker's mainhand carried Riposte at block time, so the map stays bounded to
+     * actual users of the enchant.
+     */
+    private static final Map<LivingEntity, Long> RIPOSTE_BLOCK_TICKS =
             Collections.synchronizedMap(new WeakHashMap<>());
 
     // Per-effect balance tuning. Grouped here so a balance pass touches one block instead of
@@ -175,6 +194,8 @@ public final class EnchantmentEffectHandler {
             BLOODRAGE_PROCESSING.clear();
             BONUS_HIT_PROCESSING.clear();
             AMBUSH_PRE_HIT_HEALTH.clear();
+            CRESCENDO_STREAKS.clear();
+            RIPOSTE_BLOCK_TICKS.clear();
         });
     }
 
@@ -295,6 +316,7 @@ public final class EnchantmentEffectHandler {
 
         if (blocked) {
             handleRetribution(entity, source, baseDamageTaken);
+            recordRiposteBlock(entity);
         }
 
         if (damageTaken <= 0 && !blocked) return;
@@ -310,6 +332,9 @@ public final class EnchantmentEffectHandler {
             handleSiphon(entity, source);
             handleSoulTax(entity, source);
             handleAmbush(entity, source, damageTaken);
+            handleCrescendo(entity, source, damageTaken);
+            handleRiposte(entity, source, damageTaken);
+            handleJoust(entity, source, damageTaken);
             handleSunder(entity, source);
             handleCleave(entity, source);
             handlePummel(entity, source);
@@ -660,6 +685,130 @@ public final class EnchantmentEffectHandler {
     }
 
     /**
+     * Whether this hit is an actual melee swing by {@code attacker}: a real attack damage
+     * type, delivered by the attacker's own body. The type check excludes thorns-style
+     * reflects (Retribution, vanilla Thorns), which carry the reflector as both entities
+     * but are not a swing; the direct-entity check excludes projectiles and other
+     * indirect delivery.
+     */
+    private static boolean isMeleeAttack(DamageSource source, LivingEntity attacker) {
+        return source.getDirectEntity() == attacker
+                && (source.is(DamageTypes.PLAYER_ATTACK)
+                        || source.is(DamageTypes.MOB_ATTACK)
+                        || source.is(DamageTypes.MOB_ATTACK_NO_AGGRO));
+    }
+
+    /**
+     * Crescendo: consecutive melee hits on the same target ramp up bonus damage. The
+     * opening hit starts the streak at zero bonus; every follow-up within the timeout adds
+     * a stack, capped per level. Switching targets or pausing past the timeout restarts
+     * the streak on the new hit.
+     */
+    private static void handleCrescendo(LivingEntity entity, DamageSource source, float damageTaken) {
+        if (damageTaken <= 0) return;
+        Entity attacker = source.getEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        // A sustained-melee identity: projectile, indirect, and reflected hits neither
+        // advance nor benefit from the streak.
+        if (!isMeleeAttack(source, livingAttacker)) return;
+
+        int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.CRESCENDO);
+        if (level <= 0) {
+            CRESCENDO_STREAKS.remove(livingAttacker);
+            return;
+        }
+
+        long now = livingAttacker.level().getGameTime();
+        CrescendoStreak streak = CRESCENDO_STREAKS.get(livingAttacker);
+        // One streak update per swing: a sword sweep's spill-over hits land in the same
+        // tick after the primary target and must not advance, reset, or re-pay the ramp.
+        if (streak != null && streak.lastHitTick() == now) return;
+        int stacks = 0;
+        if (streak != null && streak.targetId().equals(entity.getUUID())
+                && !CombatEnchantMath.crescendoStreakExpired(streak.lastHitTick(), now)) {
+            stacks = Math.min(streak.stacks() + 1, CombatEnchantMath.crescendoMaxStacks(level));
+        }
+        CRESCENDO_STREAKS.put(livingAttacker, new CrescendoStreak(entity.getUUID(), stacks, now));
+
+        float bonusDamage = CombatEnchantMath.crescendoBonusDamage(level, stacks);
+        if (bonusDamage <= 0) return;
+
+        withReentrancyGuard(BONUS_HIT_PROCESSING, livingAttacker.getUUID(),
+                () -> dealBonusDamage(entity, livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
+    }
+
+    /**
+     * Opens the Riposte window for a defender that just blocked a hit with its shield.
+     * Only armed when the mainhand carried Riposte at block time — the timing read is
+     * "block, then strike with the sword you were holding", not a window to bank and
+     * cash in with a swapped weapon. Public for the gametests, which arm the window
+     * directly rather than choreographing a real shield block.
+     */
+    public static void recordRiposteBlock(LivingEntity entity) {
+        if (EnchantmentEffects.getEnchantmentLevel(entity.getMainHandItem(), EnchantmentEffects.RIPOSTE) <= 0) return;
+        RIPOSTE_BLOCK_TICKS.put(entity, entity.level().getGameTime());
+    }
+
+    /**
+     * Whether {@code entity} holds an armed (possibly already expired) Riposte window.
+     * Gametest hook for verifying the block-event wiring without a follow-up attack.
+     */
+    public static boolean hasRiposteWindow(LivingEntity entity) {
+        return RIPOSTE_BLOCK_TICKS.containsKey(entity);
+    }
+
+    /**
+     * Riposte: the first melee hit inside the post-block window lands flat bonus damage.
+     * The window is consumed by that first hit regardless of whether it still qualified
+     * (expired, weapon swapped) — one block, one riposte.
+     */
+    private static void handleRiposte(LivingEntity entity, DamageSource source, float damageTaken) {
+        if (damageTaken <= 0) return;
+        Entity attacker = source.getEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (!isMeleeAttack(source, livingAttacker)) return;
+
+        Long blockTick = RIPOSTE_BLOCK_TICKS.remove(livingAttacker);
+        if (blockTick == null) return;
+        if (!CombatEnchantMath.riposteWindowOpen(blockTick, livingAttacker.level().getGameTime())) return;
+
+        int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.RIPOSTE);
+        float bonusDamage = CombatEnchantMath.riposteBonusDamage(level);
+        if (bonusDamage <= 0) return;
+
+        withReentrancyGuard(BONUS_HIT_PROCESSING, livingAttacker.getUUID(),
+                () -> dealBonusDamage(entity, livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
+    }
+
+    /**
+     * Joust: melee damage scales with the mount's current horizontal speed. Grants nothing
+     * dismounted, on a stationary mount, or from ridden non-living vehicles (boats,
+     * minecarts) — the identity is the cavalry charge, not the railgun cart.
+     */
+    private static void handleJoust(LivingEntity entity, DamageSource source, float damageTaken) {
+        if (damageTaken <= 0) return;
+        Entity attacker = source.getEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (!isMeleeAttack(source, livingAttacker)) return;
+
+        int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.JOUST);
+        if (level <= 0) return;
+
+        if (!(livingAttacker.getVehicle() instanceof LivingEntity mount)) return;
+
+        // Not getDeltaMovement(): a player-controlled mount's motion is client-authoritative
+        // and arrives server-side as bare position updates, leaving deltaMovement ~0. This
+        // tick's horizontal displacement is the speed signal that works for both player-
+        // and AI-driven mounts.
+        double mountSpeed = Math.hypot(mount.getX() - mount.xo, mount.getZ() - mount.zo);
+        float bonusDamage = CombatEnchantMath.joustBonusDamage(level, mountSpeed);
+        if (bonusDamage <= 0) return;
+
+        withReentrancyGuard(BONUS_HIT_PROCESSING, livingAttacker.getUUID(),
+                () -> dealBonusDamage(entity, livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
+    }
+
+    /**
      * Pinpoint's entry point, invoked from {@code PlayerMixin} at the exact point
      * {@code Player#attack} confirms a true critical hit (its {@code crit()} call, which
      * vanilla only reaches when the crit conditions held AND the hit landed). Applies a
@@ -727,6 +876,12 @@ public final class EnchantmentEffectHandler {
 
     private static void onAfterDeath(LivingEntity entity, DamageSource source) {
         if (entity.level().isClientSide()) return;
+        // Players keep their UUID through respawn: drop any Crescendo ramp aimed at the
+        // deceased so a fully-ramped hit can't greet a fresh respawn inside the timeout.
+        // (Iterating a synchronizedMap view requires holding the map's own lock.)
+        synchronized (CRESCENDO_STREAKS) {
+            CRESCENDO_STREAKS.values().removeIf(streak -> streak.targetId().equals(entity.getUUID()));
+        }
         handlePlunder(entity, source);
         handleSnare(entity, source);
         handleTrophy(entity, source);

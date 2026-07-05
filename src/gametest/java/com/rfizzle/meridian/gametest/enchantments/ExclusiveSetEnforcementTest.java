@@ -35,7 +35,7 @@ public class ExclusiveSetEnforcementTest implements FabricGameTest {
     @GameTest(template = "meridian:empty_3x3")
     public void damageSetMembersAreExclusive(GameTestHelper helper) {
         List<String> members = List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge",
-                "longshot");
+                "longshot", "crescendo");
         assertAllMutuallyExclusive(helper, members, "damage");
     }
 

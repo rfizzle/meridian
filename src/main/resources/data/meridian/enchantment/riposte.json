@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.riposte"
+  },
+  "supported_items": "#minecraft:enchantable/sword",
+  "weight": 2,
+  "max_level": 3,
+  "min_cost": {
+    "base": 18,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 58,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}
