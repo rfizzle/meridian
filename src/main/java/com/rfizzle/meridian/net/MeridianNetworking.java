@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.net;
 
+import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.event.LoftHandler;
@@ -8,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.List;
@@ -29,6 +31,7 @@ public final class MeridianNetworking {
         PayloadTypeRegistry.playS2C().register(CluesPayload.TYPE, CluesPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantmentInfoPayload.TYPE, EnchantmentInfoPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantingStatSyncPayload.TYPE, EnchantingStatSyncPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LoftJumpPayload.TYPE, LoftJumpPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(LoftJumpPayload.TYPE, (payload, context) ->
@@ -43,7 +46,7 @@ public final class MeridianNetworking {
      *
      * <ul>
      *   <li>{@code END_DATA_PACK_RELOAD} — re-syncs after {@code /reload}.</li>
-     *   <li>{@code JOIN} — sends the current snapshot to each joining player.</li>
+     *   <li>{@code JOIN} — sends the current snapshot and the server config to each joining player.</li>
      * </ul>
      */
     public static void registerLifecycleHandlers() {
@@ -55,8 +58,38 @@ public final class MeridianNetworking {
             }
         });
 
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-                ServerPlayNetworking.send(handler.player, buildSyncPayload()));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            ServerPlayNetworking.send(handler.player, buildSyncPayload());
+            sendConfig(handler.player);
+        });
+    }
+
+    /**
+     * Sends the server-authoritative gameplay config to a single player (#149). The {@code canSend}
+     * guard skips a client (e.g. vanilla) that has not registered the receiver.
+     */
+    public static void sendConfig(ServerPlayer player) {
+        if (ServerPlayNetworking.canSend(player, ConfigSyncPayload.TYPE)) {
+            ServerPlayNetworking.send(player, buildConfigPayload());
+        }
+    }
+
+    /**
+     * Re-broadcasts the current server config to every connected player. Called from
+     * {@link com.rfizzle.meridian.Meridian#reloadConfig(MinecraftServer)} so a
+     * {@code /meridian reload} reaches connected clients without a reconnect.
+     */
+    public static void syncConfigToAll(MinecraftServer server) {
+        ConfigSyncPayload payload = buildConfigPayload();
+        for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            if (ServerPlayNetworking.canSend(player, ConfigSyncPayload.TYPE)) {
+                ServerPlayNetworking.send(player, payload);
+            }
+        }
+    }
+
+    private static ConfigSyncPayload buildConfigPayload() {
+        return new ConfigSyncPayload(Meridian.getConfig().toSyncJson());
     }
 
     private static EnchantingStatSyncPayload buildSyncPayload() {

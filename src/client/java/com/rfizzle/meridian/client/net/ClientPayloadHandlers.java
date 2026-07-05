@@ -1,11 +1,14 @@
 package com.rfizzle.meridian.client.net;
 
+import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.ViewerRefreshTrigger;
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.net.CluesPayload;
+import com.rfizzle.meridian.net.ConfigSyncPayload;
 import com.rfizzle.meridian.net.EnchantingStatSyncPayload;
 import com.rfizzle.meridian.net.EnchantmentInfoPayload;
 import com.rfizzle.meridian.net.StatsPayload;
@@ -24,7 +27,8 @@ import java.util.Map;
  * triggers a recipe-viewer refresh so the enchantment browser repopulates with server-configured
  * values without requiring a manual viewer reload. The enchanting stat sync payload updates the
  * client-side {@link EnchantingStatRegistry}; shelf info panels read it lazily at render time, so it
- * needs no viewer refresh.
+ * needs no viewer refresh. The config sync payload stores the server's authoritative gameplay config
+ * into {@link ClientMeridianConfig} so gameplay-affecting client readers prefer it over the local file.
  */
 public final class ClientPayloadHandlers {
 
@@ -62,5 +66,13 @@ public final class ClientPayloadHandlers {
                                     .toList();
                     EnchantingStatRegistry.getInstance().applySync(payload.blocks(), tagEntries);
                 }));
+
+        ClientPlayNetworking.registerGlobalReceiver(ConfigSyncPayload.TYPE,
+                (payload, context) -> {
+                    // Decode off the client thread — GSON parsing is pure and has no client-state
+                    // dependency — then publish the immutable result on the client thread.
+                    MeridianConfig synced = MeridianConfig.fromJson(payload.configJson());
+                    context.client().execute(() -> ClientMeridianConfig.setServerConfig(synced));
+                });
     }
 }

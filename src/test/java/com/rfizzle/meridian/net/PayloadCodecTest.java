@@ -1,6 +1,7 @@
 // Tier: 2 (fabric-loader-junit)
 package com.rfizzle.meridian.net;
 
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
@@ -244,5 +245,57 @@ class PayloadCodecTest {
     void enchantingStatSyncPayload_typeId_isNamespaced() {
         assertEquals(ResourceLocation.fromNamespaceAndPath("meridian", "enchanting_stat_sync"),
                 EnchantingStatSyncPayload.TYPE.id());
+    }
+
+    // ---- ConfigSyncPayload -------------------------------------------------
+
+    @Test
+    void configSyncPayload_gameplayValues_roundTrip() {
+        MeridianConfig server = new MeridianConfig();
+        server.enchantingTable.maxEterna = 42;
+        server.anvil.prismaticWebLevelCost = 99;
+        server.tomes.extractionTomeRepairPercent = 0.5;
+        server.combat.sunderAffectsPlayers = true;
+        MeridianConfig.EnchantmentOverride override = new MeridianConfig.EnchantmentOverride();
+        override.levelCap = 7;
+        server.enchantmentOverrides.put("minecraft:sharpness", override);
+
+        ConfigSyncPayload payload = new ConfigSyncPayload(server.toSyncJson());
+        RegistryFriendlyByteBuf buf = newBuf();
+        ConfigSyncPayload.CODEC.encode(buf, payload);
+        ConfigSyncPayload decodedPayload = ConfigSyncPayload.CODEC.decode(buf);
+        assertEquals(0, buf.readableBytes(), "codec should consume every byte it wrote");
+
+        MeridianConfig decoded = MeridianConfig.fromJson(decodedPayload.configJson());
+        assertEquals(42, decoded.enchantingTable.maxEterna);
+        assertEquals(99, decoded.anvil.prismaticWebLevelCost);
+        assertEquals(0.5, decoded.tomes.extractionTomeRepairPercent);
+        assertTrue(decoded.combat.sunderAffectsPlayers, "gameplay toggle must survive round-trip");
+        assertTrue(decoded.enchantmentOverrides.containsKey("minecraft:sharpness"),
+                "enchantment overrides must survive round-trip");
+        assertEquals(7, decoded.enchantmentOverrides.get("minecraft:sharpness").levelCap);
+    }
+
+    @Test
+    void configSyncPayload_excludesClientDisplayFields() {
+        MeridianConfig server = new MeridianConfig();
+        server.display.overLeveledColor = "#123456";
+        server.display.showBookTooltips = false;
+
+        String syncJson = server.toSyncJson();
+        assertTrue(!syncJson.contains("display"),
+                "synced view must omit the client-only display block");
+
+        MeridianConfig decoded = MeridianConfig.fromJson(syncJson);
+        // The client keeps its own display prefs; the synced copy carries defaults, never the
+        // server operator's cosmetic choices.
+        assertEquals("#FF6600", decoded.display.overLeveledColor);
+        assertTrue(decoded.display.showBookTooltips);
+    }
+
+    @Test
+    void configSyncPayload_typeId_isNamespaced() {
+        assertEquals(ResourceLocation.fromNamespaceAndPath("meridian", "config_sync"),
+                ConfigSyncPayload.TYPE.id());
     }
 }

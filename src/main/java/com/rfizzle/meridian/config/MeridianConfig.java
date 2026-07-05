@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.config;
 
 import com.rfizzle.meridian.Meridian;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -23,6 +25,24 @@ public class MeridianConfig {
     private static final Gson GSON = new GsonBuilder()
             .setPrettyPrinting()
             .disableHtmlEscaping()
+            .create();
+    // Serializer for the server→client sync wire form (#149). Compact (no pretty-printing) and
+    // drops the client-only {@link #display} block, so the synced view is exactly the
+    // server-authoritative gameplay surface. The client keeps reading its own local
+    // {@code display} preferences; {@link #fromJson(String)} reads this form back.
+    private static final Gson SYNC_GSON = new GsonBuilder()
+            .disableHtmlEscaping()
+            .addSerializationExclusionStrategy(new ExclusionStrategy() {
+                @Override
+                public boolean shouldSkipField(FieldAttributes f) {
+                    return MeridianConfig.class.equals(f.getDeclaringClass()) && "display".equals(f.getName());
+                }
+
+                @Override
+                public boolean shouldSkipClass(Class<?> clazz) {
+                    return false;
+                }
+            })
             .create();
     private static final Pattern HEX_COLOR = Pattern.compile("^#[0-9A-Fa-f]{6}$");
     private static final String DEFAULT_OVER_LEVELED_COLOR = "#FF6600";
@@ -105,6 +125,38 @@ public class MeridianConfig {
 
     private static Path configPath() {
         return FabricLoader.getInstance().getConfigDir().resolve(CONFIG_FILENAME);
+    }
+
+    /**
+     * Serializes the server-authoritative gameplay surface for the config-sync payload (#149):
+     * every section except the client-only {@link #display} block. Read back with
+     * {@link #fromJson(String)}.
+     */
+    public String toSyncJson() {
+        return SYNC_GSON.toJson(this);
+    }
+
+    /**
+     * Reconstructs a config from a {@link #toSyncJson()} string received from the server. The JSON is
+     * already at the current schema version (both sides run the same mod build), so migration is
+     * deliberately skipped — only {@link #fillDefaults()} null-healing and {@link #validate()}
+     * warn-and-clamp run, so a hostile or malformed payload can never yield an out-of-range config.
+     * A null/unparseable tree falls back to a fresh default rather than throwing.
+     */
+    public static MeridianConfig fromJson(String json) {
+        MeridianConfig config;
+        try {
+            config = GSON.fromJson(json, MeridianConfig.class);
+        } catch (JsonSyntaxException e) {
+            Meridian.LOGGER.warn("Failed to parse synced config JSON; using defaults", e);
+            config = null;
+        }
+        if (config == null) {
+            config = new MeridianConfig();
+        }
+        config.fillDefaults();
+        config.validate();
+        return config;
     }
 
     private void fillDefaults() {

@@ -1,5 +1,7 @@
 package com.rfizzle.meridian.client.screen;
 
+import com.rfizzle.meridian.client.config.ClientMeridianConfig;
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentLogic;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
@@ -42,6 +44,19 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
     private static final float FALLBACK_MAX_ETERNA = 50.0F;
 
     private final MeridianEnchantmentMenu fizzleMenu;
+
+    /**
+     * The eterna bar's max before the menu pushes its first {@code StatsPayload}: the server-synced
+     * enchanting-table cap (#149), falling back to the local config and finally the vanilla-scale
+     * constant. Once stats arrive, {@code getLastStats().maxEterna()} supersedes this.
+     */
+    private static float fallbackMaxEterna() {
+        MeridianConfig config = ClientMeridianConfig.effective();
+        if (config != null && config.enchantingTable != null) {
+            return config.enchantingTable.maxEterna;
+        }
+        return FALLBACK_MAX_ETERNA;
+    }
 
     private float eterna, lastEterna;
     private float quanta, lastQuanta;
@@ -136,7 +151,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
 
         if (this.eterna > 0) {
             float barMax = fizzleMenu != null && fizzleMenu.getLastStats().maxEterna() > 0
-                    ? fizzleMenu.getLastStats().maxEterna() : FALLBACK_MAX_ETERNA;
+                    ? fizzleMenu.getLastStats().maxEterna() : fallbackMaxEterna();
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 75, 0, 197,
                     (int) (Math.min(this.eterna / barMax, 1.0F) * 110), 5);
         }
@@ -292,7 +307,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             list.add(eternaLabel().append(Component.translatable("gui.meridian.stat.eterna.desc1")));
             list.add(Component.translatable("gui.meridian.stat.eterna.desc2").withStyle(ChatFormatting.GRAY));
             if (stats.eterna() > 0) {
-                float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : FALLBACK_MAX_ETERNA;
+                float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : fallbackMaxEterna();
                 list.add(Component.literal(""));
                 list.add(Component.translatable("gui.meridian.stat.eterna.value",
                         f(stats.eterna()), (int) displayMax).withStyle(ChatFormatting.GRAY));
