@@ -5,6 +5,8 @@ import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries.AnvilInfoEntry;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -83,6 +85,23 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
         }
 
         registerShelfInfoPanels(registry);
+        registerAnvilInfoPages(registry);
+    }
+
+    /**
+     * Registers one {@link EmiInfoRecipe} per anvil interaction (salvage tomes, Prismatic Web,
+     * Tempered Core, iron-block repair) so each item's page in EMI names the anvil as the place it
+     * is used. The set is sourced from {@link AnvilInfoEntries#snapshot()} — the shared source of
+     * truth the REI and JEI adapters read too.
+     */
+    private static void registerAnvilInfoPages(EmiRegistry registry) {
+        for (AnvilInfoEntry entry : AnvilInfoEntries.snapshot()) {
+            ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(entry.item().getItem());
+            registry.addRecipe(new EmiInfoRecipe(
+                    List.of(EmiStack.of(entry.item())),
+                    entry.description(),
+                    Meridian.id("/anvil_info/" + itemId.getNamespace() + "/" + itemId.getPath())));
+        }
     }
 
     /** Latches off the first time the EMI reload symbol can't be resolved (e.g. a future EMI rename). */
