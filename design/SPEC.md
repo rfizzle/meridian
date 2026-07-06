@@ -79,7 +79,7 @@ These baselines let recipe and selection thresholds ported from Zenith stay reac
 
 Click-time validation (`MeridianEnchantmentLogic`): the button id must be in [0, 3), the input slot non-empty, the cost > 0, lapis count ≥ `buttonId + 1`, and player XP level ≥ `max(buttonId + 1, cost)` — all waived for players with infinite materials (creative). On success: lapis shrinks by `buttonId + 1`, the player loses `cost` XP levels, and the enchanted item replaces the input. `globalMinEnchantability` (default 1) is the minimum enchantability the input needs to be enchantable.
 
-Stats and clues stream to the client via `StatsPayload` (eterna/quanta/arcana/rectification/clues/maxEterna/blacklist/treasure + projected crafting result) and per-slot `CluesPayload`. The client `MeridianEnchantmentScreen` and `EnchantingInfoScreen` render the stat readout and clue list. `enchantingTable.showLevelIndicator` (default true) toggles the level indicator in the UI.
+Stats and clues stream to the client via `StatsPayload` (eterna/quanta/arcana/rectification/clues/maxEterna/blacklist/treasure + projected crafting result) and per-slot `CluesPayload`. The client `MeridianEnchantmentScreen` and `EnchantingInfoScreen` render the stat readout and clue list.
 
 ### Implementation Notes
 - The menu provider swap is the only mixin touching the enchanting table block; the block, blockstate, and model stay vanilla.
@@ -403,7 +403,6 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 |---|---|---|---|
 | `allowTreasureWithoutShelf` | bool | false | Allow treasure enchantments without a Treasure Shelf |
 | `maxEterna` | int | 50 | 1–100; Eterna stat cap |
-| `showLevelIndicator` | bool | true | Show the level indicator in the table UI |
 | `globalMinEnchantability` | int | 1 | 0–100; minimum enchantability to be enchantable |
 
 ### `shelves`
@@ -547,7 +546,7 @@ All user-facing text uses translation keys in `assets/meridian/lang/en_us.json`.
 | `block.meridian.*` | `block.meridian.hellshelf` | Block names |
 | `info.meridian.*` | `info.meridian.xp_tome.stored` | Item tooltip lines |
 | `message.meridian.*` | `message.meridian.xp_tome.full` | Action-bar messages |
-| `config.meridian.*` | `config.meridian.show_level_indicator` | Config screen labels |
+| `config.meridian.*` | `config.meridian.max_eterna` | Config screen labels |
 | `command.meridian.reload.*` | `command.meridian.reload.ok` | Command feedback |
 
 ---
