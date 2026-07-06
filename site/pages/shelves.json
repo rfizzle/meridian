@@ -102,7 +102,7 @@
           "items": [
             {
               "title": "Filtering Shelf",
-              "html": ["A block entity that lets players <strong class='text-bone'>blacklist specific enchantments</strong> from appearing at the enchanting table. Right-click to open the filtering UI and select which enchantments to exclude."],
+              "html": ["A block entity that lets players <strong class='text-bone'>blacklist specific enchantments</strong> from appearing at the enchanting table. Insert <strong class='text-bone'>single-enchantment books</strong> to exclude those enchantments from the roll pool; a book with zero or multiple enchantments is refused with an on-screen explanation, so nothing fails silently."],
               "note": "Stats identical to a vanilla bookshelf (Eterna +1, maxEterna 15). Uses a shelf slot but adds filtering control."
             },
             {

@@ -127,6 +127,9 @@ public class LibraryStorageAdapter extends SnapshotParticipant<LibrarySnapshot>
         if (this.dirty) {
             this.dirty = false;
             library.setChanged();
+            // One block-local confirmation per committed transaction that actually pooled a book,
+            // matching the hand-deposit feedback (a hopper push is otherwise invisible).
+            library.playDepositFeedback();
         }
     }
 }
