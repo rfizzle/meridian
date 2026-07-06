@@ -42,12 +42,6 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(50)
                     .setSaveConsumer(v -> current.enchantingTable.maxEterna = v)
                     .build());
-            tableCategory.addEntry(entry.startBooleanToggle(
-                            Component.translatable("config.meridian.show_level_indicator"),
-                            current.enchantingTable.showLevelIndicator)
-                    .setDefaultValue(true)
-                    .setSaveConsumer(v -> current.enchantingTable.showLevelIndicator = v)
-                    .build());
             tableCategory.addEntry(entry.startIntSlider(
                             Component.translatable("config.meridian.global_min_enchantability"),
                             current.enchantingTable.globalMinEnchantability, 0, 100)

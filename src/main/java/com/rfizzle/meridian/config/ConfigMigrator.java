@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 3;
+    static final int CURRENT_VERSION = 4;
 
     @FunctionalInterface
     interface Migration {
@@ -38,6 +38,15 @@ final class ConfigMigrator {
                     if (!anvilObj.has("temperedCoreEnabled")) {
                         anvilObj.addProperty("temperedCoreEnabled", true);
                     }
+                }
+            },
+            // v3 → v4: drop the dead enchantingTable.showLevelIndicator toggle (#161). No code ever
+            // read it, so removing the field would leave a stale key in existing files; strip it from
+            // the raw object so the re-saved config no longer advertises an inert option.
+            json -> {
+                JsonElement table = json.get("enchantingTable");
+                if (table != null && table.isJsonObject()) {
+                    table.getAsJsonObject().remove("showLevelIndicator");
                 }
             },
     };

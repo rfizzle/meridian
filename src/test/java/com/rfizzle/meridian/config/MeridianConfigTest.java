@@ -69,7 +69,6 @@ class MeridianConfigTest {
 
         assertEquals(false, cfg.enchantingTable.allowTreasureWithoutShelf);
         assertEquals(50, cfg.enchantingTable.maxEterna);
-        assertEquals(true, cfg.enchantingTable.showLevelIndicator);
 
         // #163 — both recipe-module toggles default on: an untouched config behaves as before.
         assertEquals(true, cfg.tableCrafting.allowDuplication);
