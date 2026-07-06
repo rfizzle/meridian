@@ -5,6 +5,7 @@ import com.rfizzle.meridian.enchanting.RealEnchantmentHelper;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -41,6 +42,23 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
     protected final ItemStack result;
     protected final OptionalInt displayLevel;
     protected final int xpCost;
+    protected final RecipeModule module;
+
+    public EnchantingRecipe(Ingredient input,
+                            StatRequirements requirements,
+                            StatRequirements maxRequirements,
+                            ItemStack result,
+                            OptionalInt displayLevel,
+                            int xpCost,
+                            RecipeModule module) {
+        this.input = input;
+        this.requirements = requirements;
+        this.maxRequirements = maxRequirements;
+        this.result = result;
+        this.displayLevel = displayLevel;
+        this.xpCost = xpCost;
+        this.module = module;
+    }
 
     public EnchantingRecipe(Ingredient input,
                             StatRequirements requirements,
@@ -48,12 +66,7 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
                             ItemStack result,
                             OptionalInt displayLevel,
                             int xpCost) {
-        this.input = input;
-        this.requirements = requirements;
-        this.maxRequirements = maxRequirements;
-        this.result = result;
-        this.displayLevel = displayLevel;
-        this.xpCost = xpCost;
+        this(input, requirements, maxRequirements, result, displayLevel, xpCost, RecipeModule.CORE);
     }
 
     public Ingredient getInput() {
@@ -78,6 +91,11 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
 
     public int getXpCost() {
         return xpCost;
+    }
+
+    /** Content group this recipe belongs to; {@link RecipeModule#CORE} unless the JSON says otherwise. */
+    public RecipeModule getModule() {
+        return module;
     }
 
     /**
@@ -145,7 +163,8 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
                  StatRequirements maxRequirements,
                  ItemStack result,
                  OptionalInt displayLevel,
-                 int xpCost);
+                 int xpCost,
+                 RecipeModule module);
     }
 
     protected static <T extends EnchantingRecipe> MapCodec<T> buildMapCodec(Factory<T> factory) {
@@ -160,22 +179,43 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
                         opt -> opt.map(OptionalInt::of).orElseGet(OptionalInt::empty),
                         oi -> oi.isPresent() ? Optional.of(oi.getAsInt()) : Optional.empty()
                 ).forGetter(r -> r.displayLevel),
-                Codec.INT.optionalFieldOf("xp_cost", 0).forGetter(r -> r.xpCost)
+                Codec.INT.optionalFieldOf("xp_cost", 0).forGetter(r -> r.xpCost),
+                RecipeModule.CODEC.optionalFieldOf("module", RecipeModule.CORE).forGetter(r -> r.module)
         ).apply(instance, factory::create));
     }
 
+    private static final StreamCodec<ByteBuf, OptionalInt> DISPLAY_LEVEL_STREAM_CODEC =
+            ByteBufCodecs.optional(ByteBufCodecs.VAR_INT).map(
+                    opt -> opt.map(OptionalInt::of).orElseGet(OptionalInt::empty),
+                    oi -> oi.isPresent() ? Optional.of(oi.getAsInt()) : Optional.empty());
+
+    // Hand-rolled rather than StreamCodec.composite — the module field (#163) pushed the recipe to
+    // seven components and vanilla's composite overloads stop at six.
     protected static <T extends EnchantingRecipe> StreamCodec<RegistryFriendlyByteBuf, T> buildStreamCodec(Factory<T> factory) {
-        return StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, r -> r.input,
-                StatRequirements.STREAM_CODEC, r -> r.requirements,
-                StatRequirements.STREAM_CODEC, r -> r.maxRequirements,
-                ItemStack.STREAM_CODEC, r -> r.result,
-                ByteBufCodecs.optional(ByteBufCodecs.VAR_INT).map(
-                        opt -> opt.map(OptionalInt::of).orElseGet(OptionalInt::empty),
-                        oi -> oi.isPresent() ? Optional.of(oi.getAsInt()) : Optional.<Integer>empty()
-                ), r -> r.displayLevel,
-                ByteBufCodecs.VAR_INT, r -> r.xpCost,
-                factory::create);
+        return new StreamCodec<>() {
+            @Override
+            public T decode(RegistryFriendlyByteBuf buf) {
+                return factory.create(
+                        Ingredient.CONTENTS_STREAM_CODEC.decode(buf),
+                        StatRequirements.STREAM_CODEC.decode(buf),
+                        StatRequirements.STREAM_CODEC.decode(buf),
+                        ItemStack.STREAM_CODEC.decode(buf),
+                        DISPLAY_LEVEL_STREAM_CODEC.decode(buf),
+                        ByteBufCodecs.VAR_INT.decode(buf),
+                        RecipeModule.STREAM_CODEC.decode(buf));
+            }
+
+            @Override
+            public void encode(RegistryFriendlyByteBuf buf, T recipe) {
+                Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
+                StatRequirements.STREAM_CODEC.encode(buf, recipe.requirements);
+                StatRequirements.STREAM_CODEC.encode(buf, recipe.maxRequirements);
+                ItemStack.STREAM_CODEC.encode(buf, recipe.result);
+                DISPLAY_LEVEL_STREAM_CODEC.encode(buf, recipe.displayLevel);
+                ByteBufCodecs.VAR_INT.encode(buf, recipe.xpCost);
+                RecipeModule.STREAM_CODEC.encode(buf, recipe.module);
+            }
+        };
     }
 
     /** Concrete serializer for {@code meridian:enchanting}. */

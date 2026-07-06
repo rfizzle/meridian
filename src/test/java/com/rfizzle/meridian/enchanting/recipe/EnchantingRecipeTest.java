@@ -25,7 +25,10 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.OptionalInt;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -317,6 +320,97 @@ class EnchantingRecipeTest {
     }
 
     @Test
+    void moduleField_absentInJson_defaultsToCore() {
+        JsonObject json = JsonParser.parseString("""
+                {
+                    "input": { "item": "minecraft:bookshelf" },
+                    "requirements": { "eterna": 10 },
+                    "result": { "id": "minecraft:enchanting_table" }
+                }
+                """).getAsJsonObject();
+        EnchantingRecipe decoded = EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.codec()
+                .codec().parse(JsonOps.INSTANCE, json).getOrThrow();
+        assertEquals(RecipeModule.CORE, decoded.getModule(),
+                "a recipe without a module tag must be CORE and un-toggleable");
+    }
+
+    @Test
+    void moduleField_roundTripsThroughJsonAndBuffer() {
+        EnchantingRecipe original = new EnchantingRecipe(
+                Ingredient.of(Items.EMERALD_BLOCK),
+                new StatRequirements(50F, 45F, 85F),
+                StatRequirements.NO_MAX,
+                new ItemStack(Items.TOTEM_OF_UNDYING),
+                OptionalInt.empty(),
+                0,
+                RecipeModule.DUPLICATION);
+
+        JsonElement json = EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.codec()
+                .codec().encodeStart(JsonOps.INSTANCE, original).getOrThrow();
+        assertEquals("duplication", json.getAsJsonObject().get("module").getAsString());
+        EnchantingRecipe decoded = EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.codec()
+                .codec().parse(JsonOps.INSTANCE, json).getOrThrow();
+        assertEnchantingRecipeEquals(original, decoded);
+
+        // The stream codec must carry the module too — clients receive recipes over the wire and
+        // apply the same gate to the craft-slot hint and the recipe viewers.
+        RegistryAccess.Frozen access = RegistryAccess.fromRegistryOfRegistries(BuiltInRegistries.REGISTRY);
+        RegistryFriendlyByteBuf buf = new RegistryFriendlyByteBuf(Unpooled.buffer(), access);
+        EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.streamCodec().encode(buf, original);
+        EnchantingRecipe wired = EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.streamCodec().decode(buf);
+        assertEnchantingRecipeEquals(original, wired);
+    }
+
+    @Test
+    void moduleField_unknownValueFailsTheParse() {
+        JsonObject json = JsonParser.parseString("""
+                {
+                    "input": { "item": "minecraft:bookshelf" },
+                    "requirements": { "eterna": 10 },
+                    "result": { "id": "minecraft:enchanting_table" },
+                    "module": "duplicaton"
+                }
+                """).getAsJsonObject();
+        // Strict by design: a typo'd module must fail the recipe at load, not silently un-gate it
+        // by collapsing to CORE.
+        assertTrue(EnchantingRecipeRegistry.ENCHANTING_SERIALIZER.codec()
+                        .codec().parse(JsonOps.INSTANCE, json).isError(),
+                "an unknown module string must be a parse error, not a fallback to CORE");
+    }
+
+    @Test
+    void shippedJsonFiles_carryTheirIssueModuleTags() throws Exception {
+        String[] duplication = {"totem_of_undying", "enchanted_golden_apple", "echo_shard_duplication",
+                "golden_apple", "golden_carrot", "heart_of_the_sea", "budding_amethyst"};
+        for (String name : duplication) {
+            assertEquals("duplication", readResource(name + ".json").getAsJsonObject()
+                            .get("module").getAsString(),
+                    name + " must be in the duplication module (#163)");
+        }
+        for (String food : EVERFEAST_FOODS) {
+            assertEquals("everfeast", readResource("everfeast_" + food + ".json").getAsJsonObject()
+                            .get("module").getAsString(),
+                    "everfeast_" + food + " must be in the everfeast module (#163)");
+        }
+        assertEquals("everfeast", readResource("everfull_flask.json").getAsJsonObject()
+                .get("module").getAsString(), "everfull_flask must be in the everfeast module (#163)");
+
+        // Everything else ships untagged — CORE, not toggleable.
+        try (var files = java.nio.file.Files.list(
+                java.nio.file.Path.of("src/main/resources/data/meridian/recipe/enchanting"))) {
+            Set<String> tagged = new HashSet<>(List.of(duplication));
+            for (String food : EVERFEAST_FOODS) tagged.add("everfeast_" + food);
+            tagged.add("everfull_flask");
+            for (var path : files.toList()) {
+                String name = path.getFileName().toString().replace(".json", "");
+                if (tagged.contains(name)) continue;
+                assertFalse(readResource(name + ".json").getAsJsonObject().has("module"),
+                        name + " must not carry a module tag — core recipes stay untagged");
+            }
+        }
+    }
+
+    @Test
     void effectiveXpCost_derivesFromEternaOnTheDoubledScale() {
         // No explicit xp_cost → cost tracks the slot-2 enchant scale: round(eterna * 2).
         EnchantingRecipe enderLibrary = makeRecipe(Ingredient.of(Items.BOOK),
@@ -358,6 +452,7 @@ class EnchantingRecipeTest {
         assertEquals(expected.getMaxRequirements(), actual.getMaxRequirements());
         assertEquals(expected.getDisplayLevel(), actual.getDisplayLevel());
         assertEquals(expected.getXpCost(), actual.getXpCost());
+        assertEquals(expected.getModule(), actual.getModule());
         assertEquals(expected.getResult().getItem(), actual.getResult().getItem());
         assertEquals(expected.getResult().getCount(), actual.getResult().getCount());
         assertEquals(expected.getInput().getItems().length, actual.getInput().getItems().length);

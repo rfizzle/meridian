@@ -21,9 +21,10 @@ class MeridianConfigTest {
     void defaultConfig_hasValidValues() {
         MeridianConfig cfg = new MeridianConfig();
 
-        assertEquals(1, cfg.configVersion);
+        assertEquals(ConfigMigrator.CURRENT_VERSION, cfg.configVersion);
 
         assertNotNull(cfg.enchantingTable);
+        assertNotNull(cfg.tableCrafting);
         assertNotNull(cfg.shelves);
         assertNotNull(cfg.anvil);
         assertNotNull(cfg.library);
@@ -69,6 +70,10 @@ class MeridianConfigTest {
         assertEquals(false, cfg.enchantingTable.allowTreasureWithoutShelf);
         assertEquals(50, cfg.enchantingTable.maxEterna);
         assertEquals(true, cfg.enchantingTable.showLevelIndicator);
+
+        // #163 — both recipe-module toggles default on: an untouched config behaves as before.
+        assertEquals(true, cfg.tableCrafting.allowDuplication);
+        assertEquals(true, cfg.everfeast.enabled);
 
         assertEquals(0.02, cfg.shelves.sculkShelfShriekerChance);
         assertEquals(0.05, cfg.shelves.sculkParticleChance);
@@ -245,6 +250,27 @@ class MeridianConfigTest {
         assertEquals(ConfigMigrator.CURRENT_VERSION, loaded.configVersion);
         assertEquals(7, loaded.enchantingTable.maxEterna);
         assertEquals(before, Files.readString(path), "an already-current file must not be rewritten on load");
+    }
+
+    @Test
+    void load_v1File_migratesToV2AndPopulatesModuleToggles(@TempDir Path tmp) throws IOException {
+        // v1 → v2 (#163) is purely additive: existing settings survive, the new recipe-module
+        // toggles come up at their enabled defaults, and the re-save writes them into the file.
+        Path path = tmp.resolve("meridian.json");
+        Files.writeString(path, "{\"configVersion\":1,\"enchantingTable\":{\"maxEterna\":42},"
+                + "\"everfeast\":{\"bites\":64}}");
+
+        MeridianConfig loaded = MeridianConfig.load(path);
+
+        assertEquals(ConfigMigrator.CURRENT_VERSION, loaded.configVersion);
+        assertEquals(42, loaded.enchantingTable.maxEterna);
+        assertEquals(64, loaded.everfeast.bites, "existing everfeast tuning must survive the migration");
+        assertEquals(true, loaded.tableCrafting.allowDuplication);
+        assertEquals(true, loaded.everfeast.enabled);
+        String rewritten = Files.readString(path);
+        assertTrue(rewritten.contains("\"allowDuplication\": true"),
+                "the re-saved file must surface the new toggle for operators to discover");
+        assertTrue(rewritten.contains("\"configVersion\": 2"));
     }
 
     @Test

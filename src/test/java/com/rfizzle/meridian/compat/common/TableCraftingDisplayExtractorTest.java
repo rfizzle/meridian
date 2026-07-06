@@ -2,8 +2,10 @@
 package com.rfizzle.meridian.compat.common;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;
+import com.rfizzle.meridian.enchanting.recipe.RecipeModule;
 import com.rfizzle.meridian.enchanting.recipe.StatRequirements;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.RegistryAccess;
@@ -31,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TableCraftingDisplayExtractorTest {
 
+    /** Fresh defaults: every recipe module enabled. */
+    private static final MeridianConfig DEFAULTS = new MeridianConfig();
+
     @BeforeAll
     static void bootstrap() {
         SharedConstants.tryDetectVersion();
@@ -57,7 +62,7 @@ class TableCraftingDisplayExtractorTest {
                 holder("shelf_upgrade", shelfUpgrade),
                 holder("library_upgrade", libraryUpgrade));
 
-        List<TableCraftingDisplay> displays = TableCraftingDisplayExtractor.extract(rm);
+        List<TableCraftingDisplay> displays = TableCraftingDisplayExtractor.extract(rm, DEFAULTS);
 
         assertEquals(2, displays.size(), "extractor must surface both recipe types as displays");
         Map<ResourceLocation, TableCraftingDisplay> byId = displays.stream()
@@ -88,7 +93,7 @@ class TableCraftingDisplayExtractorTest {
     void extract_emptyManager_returnsEmptyList() {
         RecipeManager rm = new RecipeManager(RegistryAccess.EMPTY);
         rm.replaceRecipes(List.of());
-        assertTrue(TableCraftingDisplayExtractor.extract(rm).isEmpty(),
+        assertTrue(TableCraftingDisplayExtractor.extract(rm, DEFAULTS).isEmpty(),
                 "no fizzle recipes loaded → extractor must produce nothing, not even placeholder displays");
     }
 
@@ -103,14 +108,50 @@ class TableCraftingDisplayExtractorTest {
                 0);
         RecipeManager rm = managerWith(holder("only", r));
 
-        TableCraftingDisplay display = TableCraftingDisplayExtractor.extract(rm).getFirst();
+        TableCraftingDisplay display = TableCraftingDisplayExtractor.extract(rm, DEFAULTS).getFirst();
         display.result().setCount(99);
 
         // Re-extract: the cached recipe's result must still report the original count, proving the
         // extractor handed back a defensive copy. Viewers routinely mutate display stacks (changing
         // amounts for tooltips), so leaking the recipe's source stack would corrupt cooking flows.
-        TableCraftingDisplay refreshed = TableCraftingDisplayExtractor.extract(rm).getFirst();
+        TableCraftingDisplay refreshed = TableCraftingDisplayExtractor.extract(rm, DEFAULTS).getFirst();
         assertEquals(4, refreshed.result().getCount());
+    }
+
+    @Test
+    void extract_disabledModule_filtersItsDisplaysButNotOthers() {
+        EnchantingRecipe duplication = new EnchantingRecipe(
+                Ingredient.of(Items.EMERALD_BLOCK),
+                new StatRequirements(50F, 45F, 85F),
+                StatRequirements.NO_MAX,
+                new ItemStack(Items.TOTEM_OF_UNDYING),
+                OptionalInt.empty(),
+                0,
+                RecipeModule.DUPLICATION);
+        EnchantingRecipe core = new EnchantingRecipe(
+                Ingredient.of(Items.BOOKSHELF),
+                new StatRequirements(22.5F, 30F, 0F),
+                StatRequirements.NO_MAX,
+                new ItemStack(Items.ENCHANTING_TABLE),
+                OptionalInt.empty(),
+                0);
+        RecipeManager rm = managerWith(holder("dup", duplication), holder("core", core));
+
+        MeridianConfig noDuplication = new MeridianConfig();
+        noDuplication.tableCrafting.allowDuplication = false;
+
+        List<TableCraftingDisplay> filtered = TableCraftingDisplayExtractor.extract(rm, noDuplication);
+        assertEquals(1, filtered.size(), "disabled module's displays must be filtered out");
+        assertEquals(Meridian.id("core"), filtered.getFirst().recipeId());
+
+        List<TableCraftingDisplay> all = TableCraftingDisplayExtractor.extractAll(rm);
+        assertEquals(2, all.size(), "extractAll must ignore module toggles (JEI hide/unhide path)");
+        Map<ResourceLocation, TableCraftingDisplay> byId = all.stream()
+                .collect(Collectors.toMap(TableCraftingDisplay::recipeId, Function.identity()));
+        assertEquals(RecipeModule.DUPLICATION, byId.get(Meridian.id("dup")).module(),
+                "displays must carry the recipe's module so JEI can hide/unhide by module");
+        assertEquals(RecipeModule.CORE, byId.get(Meridian.id("core")).module(),
+                "untagged recipes must surface as CORE");
     }
 
     private static RecipeHolder<EnchantingRecipe> holder(String path, EnchantingRecipe recipe) {

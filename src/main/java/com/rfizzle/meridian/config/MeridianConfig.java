@@ -51,6 +51,7 @@ public class MeridianConfig {
 
     public int configVersion = ConfigMigrator.CURRENT_VERSION;
     public EnchantingTable enchantingTable = new EnchantingTable();
+    public TableCrafting tableCrafting = new TableCrafting();
     public Shelves shelves = new Shelves();
     public Anvil anvil = new Anvil();
     public Library library = new Library();
@@ -174,6 +175,7 @@ public class MeridianConfig {
 
     private void fillDefaults() {
         if (enchantingTable == null) enchantingTable = new EnchantingTable();
+        if (tableCrafting == null) tableCrafting = new TableCrafting();
         if (shelves == null) shelves = new Shelves();
         if (anvil == null) anvil = new Anvil();
         if (library == null) library = new Library();
@@ -294,6 +296,15 @@ public class MeridianConfig {
         public int globalMinEnchantability = 1;
     }
 
+    public static class TableCrafting {
+        /**
+         * Whether the vanilla-item duplication recipes ({@code "module": "duplication"} — totem of
+         * undying, echo shard, golden apples, …) are available at the table. Already-crafted items
+         * are unaffected.
+         */
+        public boolean allowDuplication = true;
+    }
+
     public static class Shelves {
         public double sculkShelfShriekerChance = 0.02;
         public double sculkParticleChance = 0.05;
@@ -319,6 +330,11 @@ public class MeridianConfig {
     }
 
     public static class Everfeast {
+        /**
+         * Whether the Everfeast ration and Everfull Flask recipes ({@code "module": "everfeast"})
+         * are available at the table. Existing Everfeast items in a world keep working when off.
+         */
+        public boolean enabled = true;
         /** Bites a newly-infused Everfeast ration is created with; existing rations keep theirs. */
         public int bites = 128;
     }

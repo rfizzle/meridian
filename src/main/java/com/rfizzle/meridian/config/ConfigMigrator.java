@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 1;
+    static final int CURRENT_VERSION = 2;
 
     @FunctionalInterface
     interface Migration {
@@ -22,6 +22,10 @@ final class ConfigMigrator {
     private static final Migration[] MIGRATIONS = {
             // v0 → v1: baseline. Pre-versioned files carry no configVersion; they are treated as v0
             // and stamped current. No structural change — future renames append a lambda here.
+            json -> { },
+            // v1 → v2: recipe-module toggles (#163) — tableCrafting.allowDuplication and
+            // everfeast.enabled. Purely additive; Gson field initializers supply the defaults, and
+            // the post-migration re-save writes them into the file so operators can discover them.
             json -> { },
     };
 
