@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.timberfell"
+  },
+  "exclusive_set": "#meridian:exclusive_set/axe",
+  "supported_items": "#minecraft:enchantable/axe",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}

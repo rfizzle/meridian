@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import com.rfizzle.meridian.enchanting.TraversalEnchantMath;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.core.BlockPos;
@@ -16,7 +17,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.AABB;
@@ -54,6 +57,7 @@ public final class ArmorTickHandler {
             handleSlipstream(player);
             handleCinderwalk(player);
             handleTerrasculpt(player);
+            handleThermal(player);
 
             if (tickCounter % 20 == 0) {
                 handlePremonition(player);
@@ -189,6 +193,47 @@ public final class ArmorTickHandler {
         if (state.is(Blocks.NETHERRACK)) return Blocks.WARPED_NYLIUM.defaultBlockState();
         if (state.is(Blocks.END_STONE)) return Blocks.GRASS_BLOCK.defaultBlockState();
         return null;
+    }
+
+    private static void handleThermal(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.THERMAL, EquipmentSlot.CHEST);
+        if (level <= 0) return;
+        if (!player.isFallFlying()) return;
+
+        ServerLevel world = player.serverLevel();
+        int depth = TraversalEnchantMath.thermalScanDepth(level);
+        BlockPos base = player.blockPosition();
+        BlockPos.MutableBlockPos cursor = base.mutable();
+
+        boolean heatBelow = false;
+        for (int i = 1; i <= depth; i++) {
+            cursor.setY(base.getY() - i);
+            if (!world.isLoaded(cursor)) break;
+            if (isHeatSource(world.getBlockState(cursor))) {
+                heatBelow = true;
+                break;
+            }
+        }
+        if (!heatBelow) return;
+
+        // Add upward velocity, but never past the terminal climb speed — the updraft can
+        // boost a glide over heat, never sustain flight once the heat is left behind.
+        Vec3 velocity = player.getDeltaMovement();
+        double maxClimb = TraversalEnchantMath.thermalMaxClimb(level);
+        if (velocity.y >= maxClimb) return;
+
+        double newY = Math.min(maxClimb, velocity.y + TraversalEnchantMath.thermalLiftPerTick(level));
+        player.setDeltaMovement(velocity.x, newY, velocity.z);
+        player.hurtMarked = true;
+        player.resetFallDistance();
+    }
+
+    private static boolean isHeatSource(BlockState state) {
+        if (state.getBlock() instanceof BaseFireBlock) return true;
+        if (state.is(Blocks.MAGMA_BLOCK)) return true;
+        if (state.getFluidState().is(Fluids.LAVA)) return true;
+        if (state.getBlock() instanceof CampfireBlock) return state.getValue(CampfireBlock.LIT);
+        return false;
     }
 
     private static void handlePremonition(ServerPlayer player) {

@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.grapnel"
+  },
+  "supported_items": "#minecraft:enchantable/fishing",
+  "weight": 3,
+  "max_level": 2,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 9
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 9
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand",
+    "offhand"
+  ],
+  "effects": {}
+}

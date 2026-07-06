@@ -1,0 +1,36 @@
+{
+  DataVersion: 3955,
+  size: [5, 5, 5],
+  entities: [],
+  blocks: [
+    {pos: [0, 0, 0], state: 1},
+    {pos: [0, 0, 1], state: 1},
+    {pos: [0, 0, 2], state: 1},
+    {pos: [0, 0, 3], state: 1},
+    {pos: [0, 0, 4], state: 1},
+    {pos: [1, 0, 0], state: 1},
+    {pos: [1, 0, 1], state: 1},
+    {pos: [1, 0, 2], state: 1},
+    {pos: [1, 0, 3], state: 1},
+    {pos: [1, 0, 4], state: 1},
+    {pos: [2, 0, 0], state: 1},
+    {pos: [2, 0, 1], state: 1},
+    {pos: [2, 0, 2], state: 1},
+    {pos: [2, 0, 3], state: 1},
+    {pos: [2, 0, 4], state: 1},
+    {pos: [3, 0, 0], state: 1},
+    {pos: [3, 0, 1], state: 1},
+    {pos: [3, 0, 2], state: 1},
+    {pos: [3, 0, 3], state: 1},
+    {pos: [3, 0, 4], state: 1},
+    {pos: [4, 0, 0], state: 1},
+    {pos: [4, 0, 1], state: 1},
+    {pos: [4, 0, 2], state: 1},
+    {pos: [4, 0, 3], state: 1},
+    {pos: [4, 0, 4], state: 1}
+  ],
+  palette: [
+    {Name: "minecraft:air"},
+    {Name: "minecraft:stone"}
+  ]
+}
