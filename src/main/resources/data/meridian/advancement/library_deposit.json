@@ -1,0 +1,27 @@
+{
+    "parent": "meridian:library",
+    "criteria": {
+        "deposit_book": {
+            "conditions": {},
+            "trigger": "meridian:library_deposit"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.library_deposit.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:library"
+        },
+        "title": {
+            "translate": "advancements.meridian.library_deposit.title"
+        }
+    },
+    "requirements": [
+        [
+            "deposit_book"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -91,7 +91,7 @@ public final class ExtractionTomeHandler implements AnvilHandler {
                 book,
                 config.tomes.extractionTomeXpCost,
                 TOME_CONSUMED,
-                preserved));
+                preserved).withUsage(AnvilUsage.SALVAGE));
     }
 
     /**

@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.ItemCombinerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -129,6 +130,11 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
         AnvilResult pending = this.meridian$pendingResult;
         this.meridian$pendingResult = null;
         if (pending == null) return;
+        // Award the mechanic's usage advancement now that the player has actually taken the
+        // output — createResult only builds previews, so the take path is the true "used it" event.
+        if (pending.usage() != null && player instanceof ServerPlayer serverPlayer) {
+            pending.usage().award(serverPlayer);
+        }
         ItemStack replacement = pending.leftReplacement();
         if (replacement == null || replacement.isEmpty()) return;
         this.inputSlots.setItem(0, replacement.copy());

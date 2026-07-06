@@ -100,7 +100,8 @@ public final class ScrapTomeHandler implements AnvilHandler {
         mutable.set(picked, level);
         book.set(DataComponents.STORED_ENCHANTMENTS, mutable.toImmutable());
 
-        return Optional.of(new AnvilResult(book, config.tomes.scrapTomeXpCost, TOME_CONSUMED));
+        return Optional.of(new AnvilResult(book, config.tomes.scrapTomeXpCost, TOME_CONSUMED)
+                .withUsage(AnvilUsage.SALVAGE));
     }
 
     /**

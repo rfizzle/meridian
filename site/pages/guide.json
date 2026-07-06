@@ -147,6 +147,24 @@
       ]
     },
     {
+      "id": "advancements",
+      "title": "9. The Advancement Guidebook",
+      "titleGap": "4",
+      "blocks": [
+        { "type": "prose", "html": ["Meridian's advancement tree doubles as an in-game checklist — it certifies that you've actually <em>used</em> each major system, not just crafted the block. Open the vanilla Advancements screen and work down the branches:"] },
+        {
+          "type": "list",
+          "spacing": 3,
+          "items": [
+            "<strong class='text-bone'>Library</strong> — <strong class='text-bone'>Filing System</strong> is earned the first time you deposit an enchanted book into an Enchantment Library, and <strong class='text-bone'>Checked Out</strong> the first time you withdraw one. Automated deposits (hoppers) don't count — you have to do it by hand.",
+            "<strong class='text-bone'>Filtering Shelf</strong> — <strong class='text-bone'>Fine Print</strong> lands when you shelve a book to blacklist its enchantment from your table.",
+            "<strong class='text-bone'>Anvil</strong> — <strong class='text-bone'>Salvage Rites</strong> for using any salvage tome, <strong class='text-bone'>Breaking the Curse</strong> for stripping a curse with a Prismatic Web, and <strong class='text-bone'>Tempered</strong> for making an item unbreakable with a Tempered Core. Each fires when you take the anvil's output, not merely when you set the ingredients.",
+            "<strong class='text-bone'>Stat goals</strong> — alongside the existing Arcana and Quanta goals, <strong class='text-bone'>Steady Hand</strong> rewards enchanting at <strong class='text-bone'>Rectification above 60</strong>, and <strong class='text-bone'>The Full Picture</strong> rewards enchanting with a <strong class='text-bone'>Clues stat of 8 or more</strong> — pushing you to build for stability and full information, not just raw power."
+          ]
+        }
+      ]
+    },
+    {
       "blocks": [
         {
           "type": "panel",

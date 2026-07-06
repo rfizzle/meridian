@@ -20,8 +20,8 @@ public class EnchantedAtTableTrigger extends SimpleCriterionTrigger<EnchantedAtT
     }
 
     public void trigger(ServerPlayer player, ItemStack stack, int level,
-                        float eterna, float quanta, float arcana, float rectification) {
-        this.trigger(player, inst -> inst.test(stack, level, eterna, quanta, arcana, rectification));
+                        float eterna, float quanta, float arcana, float rectification, float clues) {
+        this.trigger(player, inst -> inst.test(stack, level, eterna, quanta, arcana, rectification, clues));
     }
 
     public record TriggerInstance(
@@ -31,7 +31,8 @@ public class EnchantedAtTableTrigger extends SimpleCriterionTrigger<EnchantedAtT
             MinMaxBounds.Doubles eterna,
             MinMaxBounds.Doubles quanta,
             MinMaxBounds.Doubles arcana,
-            MinMaxBounds.Doubles rectification
+            MinMaxBounds.Doubles rectification,
+            MinMaxBounds.Doubles clues
     ) implements SimpleCriterionTrigger.SimpleInstance {
 
         public static final Codec<TriggerInstance> CODEC = RecordCodecBuilder.create(inst -> inst
@@ -42,16 +43,19 @@ public class EnchantedAtTableTrigger extends SimpleCriterionTrigger<EnchantedAtT
                         MinMaxBounds.Doubles.CODEC.optionalFieldOf("eterna", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::eterna),
                         MinMaxBounds.Doubles.CODEC.optionalFieldOf("quanta", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::quanta),
                         MinMaxBounds.Doubles.CODEC.optionalFieldOf("arcana", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::arcana),
-                        MinMaxBounds.Doubles.CODEC.optionalFieldOf("rectification", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::rectification))
+                        MinMaxBounds.Doubles.CODEC.optionalFieldOf("rectification", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::rectification),
+                        MinMaxBounds.Doubles.CODEC.optionalFieldOf("clues", MinMaxBounds.Doubles.ANY).forGetter(TriggerInstance::clues))
                 .apply(inst, TriggerInstance::new));
 
-        public boolean test(ItemStack stack, int level, float eterna, float quanta, float arcana, float rectification) {
+        public boolean test(ItemStack stack, int level, float eterna, float quanta, float arcana,
+                            float rectification, float clues) {
             return (this.item.isEmpty() || this.item.get().test(stack))
                     && this.levels.matches(level)
                     && this.eterna.matches(eterna)
                     && this.quanta.matches(quanta)
                     && this.arcana.matches(arcana)
-                    && this.rectification.matches(rectification);
+                    && this.rectification.matches(rectification)
+                    && this.clues.matches(clues);
         }
     }
 }

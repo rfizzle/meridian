@@ -1,0 +1,27 @@
+{
+    "parent": "meridian:tome_apprentice",
+    "criteria": {
+        "salvage_tome": {
+            "conditions": {},
+            "trigger": "meridian:tome_salvage"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.tome_salvage.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:scrap_tome"
+        },
+        "title": {
+            "translate": "advancements.meridian.tome_salvage.title"
+        }
+    },
+    "requirements": [
+        [
+            "salvage_tome"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

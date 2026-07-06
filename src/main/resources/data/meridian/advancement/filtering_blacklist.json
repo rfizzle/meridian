@@ -1,0 +1,27 @@
+{
+    "parent": "meridian:curator",
+    "criteria": {
+        "blacklist_enchantment": {
+            "conditions": {},
+            "trigger": "meridian:filtering_blacklist"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.filtering_blacklist.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:filtering_shelf"
+        },
+        "title": {
+            "translate": "advancements.meridian.filtering_blacklist.title"
+        }
+    },
+    "requirements": [
+        [
+            "blacklist_enchantment"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.advancement.ModTriggers;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,7 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -75,6 +77,15 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
     private final boolean clientSide;
 
     /**
+     * The player this menu was opened for, when server-side. Used to award the library
+     * deposit/extract usage advancements — the deposit path fires from a slot's
+     * {@code setChanged} hook with no player argument in scope, so the opener is captured here.
+     * {@code null} on the client menu and the test-only constructor.
+     */
+    @Nullable
+    private final ServerPlayer serverPlayer;
+
+    /**
      * Optional callback fired by {@link #onChanged()} after the BE notifies of a pool mutation.
      * The screen sets this so it can repaint its row list without polling. {@code null} on tests
      * and on plain server-side menus.
@@ -94,6 +105,7 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
                 ? ContainerLevelAccess.create(level, tile.getBlockPos())
                 : ContainerLevelAccess.NULL;
         this.clientSide = playerInv.player.level().isClientSide();
+        this.serverPlayer = (playerInv.player instanceof ServerPlayer sp) ? sp : null;
         this.ioInv = new SimpleContainer(IO_SLOT_COUNT);
         addIoSlots();
         addPlayerSlots(playerInv);
@@ -123,6 +135,7 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         this.tile = tile;
         this.access = ContainerLevelAccess.NULL;
         this.clientSide = false;
+        this.serverPlayer = null;
         this.ioInv = new SimpleContainer(IO_SLOT_COUNT);
         addIoSlots();
         if (this.tile != null) {
@@ -208,6 +221,9 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         if (absorbed) {
             tile.setChanged();
             tile.playDepositFeedback();
+            if (serverPlayer != null) {
+                ModTriggers.LIBRARY_DEPOSIT.trigger(serverPlayer);
+            }
         }
         ioInv.setItem(DEPOSIT_SLOT, ItemStack.EMPTY);
     }
@@ -294,6 +310,9 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         ioInv.setItem(EXTRACT_SLOT, mutated);
 
         tile.extract(key, target, curLvl);
+        if (player instanceof ServerPlayer sp) {
+            ModTriggers.LIBRARY_EXTRACT.trigger(sp);
+        }
         return true;
     }
 

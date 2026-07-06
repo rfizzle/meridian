@@ -23,14 +23,30 @@ import org.jetbrains.annotations.Nullable;
  * convenience constructor is called from unit tests that run outside a Minecraft bootstrap —
  * dereferencing {@code ItemStack.EMPTY} there would eagerly load {@code ItemStack}'s static
  * initializer and fail.
+ *
+ * <p>{@code usage} is the Meridian mechanic this claim represents, or {@code null} for claims that
+ * grant no advancement (iron-block repair). It rides the pending result so the {@code onTake} hook
+ * can award the matching usage advancement only once the player has actually taken the output —
+ * building a preview during {@code createResult} never awards anything.
  */
-public record AnvilResult(ItemStack output, int xpCost, int rightConsumed, @Nullable ItemStack leftReplacement) {
+public record AnvilResult(ItemStack output, int xpCost, int rightConsumed,
+                          @Nullable ItemStack leftReplacement, @Nullable AnvilUsage usage) {
 
     /**
      * Shorthand for the common case: no left replacement — vanilla's slot-0 clear is correct.
      * Keeps every pre-Extraction-Tome handler call-site one line.
      */
     public AnvilResult(ItemStack output, int xpCost, int rightConsumed) {
-        this(output, xpCost, rightConsumed, null);
+        this(output, xpCost, rightConsumed, null, null);
+    }
+
+    /** Convenience for the Extraction Tome: a left replacement but no separate usage argument. */
+    public AnvilResult(ItemStack output, int xpCost, int rightConsumed, @Nullable ItemStack leftReplacement) {
+        this(output, xpCost, rightConsumed, leftReplacement, null);
+    }
+
+    /** Returns a copy of this claim tagged with the given usage mechanic for advancement grants. */
+    public AnvilResult withUsage(@Nullable AnvilUsage usage) {
+        return new AnvilResult(output, xpCost, rightConsumed, leftReplacement, usage);
     }
 }

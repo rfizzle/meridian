@@ -427,7 +427,8 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         if (player instanceof ServerPlayer sp) {
             CriteriaTriggers.ENCHANTED_ITEM.trigger(sp, result, outcome.xpLevelsConsumed());
             ModTriggers.ENCHANTED_AT_TABLE.trigger(sp, result, outcome.xpLevelsConsumed(),
-                    lastStats.eterna(), lastStats.quanta(), lastStats.arcana(), lastStats.rectification());
+                    lastStats.eterna(), lastStats.quanta(), lastStats.arcana(), lastStats.rectification(),
+                    lastStats.clues());
         }
         enchantSlots.setChanged();
         level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 1.0F,
@@ -523,7 +524,8 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         if (player instanceof ServerPlayer sp) {
             CriteriaTriggers.ENCHANTED_ITEM.trigger(sp, result, xpCost);
             ModTriggers.ENCHANTED_AT_TABLE.trigger(sp, result, xpCost,
-                    lastStats.eterna(), lastStats.quanta(), lastStats.arcana(), lastStats.rectification());
+                    lastStats.eterna(), lastStats.quanta(), lastStats.arcana(), lastStats.rectification(),
+                    lastStats.clues());
         }
 
         enchantSlots.setChanged();
