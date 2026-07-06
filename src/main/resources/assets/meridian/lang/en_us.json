@@ -238,6 +238,7 @@
     "info.meridian.xp_tome.stored": "Stored: %s / %s levels",
     "info.meridian.xp_tome.interact1": "Right-click to deposit 1 level.",
     "info.meridian.xp_tome.interact2": "Shift-Right-click to withdraw 1 level.",
+    "info.meridian.xp_tome.drawn": "%s drawn from tome",
     "message.meridian.xp_tome.full": "The tome is full!",
     "message.meridian.xp_tome.empty": "The tome is empty!",
     "info.meridian.beeshelf": "Trades enchanting level for maximum chaos \u2014 levels can swing wildly either way.",

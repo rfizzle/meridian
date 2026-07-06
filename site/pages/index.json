@@ -77,7 +77,7 @@
               "icon": "&#128221;",
               "title": "XP Tomes",
               "html": [
-                "A ladder of consumables that bank experience levels. Right-click to deposit a level, shift-right-click to withdraw one. Three tiers crafted from a Dormant XP Tome hold 10, 30, and 50 levels."
+                "A ladder of consumables that bank experience levels. Right-click to deposit a level, shift-right-click to withdraw one. Three tiers crafted from a Dormant XP Tome hold 10, 30, and 50 levels. At the enchanting table they pay any cost your level bar can't cover automatically — no need to withdraw first."
               ]
             },
             {

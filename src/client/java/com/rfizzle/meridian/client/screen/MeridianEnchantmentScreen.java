@@ -126,7 +126,8 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 int width = 86 - this.font.width(s);
                 FormattedText randomName = EnchantmentNames.getInstance().getRandomName(this.font, width);
                 int color = 6839882;
-                if ((lapis < slot + 1 || this.minecraft.player.experienceLevel < level)
+                if ((lapis < slot + 1 || this.minecraft.player.experienceLevel
+                        + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level)
                         && !this.minecraft.player.getAbilities().instabuild
                         || this.menu.enchantClue[slot] == -1) {
                     gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 218, 108, 19);
@@ -232,7 +233,10 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 if (!creative) {
                     lines.add(Component.literal(""));
                     int cost = slot + 1;
-                    if (this.minecraft.player.experienceLevel < level) {
+                    int bar = this.minecraft.player.experienceLevel;
+                    // The craft path consumes the full requirement, so the tome pays any shortfall
+                    // between the bar and the level cost (#162).
+                    if (bar < level && bar + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level) {
                         lines.add(Component.translatable("container.enchant.level.requirement", level)
                                 .withStyle(ChatFormatting.RED));
                     } else {
@@ -240,9 +244,16 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                         lines.add(Component.translatable(cost == 1
                                 ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
                                 .withStyle(lapisColor));
-                        lines.add(Component.translatable(cost == 1
-                                ? "container.enchant.level.one" : "container.enchant.level.many", cost)
+                        // The craft path consumes the full `level` cost (costs[CRAFTING_SLOT]), unlike
+                        // the enchant path's slot+1; show that here so it agrees with the tome split.
+                        lines.add(Component.translatable(level == 1
+                                ? "container.enchant.level.one" : "container.enchant.level.many", level)
                                 .withStyle(ChatFormatting.GRAY));
+                        int drawn = Math.max(0, level - bar);
+                        if (drawn > 0) {
+                            lines.add(Component.translatable("info.meridian.xp_tome.drawn", drawn)
+                                    .withStyle(ChatFormatting.GREEN));
+                        }
                     }
                 }
             } else {
@@ -283,7 +294,10 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 if (this.menu.enchantClue[slot] != -1 && !creative) {
                     lines.add(Component.literal(""));
                     int cost = slot + 1;
-                    if (this.minecraft.player.experienceLevel < level) {
+                    int bar = this.minecraft.player.experienceLevel;
+                    // Meeting the level requirement can lean on the tome, but the enchant path only
+                    // ever consumes `cost` (slot+1) levels — so that's all the tome pays (#162).
+                    if (bar < level && bar + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level) {
                         lines.add(Component.translatable("container.enchant.level.requirement", level)
                                 .withStyle(ChatFormatting.RED));
                     } else {
@@ -294,6 +308,11 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                         lines.add(Component.translatable(cost == 1
                                 ? "container.enchant.level.one" : "container.enchant.level.many", cost)
                                 .withStyle(ChatFormatting.GRAY));
+                        int drawn = Math.max(0, cost - bar);
+                        if (drawn > 0) {
+                            lines.add(Component.translatable("info.meridian.xp_tome.drawn", drawn)
+                                    .withStyle(ChatFormatting.GREEN));
+                        }
                     }
                 }
             }
@@ -461,7 +480,8 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 if (cost <= 0 || this.menu.enchantClue[k] == -1) continue;
                 int lapis = this.menu.getGoldCount();
                 boolean canAfford = this.minecraft.player.getAbilities().instabuild
-                        || (lapis >= k + 1 && this.minecraft.player.experienceLevel >= cost);
+                        || (lapis >= k + 1
+                                && this.minecraft.player.experienceLevel + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) >= cost);
                 if (canAfford) {
                     this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, k);
                     return true;
