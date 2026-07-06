@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 94 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 101 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "94 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "101 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "94 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "101 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -384,6 +384,13 @@
               "The harder the block, the faster it breaks — mining speed rises with block hardness, stacking (capped) with Efficiency <span class='text-smoke'>(exclusive: mining)</span>"
             ],
             [
+              "<span class='text-bone'>Timberfell</span>",
+              "I",
+              "Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Breaking a log fells the whole connected tree, at a durability cost per log <span class='text-smoke'>(exclusive: axe)</span>"
+            ],
+            [
               "<span class='text-bone'>Adamant</span>",
               "II",
               "Pickaxe",
@@ -438,6 +445,13 @@
               "Shears",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
               "Sheared wool drops as a random color"
+            ],
+            [
+              "<span class='text-bone'>Grapnel</span>",
+              "II",
+              "Fishing rod",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Reeling in a hook lodged in a block pulls you toward it, within a per-level range and on a short cooldown"
             ]
           ]
         }
@@ -754,6 +768,13 @@
               "Elytra",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
               "Reduces kinetic damage from elytra collisions"
+            ],
+            [
+              "<span class='text-bone'>Thermal</span>",
+              "II",
+              "Elytra",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Gliding over fire, lava, or campfires lifts you on the rising heat — a gentle updraft that ends when the heat is left behind"
             ]
           ]
         }
