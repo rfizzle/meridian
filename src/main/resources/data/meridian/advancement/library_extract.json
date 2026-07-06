@@ -1,0 +1,27 @@
+{
+    "parent": "meridian:library_deposit",
+    "criteria": {
+        "extract_book": {
+            "conditions": {},
+            "trigger": "meridian:library_extract"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.library_extract.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "minecraft:enchanted_book"
+        },
+        "title": {
+            "translate": "advancements.meridian.library_extract.title"
+        }
+    },
+    "requirements": [
+        [
+            "extract_book"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

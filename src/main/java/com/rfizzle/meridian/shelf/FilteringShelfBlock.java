@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.shelf;
 
+import com.rfizzle.meridian.advancement.ModTriggers;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
@@ -8,6 +9,7 @@ import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.ItemInteractionResult;
@@ -121,6 +123,9 @@ public class FilteringShelfBlock extends ChiseledBookShelfBlock implements IEnch
         if (!level.isClientSide) {
             ItemStack inserted = stack.consumeAndReturn(1, player);
             be.setItem(slot, inserted);
+            if (player instanceof ServerPlayer sp) {
+                ModTriggers.FILTERING_BLACKLIST.trigger(sp);
+            }
         }
         return ItemInteractionResult.sidedSuccess(level.isClientSide);
     }

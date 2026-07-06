@@ -1,0 +1,32 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "high_rectification_enchant": {
+            "conditions": {
+                "rectification": {
+                    "min": 60.0
+                }
+            },
+            "trigger": "meridian:enchanted_at_table"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.high_rectification.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:rectifier"
+        },
+        "title": {
+            "translate": "advancements.meridian.high_rectification.title"
+        }
+    },
+    "requirements": [
+        [
+            "high_rectification_enchant"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

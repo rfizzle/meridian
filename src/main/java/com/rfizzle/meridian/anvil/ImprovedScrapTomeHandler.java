@@ -79,6 +79,7 @@ public final class ImprovedScrapTomeHandler implements AnvilHandler {
         }
         book.set(DataComponents.STORED_ENCHANTMENTS, mutable.toImmutable());
 
-        return Optional.of(new AnvilResult(book, config.tomes.improvedScrapTomeXpCost, TOME_CONSUMED));
+        return Optional.of(new AnvilResult(book, config.tomes.improvedScrapTomeXpCost, TOME_CONSUMED)
+                .withUsage(AnvilUsage.SALVAGE));
     }
 }

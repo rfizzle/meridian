@@ -69,6 +69,7 @@ public final class TemperedCoreHandler implements AnvilHandler {
         ItemStack output = left.copyWithCount(1);
         output.setDamageValue(0);
         output.set(DataComponents.UNBREAKABLE, new Unbreakable(true));
-        return Optional.of(new AnvilResult(output, config.anvil.temperedCoreLevelCost, 1));
+        return Optional.of(new AnvilResult(output, config.anvil.temperedCoreLevelCost, 1)
+                .withUsage(AnvilUsage.TEMPERED_CORE));
     }
 }

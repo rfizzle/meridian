@@ -63,7 +63,8 @@ public final class PrismaticWebHandler implements AnvilHandler {
         }
 
         ItemStack output = stripCurses(left);
-        return Optional.of(new AnvilResult(output, config.anvil.prismaticWebLevelCost, 1));
+        return Optional.of(new AnvilResult(output, config.anvil.prismaticWebLevelCost, 1)
+                .withUsage(AnvilUsage.CURSE_STRIP));
     }
 
     static ItemStack stripCurses(ItemStack input) {

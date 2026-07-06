@@ -1,0 +1,27 @@
+{
+    "parent": "meridian:tome_salvage",
+    "criteria": {
+        "temper_item": {
+            "conditions": {},
+            "trigger": "meridian:tempered_core"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.tempered_core.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "meridian:tempered_core"
+        },
+        "title": {
+            "translate": "advancements.meridian.tempered_core.title"
+        }
+    },
+    "requirements": [
+        [
+            "temper_item"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

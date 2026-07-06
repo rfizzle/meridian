@@ -1,0 +1,32 @@
+{
+    "parent": "meridian:stone_tier",
+    "criteria": {
+        "high_clues_enchant": {
+            "conditions": {
+                "clues": {
+                    "min": 8.0
+                }
+            },
+            "trigger": "meridian:enchanted_at_table"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.meridian.high_clues.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "meridian:sightshelf_t2"
+        },
+        "title": {
+            "translate": "advancements.meridian.high_clues.title"
+        }
+    },
+    "requirements": [
+        [
+            "high_clues_enchant"
+        ]
+    ],
+    "sends_telemetry_event": false
+}
