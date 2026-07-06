@@ -127,7 +127,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 FormattedText randomName = EnchantmentNames.getInstance().getRandomName(this.font, width);
                 int color = 6839882;
                 if ((lapis < slot + 1 || this.minecraft.player.experienceLevel
-                        + this.menu.getTomeBalance() < level)
+                        + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level)
                         && !this.minecraft.player.getAbilities().instabuild
                         || this.menu.enchantClue[slot] == -1) {
                     gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 218, 108, 19);
@@ -236,7 +236,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                     int bar = this.minecraft.player.experienceLevel;
                     // The craft path consumes the full requirement, so the tome pays any shortfall
                     // between the bar and the level cost (#162).
-                    if (bar < level && bar + this.menu.getTomeBalance() < level) {
+                    if (bar < level && bar + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level) {
                         lines.add(Component.translatable("container.enchant.level.requirement", level)
                                 .withStyle(ChatFormatting.RED));
                     } else {
@@ -295,7 +295,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                     int bar = this.minecraft.player.experienceLevel;
                     // Meeting the level requirement can lean on the tome, but the enchant path only
                     // ever consumes `cost` (slot+1) levels — so that's all the tome pays (#162).
-                    if (bar < level && bar + this.menu.getTomeBalance() < level) {
+                    if (bar < level && bar + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) < level) {
                         lines.add(Component.translatable("container.enchant.level.requirement", level)
                                 .withStyle(ChatFormatting.RED));
                     } else {
@@ -479,7 +479,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                 int lapis = this.menu.getGoldCount();
                 boolean canAfford = this.minecraft.player.getAbilities().instabuild
                         || (lapis >= k + 1
-                                && this.minecraft.player.experienceLevel + this.menu.getTomeBalance() >= cost);
+                                && this.minecraft.player.experienceLevel + (fizzleMenu != null ? fizzleMenu.getTomeBalance() : 0) >= cost);
                 if (canAfford) {
                     this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, k);
                     return true;
