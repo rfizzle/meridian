@@ -165,6 +165,7 @@
     "config.meridian.enable_inline_ench_descs": "Inline Enchantment Descriptions",
     "info.meridian.enchant.infusion": "Infusion",
     "info.meridian.enchant.infusion_failed": "Insufficient table stats for infusion",
+    "gui.meridian.enchant.infusion_blocked": "Infusion — stats too low",
     "gui.meridian.enchant_info.title": "Available Enchantments",
     "gui.meridian.enchant_info.slider_power": "Power: %s",
     "gui.meridian.enchant_info.slot": "Enchantment Slot %s",
