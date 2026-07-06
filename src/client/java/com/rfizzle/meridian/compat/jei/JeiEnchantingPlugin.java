@@ -5,6 +5,8 @@ import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries.AnvilInfoEntry;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -139,6 +141,18 @@ public final class JeiEnchantingPlugin implements IModPlugin {
         registration.addRecipes(JeiEnchantingRecipeTypes.INFUSIONS, infusions);
         registration.addRecipes(JeiEnchantmentBrowserRecipeTypes.ENCHANTMENTS, extractEnchantments());
         registerShelfInfoPanels(registration);
+        registerAnvilInfoPages(registration);
+    }
+
+    /**
+     * Registers one JEI info page per anvil interaction (salvage tomes, Prismatic Web, Tempered
+     * Core, iron-block repair) so each item's page names the anvil as the place it is used. Sourced
+     * from the shared {@link AnvilInfoEntries#snapshot()}.
+     */
+    private static void registerAnvilInfoPages(IRecipeRegistration registration) {
+        for (AnvilInfoEntry entry : AnvilInfoEntries.snapshot()) {
+            registration.addItemStackInfo(entry.item(), entry.description().toArray(Component[]::new));
+        }
     }
 
     @Override

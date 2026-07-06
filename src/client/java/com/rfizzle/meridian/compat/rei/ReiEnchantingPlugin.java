@@ -5,6 +5,8 @@ import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries;
+import com.rfizzle.meridian.compat.common.AnvilInfoEntries.AnvilInfoEntry;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
 import com.rfizzle.meridian.compat.common.RecipeInfoFormatter;
@@ -97,6 +99,24 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         }
 
         registerShelfInfoPanels(registry);
+        registerAnvilInfoPages(registry);
+    }
+
+    /**
+     * Registers one {@link DefaultInformationDisplay} per anvil interaction (salvage tomes,
+     * Prismatic Web, Tempered Core, iron-block repair) so each item's info page in REI names the
+     * anvil as the place it is used. Sourced from the shared {@link AnvilInfoEntries#snapshot()}.
+     */
+    private static void registerAnvilInfoPages(DisplayRegistry registry) {
+        for (AnvilInfoEntry entry : AnvilInfoEntries.snapshot()) {
+            DefaultInformationDisplay info = DefaultInformationDisplay.createFromEntry(
+                    EntryStacks.of(entry.item()),
+                    entry.item().getHoverName());
+            for (Component line : entry.description()) {
+                info.line(line);
+            }
+            registry.add(info);
+        }
     }
 
     /**

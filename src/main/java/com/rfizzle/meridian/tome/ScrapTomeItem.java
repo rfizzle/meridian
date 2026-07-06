@@ -18,5 +18,6 @@ public class ScrapTomeItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("info.meridian.scrap_tome").withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("info.meridian.scrap_tome2").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("info.meridian.scrap_tome3").withStyle(ChatFormatting.GRAY));
     }
 }
