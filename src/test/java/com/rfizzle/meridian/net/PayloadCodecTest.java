@@ -50,7 +50,7 @@ class PayloadCodecTest {
     @Test
     void statsPayload_zeroStat_roundTrips() {
         StatsPayload original = new StatsPayload(
-                0F, 0F, 0F, 0F, 0, 0F, List.of(), false, Optional.empty());
+                0F, 0F, 0F, 0F, 0, 0F, List.of(), false, Optional.empty(), 0);
 
         RegistryFriendlyByteBuf buf = newBuf();
         StatsPayload.CODEC.encode(buf, original);
@@ -66,7 +66,7 @@ class PayloadCodecTest {
                 7.5F, 3F, 2F, 1F, 2, 22.5F,
                 List.of(enchantKey("minecraft:sharpness"), enchantKey("minecraft:mending")),
                 false,
-                Optional.empty());
+                Optional.empty(), 12);
 
         RegistryFriendlyByteBuf buf = newBuf();
         StatsPayload.CODEC.encode(buf, original);
@@ -90,7 +90,7 @@ class PayloadCodecTest {
                         enchantKey("minecraft:efficiency"),
                         enchantKey("minecraft:unbreaking")),
                 true,
-                Optional.of(result));
+                Optional.of(result), 999);
 
         RegistryFriendlyByteBuf buf = newBuf();
         StatsPayload.CODEC.encode(buf, original);
@@ -104,6 +104,7 @@ class PayloadCodecTest {
         assertEquals(original.maxEterna(), decoded.maxEterna());
         assertEquals(original.blacklist(), decoded.blacklist());
         assertEquals(original.treasure(), decoded.treasure());
+        assertEquals(original.tomeBalance(), decoded.tomeBalance());
         assertTrue(decoded.craftingResult().isPresent(),
                 "saturated payload must carry craftingResult through round-trip");
         CraftingResultEntry decodedResult = decoded.craftingResult().orElseThrow();
@@ -117,7 +118,7 @@ class PayloadCodecTest {
     @Test
     void statsPayload_fiveClues_roundTrips() {
         StatsPayload original = new StatsPayload(
-                0F, 0F, 0F, 0F, 5, 0F, List.of(), false, Optional.empty());
+                0F, 0F, 0F, 0F, 5, 0F, List.of(), false, Optional.empty(), 0);
 
         RegistryFriendlyByteBuf buf = newBuf();
         StatsPayload.CODEC.encode(buf, original);

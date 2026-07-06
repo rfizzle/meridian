@@ -6,6 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -58,6 +59,58 @@ public class XpTomeItem extends Item {
         }
 
         return InteractionResultHolder.pass(stack);
+    }
+
+    /**
+     * How many levels {@code stored} can cover toward {@code requested}, never negative and never
+     * more than either. Pure arithmetic, split out so the debit clamp is unit-testable without a
+     * live inventory.
+     */
+    public static int clampDebit(int stored, int requested) {
+        return Math.max(0, Math.min(stored, requested));
+    }
+
+    /**
+     * Sum of {@link MeridianRegistry#STORED_XP} across every {@link XpTomeItem} stack in the
+     * player's inventory. This is the pool the enchanting table may draw on to cover a level
+     * deficit.
+     */
+    public static int inventoryBalance(Player player) {
+        Inventory inventory = player.getInventory();
+        int total = 0;
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
+            if (stack.getItem() instanceof XpTomeItem) {
+                total += stack.getOrDefault(MeridianRegistry.STORED_XP, 0);
+            }
+        }
+        return total;
+    }
+
+    /**
+     * Drains {@code levels} of stored XP from the player's tomes in inventory order, skipping empty
+     * stacks. Callers are responsible for ensuring {@link #inventoryBalance} covers the request;
+     * any shortfall (should not happen after a gate check) simply leaves the request partially
+     * satisfied.
+     */
+    public static void debitInventory(Player player, int levels) {
+        if (levels <= 0) {
+            return;
+        }
+        Inventory inventory = player.getInventory();
+        int remaining = levels;
+        for (int i = 0; i < inventory.getContainerSize() && remaining > 0; i++) {
+            ItemStack stack = inventory.getItem(i);
+            if (!(stack.getItem() instanceof XpTomeItem)) {
+                continue;
+            }
+            int stored = stack.getOrDefault(MeridianRegistry.STORED_XP, 0);
+            int take = clampDebit(stored, remaining);
+            if (take > 0) {
+                stack.set(MeridianRegistry.STORED_XP, stored - take);
+                remaining -= take;
+            }
+        }
     }
 
     @Override

@@ -13,6 +13,7 @@ import com.rfizzle.meridian.net.CluesPayload;
 import com.rfizzle.meridian.net.CraftingResultEntry;
 import com.rfizzle.meridian.net.EnchantmentClue;
 import com.rfizzle.meridian.net.StatsPayload;
+import com.rfizzle.meridian.tome.XpTomeItem;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -71,6 +72,12 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
 
     /** Last-gathered stats — retained for the client HUD and click-time replay. */
     private StatCollection lastStats = StatCollection.EMPTY;
+    /**
+     * Client-side mirror of the player's combined XP-tome balance, synced via {@link StatsPayload}.
+     * Lets the screen preview the level/tome cost split before the click. Server-side this is
+     * recomputed live from inventory at each gate, so this cached copy is client-render only.
+     */
+    private int tomeBalance = 0;
     /** Slot picks from the most recent {@link #slotsChanged} — consumed on click. */
     private List<List<EnchantmentInstance>> slotPicks = List.of(List.of(), List.of(), List.of());
     /**
@@ -197,6 +204,12 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
                 new java.util.HashSet<>(payload.blacklist()),
                 payload.treasure());
         this.lastCraftingResult = payload.craftingResult();
+        this.tomeBalance = payload.tomeBalance();
+    }
+
+    /** Client-visible XP-tome balance for cost-split preview; see {@link #tomeBalance}. */
+    public int getTomeBalance() {
+        return tomeBalance;
     }
 
     public void applyClientClues(int slot, List<EnchantmentClue> clues, boolean exhausted) {
@@ -342,7 +355,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         StatsPayload payload = new StatsPayload(
                 stats.eterna(), stats.quanta(), stats.arcana(), stats.rectification(),
                 stats.clues(), stats.maxEterna(), blacklist, stats.treasureAllowed(),
-                projectCraftingResult(currentRecipe));
+                projectCraftingResult(currentRecipe), XpTomeItem.inventoryBalance(sp));
         ServerPlayNetworking.send(sp, payload);
     }
 
@@ -365,9 +378,12 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         int cost = (id >= 0 && id < costs.length) ? costs[id] : 0;
         boolean hasInf = player.hasInfiniteMaterials();
 
+        // Effective spending power is the level bar plus any XP banked in tomes; the deficit is
+        // pulled from tomes in applyEnchantment. See #162.
+        int effectiveLevels = player.experienceLevel + XpTomeItem.inventoryBalance(player);
         MeridianEnchantmentLogic.ClickAttempt attempt = MeridianEnchantmentLogic.validateClick(
                 id, cost, input.isEmpty(), lapis.isEmpty() ? 0 : lapis.getCount(),
-                player.experienceLevel, hasInf);
+                effectiveLevels, hasInf);
         if (!attempt.success()) {
             return false;
         }
@@ -392,7 +408,16 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         ItemStack result = outcome.resultStack();
         enchantSlots.setItem(INPUT_SLOT, result);
 
-        player.onEnchantmentPerformed(result, outcome.xpLevelsConsumed());
+        // Split the charge between bar and tome (#162). Charging the bar only what it can cover
+        // avoids driving experienceLevel negative, which would make vanilla's clamp also wipe the
+        // player's sub-level progress and totalExperience — an XP leak. The tome covers the rest.
+        int consumed = outcome.xpLevelsConsumed();
+        int fromBar = player.hasInfiniteMaterials() ? consumed : Math.min(consumed, player.experienceLevel);
+        int tomeDeficit = player.hasInfiniteMaterials() ? 0 : consumed - fromBar;
+        player.onEnchantmentPerformed(result, fromBar);
+        if (tomeDeficit > 0) {
+            XpTomeItem.debitInventory(player, tomeDeficit);
+        }
         lapis.consume(outcome.lapisConsumed(), player);
         if (lapis.isEmpty()) {
             enchantSlots.setItem(LAPIS_SLOT, ItemStack.EMPTY);
@@ -426,7 +451,9 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
 
         if (input.isEmpty()) return false;
         if (!hasInf && (lapis.isEmpty() || lapis.getCount() < lapisRequired)) return false;
-        if (!hasInf && player.experienceLevel < xpCost) return false;
+        // Bar plus tome balance must cover the cost; the deficit is drawn from tomes in
+        // applyCraftingRecipe (#162).
+        if (!hasInf && player.experienceLevel + XpTomeItem.inventoryBalance(player) < xpCost) return false;
 
         RecipeHolder<? extends Recipe<SingleRecipeInput>> holder = currentRecipe.get();
         access.execute((level, pos) -> applyCraftingRecipe(level, pos, player, holder, xpCost));
@@ -483,7 +510,13 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
 
         player.onEnchantmentPerformed(result, 0);
         if (!player.hasInfiniteMaterials() && xpCost > 0) {
-            player.giveExperienceLevels(-xpCost);
+            // Spend the bar down to zero, then draw the remaining deficit from tomes (#162).
+            int fromBar = Math.min(xpCost, player.experienceLevel);
+            player.giveExperienceLevels(-fromBar);
+            int deficit = xpCost - fromBar;
+            if (deficit > 0) {
+                XpTomeItem.debitInventory(player, deficit);
+            }
         }
 
         player.awardStat(Stats.ENCHANT_ITEM);
