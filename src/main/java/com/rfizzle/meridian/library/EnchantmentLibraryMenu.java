@@ -8,6 +8,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -21,6 +22,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Server-and-client menu for the Enchantment Library blocks. Ports Zenith's
@@ -201,7 +204,11 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         if (clientSide || tile == null) return;
         ItemStack stack = ioInv.getItem(DEPOSIT_SLOT);
         if (stack.isEmpty()) return;
-        tile.depositBook(stack);
+        boolean absorbed = tile.depositBookSilent(stack);
+        if (absorbed) {
+            tile.setChanged();
+            tile.playDepositFeedback();
+        }
         ioInv.setItem(DEPOSIT_SLOT, ItemStack.EMPTY);
     }
 
@@ -220,7 +227,7 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         Enchantment ench = registry.byId(index);
         if (ench == null) return false;
         Holder<Enchantment> holder = registry.wrapAsHolder(ench);
-        return attemptExtract(holder, shift);
+        return attemptExtract(holder, shift, player);
     }
 
     /**
@@ -237,6 +244,17 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
      * — matches Zenith's "upgrade in place" UX.
      */
     boolean attemptExtract(Holder<Enchantment> holder, boolean shift) {
+        return attemptExtract(holder, shift, null);
+    }
+
+    /**
+     * Player-aware extraction path. Identical logic to the pure {@link #attemptExtract(Holder,
+     * boolean)} overload, but when a non-{@code null} {@code player} is supplied a rejected click
+     * sends a one-line actionbar message explaining why (level not yet unlocked vs. not enough
+     * points), mirroring the {@code XpTomeItem} feedback pattern. The two-arg overload — used by
+     * unit tests — passes {@code null} and stays silent.
+     */
+    boolean attemptExtract(Holder<Enchantment> holder, boolean shift, @Nullable Player player) {
         if (tile == null) return false;
         if (!EnchantmentInfoRegistry.getInfo(holder).enabled()) return false;
         ResourceKey<Enchantment> key = holder.unwrapKey().orElse(null);
@@ -257,7 +275,16 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
             target = curLvl + 1;
         }
 
-        if (!tile.canExtract(key, target, curLvl)) return false;
+        if (!tile.canExtract(key, target, curLvl)) {
+            if (player != null) {
+                boolean levelGated = target > tile.getMaxLevel()
+                        || tile.getMaxLevels().getInt(key) < target;
+                player.displayClientMessage(Component.translatable(levelGated
+                        ? "message.meridian.enchlib.level_locked"
+                        : "message.meridian.enchlib.not_enough_points"), true);
+            }
+            return false;
+        }
 
         ItemStack mutated = outSlot.isEmpty() ? new ItemStack(Items.ENCHANTED_BOOK) : outSlot;
         ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(

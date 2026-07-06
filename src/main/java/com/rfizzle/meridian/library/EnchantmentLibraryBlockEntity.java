@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -17,6 +18,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -353,6 +357,41 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     /** Test-only view of the listener set so the unit test can assert add/remove without leaks. */
     Set<EnchantmentLibraryMenu> activeContainersForTest() {
         return this.activeContainers;
+    }
+
+    /**
+     * Positional audio-visual confirmation that a book actually entered the pool. Centralized here
+     * so both deposit routes fire it: the menu's slot-0 hand deposit
+     * ({@link EnchantmentLibraryMenu#absorbDepositSlot}) and the hopper adapter's committed insert
+     * ({@link LibraryStorageAdapter#onFinalCommit}). No player is in scope on the hopper path, so the
+     * feedback is block-local — a positional sound plus a small enchant-particle puff — rather than
+     * an actionbar message. Guarded to a live server level; client-side and level-less unit-test
+     * instances skip silently.
+     */
+    public void playDepositFeedback() {
+        if (this.level == null || this.level.isClientSide()) return;
+        this.level.playSound(null, this.worldPosition,
+                SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.7F, 1.0F);
+        if (this.level instanceof ServerLevel server) {
+            server.sendParticles(ParticleTypes.ENCHANT,
+                    this.worldPosition.getX() + 0.5D,
+                    this.worldPosition.getY() + 0.8D,
+                    this.worldPosition.getZ() + 0.5D,
+                    8, 0.3D, 0.3D, 0.3D, 0.05D);
+        }
+    }
+
+    /**
+     * Stateless affordability predicate mirroring {@link #canExtract}'s gate, reduced to the
+     * primitives the client screen already knows: the extraction {@code target} level, the
+     * per-enchant {@code maxLvl} cap, the point {@code cost} of the upgrade, and the {@code points}
+     * currently pooled. Lets the screen gate its success chime without duplicating the rule (and
+     * keeps that rule Tier-1 unit-testable off the client source set). A positive {@code cost}
+     * implies {@code target} sits above the current level; {@code target <= maxLvl} folds in both
+     * the per-enchant and tier caps because the caller passes the already-clamped per-enchant max.
+     */
+    public static boolean affordable(int target, int maxLvl, int cost, int points) {
+        return cost > 0 && target <= maxLvl && cost <= points;
     }
 
     /** {@code 2^(level - 1)}; non-positive levels map to zero. */

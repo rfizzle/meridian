@@ -24,6 +24,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
@@ -132,21 +133,9 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
                     .withStyle(ChatFormatting.DARK_GRAY));
             lines.add(Component.literal(""));
 
-            ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);
-            int current = getCurrentLevel(outSlot, slot.key());
-            boolean shift = Screen.hasShiftDown();
-            int targetLevel;
-            if (shift) {
-                targetLevel = Math.min(slot.maxLvl(),
-                        1 + (int) (Math.log(slot.points() + EnchantmentLibraryBlockEntity.points(current))
-                                / Math.log(2)));
-            } else {
-                targetLevel = current + 1;
-            }
-            if (targetLevel == current) targetLevel++;
-
-            int cost = EnchantmentLibraryBlockEntity.points(targetLevel)
-                    - EnchantmentLibraryBlockEntity.points(current);
+            ExtractPreview preview = previewExtract(slot);
+            int targetLevel = preview.target();
+            int cost = preview.cost();
 
             if (targetLevel > slot.maxLvl()) {
                 lines.add(Component.translatable("tooltip.meridian.enchlib.unavailable")
@@ -226,8 +215,13 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
                 this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, id);
             }
             if (this.minecraft != null) {
-                this.minecraft.getSoundManager().play(
-                        SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
+                ExtractPreview preview = previewExtract(slot);
+                boolean afford = EnchantmentLibraryBlockEntity.affordable(
+                        preview.target(), slot.maxLvl(), preview.cost(), slot.points());
+                SoundEvent sound = afford
+                        ? SoundEvents.UI_STONECUTTER_SELECT_RECIPE
+                        : SoundEvents.VILLAGER_NO;
+                this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1.0F));
             }
             return true;
         }
@@ -353,6 +347,33 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
         ItemEnchantments stored = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         return stored.getLevel(holder);
     }
+
+    /**
+     * Recomputes the would-be extraction target level and its point cost for {@code slot} exactly
+     * as {@link EnchantmentLibraryMenu#attemptExtract} does server-side (non-shift = {@code cur + 1};
+     * shift = the highest level the pool affords, clamped to the per-enchant max). Shared by the
+     * tooltip renderer and the click handler so the displayed cost and the gated chime never drift.
+     */
+    private ExtractPreview previewExtract(LibrarySlot slot) {
+        ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);
+        int current = getCurrentLevel(outSlot, slot.key());
+        int targetLevel;
+        if (Screen.hasShiftDown()) {
+            // Reuse the server's exact integer floor-log2 (EnchantmentLibraryMenu.attemptExtract)
+            // rather than a Math.log approximation, so the gated chime never disagrees with the
+            // server at power-of-two budgets.
+            targetLevel = Math.min(slot.maxLvl(),
+                    EnchantmentLibraryBlockEntity.maxLevelAffordable(slot.points(), current));
+        } else {
+            targetLevel = current + 1;
+        }
+        if (targetLevel == current) targetLevel++;
+        int cost = EnchantmentLibraryBlockEntity.points(targetLevel)
+                - EnchantmentLibraryBlockEntity.points(current);
+        return new ExtractPreview(targetLevel, cost);
+    }
+
+    private record ExtractPreview(int target, int cost) {}
 
     private int getPointCap() {
         EnchantmentLibraryBlockEntity tile = this.menu.getTile();
