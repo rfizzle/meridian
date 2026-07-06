@@ -244,8 +244,10 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
                         lines.add(Component.translatable(cost == 1
                                 ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
                                 .withStyle(lapisColor));
-                        lines.add(Component.translatable(cost == 1
-                                ? "container.enchant.level.one" : "container.enchant.level.many", cost)
+                        // The craft path consumes the full `level` cost (costs[CRAFTING_SLOT]), unlike
+                        // the enchant path's slot+1; show that here so it agrees with the tome split.
+                        lines.add(Component.translatable(level == 1
+                                ? "container.enchant.level.one" : "container.enchant.level.many", level)
                                 .withStyle(ChatFormatting.GRAY));
                         int drawn = Math.max(0, level - bar);
                         if (drawn > 0) {
