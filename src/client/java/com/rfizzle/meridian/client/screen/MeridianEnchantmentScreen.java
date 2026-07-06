@@ -119,6 +119,20 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             int j1 = xCenter + 60;
             int k1 = j1 + 20;
             int level = this.menu.costs[slot];
+            if (slot == MeridianEnchantmentLogic.CRAFTING_SLOT) {
+                int rowTop = yCenter + 14 + 19 * slot;
+                boolean hovered = mouseX - j1 >= 0 && mouseY - rowTop >= 0
+                        && mouseX - j1 < 108 && mouseY - rowTop < 19;
+                Optional<CraftingResultEntry> craft = craftingResult();
+                if (craft.isPresent()) {
+                    renderCraftReadyRow(gfx, craft.get().result(), j1, k1, rowTop, level, hovered);
+                    continue;
+                }
+                if (isInfusionFailedForInput()) {
+                    renderInfusionBlockedRow(gfx, j1, k1, rowTop);
+                    continue;
+                }
+            }
             if (level == 0) {
                 gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 218, 108, 19);
             } else {
@@ -177,6 +191,57 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             int textColor = hovered ? 0xFFFFFF : 0xCCDDEE;
             gfx.drawString(this.font, "i", btnX + 8, btnY + 2, textColor, false);
         }
+    }
+
+    /**
+     * Craft-ready infusion row: a matching recipe with sufficient stats. Renders the standard enchant
+     * row sprite tinted gold (bright gold hover variant), the result item's name in place of the
+     * galactic text, a ghosted result icon in the glyph slot, and the xp cost on the right — all at
+     * rest, no hover required (#155).
+     */
+    private void renderCraftReadyRow(GuiGraphics gfx, ItemStack result, int j1, int k1, int rowTop,
+                                     int level, boolean hovered) {
+        if (hovered) {
+            // The hover row sprite (v=237) is already authored in the gold palette; use it untinted.
+            gfx.blit(TEXTURE, j1, rowTop, 148, 237, 108, 19);
+        } else {
+            // Modulate the enabled parchment row (v=199) toward gold for the resting accent.
+            gfx.setColor(1.0F, 0.84F, 0.25F, 1.0F);
+            gfx.blit(TEXTURE, j1, rowTop, 148, 199, 108, 19);
+            gfx.setColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
+
+        int iconX = j1 + 1;
+        int iconY = rowTop + 1;
+        gfx.renderItem(result, iconX, iconY);
+        // Semi-transparent gold overlay knocks the icon back to a ghosted, "preview" read. renderItem
+        // draws at an elevated z, so lift the fill above it or it composites underneath and is unseen.
+        gfx.pose().pushPose();
+        gfx.pose().translate(0, 0, 200);
+        gfx.fill(iconX, iconY, iconX + 16, iconY + 16, 0x50FFD700);
+        gfx.pose().popPose();
+
+        // The result name is arbitrary length; fit it to one line like the galactic rows do, reserving
+        // room for the cost so a long name never wraps over it or spills past the 19px row.
+        String costStr = level > 0 ? "" + level : "";
+        int width = 86 - (costStr.isEmpty() ? 0 : this.font.width(costStr) + 4);
+        String name = this.font.plainSubstrByWidth(result.getHoverName().getString(), width);
+        gfx.drawString(this.font, name, k1, rowTop + 6, 0xEED8A0, false);
+        if (!costStr.isEmpty()) {
+            gfx.drawString(this.font, costStr, k1 + 86 - this.font.width(costStr), rowTop + 6, 0x80FF20, false);
+        }
+    }
+
+    /**
+     * Requirements-not-met infusion row: the input matches a recipe but table stats are too low, so
+     * the result is unknown client-side. Reuses the subdued disabled-row sprite (v=218) and shows a
+     * muted "stats too low" label so the player knows a craft exists and needs more shelf power (#155).
+     */
+    private void renderInfusionBlockedRow(GuiGraphics gfx, int j1, int k1, int rowTop) {
+        gfx.blit(TEXTURE, j1, rowTop, 148, 218, 108, 19);
+        String label = this.font.plainSubstrByWidth(
+                I18n.get("gui.meridian.enchant.infusion_blocked"), 86);
+        gfx.drawString(this.font, label, k1, rowTop + 6, 0x888888, false);
     }
 
     @Override
