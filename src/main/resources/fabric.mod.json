@@ -65,6 +65,7 @@
             "com.rfizzle.meridian.gametest.EverfullFlaskGameTest",
             "com.rfizzle.meridian.event.ArmorTickHandlerGameTest",
             "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
+            "com.rfizzle.meridian.event.ToolEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.AurifyHandlerGameTest",
             "com.rfizzle.meridian.event.MountedEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.TetherHandlerGameTest"

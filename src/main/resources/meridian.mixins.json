@@ -17,6 +17,7 @@
         "EnchantmentTableBlockMixin",
         "EnchantRandomlyFunctionMixin",
         "EverbloomMixin",
+        "FishingHookMixin",
         "HushMixin",
         "InexorableEntityMixin",
         "InexorableMixin",

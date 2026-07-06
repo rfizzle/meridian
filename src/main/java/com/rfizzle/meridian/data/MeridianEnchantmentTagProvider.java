@@ -46,6 +46,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/size"));
     private static final TagKey<Enchantment> MINING_EXCLUSIVE = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/mining"));
+    private static final TagKey<Enchantment> AXE_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/axe"));
     private static final TagKey<Enchantment> GLASS_CANNON_EXCLUSIVE = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("exclusive_set/glass_cannon"));
     private static final TagKey<Enchantment> MENDING_EXCLUSIVE = TagKey.create(
@@ -254,6 +256,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("gale_shot"))
                 .addOptional(Meridian.id("gallop"))
                 .addOptional(Meridian.id("glacial_lance"))
+                .addOptional(Meridian.id("grapnel"))
                 .addOptional(Meridian.id("gravitas"))
                 .addOptional(Meridian.id("grind"))
                 .addOptional(Meridian.id("harpoon"))
@@ -302,6 +305,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("tempest"))
                 .addOptional(Meridian.id("tempo"))
                 .addOptional(Meridian.id("terrasculpt"))
+                .addOptional(Meridian.id("thermal"))
+                .addOptional(Meridian.id("timberfell"))
                 .addOptional(Meridian.id("trample"))
                 .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("true_flight"))
@@ -393,6 +398,12 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("excavate"))
                 .addOptional(Meridian.id("grind"))
                 .addOptional(Meridian.id("prospect"));
+
+        // Axe-only mass-harvest set. Timberfell is the sole member today; the dedicated set
+        // (rather than reusing the pickaxe-oriented mining set) keeps room for future axe
+        // enchants that should conflict with whole-tree felling.
+        getOrCreateTagBuilder(AXE_EXCLUSIVE)
+                .addOptional(Meridian.id("timberfell"));
 
         getOrCreateTagBuilder(GLASS_CANNON_EXCLUSIVE)
                 .addOptional(Meridian.id("bloodrage"))

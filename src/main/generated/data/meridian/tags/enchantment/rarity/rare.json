@@ -41,6 +41,10 @@
       "required": false
     },
     {
+      "id": "meridian:grapnel",
+      "required": false
+    },
+    {
       "id": "meridian:grind",
       "required": false
     },
@@ -150,6 +154,14 @@
     },
     {
       "id": "meridian:terrasculpt",
+      "required": false
+    },
+    {
+      "id": "meridian:thermal",
+      "required": false
+    },
+    {
+      "id": "meridian:timberfell",
       "required": false
     },
     {

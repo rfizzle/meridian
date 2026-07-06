@@ -38,7 +38,7 @@ class EnchantmentJsonValidationTest {
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
-            "gale_shot", "gallop", "glacial_lance", "gravitas", "grind",
+            "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
             "joust", "keen_edge", "loft", "longshot", "luminance",
             "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
@@ -49,7 +49,7 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
             "slipstream", "snare", "soul_tax", "spellguard", "steadfast",
             "stormcall", "sunder", "tempest", "tempo", "terrasculpt",
-            "tether", "trample", "trophy", "true_flight", "updraft",
+            "tether", "thermal", "timberfell", "trample", "trophy", "true_flight", "updraft",
             "vault", "vital_mend", "vitality", "voidbane");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
@@ -78,6 +78,8 @@ class EnchantmentJsonValidationTest {
                     List.of("diminish", "colossus")),
             Map.entry("meridian/tags/enchantment/exclusive_set/mining.json",
                     List.of("excavate", "grind", "prospect")),
+            Map.entry("meridian/tags/enchantment/exclusive_set/axe.json",
+                    List.of("timberfell")),
             Map.entry("meridian/tags/enchantment/exclusive_set/glass_cannon.json",
                     List.of("bloodrage", "reckless", "reprieve")),
             Map.entry("meridian/tags/enchantment/exclusive_set/mobility.json",
@@ -118,6 +120,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("excavate", "#meridian:exclusive_set/mining"),
             Map.entry("grind", "#meridian:exclusive_set/mining"),
             Map.entry("prospect", "#meridian:exclusive_set/mining"),
+            Map.entry("timberfell", "#meridian:exclusive_set/axe"),
             Map.entry("bloodrage", "#meridian:exclusive_set/glass_cannon"),
             Map.entry("reckless", "#meridian:exclusive_set/glass_cannon"),
             Map.entry("reprieve", "#meridian:exclusive_set/glass_cannon"),
@@ -172,11 +175,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is98() throws Exception {
+    void enchantmentCount_is101() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(98, count, "expected exactly 98 enchantment JSON files");
+        assertEquals(101, count, "expected exactly 101 enchantment JSON files");
     }
 
     @TestFactory

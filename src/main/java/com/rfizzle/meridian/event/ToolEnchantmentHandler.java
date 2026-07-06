@@ -28,6 +28,7 @@ public final class ToolEnchantmentHandler {
 
     private static final Set<UUID> EXCAVATING_PLAYERS = Collections.synchronizedSet(new HashSet<>());
     private static final int PROSPECT_MAX_VEIN = 48;
+    private static final int TIMBERFELL_MAX_LOGS = 192;
 
     private ToolEnchantmentHandler() {}
 
@@ -48,6 +49,7 @@ public final class ToolEnchantmentHandler {
         try {
             handleExcavate(serverPlayer, (ServerLevel) world, pos, state, tool);
             handleProspect(serverPlayer, (ServerLevel) world, pos, state, tool);
+            handleTimberfell(serverPlayer, (ServerLevel) world, pos, state, tool);
             handleBounty(serverPlayer, (ServerLevel) world, pos, state, tool);
         } finally {
             EXCAVATING_PLAYERS.remove(player.getUUID());
@@ -88,6 +90,22 @@ public final class ToolEnchantmentHandler {
         List<BlockPos> vein = findVein(world, pos, oreBlock);
 
         for (BlockPos target : vein) {
+            player.gameMode.destroyBlock(target);
+        }
+    }
+
+    private static void handleTimberfell(ServerPlayer player, ServerLevel world, BlockPos pos,
+                                          BlockState state, ItemStack tool) {
+        int level = EnchantmentEffects.getEnchantmentLevel(tool, EnchantmentEffects.TIMBERFELL);
+        if (level <= 0) return;
+
+        if (!state.is(BlockTags.LOGS)) return;
+
+        List<BlockPos> logs = findConnectedLogs(world, pos);
+        for (BlockPos target : logs) {
+            // Stop before the axe would break: each felled log costs durability, and
+            // Timberfell must never be the swing that snaps the tool.
+            if (tool.isDamageableItem() && tool.getDamageValue() >= tool.getMaxDamage() - 1) break;
             player.gameMode.destroyBlock(target);
         }
     }
@@ -210,5 +228,41 @@ public final class ToolEnchantmentHandler {
             }
         }
         return vein;
+    }
+
+    /**
+     * Flood-fills the connected logs of a felled tree from {@code start} (the block just
+     * broken by vanilla, so it is excluded from the result). Uses 26-neighbour (3×3×3)
+     * connectivity rather than the 6-face connectivity Prospect uses, so offset branches
+     * and 2×2 giant-tree trunks are caught. Bounded by {@link #TIMBERFELL_MAX_LOGS}.
+     */
+    static List<BlockPos> findConnectedLogs(ServerLevel world, BlockPos start) {
+        List<BlockPos> logs = new ArrayList<>();
+        Queue<BlockPos> queue = new ArrayDeque<>();
+        Set<BlockPos> visited = new HashSet<>();
+
+        queue.add(start);
+        visited.add(start);
+
+        while (!queue.isEmpty() && logs.size() < TIMBERFELL_MAX_LOGS) {
+            BlockPos current = queue.poll();
+            if (!current.equals(start)) {
+                logs.add(current);
+            }
+
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        if (dx == 0 && dy == 0 && dz == 0) continue;
+                        BlockPos neighbor = current.offset(dx, dy, dz);
+                        if (!visited.add(neighbor)) continue;
+                        if (world.getBlockState(neighbor).is(BlockTags.LOGS)) {
+                            queue.add(neighbor);
+                        }
+                    }
+                }
+            }
+        }
+        return logs;
     }
 }

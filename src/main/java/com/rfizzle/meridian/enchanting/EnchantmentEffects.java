@@ -94,6 +94,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> DECOY = key("decoy");
     public static final ResourceKey<Enchantment> BASTION = key("bastion");
     public static final ResourceKey<Enchantment> EVERBLOOM = key("everbloom");
+    public static final ResourceKey<Enchantment> TIMBERFELL = key("timberfell");
+    public static final ResourceKey<Enchantment> GRAPNEL = key("grapnel");
+    public static final ResourceKey<Enchantment> THERMAL = key("thermal");
 
     private EnchantmentEffects() {}
 
