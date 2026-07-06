@@ -67,10 +67,11 @@
             ["<code class='text-accent2 whitespace-nowrap'>prismaticWebRemovesCurses</code>", "boolean", "true", "Enable Prismatic Web curse removal"],
             ["<code class='text-accent2 whitespace-nowrap'>prismaticWebLevelCost</code>", "int", "30", "XP levels consumed per curse removal"],
             ["<code class='text-accent2 whitespace-nowrap'>ironBlockRepairsAnvil</code>", "boolean", "true", "Enable Iron Block anvil repair"],
+            ["<code class='text-accent2 whitespace-nowrap'>temperedCoreEnabled</code>", "boolean", "true", "Enable applying a Tempered Core at the anvil to make gear unbreakable"],
             ["<code class='text-accent2 whitespace-nowrap'>temperedCoreLevelCost</code>", "int", "10", "XP levels consumed to apply a Tempered Core"]
           ]
         },
-        { "type": "code", "small": true, "code": "{\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10\n  }\n}" }
+        { "type": "code", "small": true, "code": "{\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreEnabled\": true,\n    \"temperedCoreLevelCost\": 10\n  }\n}" }
       ]
     },
     {
@@ -203,7 +204,7 @@
       "plainTitle": true,
       "intro": "The complete default <code class='text-accent2'>config/meridian.json</code> generated on first launch.",
       "blocks": [
-        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 2,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  },\n  \"tableCrafting\": {\n    \"allowDuplication\": true\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"everfeast\": {\n    \"enabled\": true,\n    \"bites\": 128\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"combat\": {\n    \"sunderAffectsPlayers\": false,\n    \"seekerTargetsPlayers\": false,\n    \"harpoonAffectsPlayers\": false\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
+        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 3,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"showLevelIndicator\": true,\n    \"globalMinEnchantability\": 1\n  },\n  \"tableCrafting\": {\n    \"allowDuplication\": true\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreEnabled\": true,\n    \"temperedCoreLevelCost\": 10\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"everfeast\": {\n    \"enabled\": true,\n    \"bites\": 128\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"combat\": {\n    \"sunderAffectsPlayers\": false,\n    \"seekerTargetsPlayers\": false,\n    \"harpoonAffectsPlayers\": false\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
       ]
     }
   ]

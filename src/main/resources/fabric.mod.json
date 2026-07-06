@@ -62,6 +62,7 @@
             "com.rfizzle.meridian.gametest.EnchantmentTagGameTest",
             "com.rfizzle.meridian.gametest.RarityTagGameTest",
             "com.rfizzle.meridian.gametest.TemperedCoreGameTest",
+            "com.rfizzle.meridian.gametest.DragonDropGameTest",
             "com.rfizzle.meridian.gametest.EverfullFlaskGameTest",
             "com.rfizzle.meridian.gametest.EverfeastRationGameTest",
             "com.rfizzle.meridian.gametest.RecipeModuleToggleGameTest",

@@ -160,7 +160,7 @@
             ["<span class='text-bone'>Echo Shard</span>", "4x Echo Shard", "≥35", "≥50", "≥50", "—"],
             ["<span class='text-bone'>Nautilus Shell</span>", "Heart of the Sea", "≥35", "≥30", "≥60", "Key for Heart-Forged Seashelf"],
             ["<span class='text-bone'>Dragon's Breath</span>", "3x Infused Breath", "≥40", "15–25", "≥60", "Key material for End-tier shelves"],
-            ["<span class='text-bone'>Dormant Core</span>", "Tempered Core", "≥45", "—", "≥50", "Loot-only input; core makes one item unbreakable at the anvil"],
+            ["<span class='text-bone'>Dormant Core</span>", "Tempered Core", "≥45", "—", "≥50", "Dropped by the Ender Dragon; core makes one item unbreakable at the anvil"],
             ["<span class='text-bone'>Golden Apple</span>", "Enchanted Golden Apple", "≥45", "≥40", "≥75", "—"],
             ["<span class='text-bone'>Emerald Block</span>", "Totem of Undying", "≥50", "≥45", "≥85", "Requires max Eterna"],
             ["<span class='text-bone'>Enchantment Library</span>", "Library of Alexandria", "=50", "45–50", "=100", "Preserves stored data. Hardest recipe"]

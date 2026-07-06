@@ -50,6 +50,9 @@ public final class TemperedCoreHandler implements AnvilHandler {
         if (config == null) {
             return Optional.empty();
         }
+        if (!config.anvil.temperedCoreEnabled) {
+            return Optional.empty();
+        }
         if (left == null || right == null || left.isEmpty() || right.isEmpty()) {
             return Optional.empty();
         }

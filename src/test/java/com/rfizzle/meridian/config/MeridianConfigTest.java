@@ -253,9 +253,10 @@ class MeridianConfigTest {
     }
 
     @Test
-    void load_v1File_migratesToV2AndPopulatesModuleToggles(@TempDir Path tmp) throws IOException {
-        // v1 → v2 (#163) is purely additive: existing settings survive, the new recipe-module
-        // toggles come up at their enabled defaults, and the re-save writes them into the file.
+    void load_v1File_migratesToCurrentAndPopulatesNewToggles(@TempDir Path tmp) throws IOException {
+        // v1 → current is purely additive: existing settings survive, the recipe-module toggles
+        // (#163) and the tempered-core toggle (#158) come up at their enabled defaults, and the
+        // re-save writes them into the file so operators can discover them.
         Path path = tmp.resolve("meridian.json");
         Files.writeString(path, "{\"configVersion\":1,\"enchantingTable\":{\"maxEterna\":42},"
                 + "\"everfeast\":{\"bites\":64}}");
@@ -267,10 +268,41 @@ class MeridianConfigTest {
         assertEquals(64, loaded.everfeast.bites, "existing everfeast tuning must survive the migration");
         assertEquals(true, loaded.tableCrafting.allowDuplication);
         assertEquals(true, loaded.everfeast.enabled);
+        assertEquals(true, loaded.anvil.temperedCoreEnabled);
         String rewritten = Files.readString(path);
         assertTrue(rewritten.contains("\"allowDuplication\": true"),
                 "the re-saved file must surface the new toggle for operators to discover");
-        assertTrue(rewritten.contains("\"configVersion\": 2"));
+        assertTrue(rewritten.contains("\"configVersion\": " + ConfigMigrator.CURRENT_VERSION));
+    }
+
+    @Test
+    void migrate_v2ToV3_writesTemperedCoreEnabledWhenAnvilLacksIt() {
+        // Gson reads a missing boolean as false, not the Java default true, so the v2→v3 migration
+        // must write the key explicitly onto an existing anvil object that predates it.
+        JsonObject anvil = new JsonObject();
+        anvil.addProperty("temperedCoreLevelCost", 10);
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 2);
+        json.add("anvil", anvil);
+
+        assertTrue(ConfigMigrator.migrate(json));
+        assertEquals(true, json.getAsJsonObject("anvil").get("temperedCoreEnabled").getAsBoolean(),
+                "a v2 anvil section must gain temperedCoreEnabled=true");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
+    }
+
+    @Test
+    void migrate_v2ToV3_preservesExplicitTemperedCoreDisable() {
+        // An operator who deliberately turned the handler off must keep that choice through migration.
+        JsonObject anvil = new JsonObject();
+        anvil.addProperty("temperedCoreEnabled", false);
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 2);
+        json.add("anvil", anvil);
+
+        assertTrue(ConfigMigrator.migrate(json));
+        assertEquals(false, json.getAsJsonObject("anvil").get("temperedCoreEnabled").getAsBoolean(),
+                "an explicit false must not be overwritten");
     }
 
     @Test
