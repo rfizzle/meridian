@@ -21,6 +21,10 @@
       "required": false
     },
     {
+      "id": "meridian:bastion",
+      "required": false
+    },
+    {
       "id": "meridian:beckon",
       "required": false
     },
@@ -61,7 +65,15 @@
       "required": false
     },
     {
+      "id": "meridian:decoy",
+      "required": false
+    },
+    {
       "id": "meridian:emberward",
+      "required": false
+    },
+    {
+      "id": "meridian:everbloom",
       "required": false
     },
     {
@@ -106,6 +118,10 @@
     },
     {
       "id": "meridian:harpoon",
+      "required": false
+    },
+    {
+      "id": "meridian:hush",
       "required": false
     },
     {

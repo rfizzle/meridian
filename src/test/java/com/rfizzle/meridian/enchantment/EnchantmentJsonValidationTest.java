@@ -33,13 +33,13 @@ class EnchantmentJsonValidationTest {
 
     private static final List<String> ALL_ENCHANTMENT_IDS = List.of(
             "abyss_ward", "adamant", "alacrity", "ambush", "animus",
-            "antidote", "aurify", "beckon", "blight", "blink",
+            "antidote", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
-            "decay", "detonation", "diminish", "emberward", "excavate",
+            "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "gravitas", "grind",
-            "harpoon", "impact_ward", "inexorable", "insight", "ironwing",
+            "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
             "joust", "keen_edge", "loft", "longshot", "luminance",
             "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
@@ -172,11 +172,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is94() throws Exception {
+    void enchantmentCount_is98() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(94, count, "expected exactly 94 enchantment JSON files");
+        assertEquals(98, count, "expected exactly 98 enchantment JSON files");
     }
 
     @TestFactory

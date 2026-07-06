@@ -16,6 +16,8 @@
         "EnchantmentMenuAccessor",
         "EnchantmentTableBlockMixin",
         "EnchantRandomlyFunctionMixin",
+        "EverbloomMixin",
+        "HushMixin",
         "InexorableEntityMixin",
         "InexorableMixin",
         "ItemMixin",

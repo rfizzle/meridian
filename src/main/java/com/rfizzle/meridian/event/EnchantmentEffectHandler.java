@@ -96,6 +96,18 @@ public final class EnchantmentEffectHandler {
     private static final Map<LivingEntity, Long> RIPOSTE_BLOCK_TICKS =
             Collections.synchronizedMap(new WeakHashMap<>());
 
+    /** Game time of each Decoy wearer's last deployment, gating its long re-arm cooldown. */
+    private static final Map<LivingEntity, Long> decoyCooldowns =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
+    /**
+     * Decoy wearers' health snapshotted before a hit lands, so {@code handleDecoy} can tell a
+     * downward half-health crossing from chip damage taken while already low. Populated in
+     * {@code ALLOW_DAMAGE} and consumed in {@code AFTER_DAMAGE}, mirroring the Ambush snapshot.
+     */
+    private static final Map<LivingEntity, Float> DECOY_PRE_HIT_HEALTH =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
     // Per-effect balance tuning. Grouped here so a balance pass touches one block instead of
     // hunting inline literals across the handlers. Naming: BASE_* is the level-0 term and
     // *_PER_LEVEL the per-enchantment-level increment unless noted.
@@ -196,6 +208,8 @@ public final class EnchantmentEffectHandler {
             AMBUSH_PRE_HIT_HEALTH.clear();
             CRESCENDO_STREAKS.clear();
             RIPOSTE_BLOCK_TICKS.clear();
+            decoyCooldowns.clear();
+            DECOY_PRE_HIT_HEALTH.clear();
         });
     }
 
@@ -216,6 +230,7 @@ public final class EnchantmentEffectHandler {
     private static boolean onAllowDamage(LivingEntity entity, DamageSource source, float amount) {
         if (entity.level().isClientSide()) return true;
         snapshotAmbushHealth(entity, source);
+        snapshotDecoyHealth(entity, source);
         if (!source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) return true;
 
         int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.ABYSS_WARD, EquipmentSlot.HEAD);
@@ -310,6 +325,23 @@ public final class EnchantmentEffectHandler {
         }
     }
 
+    /**
+     * Records a Decoy wearer's health before a hit lands. Skipped while the attacker is landing a
+     * mod-originated bonus hit — mirroring {@link #snapshotAmbushHealth} — so a nested bonus hit
+     * can't overwrite the outer hit's pre-health with a mid-combo value and mask a genuine
+     * half-health crossing. Overwrites otherwise, so the snapshot always reflects health
+     * immediately before the most recent real blow.
+     */
+    private static void snapshotDecoyHealth(LivingEntity entity, DamageSource source) {
+        if (source.getEntity() instanceof LivingEntity attacker
+                && BONUS_HIT_PROCESSING.contains(attacker.getUUID())) {
+            return;
+        }
+        if (EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.DECOY, EquipmentSlot.CHEST) > 0) {
+            DECOY_PRE_HIT_HEALTH.put(entity, entity.getHealth());
+        }
+    }
+
     private static void onAfterDamage(LivingEntity entity, DamageSource source,
                                        float baseDamageTaken, float damageTaken, boolean blocked) {
         if (entity.level().isClientSide()) return;
@@ -317,6 +349,7 @@ public final class EnchantmentEffectHandler {
         if (blocked) {
             handleRetribution(entity, source, baseDamageTaken);
             recordRiposteBlock(entity);
+            handleBastion(entity);
         }
 
         if (damageTaken <= 0 && !blocked) return;
@@ -339,6 +372,9 @@ public final class EnchantmentEffectHandler {
             handleCleave(entity, source);
             handlePummel(entity, source);
             handleMaceSlam(entity, source);
+            // Decoy consumes the pre-hit snapshot, so it must run on the outer real hit only —
+            // a nested bonus hit would otherwise consume it against a mid-combo health value.
+            handleDecoy(entity);
         }
         handleRepulse(entity, source);
         handleFrostguard(entity, source);
@@ -506,6 +542,52 @@ public final class EnchantmentEffectHandler {
 
         int duration = RALLY_BASE_REGEN_TICKS + RALLY_REGEN_TICKS_PER_LEVEL * level;
         entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, duration, 1, true, true, true));
+    }
+
+    /**
+     * Bastion: a successful shield block pulses Resistance to nearby allied players — a group
+     * defensive identity for multiplayer. The {@code blocked} flag already confirms a real block
+     * occurred, so the level is read straight off whichever hand holds the shield. The blocker is
+     * excluded; the block itself is their mitigation, the pulse is for teammates.
+     */
+    private static void handleBastion(LivingEntity entity) {
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.BASTION,
+                EquipmentSlot.MAINHAND, EquipmentSlot.OFFHAND);
+        if (level <= 0) return;
+        if (!(entity.level() instanceof ServerLevel serverLevel)) return;
+
+        int duration = DefenseEnchantMath.bastionResistanceTicks(level);
+        AABB area = entity.getBoundingBox().inflate(DefenseEnchantMath.BASTION_ALLY_RADIUS);
+        List<Player> allies = serverLevel.getEntitiesOfClass(Player.class, area,
+                ally -> ally.isAlive() && ally != entity);
+        for (Player ally : allies) {
+            ally.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, duration,
+                    DefenseEnchantMath.BASTION_RESIST_AMPLIFIER, true, true, true));
+        }
+    }
+
+    /**
+     * Decoy: the hit that first drops the chestplate wearer across the half-health line deploys a
+     * decoy to pull hostile aggro, then locks the enchant out for {@link
+     * DefenseEnchantMath#DECOY_COOLDOWN_TICKS}. The pre-hit snapshot separates a genuine downward
+     * crossing from chip damage taken while already below half — the latter must not re-deploy.
+     */
+    private static void handleDecoy(LivingEntity entity) {
+        Float preHealth = DECOY_PRE_HIT_HEALTH.remove(entity);
+
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.DECOY, EquipmentSlot.CHEST);
+        if (level <= 0 || preHealth == null) return;
+        if (!entity.isAlive()) return;
+        if (!(entity.level() instanceof ServerLevel serverLevel)) return;
+
+        if (!DefenseEnchantMath.decoyThresholdCrossed(preHealth, entity.getHealth(), entity.getMaxHealth())) return;
+
+        long currentTick = serverLevel.getGameTime();
+        Long lastActivation = decoyCooldowns.get(entity);
+        if (lastActivation != null && (currentTick - lastActivation) < DefenseEnchantMath.DECOY_COOLDOWN_TICKS) return;
+
+        decoyCooldowns.put(entity, currentTick);
+        DecoyManager.deploy(serverLevel, entity);
     }
 
     private static void handleBloodrage(LivingEntity entity) {

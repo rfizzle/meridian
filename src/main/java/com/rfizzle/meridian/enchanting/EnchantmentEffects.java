@@ -90,6 +90,10 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> CRESCENDO = key("crescendo");
     public static final ResourceKey<Enchantment> RIPOSTE = key("riposte");
     public static final ResourceKey<Enchantment> JOUST = key("joust");
+    public static final ResourceKey<Enchantment> HUSH = key("hush");
+    public static final ResourceKey<Enchantment> DECOY = key("decoy");
+    public static final ResourceKey<Enchantment> BASTION = key("bastion");
+    public static final ResourceKey<Enchantment> EVERBLOOM = key("everbloom");
 
     private EnchantmentEffects() {}
 
