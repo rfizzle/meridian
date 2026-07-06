@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.common;
 
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;
@@ -23,7 +24,24 @@ public final class TableCraftingDisplayExtractor {
     private TableCraftingDisplayExtractor() {
     }
 
-    public static List<TableCraftingDisplay> extract(RecipeManager recipes) {
+    /**
+     * Entries whose {@link com.rfizzle.meridian.enchanting.recipe.RecipeModule} is enabled in
+     * {@code config} (#163) — the list a viewer should show. Client callers pass the synced
+     * config ({@code ClientMeridianConfig.effective()}) so the server's toggles govern what the
+     * viewers list.
+     */
+    public static List<TableCraftingDisplay> extract(RecipeManager recipes, MeridianConfig config) {
+        List<TableCraftingDisplay> out = extractAll(recipes);
+        out.removeIf(display -> !display.module().isEnabled(config));
+        return out;
+    }
+
+    /**
+     * Every entry regardless of module toggles. Only for callers that apply the module gate
+     * themselves — the JEI plugin registers all entries once and hides/unhides by module at
+     * runtime, since JEI can't re-register on a live config change.
+     */
+    public static List<TableCraftingDisplay> extractAll(RecipeManager recipes) {
         List<TableCraftingDisplay> out = new ArrayList<>();
         for (RecipeHolder<EnchantingRecipe> holder : recipes.getAllRecipesFor(EnchantingRecipeRegistry.ENCHANTING_TYPE)) {
             out.add(toDisplay(holder, false));
@@ -44,6 +62,7 @@ public final class TableCraftingDisplayExtractor {
                 recipe.getMaxRequirements(),
                 recipe.getDisplayLevel(),
                 recipe.getEffectiveXpCost(),
-                keepNbt);
+                keepNbt,
+                recipe.getModule());
     }
 }

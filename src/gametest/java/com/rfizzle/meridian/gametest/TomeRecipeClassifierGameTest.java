@@ -5,6 +5,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.compat.common.TableCraftingDisplay;
 import com.rfizzle.meridian.compat.common.TomeRecipeClassifier;
+import com.rfizzle.meridian.enchanting.recipe.RecipeModule;
 import com.rfizzle.meridian.enchanting.recipe.StatRequirements;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -81,6 +82,7 @@ public class TomeRecipeClassifierGameTest implements FabricGameTest {
                 StatRequirements.NO_MAX,
                 OptionalInt.empty(),
                 0,
-                false);
+                false,
+                RecipeModule.CORE);
     }
 }

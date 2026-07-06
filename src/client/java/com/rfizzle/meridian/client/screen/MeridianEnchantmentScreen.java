@@ -542,6 +542,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
         ItemStack input = this.menu.getSlot(0).getItem();
         if (input.isEmpty()) return false;
         return craftingResult().isEmpty()
-                && EnchantingRecipeRegistry.hasItemMatch(this.minecraft.level.getRecipeManager(), input);
+                && EnchantingRecipeRegistry.hasItemMatch(this.minecraft.level.getRecipeManager(), input,
+                        ClientMeridianConfig.effective());
     }
 }

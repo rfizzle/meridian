@@ -3,6 +3,7 @@ package com.rfizzle.meridian.compat.emi;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
@@ -64,7 +65,10 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
         registry.addCategory(INFUSIONS);
         registry.addWorkstation(INFUSIONS, EmiStack.of(Items.ENCHANTING_TABLE));
 
-        for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(registry.getRecipeManager())) {
+        // Module-gated (#163): a config sync that flips a toggle triggers notifySync(), and the
+        // full EMI reload re-runs this registration with the new effective config.
+        for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(
+                registry.getRecipeManager(), ClientMeridianConfig.effective())) {
             registry.addRecipe(new EmiEnchantingRecipe(INFUSIONS, display));
         }
 

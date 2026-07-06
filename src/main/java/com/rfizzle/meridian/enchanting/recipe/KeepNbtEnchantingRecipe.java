@@ -33,8 +33,18 @@ public class KeepNbtEnchantingRecipe extends EnchantingRecipe {
                                    StatRequirements maxRequirements,
                                    ItemStack result,
                                    OptionalInt displayLevel,
+                                   int xpCost,
+                                   RecipeModule module) {
+        super(input, requirements, maxRequirements, result, displayLevel, xpCost, module);
+    }
+
+    public KeepNbtEnchantingRecipe(Ingredient input,
+                                   StatRequirements requirements,
+                                   StatRequirements maxRequirements,
+                                   ItemStack result,
+                                   OptionalInt displayLevel,
                                    int xpCost) {
-        super(input, requirements, maxRequirements, result, displayLevel, xpCost);
+        this(input, requirements, maxRequirements, result, displayLevel, xpCost, RecipeModule.CORE);
     }
 
     @Override

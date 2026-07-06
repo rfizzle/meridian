@@ -63,6 +63,8 @@
             "com.rfizzle.meridian.gametest.RarityTagGameTest",
             "com.rfizzle.meridian.gametest.TemperedCoreGameTest",
             "com.rfizzle.meridian.gametest.EverfullFlaskGameTest",
+            "com.rfizzle.meridian.gametest.EverfeastRationGameTest",
+            "com.rfizzle.meridian.gametest.RecipeModuleToggleGameTest",
             "com.rfizzle.meridian.event.ArmorTickHandlerGameTest",
             "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.ToolEnchantmentHandlerGameTest",

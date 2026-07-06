@@ -32,4 +32,19 @@ public final class ViewerRefreshTrigger {
             JeiEnchantingPlugin.notifySync();
         }
     }
+
+    /**
+     * Refreshes the viewers' infusion lists after a config sync flipped a recipe-module toggle
+     * (#163). EMI re-runs its whole registration (the reflective reload above), which re-extracts
+     * the infusion list under the new effective config; JEI applies its hide/unhide module filter
+     * in place. REI, as ever, refreshes on rejoin or F3+T.
+     */
+    public static void notifyConfigSync() {
+        if (FabricLoader.getInstance().isModLoaded("emi")) {
+            EmiEnchantingPlugin.notifySync();
+        }
+        if (FabricLoader.getInstance().isModLoaded("jei")) {
+            JeiEnchantingPlugin.applyInfusionModuleFilter();
+        }
+    }
 }

@@ -79,7 +79,7 @@ public class EverfeastRationGameTest implements FabricGameTest {
 
         for (var base : MeridianRegistry.EVERFEAST_RATIONS.keySet()) {
             ItemStack input = new ItemStack(base);
-            var match = EnchantingRecipeRegistry.findMatch(recipes, input, atGate);
+            var match = EnchantingRecipeRegistry.findMatch(recipes, input, atGate, Meridian.getConfig());
             if (match.isEmpty()) {
                 helper.fail("No everfeast recipe matched " + base + " at the eterna 27 / quanta 15 gate");
                 return;
@@ -89,8 +89,8 @@ public class EverfeastRationGameTest implements FabricGameTest {
                 helper.fail("Recipe for " + base + " must produce its everfeast ration, got " + result);
                 return;
             }
-            if (EnchantingRecipeRegistry.findMatch(recipes, input, belowEterna).isPresent()
-                    || EnchantingRecipeRegistry.findMatch(recipes, input, belowQuanta).isPresent()) {
+            if (EnchantingRecipeRegistry.findMatch(recipes, input, belowEterna, Meridian.getConfig()).isPresent()
+                    || EnchantingRecipeRegistry.findMatch(recipes, input, belowQuanta, Meridian.getConfig()).isPresent()) {
                 helper.fail("Everfeast recipe for " + base + " must not match below the stat gate");
                 return;
             }

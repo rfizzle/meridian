@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.compat.common;
 
+import com.rfizzle.meridian.enchanting.recipe.RecipeModule;
 import com.rfizzle.meridian.enchanting.recipe.StatRequirements;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -24,6 +25,7 @@ public record TableCraftingDisplay(
         StatRequirements maxRequirements,
         OptionalInt displayLevel,
         int xpCost,
-        boolean keepNbt
+        boolean keepNbt,
+        RecipeModule module
 ) {
 }

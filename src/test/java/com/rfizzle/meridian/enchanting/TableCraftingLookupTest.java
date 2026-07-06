@@ -2,6 +2,7 @@ package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.api.StatCollection;
+import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;
@@ -32,6 +33,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 // Tier: 2
 class TableCraftingLookupTest {
 
+    /** Fresh defaults: every recipe module enabled. */
+    private static final MeridianConfig DEFAULTS = new MeridianConfig();
+
     @BeforeAll
     static void bootstrap() {
         SharedConstants.tryDetectVersion();
@@ -51,7 +55,7 @@ class TableCraftingLookupTest {
 
         StatCollection shelves = stats(50F, 48F, 100F);
         Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> hit =
-                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.BOOK), shelves);
+                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.BOOK), shelves, DEFAULTS);
 
         assertTrue(hit.isPresent(),
                 "library input at Eterna 50 / Quanta 48 / Arcana 100 must resolve the ender upgrade");
@@ -74,7 +78,7 @@ class TableCraftingLookupTest {
 
         StatCollection underpowered = stats(30F, 10F, 40F);
         Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> hit =
-                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.BOOK), underpowered);
+                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.BOOK), underpowered, DEFAULTS);
 
         assertEquals(Optional.empty(), hit,
                 "stats below the recipe's minima must leave the menu's currentRecipe empty");
@@ -92,7 +96,7 @@ class TableCraftingLookupTest {
         RecipeManager rm = managerWith(holder("always", always));
 
         Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> hit =
-                MeridianEnchantmentMenu.lookupCraftingResult(rm, ItemStack.EMPTY, stats(50F, 50F, 100F));
+                MeridianEnchantmentMenu.lookupCraftingResult(rm, ItemStack.EMPTY, stats(50F, 50F, 100F), DEFAULTS);
 
         assertEquals(Optional.empty(), hit,
                 "empty input must short-circuit before the recipe manager scan — no point matching against nothing");
@@ -110,7 +114,7 @@ class TableCraftingLookupTest {
         RecipeManager rm = managerWith(holder("books_only", bookRecipe));
 
         Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> hit =
-                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.DIAMOND_SWORD), stats(50F, 50F, 100F));
+                MeridianEnchantmentMenu.lookupCraftingResult(rm, new ItemStack(Items.DIAMOND_SWORD), stats(50F, 50F, 100F), DEFAULTS);
 
         assertEquals(Optional.empty(), hit,
                 "input that fails the ingredient predicate must not match regardless of shelf totals");

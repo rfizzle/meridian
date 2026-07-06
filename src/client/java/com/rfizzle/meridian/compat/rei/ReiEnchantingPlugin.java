@@ -3,6 +3,7 @@ package com.rfizzle.meridian.compat.rei;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
+import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.compat.client.LazyShelfStatsContents;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserExtractor;
 import com.rfizzle.meridian.compat.common.EnchantmentBrowserRecord;
@@ -83,7 +84,11 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         if (client == null || client.level == null) {
             return;
         }
-        for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(client.level.getRecipeManager())) {
+        // Module-gated (#163). REI has no safe programmatic reload (see class javadoc), so a config
+        // toggle flipped mid-session shows here only after rejoin or a manual resource reload
+        // (F3+T) — same limitation as the enchantment browser below.
+        for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(
+                client.level.getRecipeManager(), ClientMeridianConfig.effective())) {
             registry.add(new ReiEnchantingDisplay(display, INFUSIONS_ID));
         }
 

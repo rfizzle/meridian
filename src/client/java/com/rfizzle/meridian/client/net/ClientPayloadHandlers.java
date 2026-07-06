@@ -72,7 +72,20 @@ public final class ClientPayloadHandlers {
                     // Decode off the client thread — GSON parsing is pure and has no client-state
                     // dependency — then publish the immutable result on the client thread.
                     MeridianConfig synced = MeridianConfig.fromJson(payload.configJson());
-                    context.client().execute(() -> ClientMeridianConfig.setServerConfig(synced));
+                    context.client().execute(() -> {
+                        // Refresh the recipe viewers only when the sync actually flips a
+                        // recipe-module toggle (#163): the EMI path is a full recipe reload, and
+                        // every join already gets one via the enchantment-info payload — an
+                        // unconditional second reload here would double that cost for nothing.
+                        MeridianConfig before = ClientMeridianConfig.effective();
+                        ClientMeridianConfig.setServerConfig(synced);
+                        boolean moduleGatesChanged =
+                                before.tableCrafting.allowDuplication != synced.tableCrafting.allowDuplication
+                                        || before.everfeast.enabled != synced.everfeast.enabled;
+                        if (moduleGatesChanged) {
+                            ViewerRefreshTrigger.notifyConfigSync();
+                        }
+                    });
                 });
     }
 }

@@ -55,6 +55,16 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setSaveConsumer(v -> current.enchantingTable.globalMinEnchantability = v)
                     .build());
 
+            // Table Crafting
+            ConfigCategory tableCraftingCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.meridian.category.table_crafting"));
+            tableCraftingCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.allow_duplication"),
+                            current.tableCrafting.allowDuplication)
+                    .setDefaultValue(true)
+                    .setSaveConsumer(v -> current.tableCrafting.allowDuplication = v)
+                    .build());
+
             // Shelves
             ConfigCategory shelvesCategory = builder.getOrCreateCategory(
                     Component.translatable("config.meridian.category.shelves"));
@@ -151,6 +161,12 @@ public class ModMenuIntegration implements ModMenuApi {
             // Everfeast
             ConfigCategory everfeastCategory = builder.getOrCreateCategory(
                     Component.translatable("config.meridian.category.everfeast"));
+            everfeastCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.everfeast_enabled"),
+                            current.everfeast.enabled)
+                    .setDefaultValue(true)
+                    .setSaveConsumer(v -> current.everfeast.enabled = v)
+                    .build());
             everfeastCategory.addEntry(entry.startIntField(
                             Component.translatable("config.meridian.everfeast_bites"),
                             current.everfeast.bites)

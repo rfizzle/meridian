@@ -156,11 +156,11 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
      * short-circuit to avoid scanning the recipe manager for a match that will always miss.
      */
     static Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> lookupCraftingResult(
-            RecipeManager recipes, ItemStack input, StatCollection stats) {
+            RecipeManager recipes, ItemStack input, StatCollection stats, MeridianConfig config) {
         if (input.isEmpty()) {
             return Optional.empty();
         }
-        return EnchantingRecipeRegistry.findMatch(recipes, input, stats);
+        return EnchantingRecipeRegistry.findMatch(recipes, input, stats, config);
     }
 
     /**
@@ -254,7 +254,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         StatCollection rawStats = EnchantingStatRegistry.gatherRawStats(level, pos);
         StatCollection stats = rawStats.applyBaselines(input.getItem().getEnchantmentValue());
         this.lastStats = stats;
-        this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats);
+        this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats, Meridian.getConfig());
 
         boolean canEnchant = input.getCount() == 1
                 && (input.getItem().isEnchantable(input) || input.is(Items.BOOK))
@@ -445,6 +445,16 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         Container enchantSlots = enchantSlots();
         ItemStack input = enchantSlots.getItem(INPUT_SLOT);
         if (input.isEmpty()) return;
+
+        // Re-check the module gate at click time (#163): currentRecipe is cached by recompute, so
+        // a live config reload landing between recompute and the click would otherwise craft a
+        // just-disabled recipe one last time. Recomputing on failure also clears the client's
+        // craft button via the fresh StatsPayload.
+        if (holder.value() instanceof EnchantingRecipe enchanting
+                && !enchanting.getModule().isEnabled(Meridian.getConfig())) {
+            recompute(level, pos, input);
+            return;
+        }
 
         ItemStack result = holder.value().assemble(new SingleRecipeInput(input), level.registryAccess());
         if (result.getItem() instanceof EverfeastRationItem) {
