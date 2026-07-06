@@ -128,6 +128,8 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
             lines.add(Component.translatable("tooltip.meridian.enchlib.points",
                     formatNumber(slot.points()), formatNumber(getPointCap()))
                     .withStyle(ChatFormatting.GRAY));
+            lines.add(Component.translatable("tooltip.meridian.enchlib.curve_rule")
+                    .withStyle(ChatFormatting.DARK_GRAY));
             lines.add(Component.literal(""));
 
             ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);

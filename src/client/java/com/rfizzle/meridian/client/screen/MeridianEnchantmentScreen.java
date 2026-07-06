@@ -307,6 +307,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             List<Component> list = Lists.newArrayList();
             list.add(eternaLabel().append(Component.translatable("gui.meridian.stat.eterna.desc1")));
             list.add(Component.translatable("gui.meridian.stat.eterna.desc2").withStyle(ChatFormatting.GRAY));
+            list.add(Component.translatable("gui.meridian.stat.eterna.formula").withStyle(ChatFormatting.GRAY));
             if (stats.eterna() > 0) {
                 float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : fallbackMaxEterna();
                 list.add(Component.literal(""));
@@ -320,6 +321,8 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             list.add(quantaLabel().append(Component.translatable("gui.meridian.stat.quanta.desc1")));
             list.add(Component.translatable("gui.meridian.stat.quanta.desc2").withStyle(ChatFormatting.GRAY));
             list.add(rectLabel().append(Component.translatable("gui.meridian.stat.quanta.desc3").withStyle(ChatFormatting.GRAY)));
+            list.add(Component.translatable("gui.meridian.stat.quanta.formula").withStyle(ChatFormatting.GRAY));
+            list.add(Component.translatable("gui.meridian.stat.quanta.formula2").withStyle(ChatFormatting.GRAY));
             if (stats.quanta() > 0) {
                 list.add(CommonComponents.EMPTY);
                 list.add(Component.translatable("gui.meridian.stat.quanta.value",
@@ -343,6 +346,7 @@ public class MeridianEnchantmentScreen extends EnchantmentScreen {
             list.add(arcanaLabel().append(Component.translatable("gui.meridian.stat.arcana.desc1")));
             list.add(Component.translatable("gui.meridian.stat.arcana.desc2").withStyle(ChatFormatting.GRAY));
             list.add(Component.translatable("gui.meridian.stat.arcana.desc3").withStyle(ChatFormatting.GRAY));
+            list.add(Component.translatable("gui.meridian.stat.arcana.formula").withStyle(ChatFormatting.GRAY));
             if (stats.arcana() > 0) {
                 list.add(Component.literal(""));
                 ItemStack inputItem = this.menu.slots.get(0).getItem();

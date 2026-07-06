@@ -57,4 +57,14 @@ class ShelfLangKeysTest {
             assertFalse(value.isBlank(), () -> "lang value for " + key + " must not be blank");
         }));
     }
+
+    @TestFactory
+    Stream<DynamicTest> everyShelf_hasNonBlankInfoKey() {
+        return EXPECTED_SHELF_IDS.stream().map(id -> DynamicTest.dynamicTest(id, () -> {
+            String key = "info.meridian." + id;
+            assertTrue(lang.has(key), () -> "missing purpose-line lang key: " + key);
+            String value = lang.get(key).getAsString();
+            assertFalse(value.isBlank(), () -> "lang value for " + key + " must not be blank");
+        }));
+    }
 }
