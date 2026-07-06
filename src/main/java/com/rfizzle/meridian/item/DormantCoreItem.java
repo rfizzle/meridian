@@ -9,10 +9,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 
 /**
- * Inert precursor to the Tempered Core. Loot-only — Meridian registers the item and its
- * art but ships no recipe for it; where it appears in loot pools is wired externally.
- * Ignited into a {@link TemperedCoreItem} through the end-tier
- * {@code meridian:enchanting} infusion on a high-Eterna/Arcana table.
+ * Inert precursor to the Tempered Core. Meridian registers the item and its art but ships
+ * no recipe for it; the sole survival source is a guaranteed one-per-kill drop from the Ender
+ * Dragon, handled by {@link com.rfizzle.meridian.mixin.EnderDragonMixin}. Ignited into a
+ * {@link TemperedCoreItem} through the end-tier {@code meridian:enchanting} infusion on a
+ * high-Eterna/Arcana table.
  */
 public class DormantCoreItem extends Item {
 

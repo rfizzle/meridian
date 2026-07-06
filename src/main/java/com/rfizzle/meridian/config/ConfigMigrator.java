@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 2;
+    static final int CURRENT_VERSION = 3;
 
     @FunctionalInterface
     interface Migration {
@@ -27,6 +27,19 @@ final class ConfigMigrator {
             // everfeast.enabled. Purely additive; Gson field initializers supply the defaults, and
             // the post-migration re-save writes them into the file so operators can discover them.
             json -> { },
+            // v2 → v3: anvil.temperedCoreEnabled (#158). Unlike the additive toggles above, a missing
+            // boolean must be written explicitly: Gson deserializes an absent boolean as false, not the
+            // Java field default true, which would silently disable the handler for existing configs.
+            // Seed true only when the key is absent so an operator's explicit false is preserved.
+            json -> {
+                JsonElement anvil = json.get("anvil");
+                if (anvil != null && anvil.isJsonObject()) {
+                    JsonObject anvilObj = anvil.getAsJsonObject();
+                    if (!anvilObj.has("temperedCoreEnabled")) {
+                        anvilObj.addProperty("temperedCoreEnabled", true);
+                    }
+                }
+            },
     };
 
     private ConfigMigrator() {}

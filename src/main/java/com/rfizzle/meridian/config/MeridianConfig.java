@@ -315,6 +315,7 @@ public class MeridianConfig {
         public int prismaticWebLevelCost = 30;
         public boolean ironBlockRepairsAnvil = true;
         public int temperedCoreLevelCost = 10;
+        public boolean temperedCoreEnabled = true;
     }
 
     public static class Library {

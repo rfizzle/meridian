@@ -16,6 +16,7 @@
         "EnchantmentMenuAccessor",
         "EnchantmentTableBlockMixin",
         "EnchantRandomlyFunctionMixin",
+        "EnderDragonMixin",
         "EverbloomMixin",
         "FishingHookMixin",
         "HushMixin",

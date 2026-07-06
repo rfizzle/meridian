@@ -101,6 +101,19 @@ class TemperedCoreLogicTest {
     }
 
     @Test
+    void disabledByConfig_declines() {
+        MeridianConfig disabled = new MeridianConfig();
+        disabled.anvil.temperedCoreEnabled = false;
+        TemperedCoreHandler off = new TemperedCoreHandler(() -> disabled);
+
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.setDamageValue(100);
+
+        assertTrue(off.handle(sword, new ItemStack(temperedCore), null).isEmpty(),
+                "handler must decline the pair when anvil.temperedCoreEnabled is false");
+    }
+
+    @Test
     void emptySlots_decline() {
         assertTrue(handler.handle(ItemStack.EMPTY, new ItemStack(temperedCore), null).isEmpty());
         assertTrue(handler.handle(new ItemStack(Items.DIAMOND_SWORD), ItemStack.EMPTY, null).isEmpty());
