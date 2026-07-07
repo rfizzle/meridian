@@ -285,6 +285,103 @@ tasks.register('verifyDatagenIdempotent') {
     }
 }
 
+// Single source of truth for the enchantment roster size: the JSON files under
+// data/meridian/enchantment/. Documented count claims in README.md and the site
+// are generated from it (syncEnchantmentCount) and asserted in CI
+// (verifyEnchantmentCount, wired into `check`) so a stale number can't reach master.
+def enchantmentCountFiles = ['README.md', 'site/pages/enchantments.json']
+// Each pattern anchors the roster count to a claim idiom (not any "N enchantments"
+// phrase), so unrelated prose like "combine 2 enchantments" is never touched. Every
+// digit run inside a match is a roster count — the "(N of N)" attribution carries two
+// — so sync rewrites all of them and verify asserts each equals the actual count.
+def enchantmentCountClaims = [
+        /### (\d+) Enchantments/,
+        /(\d+) original enchantments/,
+        /(\d+) original Meridian enchantments/,
+        /(\d+) enchantments are original/,
+        /(\d+) of its own enchantments/,
+        /Enchantment data \((\d+) of (\d+)\)/,
+]
+def enchantmentCount = {
+    def dir = file('src/main/resources/data/meridian/enchantment')
+    if (!dir.isDirectory()) {
+        throw new GradleException("enchantment data dir not found: ${dir}")
+    }
+    // Recursive: Minecraft's data-pack loader descends into subfolders, so a
+    // nested enchantment/combat/foo.json is a valid entry and must be counted.
+    fileTree(dir).matching { include '**/*.json' }.files.size()
+}
+
+tasks.register('syncEnchantmentCount') {
+    description = 'Rewrites documented enchantment-count claims from the number of enchantment JSONs'
+    group = 'verification'
+    doLast {
+        def count = enchantmentCount()
+        def changed = []
+        enchantmentCountFiles.each { rel ->
+            def f = file(rel)
+            def original = f.text
+            def updated = original
+            enchantmentCountClaims.each { pat ->
+                updated = updated.replaceAll(pat) { match -> match[0].replaceAll(/\d+/, count.toString()) }
+            }
+            if (updated != original) {
+                f.text = updated
+                changed << rel
+            }
+        }
+        if (changed.isEmpty()) {
+            logger.lifecycle("Enchantment-count claims already at ${count}.")
+        } else {
+            logger.lifecycle("Set enchantment count to ${count} in: ${changed.join(', ')}")
+        }
+    }
+}
+
+tasks.register('verifyEnchantmentCount') {
+    description = 'Asserts documented enchantment-count claims match the number of enchantment JSONs'
+    group = 'verification'
+    doLast {
+        def count = enchantmentCount()
+        def emptyFiles = []
+        def stale = []
+        enchantmentCountFiles.each { rel ->
+            def text = file(rel).text
+            def fileMatches = 0
+            enchantmentCountClaims.each { pat ->
+                (text =~ pat).each { m ->
+                    // Assert every digit run in the matched idiom (the "(N of N)"
+                    // attribution carries two) against the actual count.
+                    (m[0] =~ /\d+/).each { num ->
+                        fileMatches++
+                        if (num.toInteger() != count) {
+                            stale << "${rel}: claims ${num} in \"${m[0].trim()}\", expected ${count}"
+                        }
+                    }
+                }
+            }
+            if (fileMatches == 0) {
+                emptyFiles << rel
+            }
+        }
+        if (!emptyFiles.isEmpty()) {
+            throw new GradleException(
+                    "No enchantment-count claims found in: ${emptyFiles.join(', ')} — the guard matched " +
+                    'nothing. If the docs were reworded, update the enchantmentCountClaims patterns in build.gradle.')
+        }
+        if (!stale.isEmpty()) {
+            throw new GradleException(
+                    "Documented enchantment count is stale (actual JSON count = ${count}):\n  " +
+                    stale.join('\n  ') +
+                    '\nRun ./gradlew syncEnchantmentCount and commit the results.')
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn 'verifyEnchantmentCount'
+}
+
 processResources {
     def projectVersion = project.version
     inputs.property "version", projectVersion
