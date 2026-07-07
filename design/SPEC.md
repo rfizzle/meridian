@@ -14,7 +14,7 @@ Meridian replaces vanilla's single bookshelf "power" value with five independent
 
 | Stat | Type | Range after aggregation | Role |
 |---|---|---|---|
-| **Eterna** | float | floored at 0, capped per shelf tier | Drives the XP-level cost of each enchant slot. Slot 2 cost = `round(eterna)`, capped at `enchantingTable.maxEterna` (default 50). Replaces vanilla's 0–30 level range with 0–50 |
+| **Eterna** | float | floored at 0, capped per shelf tier | Drives the XP-level cost of each enchant slot. Slot 2 cost = `round(eterna * 2)`, capped at `enchantingTable.maxEterna` (default 50, so a level cap of 100). Replaces vanilla's 0–30 level range with 0–100 |
 | **Quanta** | float | clamped [0, 100] | Upper bound of the random power roll. Higher Quanta = more variance |
 | **Arcana** | float | clamped [0, 100] | Biases enchantment selection toward rarer enchantments via weighted rarity buckets |
 | **Rectification** | float | clamped [0, 100] | Truncates Quanta's negative variance. At 100 the power factor is always ≥ 0 |
@@ -45,7 +45,7 @@ Selection lives in `RealEnchantmentHelper`. The constants below are exact.
 **Per-slot XP cost** (`getCost`, three slots indexed 0–2):
 ```
 clamped  = clamp(eterna, 0, enchantingTable.maxEterna)   // default cap 50
-level    = round(clamped)
+level    = round(clamped * 2)                             // LEVELS_PER_ETERNA, default cap 100
 slot 2   = level                                          // deterministic
 slot 1   = max(1, round(level * uniform(0.6, 0.8)))       // 60–80% of slot 2
 slot 0   = max(1, round(level * uniform(0.2, 0.4)))       // 20–40% of slot 2
@@ -591,14 +591,3 @@ JUnit, no Minecraft runtime. Cover config parse/serialize round-trips, enchantin
 
 ### Gametests (`src/gametest/`, Fabric Gametest API)
 Registered in `fabric.mod.json`. Cover registry presence, shelf roster and scan, menu end-to-end, prismatic web, library deposit/extract/persist/hopper, tome registry and anvil flows, XP tome, crafting button, specialty materials, advancement codec, config + reload-callback reload, and the enchantment roster (exclusive-set enforcement, config-disable, attribute/status effects, edge cases, selection, tags).
-
----
-
-## Rendering Compatibility
-
-The custom enchant-glyph particles route through the vanilla `ParticleEngine`, so they are inherently compatible with Sodium/Iris. Custom screens (`MeridianEnchantmentScreen`, `EnchantmentLibraryScreen`, `EnchantingInfoScreen`) use standard `AbstractContainerScreen` rendering. No raw `RenderSystem`/GL world rendering is used.
-
----
-
-## Future Considerations
-- Cloth Config GUI for the structured config (currently a ModMenu entry over the JSON file).
