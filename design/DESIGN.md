@@ -30,12 +30,11 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 | Accent 2 | Enchant Gold | `#DAA520` | Titles, stars, key accents |
 | Bright | Celestial Gold | `#FFD700` | Hover states, emphasis |
 | Glow | Cyan Spark | `#00BFFF` | Particle effects, sparkles |
-| Text Primary | Bone | `#e8e0d4` | Body text |
-| Text Secondary | Ash | `#a89f93` | Muted text, descriptions |
-| Text Tertiary | Smoke | `#6b6359` | Disabled, placeholder |
-| Surface Base | Obsidian | `#0a0a0a` | Page backgrounds |
-| Surface Card | Dark Stone | `#1a1a1a` | Cards, panels |
-| Surface Elevated | Stone | `#222222` | Elevated surfaces, hover cards |
+
+Shared neutrals (text and surfaces) follow the standard tokens as-is —
+`--color-bone`, `--color-ash`, `--color-smoke`, `--color-ink`,
+`--color-card`, `--color-elevated` — see concord
+[`design/DESIGN-SYSTEM.md`](../../concord/design/DESIGN-SYSTEM.md) §2.
 
 ### Typography
 
@@ -61,93 +60,7 @@ The full asset manifest — every `.glyph` source under `art/`, the final resour
 
 ---
 
-## 4. Generation Prompts
-
-### Gemini Prompts (Logos / High-Res Art)
-
-**Open Graph / Social Card:**
-```
-Pixel art style, 1200x630 banner image for a Minecraft mod called "Meridian".
-Center the logo: a stone archway framing a glowing eight-pointed compass rose
-with a golden star center, set against a deep blue-violet cosmic background
-with constellation lines and runic symbols. The word "MERIDIAN" in blocky
-pixel font below. Dark violet (#1a0a3e) background. Subtle cyan and gold
-particle effects. Style consistent with the existing Meridian logo.
-```
-
-**Website Hero Background:**
-```
-Pixel art tileable background texture, 1920x600. Dark blue-violet brickwork
-(#1a0a3e to #2a1a6e gradient) with subtle enchanting table rune glyphs
-scattered across the surface. Faint constellation lines connecting small
-cyan (#00BFFF) star points. Very subtle — this is a background behind text.
-Minecraft pixel art style, 16-pixel grid aligned.
-```
-
-**Discord Banner:**
-```
-Pixel art banner, 1280x640. The Meridian compass rose icon centered on a
-dark violet (#1a0a3e) background. Soft purple-blue glow radiating from center.
-Faint runic symbols in the background. "Meridian" in gold pixel font below
-the icon. "Enchanting Overhaul" subtitle in lighter text. Clean, minimal.
-```
-
-### Glyph Specs (In-Game Pixel Art)
-
-In-game pixel art — HUD/UI glyphs, recipe-browser icons, item textures, and
-tier-icon sets — is authored through Concord's glyph pipeline: write the
-ASCII-grid `.glyph` spec, then render it deterministically with `/glyph` (the
-`mc-textures` skill is the craft reference). Every PNG master commits its
-`.glyph` source beside it in `art/glyphs/`, so each texture re-renders from its
-spec rather than being hand-patched. Design at the target size with hard pixels,
-a limited palette, and an `ink` (#0a0a0a) 1px outline so the glyph reads against
-any background. The normative spec is concord's `design/DESIGN-SYSTEM.md` §8.
-The specs below seed that work.
-
-**Recipe Browser Icon (EMI/REI/JEI Tab):**
-```
-Theme: Enchanting / arcane navigation
-Subject: Compass rose with golden center star
-Style: Minecraft item icon, pixel art
-Size: 32x32
-Colors: Deep violet background, gold (#DAA520) star, purple (#7B2FBE) compass points,
-        cyan (#00BFFF) sparkle accents
-Notes: Must read clearly at 16x16 downscale. No text. Single centered motif.
-```
-
-**Shelf Tier Icons (batch of 5):**
-```
-Theme: Enchanting shelf progression
-Subject: Five 16x16 icons representing shelf tiers:
-  1. Basic (wooden bookshelf) — warm brown, simple
-  2. Nether (hellshelf) — orange/red glow, netherbrick texture
-  3. Deep (deepshelf) — dark teal/sculk, echo particles
-  4. End (endshelf) — pale yellow/purple, end stone texture
-  5. Treasure (special) — gold with enchant glint
-Style: Minecraft item icons, pixel art, consistent set
-Size: 16x16 each
-Colors: Each uses its biome-appropriate sub-palette while keeping gold (#DAA520) as
-        the unifying accent
-```
-
----
-
-## 5. Image References
-
-| Image | Reference Source | Notes |
-|-------|----------------|-------|
-| Compass rose motif | Meridian-Icon.png | Eight-pointed star, stone arch frame |
-| Runic background | Meridian-Logo.png background | Enchanting table glyphs on brickwork |
-| Color temperature | Meridian-Logo.png | Deep violet → cosmic blue gradient |
-| Glow style | Meridian-Icon.png outer glow | Purple-blue radial, not hard-edged |
-| Pixel art item style | `assets/meridian/textures/item/tome/xp_tome.png` | Tome sprite — sets the in-game item pixel density |
-| Shelf textures | `src/main/resources/assets/meridian/textures/block/` | Reference for shelf tier icon colors |
-| Constellation overlay | Meridian-Logo.png background | Thin cyan lines connecting star points |
-| Stone texture | Meridian-Icon.png arch | Dark gray stone with vine/tendril wrapping |
-
----
-
-## 6. Website & Listing Brand Notes
+## 4. Website & Listing Brand Notes
 
 How the Meridian brand lands on its web and store surfaces. The page and listing copy themselves are content, not brand — they live in `site/` and render through the shared Concord template; this section carries only the brand direction.
 
@@ -160,7 +73,7 @@ Content lives elsewhere: page copy in `site/pages/*.json`, theme tokens in `site
 
 ---
 
-## 7. Concord Context
+## 5. Concord Context
 
 Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independent system overhauls. Its **violet + gold** signature and **compass-rose** motif read distinct from its siblings:
 
