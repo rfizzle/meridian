@@ -24,7 +24,7 @@ dark, and the End for the materials that raise each stat, upgrading shelves in
 place and banking spare books into a library instead of hoarding chests of them.
 Late game is mastery of the whole board: an End-tier wall that reaches Eterna 50,
 a Library of Alexandria dispensing your best books on demand, and tomes that lift
-a perfect enchantment off a worn tool onto a fresh one. An 18-step advancement
+a perfect enchantment off a worn tool onto a fresh one. A 26-step advancement
 tree marks the path from first shelf to Eterna 50.
 
 ## The features, as you'll play them

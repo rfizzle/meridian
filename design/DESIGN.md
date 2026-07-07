@@ -43,17 +43,25 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 - **Body:** Monospace stack: SF Mono, Cascadia Code, Fira Code, Consolas
 - **Website gradient animation:** `gold-pulse` keyframes (4s ease-in-out, brightness 1→1.15)
 
----
+### Audio
 
-## 2. Assets
-
-The full asset manifest — every `.glyph` source under `art/`, the final
-resource/site path it ships as, and what is still `MISSING` a glyph source —
-lives in [`ASSETS.md`](ASSETS.md).
+Meridian's soundscape stays vanilla. Its cues are organic foley — the enchanting hum, the anvil clang, the sculk bloom, book pages — which vanilla already renders convincingly; synthesizing them would only make them feel fake. A custom synthesized cue (via the `/sfx` pipeline, concord `design/DESIGN-SYSTEM.md` §9) earns its place only where a sound needs its own identity, and none currently do. [`SPEC.md`](SPEC.md) owns the trigger-to-sound mapping.
 
 ---
 
-## 3. Generation Prompts
+## 2. HUD
+
+Meridian occupies **no HUD slot**, by design — enchanting is table-interaction-based, with no persistent ambient stat that warrants an always-on element (concord [`HUD-STANDARD.md`](../../concord/HUD-STANDARD.md) §1: "opting out is conformant"). Eterna, Quanta, Arcana, Rectification, clues, shelf stats, and library contents surface through the enchanting-table screen, Jade/WTHIT overlays on enchanting blocks, and the EMI/REI/JEI recipe browser. [`SPEC.md`](SPEC.md) owns when and where each of these appears.
+
+---
+
+## 3. Assets
+
+The full asset manifest — every `.glyph` source under `art/`, the final resource/site path it ships as, and what is still `MISSING` a glyph source — lives in [`ASSETS.md`](ASSETS.md). This document owns the *why and the look* of each asset family; the manifest owns the *where*.
+
+---
+
+## 4. Generation Prompts
 
 ### Gemini Prompts (Logos / High-Res Art)
 
@@ -107,10 +115,6 @@ Colors: Deep violet background, gold (#DAA520) star, purple (#7B2FBE) compass po
 Notes: Must read clearly at 16x16 downscale. No text. Single centered motif.
 ```
 
-### HUD
-
-Meridian occupies **no HUD slot**, by design — enchanting is table-interaction-based, with no persistent ambient stat that warrants an always-on element (concord [`HUD-STANDARD.md`](../../concord/HUD-STANDARD.md) §1: "opting out is conformant"). Eterna, Quanta, Arcana, Rectification, clues, shelf stats, and library contents surface through Jade/WTHIT overlays on enchanting blocks and EMI/REI/JEI recipe-browser integration.
-
 **Shelf Tier Icons (batch of 5):**
 ```
 Theme: Enchanting shelf progression
@@ -128,7 +132,7 @@ Colors: Each uses its biome-appropriate sub-palette while keeping gold (#DAA520)
 
 ---
 
-## 4. Image References
+## 5. Image References
 
 | Image | Reference Source | Notes |
 |-------|----------------|-------|
@@ -143,110 +147,22 @@ Colors: Each uses its biome-appropriate sub-palette while keeping gold (#DAA520)
 
 ---
 
-## 5. Website Specification
+## 6. Website & Listing Brand Notes
 
-### Domain & Hosting
+How the Meridian brand lands on its web and store surfaces. The page and listing copy themselves are content, not brand — they live in `site/` and render through the shared Concord template; this section carries only the brand direction.
 
-- **Domain:** `meridian.rfizzle.com`
-- **Hosting:** GitHub Pages from `docs/` directory
-- **CNAME:** `docs/CNAME` → `meridian.rfizzle.com`
+- **Domain:** `meridian.rfizzle.com`. The site is built from `site/` (JSON page content plus the `site.json` theme) by the shared Concord template and deployed by the `site.yml` Actions workflow.
+- **Accent usage:** gold (`#DAA520` → `#FFD700`) over deep violet (`#1a0a3e` / `#2a1a6e`); the compass-rose / astrolabe motif anchors the hero against runic blue-violet brickwork threaded with faint cyan (`#00BFFF`) constellation lines.
+- **Open Graph / social:** the full logo (`art/logo.png`) as an absolute-URL `og:image` on a `summary_large_image` card; the favicon and apple-touch icon derive from the astrolabe glyph (`site/assets/icon.png`).
+- **Store screenshots (art direction):** 1920×1080, gold-and-violet lighting; subjects that read the brand at a glance — a full shelf wall ringing the table, the five-stat enchanting screen, a library in use, and a signature enchantment firing.
 
-### Current Pages
-
-| Page | File | Content |
-|------|------|---------|
-| Home | `index.html` | Hero with logo, feature overview, download links |
-| Enchantments | `enchantments.html` | Full enchantment list with categories |
-| Shelves | `shelves.html` | Shelf blocks with stats and tier progression |
-| Config | `config.html` | Configuration reference |
-| Commands | `commands.html` | Command reference |
-
-### Pages to Add
-
-| Page | File | Content |
-|------|------|---------|
-| Getting Started | `guide.html` | Installation, first enchanting table setup, stat explanation |
-| FAQ | `faq.html` | Common questions, compatibility, performance |
-| Changelog | `changelog.html` | Version history with dates |
-| Stat Calculator | `calculator.html` | Interactive shelf layout → stat calculator (JS) |
-
-### Website Design Tokens (Tailwind)
-
-```javascript
-colors: {
-    base: '#0a0a0a',
-    card: '#1a1a1a',
-    elevated: '#222222',
-    gold: { DEFAULT: '#DAA520', dark: '#8B6914' },
-    amber: { DEFAULT: '#F0C040', bright: '#FFD700' },
-    bone: '#e8e0d4',
-    ash: '#a89f93',
-    smoke: '#6b6359',
-}
-```
-
-### SEO & Social
-
-- **Title pattern:** `{Page} — Meridian | Enchanting Overhaul for Minecraft`
-- **og:image:** Must be absolute URL (`https://meridian.rfizzle.com/logo.png`)
-- **twitter:card:** `summary_large_image` (upgrade from `summary`)
-- **Favicon:** `<link rel="icon" type="image/png" href="icon.png">`
-- **Apple Touch:** `<link rel="apple-touch-icon" href="apple-touch-icon.png">` (need to create)
-
-### Cross-Mod Navigation
-
-Footer section linking to all companion mods:
-```
-Part of the rfizzle mod suite:
-[Meridian] [Mercantile] [Tribulation] [Prosperity]
-```
+Content lives elsewhere: page copy in `site/pages/*.json`, theme tokens in `site/site.json`, and store listing copy in `site/listing-curseforge.md` / `site/listing-modrinth.md` (authored per the `mc-listing` skill).
 
 ---
 
-## 6. Distribution Listings
+## 7. Concord Context
 
-### CurseForge / Modrinth
-
-**Description Template:**
-1. Logo image (centered)
-2. One-paragraph summary
-3. Feature list with headers (Stat System, Shelves, Enchantments, Libraries, Tomes, Anvil)
-4. Screenshot gallery (3–5 images)
-5. Requirements section (Fabric Loader, Fabric API, Cloth Config)
-6. Optional dependencies (EMI/REI/JEI, Jade/WTHIT)
-7. Links to companion mods
-
-**Screenshot Standards:**
-- Resolution: 1920×1080
-- Shader: Complementary Shaders (or vanilla for clarity shots)
-- HUD: Visible but not cluttered
-- Subjects: (1) Enchanting table with full shelf setup, (2) Enchanting GUI with stats, (3) Library block in use, (4) Shelf variety showcase, (5) Custom enchantment in action
-
-**Changelog Format:**
-```markdown
-## [0.1.0] — 2025-XX-XX
-### Added
-- Feature description
-### Changed
-- Change description
-### Fixed
-- Fix description
-```
-
-### README Badges
-
-```markdown
-![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-green)
-![Fabric](https://img.shields.io/badge/Loader-Fabric-blue)
-![License](https://img.shields.io/badge/License-MIT-yellow)
-![GitHub](https://img.shields.io/github/v/release/rfizzle/meridian)
-```
-
----
-
-## 7. Companion Mod Context
-
-Meridian is part of a four-mod suite. Each mod overhauls a different Minecraft system:
+Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independent system overhauls. Its **violet + gold** signature and **compass-rose** motif read distinct from its siblings:
 
 | Mod | Domain | Color Signature | Icon Motif |
 |-----|--------|----------------|------------|
@@ -255,12 +171,4 @@ Meridian is part of a four-mod suite. Each mod overhauls a different Minecraft s
 | **Tribulation** | Difficulty & Scaling | Crimson / Red | Hourglass with hearts |
 | **Prosperity** | Loot & Containers | Gold / Diamond Cyan | Trophy chalice |
 
-All four share:
-- Minecraft 1.21.1, Java 21, Fabric
-- Dark base website theme (`#0a0a0a` / `#1a1a1a` / `#222222`)
-- Bone/Ash/Smoke text palette
-- Monospace font stack
-- Pixel art logo style (Gemini-generated)
-- Same website structural pattern (hero → features → config → commands)
-- MIT license
-- Optional Jade/WTHIT, EMI/REI/JEI, ModMenu, Cloth Config integrations
+The suite-wide rules the four share — base website theme, neutral text palette, typography stack, logo formula, and the standard optional integrations — are the standard, not restated here: see concord's [`design/DESIGN-SYSTEM.md`](../../concord/design/DESIGN-SYSTEM.md) and the collection [`VISION.md`](../../concord/VISION.md).
