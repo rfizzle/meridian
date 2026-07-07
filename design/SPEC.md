@@ -2,7 +2,7 @@
 
 Minecraft 1.21.1 Fabric mod. Enchanting overhaul.
 
-**Asset philosophy:** Custom pixel-art textures for mod-specific visuals (authored through Concord's glyph pipeline — `/glyph`, the `mc-textures` skill, concord `design/DESIGN-SYSTEM.md` §8 — with `.glyph` sources kept beside the masters; the XP-tome item ladder ships its `.glyph` sources under `art/tome/`). The shelf and block textures are likewise original pixel art authored through the glyph pipeline — no asset is Zenith/Apotheosis-derived. Sounds stay **fully vanilla** — Meridian ships no custom `SoundEvent`s and no `sounds.json`; every cue (enchanting hum, anvil use, sculk bloom, library interaction) maps to a vanilla `SoundEvent`, which is the right call for organic foley. Custom synthesized cues would be added through the `/sfx` pipeline (concord `design/DESIGN-SYSTEM.md` §9) only where a sound benefits from its own identity; none currently do. Custom particles are used for mod-specific table ambiance: four element-themed enchant-glyph particle families (`enchant_fire`, `enchant_water`, `enchant_sculk`, `enchant_end`) whose textures are per-letter Standard Galactic Alphabet rune sprites (`sga_a_*` … `sga_z_*`) drawn in element palettes, plus vanilla `ParticleTypes.ENCHANT` / `SCULK_SOUL` where vanilla already reads correctly.
+**Asset philosophy:** Custom pixel-art textures for mod-specific visuals (authored through Concord's glyph pipeline — `/glyph`, the `mc-textures` skill, concord `design/DESIGN-SYSTEM.md` §8 — with `.glyph` sources kept beside the masters; the XP-tome item ladder ships its `.glyph` sources under `art/tome/`). The shelf and block textures are likewise original pixel art authored through the glyph pipeline — no asset is Zenith/Apotheosis-derived. Sounds stay **fully vanilla** — Meridian ships no custom `SoundEvent`s and no `sounds.json`; every cue (enchanting hum, anvil use, sculk bloom, library interaction) maps to a vanilla `SoundEvent`. The audio direction — why the soundscape stays vanilla — lives in [`DESIGN.md`](DESIGN.md). Custom particles are used for mod-specific table ambiance: four element-themed enchant-glyph particle families (`enchant_fire`, `enchant_water`, `enchant_sculk`, `enchant_end`) whose textures are per-letter Standard Galactic Alphabet rune sprites (`sga_a_*` … `sga_z_*`) drawn in element palettes, plus vanilla `ParticleTypes.ENCHANT` / `SCULK_SOUL` where vanilla already reads correctly.
 
 ---
 
@@ -228,6 +228,15 @@ Two recipe types register through `EnchantingRecipeRegistry`:
 | `echo_shard_duplication` | echo_shard → echo_shard ×4 | 35 / 50 / 50 | |
 | `heart_of_the_sea` | nautilus_shell → heart_of_the_sea | 35 / 30 / 60 | |
 | `totem_of_undying` | emerald_block → totem_of_undying | 50 / 45 / 85 | |
+| `tempered_core` | dormant_core → tempered_core | 45 / 0 / 50 | xp_cost 45; ignites the dragon-dropped core (§7) |
+
+### Recipe Modules
+Each recipe carries an optional `"module"` field (`RecipeModule`, read from the codec) grouping it for the config gate:
+- **`core`** (untagged default) — shelf upgrades, tomes, XP conversions; always on, cannot be switched off.
+- **`duplication`** — vanilla-item duplication (totem of undying, echo shard, golden apples, golden carrot, heart of the sea, budding amethyst); gated by `tableCrafting.allowDuplication` (default true).
+- **`everfeast`** — Everfeast rations and the Everfull Flask; gated by `everfeast.enabled` (default true).
+
+A disabled module's recipes vanish from the table and from the EMI/REI/JEI browser; the gate reads the server's config on the server and the synced config on the client, so a dedicated server's toggles govern its clients. The codec is strict — an unknown `"module"` string fails that recipe at load rather than falling back to `core`.
 
 ### Implementation Notes
 - Multi-item recipe input handling: on craft, excess input beyond the consumed amount is returned to inventory or dropped; `setChanged()` re-triggers the shelf scan.
@@ -316,13 +325,18 @@ A tiered consumable that banks experience levels. Crafted at the enchanting tabl
 
 Meridian extends the vanilla anvil through a handler chain rather than replacing the menu. `AnvilMenuMixin` injects on `AnvilMenu#createResult` (RETURN) and on `onTake`; `AnvilDispatcher` runs the registered `AnvilHandler`s in order and the **first** handler that returns a non-empty `AnvilResult(output, xpCost, rightConsumed, leftReplacement)` claims the slot pair. If the left item has Curse of Sealing, the result is blanked and all handlers are skipped.
 
-Registration order (`MeridianAnvilHandlers`): Prismatic Web → Iron Block Repair → Scrap Tome → Improved Scrap Tome → Extraction Tome → Extraction Tome Repair.
+Registration order (`MeridianAnvilHandlers`): Prismatic Web → Iron Block Repair → Scrap Tome → Improved Scrap Tome → Extraction Tome → Extraction Tome Repair → Tempered Core.
 
 ### Prismatic Web (`meridian:prismatic_web`)
 Left = any enchanted item, right = Prismatic Web. Strips all `#minecraft:curse` enchantments (non-curses preserved); declines if there are no curses. Consumes 1 web, costs `anvil.prismaticWebLevelCost` (default 30) XP levels. Gated by `anvil.prismaticWebRemovesCurses` (default true).
 
 ### Iron Block Anvil Repair
 Left = a damaged anvil (Damaged → Chipped → Anvil), right = an iron block (exact item match, not a tag — ingots/nuggets/other blocks are excluded). Repairs the anvil one tier, copies any `ENCHANTMENTS` component to the output, consumes 1 iron block, and costs 1 XP level (`XP_COST_LEVELS = 1`). Pristine anvils decline. Gated by `anvil.ironBlockRepairsAnvil` (default true).
+
+### Tempered Core (`meridian:tempered_core`)
+Left = any damageable, not-already-unbreakable item, right = a Tempered Core. Marks the left item permanently unbreakable (`minecraft:unbreakable`): remaining damage is healed to full and the item stops taking damage entirely, while item type, enchantments, name, and every other component are preserved — any Mending or Unbreaking simply goes inert (nothing is stripped or refunded). Consumes exactly 1 core per click regardless of stack size and costs `anvil.temperedCoreLevelCost` (default 10) XP levels — the real gate is obtaining the core. Declines (leaving vanilla and the rest of the chain free) when either slot is empty, the right slot is not a Tempered Core, the left is already unbreakable (one core per item), or the left has no durability to protect. Gated by `anvil.temperedCoreEnabled` (default true).
+
+**Dormant Core source.** The Ender Dragon drops one Dormant Core per kill (first and every respawn) as a free item entity — spawned by `DragonLootHandler.dropDormantCore` from `EnderDragonMixin`, injected at the terminal frame of `EnderDragon#tickDeath()` (`dragonDeathTime == 200`) because the dragon never routes through `LivingEntity.die()` and rolls no loot table. The Dormant Core is ignited into a Tempered Core at an end-tier table via the `tempered_core` enchanting recipe (§3): Eterna 45, Arcana 50, `xp_cost` 45.
 
 ### Implementation Notes
 - `leftReplacement` (used by the Extraction Tome) restores a stripped/damaged copy to slot 0 after vanilla's `onTake` clears it.
@@ -332,10 +346,10 @@ Left = a damaged anvil (Damaged → Chipped → Anvil), right = an iron block (e
 
 ## 8. Enchantments
 
-94 original enchantments, defined as JSON in `data/meridian/enchantment/` (94 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
+101 original enchantments, defined as JSON in `data/meridian/enchantment/` (101 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
 
 ### JSON Structure
-Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈28) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈66 carry custom behavior driven by Java event handlers.
+Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈28) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈73 carry custom behavior driven by Java event handlers.
 
 ### Categories and Handlers
 | Category | Example enchantments | Handler |
@@ -349,10 +363,10 @@ Each file is a standard 1.21.1 enchantment definition: `description` (translatio
 | Shield | Retribution, Pummel, Fortify | `EnchantmentEffectHandler`, `ShieldFortifyMixin` |
 | Utility | Mason's Reach, Aurify, Tether | `AurifyHandler`, `TetherHandler` |
 
-`EnchantmentEffects` holds ~49 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`).
+`EnchantmentEffects` holds ~75 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`).
 
 ### Exclusive Sets
-Six exclusive-set tags constrain mutually exclusive picks: `exclusive_set/mining`, `/size`, `/arrow_impact`, `/glass_cannon`, `/aspect`, `/mending`.
+Ten exclusive-set tags constrain mutually exclusive picks: `exclusive_set/mining`, `/size`, `/arrow_impact`, `/glass_cannon`, `/aspect`, `/mending`, `/axe`, `/loot_bonus`, `/mobility`, `/trophy`.
 
 ### Implementation Notes
 - The `EnchantableItem` API hook (§1) is the supported path for items to post-process selection.
@@ -396,7 +410,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 
 ## Configuration
 
-`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 1) with a forward-migration hook.
+`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 4) with a forward-migration hook.
 
 ### `enchantingTable`
 | Key | Type | Default | Range / Notes |
@@ -404,6 +418,11 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `allowTreasureWithoutShelf` | bool | false | Allow treasure enchantments without a Treasure Shelf |
 | `maxEterna` | int | 50 | 1–100; Eterna stat cap |
 | `globalMinEnchantability` | int | 1 | 0–100; minimum enchantability to be enchantable |
+
+### `tableCrafting`
+| Key | Type | Default | Range / Notes |
+|---|---|---|---|
+| `allowDuplication` | bool | true | Whether the vanilla-item duplication recipes (`"module": "duplication"`) are available at the table; already-crafted items are unaffected |
 
 ### `shelves`
 | Key | Type | Default | Range |
@@ -418,6 +437,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `prismaticWebLevelCost` | int | 30 | XP levels per curse removal |
 | `ironBlockRepairsAnvil` | bool | true | |
 | `temperedCoreLevelCost` | int | 10 | XP levels for the Tempered Core anvil upgrade |
+| `temperedCoreEnabled` | bool | true | Whether a Tempered Core may be applied at the anvil to make gear unbreakable (§7) |
 
 ### `library`
 | Key | Type | Default | Notes |
@@ -436,6 +456,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 ### `everfeast`
 | Key | Type | Default | Range / Notes |
 |---|---|---|---|
+| `enabled` | bool | true | Whether the Everfeast ration and Everfull Flask recipes (`"module": "everfeast"`) are available at the table; existing items keep working when off |
 | `bites` | int | 128 | 1–4096; bites a newly-infused Everfeast ration is created with (existing rations keep theirs) |
 
 ### `warden`
@@ -511,7 +532,7 @@ All optional dependencies are `suggests` in `fabric.mod.json`; the mod runs with
 
 ## Sound Design
 
-Every cue is **vanilla**. Meridian ships no custom `SoundEvent`s and no `sounds.json`; organic foley (enchanting hum, anvil clang, sculk bloom, book pages) is something vanilla already nails, so synthesis would only make it feel fake. Custom synthesized cues (via the `/sfx` pipeline, concord `design/DESIGN-SYSTEM.md` §9) would be added only where a sound benefits from its own identity; none currently do.
+Every cue is **vanilla**: Meridian ships no custom `SoundEvent`s and no `sounds.json`, mapping each interaction to an existing vanilla sound. The audio direction — why the mod stays vanilla-foley — lives in [`DESIGN.md`](DESIGN.md); this table owns the trigger-to-sound mapping.
 
 | Feature | Vanilla Sound |
 |---|---|
@@ -553,7 +574,7 @@ All user-facing text uses translation keys in `assets/meridian/lang/en_us.json`.
 
 ## Advancement Tree
 
-18 advancements (`data/meridian/advancement/`) guide progression from the first shelf to Eterna 50: `root`, `library`, `ender_library`, `stone_tier`, `tier_three`, `stable_enchanting`, `high_quanta`, `high_arcana`, `all_seeing`, `treasure_seeker`, `tome_apprentice`, `tome_master`, `web_spinner`, `warden_tendril`, `sculk_mastery`, `infused_breath`, `curator`, `apotheosis`.
+26 advancements (`data/meridian/advancement/`) guide progression from the first shelf to Eterna 50. The tree is **usage-triggered** — each advancement fires when the player actually *uses* a system (takes the anvil output, deposits or extracts from a library, hits a stat threshold at the table), not merely when the block is crafted. Branches cover shelf tiers, the five stats, the library, the tomes, the anvil, and the End-game: `root`, `stone_tier`, `tier_three`, `stable_enchanting`, `high_quanta`, `high_arcana`, `high_clues`, `high_rectification`, `all_seeing`, `treasure_seeker`, `library`, `library_deposit`, `library_extract`, `ender_library`, `curator`, `tome_apprentice`, `tome_master`, `tome_salvage`, `web_spinner`, `tempered_core`, `curse_strip`, `filtering_blacklist`, `warden_tendril`, `sculk_mastery`, `infused_breath`, `apotheosis`.
 
 ---
 

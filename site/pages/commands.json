@@ -41,7 +41,7 @@
             {
               "type": "list",
               "items": [
-                "Enchanting table settings (maxEterna, treasure shelf requirement, level indicator)",
+                "Enchanting table settings (maxEterna, treasure shelf requirement, global minimum enchantability)",
                 "Shelf behavior (sculk shrieker chance, particle rates)",
                 "Anvil settings (prismatic web cost, iron block repair toggle)",
                 "Library settings (hopper rate limit)",

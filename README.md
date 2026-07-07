@@ -129,7 +129,7 @@ First-class recipe and tooltip adapters ship at launch for:
 
 ### Advancement Tree
 
-18 advancements guide players through the progression, from picking up their first shelf to reaching Eterna 50.
+26 advancements guide players through the progression, from picking up their first shelf to reaching Eterna 50.
 
 ### Per-Enchantment Overrides
 

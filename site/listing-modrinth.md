@@ -13,7 +13,7 @@ list, config reference, and command guide.
 
 Meridian is a **ground-up rewrite of Minecraft's enchanting system** for
 **Minecraft 1.21.1 (Fabric)**. It replaces the single-stat enchanting table
-with a five-axis progression system, adds 75 original enchantments, introduces
+with a five-axis progression system, adds 101 original enchantments, introduces
 25+ biome-themed shelf blocks, and gives you real tools for managing your
 enchantment collection — libraries, salvage tomes, and anvil upgrades included.
 
@@ -76,9 +76,9 @@ Every shelf contributes a unique combination of stats, and they're organized int
 
 Each shelf tier displays themed enchanting particles — fire, water, end, and sculk.
 
-### 75 Original Enchantments
+### 101 Original Enchantments
 
-Meridian adds 75 new enchantments across every equipment slot and playstyle. Every enchantment is fully data-driven and can be individually configured or disabled by server operators.
+Meridian adds 101 new enchantments across every equipment slot and playstyle. Every enchantment is fully data-driven and can be individually configured or disabled by server operators.
 
 #### Combat
 **Tempo** — Increases attack speed. **Keen Edge** — Chance to deal a burst of bonus damage. **Cleave** — Strikes hit nearby enemies in an arc. **Siphon** — Drains life from targets on hit. **Final Gambit** — Sacrifice your weapon for devastating burst damage. **Soul Tax** — Spend XP to amplify strikes. **Blight** — Poisons targets. **Decay** — Inflicts Wither. **Nightfall** — Blinds targets with Darkness.
@@ -169,7 +169,7 @@ Wardens now drop **Warden Tendrils** — a crafting material required for sculk-
 
 ### Progression
 
-Meridian includes an advancement tree that guides you from your first shelf all the way to Apotheosis — reaching Eterna 50 with a Draconic Endshelf. Eighteen advancements cover shelf crafting, library building, tome mastery, Warden hunting, and more.
+Meridian includes an advancement tree that guides you from your first shelf all the way to Apotheosis — reaching Eterna 50 with a Draconic Endshelf. Twenty-six advancements cover shelf crafting, library building, tome mastery, Warden hunting, and more.
 
 ## Commands
 

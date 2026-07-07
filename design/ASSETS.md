@@ -15,7 +15,7 @@
 | Asset | Source | Final / derived copies |
 |---|---|---|
 | Full logo | `art/logo.png` — `.png` master (not glyph-based) | `site/assets/logo.png` |
-| Mod icon | `art/glyphs/astrolabe_logo.glyph` → `art/icon-128.png` (128 native), `art/icon-512.png` (512 store master) | `assets/meridian/icon.png` (256, in-jar Mod Menu + EMI/REI/JEI category tabs), `site/assets/icon.png` (256, favicon/apple-touch/nav) |
+| Mod icon | `art/glyphs/astrolabe_logo.glyph` (built by `art/glyphs/astrolabe_logo.gen.py`) → `art/icon-128.png` (128 native), `art/icon-512.png` (512 store master) | `assets/meridian/icon.png` (256, in-jar Mod Menu + EMI/REI/JEI category tabs), `site/assets/icon.png` (256, favicon/apple-touch/nav) |
 
 ## In-game pixel art
 
@@ -32,8 +32,12 @@
 | Improved Scrap Tome | `art/glyphs/improved_scrap_tome.glyph` | `assets/meridian/textures/item/tome/improved_scrap_tome.png` |
 | Extraction Tome | `art/glyphs/extraction_tome.glyph` | `assets/meridian/textures/item/tome/extraction_tome.png` |
 | Infused Breath (animated, 8 frames) | `art/glyphs/infused_breath.glyph` | `assets/meridian/textures/item/infused_breath.png` (+ `.png.mcmeta`) |
-| Prismatic Web | `art/glyphs/prismatic_web.glyph` | `assets/meridian/textures/item/prismatic_web.png` |
+| Prismatic Web (animated) | `art/glyphs/prismatic_web.glyph` | `assets/meridian/textures/item/prismatic_web.png` (+ `.png.mcmeta`) |
 | Warden Tendril | `art/glyphs/warden_tendril.glyph` | `assets/meridian/textures/item/warden_tendril.png` |
+| Dormant Core | `art/glyphs/dormant_core.glyph` | `assets/meridian/textures/item/dormant_core.png` |
+| Tempered Core (animated) | `art/glyphs/tempered_core.glyph` | `assets/meridian/textures/item/tempered_core.png` (+ `.png.mcmeta`) |
+| Everfull Flask (animated) | `art/glyphs/everfull_flask.glyph` | `assets/meridian/textures/item/everfull_flask.png` (+ `.png.mcmeta`) |
+| Everfeast foods (10: `baked_potato`, `bread`, `cooked_beef`, `cooked_chicken`, `cooked_cod`, `cooked_mutton`, `cooked_porkchop`, `cooked_rabbit`, `cooked_salmon`, `golden_carrot`; each animated) | `art/glyphs/everfeast_*.glyph` | `assets/meridian/textures/item/everfeast_*.png` (each + `.png.mcmeta`) |
 | Sea-family shelves (`seashelf`, `crystal_seashelf`, `heart_seashelf`, `infused_seashelf`) + shared `prismarine_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{seashelf,crystal_seashelf,heart_seashelf,infused_seashelf,prismarine_shelf_top}.png` |
 | Nether-family shelves (`hellshelf`, `glowing_hellshelf`, `blazing_hellshelf` [animated], `infused_hellshelf`) + shared `nether_brick_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{hellshelf,glowing_hellshelf,blazing_hellshelf,infused_hellshelf,nether_brick_shelf_top}.png` |
 | Deepslate-family shelves (`deepshelf`, `dormant_deepshelf`, `echoing_deepshelf` [animated], `soul_touched_deepshelf` [animated]) + shared `deepslate_shelf_top` | `art/glyphs/shelves/*.glyph` + `shelfgen.py` | `assets/meridian/textures/block/{deepshelf,dormant_deepshelf,echoing_deepshelf,soul_touched_deepshelf,deepslate_shelf_top}.png` |
