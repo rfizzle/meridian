@@ -4,6 +4,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.enchanting.RangedEnchantMath;
 import com.rfizzle.meridian.event.ProjectileEnchantmentHandler;
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -186,7 +187,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         Holder<Enchantment> seeker = lookup(helper, "seeker");
         if (seeker == null) { helper.fail("seeker not in registry"); return; }
 
-        var target = helper.makeMockServerPlayerInLevel();
+        var target = MockPlayers.serverPlayerInLevel(helper);
         BlockPos targetAbs = helper.absolutePos(new BlockPos(1, 1, 2));
         target.teleportTo(targetAbs.getX() + 0.5, targetAbs.getY(), targetAbs.getZ() + 0.5);
 
@@ -266,7 +267,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         BlockPos throwerAbs = helper.absolutePos(new BlockPos(1, 1, 0));
         thrower.moveTo(throwerAbs.getX() + 0.5, throwerAbs.getY(), throwerAbs.getZ() + 0.5);
 
-        var victim = helper.makeMockServerPlayerInLevel();
+        var victim = MockPlayers.serverPlayerInLevel(helper);
         BlockPos victimAbs = helper.absolutePos(new BlockPos(1, 1, 2));
         victim.teleportTo(victimAbs.getX() + 0.5, victimAbs.getY(), victimAbs.getZ() + 0.5);
         victim.setDeltaMovement(Vec3.ZERO);

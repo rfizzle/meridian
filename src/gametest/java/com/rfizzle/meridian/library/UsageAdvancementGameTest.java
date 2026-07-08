@@ -3,6 +3,7 @@ package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.core.BlockPos;
@@ -44,7 +45,7 @@ public class UsageAdvancementGameTest implements FabricGameTest {
         EnchantmentLibraryBlockEntity tile = placeLibrary(helper);
         if (tile == null) return;
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         EnchantmentLibraryMenu menu = new EnchantmentLibraryMenu(1, player.getInventory(), tile);
         menu.getSlot(EnchantmentLibraryMenu.DEPOSIT_SLOT).set(sharpnessBook(helper));
 
@@ -59,7 +60,7 @@ public class UsageAdvancementGameTest implements FabricGameTest {
         EnchantmentLibraryBlockEntity tile = placeLibrary(helper);
         if (tile == null) return;
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         // The automated storage path (LibraryStorageAdapter, hoppers) goes straight to the BE with
         // no player — this asserts that path grants nothing to a player standing by.
         tile.depositBookSilent(sharpnessBook(helper));
@@ -82,7 +83,7 @@ public class UsageAdvancementGameTest implements FabricGameTest {
             tile.depositBookSilent(sharpnessBook(helper));
         }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         EnchantmentLibraryMenu menu = new EnchantmentLibraryMenu(1, player.getInventory(), tile);
         Enchantment sharpness = enchReg.getOrThrow(Enchantments.SHARPNESS);
         int index = enchReg.getId(sharpness);
@@ -102,7 +103,7 @@ public class UsageAdvancementGameTest implements FabricGameTest {
     @GameTest(template = "meridian:empty_5x5x5", timeoutTicks = 100, batch = "advSalvage")
     public void takingScrapTomeOutputGrantsAdvancement(GameTestHelper helper) {
         helper.setBlock(ANVIL_POS, Blocks.ANVIL.defaultBlockState());
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.experienceLevel = 30;
         AnvilMenu menu = new AnvilMenu(1, player.getInventory(),
                 ContainerLevelAccess.create(helper.getLevel(), helper.absolutePos(ANVIL_POS)));

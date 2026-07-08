@@ -2,6 +2,7 @@
 package com.rfizzle.meridian.shelf;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -54,7 +55,7 @@ public class FilteringShelfFeedbackGameTest implements FabricGameTest {
         mutable.set(unbreaking, 1);
         book.set(DataComponents.STORED_ENCHANTMENTS, mutable.toImmutable());
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.setGameMode(GameType.SURVIVAL);
         player.setItemInHand(InteractionHand.MAIN_HAND, book);
 
