@@ -15,9 +15,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
@@ -44,7 +46,10 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "everbloom");
         if (ench == null) { helper.fail("everbloom not in registry"); return; }
 
-        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        // Everbloom rides EverbloomMixin on LivingEntity.addEffect and only reads the equipped
+        // chest enchantment — no connection, player-list, or proximity — so the lighter non-placed
+        // Player stub is sufficient (see mc-testing-mock).
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
         ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
         chest.enchant(ench, 3);
@@ -77,7 +82,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
 
     @GameTest(template = "meridian:empty_3x3")
     public void everbloomWithoutEnchantLeavesDurationUnchanged(GameTestHelper helper) {
-        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 
         int base = 600;
         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, base, 0, true, true, true));
