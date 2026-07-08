@@ -45,12 +45,13 @@ public final class ToolEnchantmentHandler {
 
         ItemStack tool = player.getMainHandItem();
 
+        ServerLevel serverLevel = (ServerLevel) world;
         EXCAVATING_PLAYERS.add(player.getUUID());
         try {
-            handleExcavate(serverPlayer, (ServerLevel) world, pos, state, tool);
-            handleProspect(serverPlayer, (ServerLevel) world, pos, state, tool);
-            handleTimberfell(serverPlayer, (ServerLevel) world, pos, state, tool);
-            handleBounty(serverPlayer, (ServerLevel) world, pos, state, tool);
+            EffectGuard.run("excavate", serverPlayer, () -> handleExcavate(serverPlayer, serverLevel, pos, state, tool));
+            EffectGuard.run("prospect", serverPlayer, () -> handleProspect(serverPlayer, serverLevel, pos, state, tool));
+            EffectGuard.run("timberfell", serverPlayer, () -> handleTimberfell(serverPlayer, serverLevel, pos, state, tool));
+            EffectGuard.run("bounty", serverPlayer, () -> handleBounty(serverPlayer, serverLevel, pos, state, tool));
         } finally {
             EXCAVATING_PLAYERS.remove(player.getUUID());
         }
@@ -151,6 +152,12 @@ public final class ToolEnchantmentHandler {
         if (!isTillable(centerState)) return InteractionResult.PASS;
 
         int radius = level;
+        EffectGuard.run("furrow", player, () -> applyFurrow(world, center, radius));
+
+        return InteractionResult.PASS;
+    }
+
+    private static void applyFurrow(Level world, BlockPos center, int radius) {
         for (BlockPos bp : BlockPos.betweenClosed(center.offset(-radius, 0, -radius),
                 center.offset(radius, 0, radius))) {
             if (bp.equals(center)) continue;
@@ -160,8 +167,6 @@ public final class ToolEnchantmentHandler {
 
             world.setBlockAndUpdate(bp, Blocks.FARMLAND.defaultBlockState());
         }
-
-        return InteractionResult.PASS;
     }
 
     private static boolean isTillable(BlockState state) {

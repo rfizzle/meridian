@@ -52,19 +52,19 @@ public final class ArmorTickHandler {
     private static void onServerTick(MinecraftServer server) {
         tickCounter++;
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            handleLuminance(player);
-            handleGravitas(player);
-            handleSlipstream(player);
-            handleCinderwalk(player);
-            handleTerrasculpt(player);
-            handleThermal(player);
+            EffectGuard.run("luminance", player, () -> handleLuminance(player));
+            EffectGuard.run("gravitas", player, () -> handleGravitas(player));
+            EffectGuard.run("slipstream", player, () -> handleSlipstream(player));
+            EffectGuard.run("cinderwalk", player, () -> handleCinderwalk(player));
+            EffectGuard.run("terrasculpt", player, () -> handleTerrasculpt(player));
+            EffectGuard.run("thermal", player, () -> handleThermal(player));
 
             if (tickCounter % 20 == 0) {
-                handlePremonition(player);
+                EffectGuard.run("premonition", player, () -> handlePremonition(player));
             }
         }
 
-        revertCinderwalkBlocks(server);
+        EffectGuard.run("cinderwalk_revert", null, () -> revertCinderwalkBlocks(server));
     }
 
     private static void handleLuminance(ServerPlayer player) {

@@ -229,13 +229,24 @@ public final class EnchantmentEffectHandler {
 
     private static boolean onAllowDamage(LivingEntity entity, DamageSource source, float amount) {
         if (entity.level().isClientSide()) return true;
-        snapshotAmbushHealth(entity, source);
-        snapshotDecoyHealth(entity, source);
-        if (!source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) return true;
+        EffectGuard.run("ambush_snapshot", entity, () -> snapshotAmbushHealth(entity, source));
+        EffectGuard.run("decoy_snapshot", entity, () -> snapshotDecoyHealth(entity, source));
 
-        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.ABYSS_WARD, EquipmentSlot.HEAD);
-        if (level <= 0) return true;
+        // Cheap applicability gates stay outside the guard: this event fires for every damage
+        // instance, but Abyss Ward only concerns a void plunge onto a helmet wearer.
+        if (!source.is(DamageTypes.FELL_OUT_OF_WORLD)) return true;
+        if (EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.ABYSS_WARD, EquipmentSlot.HEAD) <= 0) {
+            return true;
+        }
+        return EffectGuard.run("abyss_ward", entity, true, () -> applyAbyssWard(entity));
+    }
 
+    /**
+     * Abyss Ward's rescue, reached only once the wearer has taken a fatal void plunge: once per long
+     * cooldown, levitate them back up and cancel the hit. Returns whether the damage should still
+     * apply — {@code false} only when the rescue fired.
+     */
+    private static boolean applyAbyssWard(LivingEntity entity) {
         long currentTick = entity.level().getGameTime();
         Long lastUsed = abyssWardCooldowns.get(entity);
         if (lastUsed != null && (currentTick - lastUsed) < ABYSS_WARD_COOLDOWN_TICKS) return true;
@@ -259,7 +270,7 @@ public final class EnchantmentEffectHandler {
      */
     private static boolean onAllowDeath(LivingEntity entity, DamageSource source, float amount) {
         if (entity.level().isClientSide()) return true;
-        return !tryBlink(entity, source);
+        return !EffectGuard.run("blink", entity, false, () -> tryBlink(entity, source));
     }
 
     /** Attempts a Blink rescue; true if it fired and the death must be cancelled. */
@@ -347,9 +358,9 @@ public final class EnchantmentEffectHandler {
         if (entity.level().isClientSide()) return;
 
         if (blocked) {
-            handleRetribution(entity, source, baseDamageTaken);
-            recordRiposteBlock(entity);
-            handleBastion(entity);
+            EffectGuard.run("retribution", entity, () -> handleRetribution(entity, source, baseDamageTaken));
+            EffectGuard.run("riposte_block", entity, () -> recordRiposteBlock(entity));
+            EffectGuard.run("bastion", entity, () -> handleBastion(entity));
         }
 
         if (damageTaken <= 0 && !blocked) return;
@@ -360,28 +371,30 @@ public final class EnchantmentEffectHandler {
         boolean bonusHit = attackerEntity instanceof LivingEntity livingAttacker
                 && BONUS_HIT_PROCESSING.contains(livingAttacker.getUUID());
         if (!bonusHit) {
-            handleQuell(entity, source);
-            handleFinalGambit(entity, source);
-            handleSiphon(entity, source);
-            handleSoulTax(entity, source);
-            handleAmbush(entity, source, damageTaken);
-            handleCrescendo(entity, source, damageTaken);
-            handleRiposte(entity, source, damageTaken);
-            handleJoust(entity, source, damageTaken);
-            handleSunder(entity, source);
-            handleCleave(entity, source);
-            handlePummel(entity, source);
+            EffectGuard.run("quell", entity, () -> handleQuell(entity, source));
+            EffectGuard.run("final_gambit", entity, () -> handleFinalGambit(entity, source));
+            EffectGuard.run("siphon", entity, () -> handleSiphon(entity, source));
+            EffectGuard.run("soul_tax", entity, () -> handleSoulTax(entity, source));
+            EffectGuard.run("ambush", entity, () -> handleAmbush(entity, source, damageTaken));
+            EffectGuard.run("crescendo", entity, () -> handleCrescendo(entity, source, damageTaken));
+            EffectGuard.run("riposte", entity, () -> handleRiposte(entity, source, damageTaken));
+            EffectGuard.run("joust", entity, () -> handleJoust(entity, source, damageTaken));
+            EffectGuard.run("sunder", entity, () -> handleSunder(entity, source));
+            EffectGuard.run("cleave", entity, () -> handleCleave(entity, source));
+            EffectGuard.run("pummel", entity, () -> handlePummel(entity, source));
+            // Mace-slam is a mini-dispatcher: it fans out to three independent enchantments, each
+            // guarded individually inside it, so its cheap mace/fall-distance gate stays unguarded here.
             handleMaceSlam(entity, source);
             // Decoy consumes the pre-hit snapshot, so it must run on the outer real hit only —
             // a nested bonus hit would otherwise consume it against a mid-combo health value.
-            handleDecoy(entity);
+            EffectGuard.run("decoy", entity, () -> handleDecoy(entity));
         }
-        handleRepulse(entity, source);
-        handleFrostguard(entity, source);
-        handleRally(entity);
-        handleBloodrage(entity);
-        handleEmberward(entity, source);
-        handleReprieve(entity);
+        EffectGuard.run("repulse", entity, () -> handleRepulse(entity, source));
+        EffectGuard.run("frostguard", entity, () -> handleFrostguard(entity, source));
+        EffectGuard.run("rally", entity, () -> handleRally(entity));
+        EffectGuard.run("bloodrage", entity, () -> handleBloodrage(entity));
+        EffectGuard.run("emberward", entity, () -> handleEmberward(entity, source));
+        EffectGuard.run("reprieve", entity, () -> handleReprieve(entity));
     }
 
     /**
@@ -644,9 +657,9 @@ public final class EnchantmentEffectHandler {
         if (!weapon.is(Items.MACE)) return;
         if (player.fallDistance < MACE_SLAM_MIN_FALL_DISTANCE) return;
 
-        handleTempest(entity, player, weapon);
-        handleSeismicSlam(entity, player, weapon);
-        handleUpdraft(player, weapon);
+        EffectGuard.run("tempest", entity, () -> handleTempest(entity, player, weapon));
+        EffectGuard.run("seismic_slam", entity, () -> handleSeismicSlam(entity, player, weapon));
+        EffectGuard.run("updraft", player, () -> handleUpdraft(player, weapon));
     }
 
     private static void handleTempest(LivingEntity entity, ServerPlayer player, ItemStack weapon) {
@@ -906,8 +919,8 @@ public final class EnchantmentEffectHandler {
         if (level <= 0) return;
 
         float bonusDamage = CombatEnchantMath.pinpointBonusDamage(level);
-        withReentrancyGuard(BONUS_HIT_PROCESSING, player.getUUID(),
-                () -> dealBonusDamage(livingTarget, player.damageSources().playerAttack(player), bonusDamage));
+        EffectGuard.run("pinpoint", livingTarget, () -> withReentrancyGuard(BONUS_HIT_PROCESSING, player.getUUID(),
+                () -> dealBonusDamage(livingTarget, player.damageSources().playerAttack(player), bonusDamage)));
     }
 
     /** Sunder: chance on hit to knock a random piece of the victim's equipment loose. */
@@ -961,12 +974,14 @@ public final class EnchantmentEffectHandler {
         // Players keep their UUID through respawn: drop any Crescendo ramp aimed at the
         // deceased so a fully-ramped hit can't greet a fresh respawn inside the timeout.
         // (Iterating a synchronizedMap view requires holding the map's own lock.)
-        synchronized (CRESCENDO_STREAKS) {
-            CRESCENDO_STREAKS.values().removeIf(streak -> streak.targetId().equals(entity.getUUID()));
-        }
-        handlePlunder(entity, source);
-        handleSnare(entity, source);
-        handleTrophy(entity, source);
+        EffectGuard.run("crescendo_cleanup", entity, () -> {
+            synchronized (CRESCENDO_STREAKS) {
+                CRESCENDO_STREAKS.values().removeIf(streak -> streak.targetId().equals(entity.getUUID()));
+            }
+        });
+        EffectGuard.run("plunder", entity, () -> handlePlunder(entity, source));
+        EffectGuard.run("snare", entity, () -> handleSnare(entity, source));
+        EffectGuard.run("trophy", entity, () -> handleTrophy(entity, source));
     }
 
     private static void handlePlunder(LivingEntity entity, DamageSource source) {

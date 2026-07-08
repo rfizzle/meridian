@@ -48,6 +48,10 @@ public final class GrapnelHandler {
 
         double pullSpeed = TraversalEnchantMath.grapnelPullSpeed(enchantLevel, distance);
         Vec3 pull = toHook.scale(pullSpeed / distance);
+        EffectGuard.run("grapnel", player, () -> applyPull(player, rod, level, pull));
+    }
+
+    private static void applyPull(ServerPlayer player, ItemStack rod, Level level, Vec3 pull) {
         player.setDeltaMovement(pull.x, pull.y + TraversalEnchantMath.GRAPNEL_LIFT, pull.z);
         player.hurtMarked = true;
         player.resetFallDistance();

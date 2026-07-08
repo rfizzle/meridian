@@ -39,18 +39,28 @@ public final class AurifyHandler {
         BlockState converted = getGoldConversion(state);
         if (converted == null) return InteractionResult.PASS;
 
+        boolean consumed = EffectGuard.run("aurify", player, false,
+                () -> applyAurify(player, world, hand, pos, converted, stack));
+        return consumed ? InteractionResult.SUCCESS : InteractionResult.PASS;
+    }
+
+    /**
+     * Applies one Aurify attempt on an already-validated convertible block. A 30% roll converts it
+     * to its gold form (heavier durability cost, chime) and returns {@code true} so the interaction
+     * is consumed; a miss just spends durability and returns {@code false} (interaction passes).
+     */
+    private static boolean applyAurify(Player player, Level world, InteractionHand hand, BlockPos pos,
+                                       BlockState converted, ItemStack stack) {
+        EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         if (player.getRandom().nextFloat() >= 0.30f) {
-            EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
             stack.hurtAndBreak(3, player, slot);
-            return InteractionResult.PASS;
+            return false;
         }
 
         world.setBlockAndUpdate(pos, converted);
-        EquipmentSlot slot = hand == InteractionHand.MAIN_HAND ? EquipmentSlot.MAINHAND : EquipmentSlot.OFFHAND;
         stack.hurtAndBreak(5, player, slot);
         world.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0f, 0.8f);
-
-        return InteractionResult.SUCCESS;
+        return true;
     }
 
     // Package-private: the deterministic block-to-gold mapping is the testable core of the

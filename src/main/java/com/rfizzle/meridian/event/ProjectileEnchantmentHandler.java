@@ -87,8 +87,10 @@ public final class ProjectileEnchantmentHandler {
             arrow.setNoGravity(true);
         }
         if (!arrow.level().isClientSide()) {
-            handleLongshot(arrow, longshotLevel);
-            handleSeeker(arrow, seekerLevel);
+            int longshot = longshotLevel;
+            int seeker = seekerLevel;
+            EffectGuard.run("longshot", arrow, () -> handleLongshot(arrow, longshot));
+            EffectGuard.run("seeker", arrow, () -> handleSeeker(arrow, seeker));
         }
     }
 
@@ -100,13 +102,13 @@ public final class ProjectileEnchantmentHandler {
         Vec3 pos = hit.getEntity().position();
         Entity owner = arrow.getOwner();
 
-        handleGaleShot(arrow, weapon, pos, owner);
-        handleResonance(arrow, weapon, pos, owner);
-        handlePermafrost(arrow, weapon, pos);
-        handleDetonation(arrow, weapon, pos, owner);
-        handleStormcall(arrow, weapon, pos);
-        handleGlacialLance(arrow, weapon, pos);
-        handleHarpoon(arrow, weapon, hit);
+        EffectGuard.run("gale_shot", arrow, () -> handleGaleShot(arrow, weapon, pos, owner));
+        EffectGuard.run("resonance", arrow, () -> handleResonance(arrow, weapon, pos, owner));
+        EffectGuard.run("permafrost", arrow, () -> handlePermafrost(arrow, weapon, pos));
+        EffectGuard.run("detonation", arrow, () -> handleDetonation(arrow, weapon, pos, owner));
+        EffectGuard.run("stormcall", arrow, () -> handleStormcall(arrow, weapon, pos));
+        EffectGuard.run("glacial_lance", arrow, () -> handleGlacialLance(arrow, weapon, pos));
+        EffectGuard.run("harpoon", arrow, () -> handleHarpoon(arrow, weapon, hit));
     }
 
     public static boolean handleBlockImpact(AbstractArrow arrow, BlockHitResult hit) {
@@ -114,18 +116,18 @@ public final class ProjectileEnchantmentHandler {
         ItemStack weapon = arrow.getWeaponItem();
         if (weapon == null || weapon.isEmpty()) return false;
 
-        if (handleRicochet(arrow, weapon, hit)) {
+        if (EffectGuard.run("ricochet", arrow, false, () -> handleRicochet(arrow, weapon, hit))) {
             return true;
         }
 
         Vec3 pos = hit.getLocation();
         Entity owner = arrow.getOwner();
-        handleGaleShot(arrow, weapon, pos, owner);
-        handleResonance(arrow, weapon, pos, owner);
-        handlePermafrost(arrow, weapon, pos);
-        handleDetonation(arrow, weapon, pos, owner);
-        handleStormcall(arrow, weapon, pos);
-        handleGlacialLance(arrow, weapon, pos);
+        EffectGuard.run("gale_shot", arrow, () -> handleGaleShot(arrow, weapon, pos, owner));
+        EffectGuard.run("resonance", arrow, () -> handleResonance(arrow, weapon, pos, owner));
+        EffectGuard.run("permafrost", arrow, () -> handlePermafrost(arrow, weapon, pos));
+        EffectGuard.run("detonation", arrow, () -> handleDetonation(arrow, weapon, pos, owner));
+        EffectGuard.run("stormcall", arrow, () -> handleStormcall(arrow, weapon, pos));
+        EffectGuard.run("glacial_lance", arrow, () -> handleGlacialLance(arrow, weapon, pos));
 
         return false;
     }
