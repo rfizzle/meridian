@@ -3,6 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.CombatEnchantMath;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import com.rfizzle.meridian.mixin.LivingEntityCombatAccessor;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -445,7 +446,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "riposte");
         if (ench == null) { helper.fail("riposte not in registry"); return; }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.setGameMode(GameType.SURVIVAL);
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
         sword.enchant(ench, 3);

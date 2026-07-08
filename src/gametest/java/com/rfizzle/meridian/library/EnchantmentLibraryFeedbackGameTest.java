@@ -2,6 +2,7 @@
 package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -86,7 +87,7 @@ public class EnchantmentLibraryFeedbackGameTest implements FabricGameTest {
         Enchantment sharpness = enchReg.getOrThrow(Enchantments.SHARPNESS);
         int index = enchReg.getId(sharpness);
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         EnchantmentLibraryMenu menu = new EnchantmentLibraryMenu(1, player.getInventory(), tile);
 
         // Empty pool → canExtract is false → clickMenuButton must reject and message the player.

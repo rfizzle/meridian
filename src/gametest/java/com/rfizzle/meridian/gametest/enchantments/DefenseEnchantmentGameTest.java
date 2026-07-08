@@ -4,6 +4,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.event.LoftHandler;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -204,7 +205,7 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         BlockPos onFloor = helper.absolutePos(new BlockPos(1, 2, 1));
         BlockPos inAir = helper.absolutePos(new BlockPos(1, 3, 1));
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.teleportTo(inAir.getX() + 0.5, inAir.getY(), inAir.getZ() + 0.5);
         player.setOnGround(false);
 

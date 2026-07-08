@@ -3,6 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.event.DecoyManager;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -43,7 +44,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "everbloom");
         if (ench == null) { helper.fail("everbloom not in registry"); return; }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
 
         ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
         chest.enchant(ench, 3);
@@ -76,7 +77,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
 
     @GameTest(template = "meridian:empty_3x3")
     public void everbloomWithoutEnchantLeavesDurationUnchanged(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
 
         int base = 600;
         player.addEffect(new MobEffectInstance(MobEffects.REGENERATION, base, 0, true, true, true));
@@ -96,7 +97,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
     @GameTest(template = "meridian:empty_3x3")
     public void decoyDeploysBodyAndExpires(GameTestHelper helper) {
         DecoyManager.clearForTest();
-        ServerPlayer owner = helper.makeMockServerPlayerInLevel();
+        ServerPlayer owner = MockPlayers.serverPlayerInLevel(helper);
 
         DecoyManager.deploy(helper.getLevel(), owner);
 

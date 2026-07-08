@@ -2,6 +2,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.MiningEnchantMath;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -130,7 +131,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
         Holder<Enchantment> ench = lookup(helper, "reclaim");
         if (ench == null) { helper.fail("reclaim not in registry"); return; }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
         ItemStack pick = new ItemStack(Items.IRON_PICKAXE);
         pick.enchant(ench, 1);
@@ -162,7 +163,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
 
     @GameTest(template = "meridian:empty_3x3")
     public void unenchantedBreakStillDropsGroundItems(GameTestHelper helper) {
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
         player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
         player.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE));
 
