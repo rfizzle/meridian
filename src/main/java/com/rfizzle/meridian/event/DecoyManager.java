@@ -91,7 +91,7 @@ public final class DecoyManager {
                     continue;
                 }
 
-                taunt(decoy, active.level());
+                EffectGuard.run("decoy_taunt", decoy, () -> taunt(decoy, active.level()));
             }
         }
     }
@@ -109,11 +109,11 @@ public final class DecoyManager {
 
     /** Discards a tagged decoy that loaded without a live tracker — an orphan from a crashed session. */
     private static void onEntityLoad(Entity entity) {
-        if (entity instanceof ArmorStand stand
-                && stand.getTags().contains(DECOY_ENTITY_TAG)
-                && !isTracked(stand)) {
-            stand.discard();
-        }
+        // Cheap filter outside the guard: this hook fires for every entity that loads anywhere on
+        // the server, and only a stranded tagged decoy is ours to discard.
+        if (!(entity instanceof ArmorStand stand)) return;
+        if (!stand.getTags().contains(DECOY_ENTITY_TAG) || isTracked(stand)) return;
+        EffectGuard.run("decoy_orphan_cleanup", stand, stand::discard);
     }
 
     private static boolean isTracked(ArmorStand stand) {

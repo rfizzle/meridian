@@ -49,7 +49,7 @@ public final class LoftHandler {
     private static void onServerTick(MinecraftServer server) {
         if (airJumpSpent.isEmpty()) return;
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-            resetOnGround(player);
+            EffectGuard.run("loft_reset", player, () -> resetOnGround(player));
         }
     }
 
@@ -114,12 +114,16 @@ public final class LoftHandler {
         if (!airJumpSpent.add(player.getUUID())) return false;
         lastAirJump.put(player.getUUID(), now);
 
+        EffectGuard.run("loft", player, () -> applyLoftJump(player));
+        return true;
+    }
+
+    private static void applyLoftJump(ServerPlayer player) {
         Vec3 movement = player.getDeltaMovement();
         player.setDeltaMovement(movement.x, DefenseEnchantMath.LOFT_JUMP_VELOCITY, movement.z);
         player.hurtMarked = true;
         player.resetFallDistance();
         player.serverLevel().playSound(null, player.blockPosition(), SoundEvents.BREEZE_JUMP,
                 player.getSoundSource(), 0.5f, 1.2f);
-        return true;
     }
 }

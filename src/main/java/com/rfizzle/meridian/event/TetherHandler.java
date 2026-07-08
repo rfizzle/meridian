@@ -28,7 +28,7 @@ public final class TetherHandler {
 
     private static void onPlayerRespawn(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive) {
         if (alive) return;
-        restoreTetheredItems(oldPlayer, newPlayer);
+        EffectGuard.run("tether", newPlayer, () -> restoreTetheredItems(oldPlayer, newPlayer));
     }
 
     // Package-private: moves any items stashed on `from` into `to`'s inventory (dropping the

@@ -37,7 +37,7 @@ public final class MountedEnchantmentHandler {
     private static void onServerTick(MinecraftServer server) {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (player.getVehicle() instanceof AbstractHorse horse) {
-                handleTrample(horse);
+                EffectGuard.run("trample", horse, () -> handleTrample(horse));
             }
         }
     }
