@@ -4,6 +4,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.enchanting.RangedEnchantMath;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
@@ -62,6 +63,23 @@ public final class ProjectileEnchantmentHandler {
             Collections.synchronizedMap(new WeakHashMap<>());
 
     private ProjectileEnchantmentHandler() {}
+
+    /**
+     * The per-arrow tick and impact effects are driven from {@code AbstractArrowMixin} /
+     * {@code ThrownTridentMixin}, not from Fabric events, so this only wires the lifecycle
+     * clear: the launch/lock/bounce snapshots below are in-memory only and, though weakly
+     * keyed, must not outlive the server they were captured on (stale entries otherwise
+     * survive a same-JVM restart until GC runs — a gametest/integration-harness concern).
+     */
+    public static void register() {
+        ServerLifecycleEvents.SERVER_STOPPED.register(server -> reset());
+    }
+
+    private static void reset() {
+        bouncesRemaining.clear();
+        longshotLaunches.clear();
+        seekerLocks.clear();
+    }
 
     public static void handleTick(AbstractArrow arrow) {
         ItemStack weapon = arrow.getWeaponItem();
@@ -400,5 +418,24 @@ public final class ProjectileEnchantmentHandler {
                 SoundEvents.ARROW_HIT, SoundSource.PLAYERS, 0.5f, 1.4f);
 
         return true;
+    }
+
+    // Test support: mirror the per-projectile tracker sizes and run the same reset the
+    // SERVER_STOPPED listener does, so a gametest can assert the clear without firing the
+    // real lifecycle event (which fires only once, at the end of the whole run).
+    public static int bouncesRemainingSizeForTest() {
+        return bouncesRemaining.size();
+    }
+
+    public static int longshotLaunchesSizeForTest() {
+        return longshotLaunches.size();
+    }
+
+    public static int seekerLocksSizeForTest() {
+        return seekerLocks.size();
+    }
+
+    public static void clearForTest() {
+        reset();
     }
 }
