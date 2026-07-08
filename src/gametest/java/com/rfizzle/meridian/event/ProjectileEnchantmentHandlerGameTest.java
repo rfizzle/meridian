@@ -87,4 +87,63 @@ public class ProjectileEnchantmentHandlerGameTest implements FabricGameTest {
 
         helper.succeed();
     }
+
+    // Lifecycle hygiene: the per-projectile trackers (bounces, Longshot launches, Seeker locks)
+    // populated during flight are all emptied by the SERVER_STOPPED reset, exercised here through
+    // clearForTest() (the same reset path the lifecycle listener runs).
+    @GameTest(template = "meridian:empty_3x3")
+    public void resetClearsPerProjectileTrackers(GameTestHelper helper) {
+        Holder<Enchantment> ricochet = lookup(helper, "ricochet");
+        Holder<Enchantment> longshot = lookup(helper, "longshot");
+        Holder<Enchantment> seeker = lookup(helper, "seeker");
+        if (ricochet == null || longshot == null || seeker == null) {
+            helper.fail("ricochet/longshot/seeker not in registry");
+            return;
+        }
+
+        // Start from a known-empty baseline — earlier tests may have left weakly-held entries.
+        ProjectileEnchantmentHandler.clearForTest();
+
+        ItemStack ricochetBow = new ItemStack(Items.BOW);
+        ricochetBow.enchant(ricochet, 2);
+        Arrow bouncer = arrowFiredFrom(helper, ricochetBow);
+        bouncer.setDeltaMovement(new Vec3(0.0, 0.0, 1.0));
+        BlockHitResult hit = new BlockHitResult(bouncer.position(), Direction.NORTH,
+                BlockPos.containing(bouncer.position()), false);
+        ProjectileEnchantmentHandler.handleBlockImpact(bouncer, hit);
+
+        ItemStack longshotBow = new ItemStack(Items.BOW);
+        longshotBow.enchant(longshot, 1);
+        Arrow longshotArrow = arrowFiredFrom(helper, longshotBow);
+        ProjectileEnchantmentHandler.handleTick(longshotArrow);
+
+        ItemStack seekerBow = new ItemStack(Items.BOW);
+        seekerBow.enchant(seeker, 1);
+        Arrow seekerArrow = arrowFiredFrom(helper, seekerBow);
+        ProjectileEnchantmentHandler.handleTick(seekerArrow);
+
+        if (ProjectileEnchantmentHandler.bouncesRemainingSizeForTest() < 1
+                || ProjectileEnchantmentHandler.longshotLaunchesSizeForTest() < 1
+                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() < 1) {
+            helper.fail("Trackers should be populated after flight events: bounces="
+                    + ProjectileEnchantmentHandler.bouncesRemainingSizeForTest()
+                    + " longshot=" + ProjectileEnchantmentHandler.longshotLaunchesSizeForTest()
+                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest());
+            return;
+        }
+
+        ProjectileEnchantmentHandler.clearForTest();
+
+        if (ProjectileEnchantmentHandler.bouncesRemainingSizeForTest() != 0
+                || ProjectileEnchantmentHandler.longshotLaunchesSizeForTest() != 0
+                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() != 0) {
+            helper.fail("Reset should clear every per-projectile tracker: bounces="
+                    + ProjectileEnchantmentHandler.bouncesRemainingSizeForTest()
+                    + " longshot=" + ProjectileEnchantmentHandler.longshotLaunchesSizeForTest()
+                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest());
+            return;
+        }
+
+        helper.succeed();
+    }
 }
