@@ -1,15 +1,13 @@
 package com.rfizzle.meridian.compat.tribulation;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.tribulation.api.TribulationAPI;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Soft-dependency probe for Tribulation's soul-inventory, used to decide the single owner of the
+ * Soft-dependency bridge to Tribulation's soul-inventory, used to decide the single owner of the
  * keep-on-death behavior when both mods are installed.
  *
  * <p>Meridian's {@code TetherHandler} and Tribulation's soul-inventory both implement
@@ -17,19 +15,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * would receive it twice on respawn, so exactly one mod may own a given death: Tribulation wins
  * when its soul-inventory is active, and Meridian stands down.
  *
- * <p>The probe fails open. It reports {@code true} only when Tribulation is loaded, exposes
- * {@code TribulationAPI.isSoulInventoryActive()}, and that accessor returns {@code true}. In every
- * other case — Tribulation absent, an older Tribulation that predates the accessor, the
- * soul-inventory disabled in config, or the reflective call throwing — Meridian handles
- * keep-on-death itself.
+ * <p>The bridge fails open. It reports {@code true} only when Tribulation is loaded and
+ * {@code TribulationAPI.isSoulInventoryActive()} returns {@code true}. In every other case —
+ * Tribulation absent, the soul-inventory disabled in config, or the call throwing — Meridian
+ * handles keep-on-death itself.
+ *
+ * <p>{@code TribulationAPI} is referenced through {@code modCompileOnly} rather than reflection,
+ * guarded by {@code isModLoaded}. The {@code catch (Throwable)} still matters: an installed
+ * Tribulation older than the {@code tribulation_version} Meridian compiled against predates
+ * {@code isSoulInventoryActive()} and surfaces the miss as a {@link LinkageError}, which must
+ * degrade to Meridian owning the death — never crash it.
  */
 public final class TribulationCompat {
 
-    private static final String API_CLASS = "com.rfizzle.tribulation.api.TribulationAPI";
-    private static final String API_METHOD = "isSoulInventoryActive";
-
-    private static volatile boolean resolved;
-    private static volatile MethodHandle handle;
     private static final AtomicBoolean LOGGED = new AtomicBoolean(false);
 
     private TribulationCompat() {}
@@ -40,34 +38,15 @@ public final class TribulationCompat {
      */
     public static boolean isSoulInventoryActive() {
         if (!FabricLoader.getInstance().isModLoaded("tribulation")) return false;
-        MethodHandle h = resolve();
-        if (h == null) return false;
         try {
-            return (boolean) h.invokeExact();
+            return TribulationAPI.isSoulInventoryActive();
         } catch (Throwable t) {
             if (LOGGED.compareAndSet(false, true)) {
-                Meridian.LOGGER.warn("{}.{} threw; Meridian keeps handling tether", API_CLASS, API_METHOD, t);
+                Meridian.LOGGER.warn(
+                        "TribulationAPI.isSoulInventoryActive() unavailable (older Tribulation?); "
+                                + "Meridian keeps handling tether", t);
             }
             return false;
-        }
-    }
-
-    private static MethodHandle resolve() {
-        if (resolved) return handle;
-        synchronized (TribulationCompat.class) {
-            if (resolved) return handle;
-            try {
-                handle = MethodHandles.publicLookup().findStatic(
-                        Class.forName(API_CLASS), API_METHOD, MethodType.methodType(boolean.class));
-            } catch (Throwable t) {
-                if (LOGGED.compareAndSet(false, true)) {
-                    Meridian.LOGGER.info(
-                            "{}.{} unavailable (Tribulation predates it?); Meridian keeps handling tether",
-                            API_CLASS, API_METHOD);
-                }
-            }
-            resolved = true;
-            return handle;
         }
     }
 }

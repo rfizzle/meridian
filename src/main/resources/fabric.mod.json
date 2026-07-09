@@ -100,6 +100,9 @@
         "java": ">=21",
         "fabric-api": ">=0.116.1"
     },
+    "recommends": {
+        "tribulation": ">=1.1.0-beta.1"
+    },
     "suggests": {
         "emi": "*",
         "roughlyenoughitems": "*",
