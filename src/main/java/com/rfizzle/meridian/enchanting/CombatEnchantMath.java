@@ -11,6 +11,8 @@ public final class CombatEnchantMath {
 
     public static final float AMBUSH_DAMAGE_PER_LEVEL = 1.25f;
 
+    public static final float REAP_DAMAGE_PER_LEVEL = 1.25f;
+
     public static final float PINPOINT_BASE_DAMAGE = 0.5f;
     public static final float PINPOINT_DAMAGE_PER_LEVEL = 1.0f;
 
@@ -50,6 +52,19 @@ public final class CombatEnchantMath {
     public static float ambushBonusDamage(int level, float healthFraction) {
         if (level <= 0 || healthFraction <= 0.0f) return 0.0f;
         return AMBUSH_DAMAGE_PER_LEVEL * level * Math.min(1.0f, healthFraction);
+    }
+
+    /**
+     * Reap's finisher bonus: the mirror of {@link #ambushBonusDamage}. Zero against an
+     * unharmed target, scaling up linearly with how far the target's pre-hit health has
+     * fallen — full value as it approaches death. Shares Ambush's pre-hit
+     * {@link #ambushHealthFraction} snapshot.
+     */
+    public static float reapBonusDamage(int level, float healthFraction) {
+        if (level <= 0) return 0.0f;
+        float weakened = 1.0f - Math.min(1.0f, Math.max(0.0f, healthFraction));
+        if (weakened <= 0.0f) return 0.0f;
+        return REAP_DAMAGE_PER_LEVEL * level * weakened;
     }
 
     /** Pinpoint's flat bonus, applied on top of the vanilla critical-hit multiplier. */
