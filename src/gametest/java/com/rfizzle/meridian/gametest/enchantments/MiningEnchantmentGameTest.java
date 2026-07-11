@@ -184,6 +184,132 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- Kiln: mined drops come out smelted, composing with Reclaim ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void kilnSmeltsMinedDropOnTheGround(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "kiln");
+        if (ench == null) { helper.fail("kiln not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+        ItemStack pick = new ItemStack(Items.IRON_PICKAXE);
+        pick.enchant(ench, 1);
+        player.setItemSlot(EquipmentSlot.MAINHAND, pick);
+
+        BlockPos rel = new BlockPos(1, 2, 1);
+        helper.setBlock(rel, Blocks.COBBLESTONE);
+        BlockPos abs = helper.absolutePos(rel);
+
+        player.gameMode.destroyBlock(abs);
+
+        AABB area = new AABB(abs).inflate(4.0);
+        boolean stoneDropped = !helper.getLevel().getEntitiesOfClass(ItemEntity.class, area,
+                item -> item.getItem().is(Items.STONE)).isEmpty();
+        boolean cobbleDropped = !helper.getLevel().getEntitiesOfClass(ItemEntity.class, area,
+                item -> item.getItem().is(Items.COBBLESTONE)).isEmpty();
+        player.discard();
+
+        if (!stoneDropped) {
+            helper.fail("Kiln should drop the smelted result (stone) when breaking cobblestone");
+            return;
+        }
+        if (cobbleDropped) {
+            helper.fail("Kiln must replace the raw cobblestone drop, not add to it");
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void kilnComposesWithReclaimIntoInventory(GameTestHelper helper) {
+        Holder<Enchantment> kiln = lookup(helper, "kiln");
+        Holder<Enchantment> reclaim = lookup(helper, "reclaim");
+        if (kiln == null || reclaim == null) { helper.fail("kiln/reclaim not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+        ItemStack pick = new ItemStack(Items.IRON_PICKAXE);
+        pick.enchant(kiln, 1);
+        pick.enchant(reclaim, 1);
+        player.setItemSlot(EquipmentSlot.MAINHAND, pick);
+
+        BlockPos rel = new BlockPos(1, 2, 1);
+        helper.setBlock(rel, Blocks.COBBLESTONE);
+        BlockPos abs = helper.absolutePos(rel);
+
+        player.gameMode.destroyBlock(abs);
+
+        boolean smeltedInInventory = player.getInventory().items.stream().anyMatch(s -> s.is(Items.STONE));
+        boolean rawInInventory = player.getInventory().items.stream().anyMatch(s -> s.is(Items.COBBLESTONE));
+        List<ItemEntity> groundItems = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
+                new AABB(abs).inflate(4.0));
+        player.discard();
+
+        if (!smeltedInInventory) {
+            helper.fail("Kiln + Reclaim should place the smelted stone straight into the inventory");
+            return;
+        }
+        if (rawInInventory) {
+            helper.fail("Kiln + Reclaim must smelt the drop, not bank raw cobblestone");
+            return;
+        }
+        if (!groundItems.isEmpty()) {
+            helper.fail("Kiln + Reclaim must not spawn ground items, found " + groundItems.size());
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void kilnLeavesNonSmeltableBlocksAlone(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "kiln");
+        if (ench == null) { helper.fail("kiln not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        player.gameMode.changeGameModeForPlayer(GameType.SURVIVAL);
+        ItemStack shovel = new ItemStack(Items.IRON_SHOVEL);
+        shovel.enchant(ench, 1);
+        player.setItemSlot(EquipmentSlot.MAINHAND, shovel);
+
+        // Dirt has no smelting recipe — Kiln must leave its drop untouched.
+        BlockPos rel = new BlockPos(1, 2, 1);
+        helper.setBlock(rel, Blocks.DIRT);
+        BlockPos abs = helper.absolutePos(rel);
+
+        player.gameMode.destroyBlock(abs);
+
+        boolean dirtDropped = !helper.getLevel().getEntitiesOfClass(ItemEntity.class,
+                new AABB(abs).inflate(4.0), item -> item.getItem().is(Items.DIRT)).isEmpty();
+        player.discard();
+
+        if (!dirtDropped) {
+            helper.fail("Kiln must drop a non-smeltable block (dirt) normally");
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void kilnAppliesToPickaxesAndShovelsOnly(GameTestHelper helper) {
+        Holder<Enchantment> kiln = lookup(helper, "kiln");
+        if (kiln == null) { helper.fail("kiln not in registry"); return; }
+
+        Enchantment kilnE = kiln.value();
+        if (!kilnE.canEnchant(new ItemStack(Items.DIAMOND_PICKAXE))
+                || !kilnE.canEnchant(new ItemStack(Items.DIAMOND_SHOVEL))) {
+            helper.fail("kiln should apply to pickaxes and shovels");
+            return;
+        }
+        if (kilnE.canEnchant(new ItemStack(Items.DIAMOND_AXE))
+                || kilnE.canEnchant(new ItemStack(Items.DIAMOND_HOE))
+                || kilnE.canEnchant(new ItemStack(Items.DIAMOND_SWORD))) {
+            helper.fail("kiln should NOT apply to axes, hoes, or swords");
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Definitions: item eligibility follows the issue's item lists ---
 
     @GameTest(template = "meridian:empty_3x3")
