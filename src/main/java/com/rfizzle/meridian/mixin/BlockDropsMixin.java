@@ -62,7 +62,11 @@ public abstract class BlockDropsMixin {
             if (routeToInventory) {
                 player.getInventory().placeItemBackInInventory(out);
             } else {
-                Block.popResource(level, pos, out);
+                // A smelted drop can exceed a stack (a modded high-count smelt of a multi-item
+                // drop); pop it in stack-sized pieces so no oversized item entity is spawned.
+                while (!out.isEmpty()) {
+                    Block.popResource(level, pos, out.split(out.getMaxStackSize()));
+                }
             }
         }
         state.spawnAfterBreak(serverLevel, pos, tool, true);

@@ -5,6 +5,7 @@ import java.util.Optional;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -16,6 +17,14 @@ import net.minecraft.world.item.crafting.SmeltingRecipe;
  */
 public final class KilnSmelting {
 
+    /**
+     * Single-entry recipe cache, matching how vanilla furnaces look smelting up: it short-circuits
+     * the recipe stream when the same item is smelted repeatedly (vein-mining, machine breaks).
+     * Block breaks run on the server thread only, so the shared instance needs no synchronization.
+     */
+    private static final RecipeManager.CachedCheck<SingleRecipeInput, SmeltingRecipe> CHECK =
+            RecipeManager.createCheck(RecipeType.SMELTING);
+
     private KilnSmelting() {}
 
     /**
@@ -26,8 +35,7 @@ public final class KilnSmelting {
     public static ItemStack smelt(ServerLevel level, ItemStack drop) {
         if (drop.isEmpty()) return drop;
 
-        Optional<RecipeHolder<SmeltingRecipe>> recipe = level.getRecipeManager()
-                .getRecipeFor(RecipeType.SMELTING, new SingleRecipeInput(drop), level);
+        Optional<RecipeHolder<SmeltingRecipe>> recipe = CHECK.getRecipeFor(new SingleRecipeInput(drop), level);
         if (recipe.isEmpty()) return drop;
 
         ItemStack result = recipe.get().value().getResultItem(level.registryAccess());
