@@ -10,6 +10,7 @@ import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
 import com.rfizzle.meridian.event.ArmorTickHandler;
+import com.rfizzle.meridian.event.AttunementHandler;
 import com.rfizzle.meridian.event.AurifyHandler;
 import com.rfizzle.meridian.event.DecoyManager;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
@@ -57,6 +58,7 @@ public class Meridian implements ModInitializer {
         WardenLootHandler.register();
         EnchantmentEffectHandler.register();
         ArmorTickHandler.register();
+        AttunementHandler.register();
         DecoyManager.register();
         LoftHandler.register();
         ToolEnchantmentHandler.register();

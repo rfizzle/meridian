@@ -99,7 +99,11 @@ public class ExclusiveSetEnforcementTest implements FabricGameTest {
     @GameTest(template = "meridian:empty_3x3")
     public void mendingSetMembersAreExclusive(GameTestHelper helper) {
         Holder<Enchantment> vitalMend = lookup(helper, "vital_mend");
-        if (vitalMend == null) { helper.fail("vital_mend not in registry"); return; }
+        Holder<Enchantment> attunement = lookup(helper, "attunement");
+        if (vitalMend == null || attunement == null) {
+            helper.fail("vital_mend or attunement not in registry");
+            return;
+        }
 
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
@@ -108,6 +112,14 @@ public class ExclusiveSetEnforcementTest implements FabricGameTest {
 
         if (areCompatible(vitalMend, mending)) {
             helper.fail("Vital Mend and Mending should be mutually exclusive (mending set)");
+            return;
+        }
+        if (areCompatible(attunement, mending)) {
+            helper.fail("Attunement and Mending should be mutually exclusive (mending set)");
+            return;
+        }
+        if (areCompatible(attunement, vitalMend)) {
+            helper.fail("Attunement and Vital Mend should be mutually exclusive (mending set)");
             return;
         }
         helper.succeed();

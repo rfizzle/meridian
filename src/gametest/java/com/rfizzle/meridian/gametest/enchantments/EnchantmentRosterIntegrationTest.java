@@ -16,7 +16,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
 
     private static final List<String> ALL_IDS = List.of(
             "abyss_ward", "adamant", "alacrity", "ambush", "animus",
-            "antidote", "aurify", "bastion", "beckon", "blight", "blink",
+            "antidote", "attunement", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
@@ -36,7 +36,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "vault", "vital_mend", "vitality", "voidbane");
 
     @GameTest(template = "meridian:empty_3x3")
-    public void all101EnchantmentsResolveInRegistry(GameTestHelper helper) {
+    public void all102EnchantmentsResolveInRegistry(GameTestHelper helper) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
         List<String> missing = new ArrayList<>();
@@ -60,8 +60,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 101) {
-            helper.fail("Expected 101 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 102) {
+            helper.fail("Expected 102 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();
