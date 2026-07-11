@@ -97,6 +97,7 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> TIMBERFELL = key("timberfell");
     public static final ResourceKey<Enchantment> GRAPNEL = key("grapnel");
     public static final ResourceKey<Enchantment> THERMAL = key("thermal");
+    public static final ResourceKey<Enchantment> ATTUNEMENT = key("attunement");
 
     private EnchantmentEffects() {}
 

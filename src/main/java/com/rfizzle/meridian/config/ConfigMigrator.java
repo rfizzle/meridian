@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 4;
+    static final int CURRENT_VERSION = 5;
 
     @FunctionalInterface
     interface Migration {
@@ -49,6 +49,10 @@ final class ConfigMigrator {
                     table.getAsJsonObject().remove("showLevelIndicator");
                 }
             },
+            // v4 → v5: the attunement group (#206) — radius, intervalTicks, minEterna. Purely
+            // additive; Gson field initializers supply the defaults, and the post-migration re-save
+            // writes the group into the file so operators can discover it.
+            json -> { },
     };
 
     private ConfigMigrator() {}

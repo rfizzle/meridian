@@ -73,6 +73,7 @@
             "com.rfizzle.meridian.gametest.EverfeastRationGameTest",
             "com.rfizzle.meridian.gametest.RecipeModuleToggleGameTest",
             "com.rfizzle.meridian.event.ArmorTickHandlerGameTest",
+            "com.rfizzle.meridian.event.AttunementHandlerGameTest",
             "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.ToolEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.AurifyHandlerGameTest",

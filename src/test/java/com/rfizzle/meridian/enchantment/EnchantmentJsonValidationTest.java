@@ -33,7 +33,7 @@ class EnchantmentJsonValidationTest {
 
     private static final List<String> ALL_ENCHANTMENT_IDS = List.of(
             "abyss_ward", "adamant", "alacrity", "ambush", "animus",
-            "antidote", "aurify", "bastion", "beckon", "blight", "blink",
+            "antidote", "attunement", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
@@ -54,7 +54,7 @@ class EnchantmentJsonValidationTest {
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
-            "vital_mend", "tether", "curse_of_decay", "curse_of_sealing", "aurify");
+            "vital_mend", "attunement", "tether", "curse_of_decay", "curse_of_sealing", "aurify");
 
     /**
      * Maps each exclusive set tag path (relative to GENERATED_TAGS_DIR) to the
@@ -85,7 +85,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("meridian/tags/enchantment/exclusive_set/mobility.json",
                     List.of("loft", "vault")),
             Map.entry("meridian/tags/enchantment/exclusive_set/mending.json",
-                    List.of("vital_mend")),
+                    List.of("vital_mend", "attunement")),
             Map.entry("meridian/tags/enchantment/exclusive_set/loot_bonus.json",
                     List.of("fortuity", "plunder")),
             Map.entry("meridian/tags/enchantment/exclusive_set/trophy.json",
@@ -127,6 +127,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("loft", "#meridian:exclusive_set/mobility"),
             Map.entry("vault", "#meridian:exclusive_set/mobility"),
             Map.entry("vital_mend", "#meridian:exclusive_set/mending"),
+            Map.entry("attunement", "#meridian:exclusive_set/mending"),
             Map.entry("ambush", "#minecraft:exclusive_set/damage"),
             Map.entry("pinpoint", "#minecraft:exclusive_set/damage"),
             Map.entry("longshot", "#minecraft:exclusive_set/damage"),
@@ -175,11 +176,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is101() throws Exception {
+    void enchantmentCount_is102() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(101, count, "expected exactly 101 enchantment JSON files");
+        assertEquals(102, count, "expected exactly 102 enchantment JSON files");
     }
 
     @TestFactory
@@ -344,6 +345,7 @@ class EnchantmentJsonValidationTest {
                 Map.entry("rally", 1),
                 Map.entry("cinderwalk", 2),
                 Map.entry("vital_mend", 1),
+                Map.entry("attunement", 1),
                 Map.entry("tether", 1),
                 Map.entry("curse_of_decay", 2),
                 Map.entry("curse_of_sealing", 1),

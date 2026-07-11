@@ -34,6 +34,25 @@ class ConfigMigratorTest {
     }
 
     @Test
+    void migrate_v4_advancesToCurrentWithoutStructuralChange() {
+        // v4 → v5 (the attunement group, #206) is purely additive: the migration only advances the
+        // version stamp; Gson field initializers supply the new group's defaults on deserialize.
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 4);
+        JsonObject table = new JsonObject();
+        table.addProperty("maxEterna", 50);
+        json.add("enchantingTable", table);
+
+        boolean changed = ConfigMigrator.migrate(json);
+
+        assertTrue(changed, "migrating a v4 config must report a change");
+        assertEquals(50, json.getAsJsonObject("enchantingTable").get("maxEterna").getAsInt(),
+                "unrelated keys must survive the migration");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt(),
+                "configVersion must be stamped to the current version");
+    }
+
+    @Test
     void migrate_currentVersion_isNoOp() {
         JsonObject json = new JsonObject();
         json.addProperty("configVersion", ConfigMigrator.CURRENT_VERSION);

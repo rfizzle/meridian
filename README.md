@@ -13,7 +13,7 @@
   <a href="https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul"><img alt="CurseForge downloads" src="https://img.shields.io/curseforge/dt/1546092?logo=curseforge&label=CurseForge"></a>
 </p>
 
-A complete enchanting overhaul for Minecraft 1.21.1 (Fabric). Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 101 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
+A complete enchanting overhaul for Minecraft 1.21.1 (Fabric). Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 102 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
 
 ## Download
 
@@ -101,9 +101,9 @@ The Dormant XP Tome itself stores nothing — it's the crafting base for the act
 - **Prismatic Web** — Strips all curses from an item (30 levels, 1 web consumed). Non-curse enchantments are preserved.
 - **Iron Block Repair** — Repairs a Damaged or Chipped Anvil by one tier (1 iron block consumed).
 
-### 101 Enchantments
+### 102 Enchantments
 
-A roster of 101 original enchantments spanning combat, tools, mobility, mounts, and more. Implemented as data-driven JSON definitions with custom Java handlers where vanilla effect components aren't sufficient.
+A roster of 102 original enchantments spanning combat, tools, mobility, mounts, and more. Implemented as data-driven JSON definitions with custom Java handlers where vanilla effect components aren't sufficient.
 
 Highlights include:
 
@@ -137,7 +137,7 @@ Server operators can override `maxLevel`, `maxLootLevel`, `levelCap`, and `enabl
 
 ### Inline Enchantment Descriptions
 
-With `display.enableInlineEnchDescs` turned on, item and book tooltips show a short gray description under each enchantment — the same lines that appear in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 101 of its own enchantments **and** for every vanilla enchantment.
+With `display.enableInlineEnchDescs` turned on, item and book tooltips show a short gray description under each enchantment — the same lines that appear in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 102 of its own enchantments **and** for every vanilla enchantment.
 
 The descriptions are plain language keys, so any enchantment is covered the moment a matching key exists:
 
@@ -258,7 +258,7 @@ if (FabricLoader.getInstance().isModLoaded("meridian")) {
 
 Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by TheWinABagel. All code, data, and art are original to Meridian — no source or assets were copied. The enchanting subsystem reimplements the stat schema, shelf roster, and recipe shapes as a fresh design reference only.
 
-All 101 enchantments are original to Meridian — names, IDs, weights, costs, effect definitions, and description text are authored fresh.
+All 102 enchantments are original to Meridian — names, IDs, weights, costs, effect definitions, and description text are authored fresh.
 
 ---
 
@@ -277,6 +277,6 @@ Install any, combine all.
 
 - **Code:** MIT
 - **Art & textures:** Original to Meridian.
-- **Enchantment data (101 of 101):** Original to Meridian.
+- **Enchantment data (102 of 102):** Original to Meridian.
 
 © 2026 rfizzle. Meridian is not affiliated with Mojang Studios or Microsoft.

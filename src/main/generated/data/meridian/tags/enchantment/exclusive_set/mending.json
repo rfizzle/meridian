@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:attunement",
+      "required": false
+    },
+    {
       "id": "meridian:vital_mend",
       "required": false
     },

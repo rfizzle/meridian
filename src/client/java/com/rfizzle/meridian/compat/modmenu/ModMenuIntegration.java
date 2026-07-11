@@ -213,6 +213,28 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setSaveConsumer(v -> current.combat.harpoonAffectsPlayers = v)
                     .build());
 
+            // Attunement
+            ConfigCategory attunementCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.meridian.category.attunement"));
+            attunementCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.attunement_radius"),
+                            current.attunement.radius)
+                    .setDefaultValue(8).setMin(1).setMax(32)
+                    .setSaveConsumer(v -> current.attunement.radius = v)
+                    .build());
+            attunementCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.attunement_interval_ticks"),
+                            current.attunement.intervalTicks)
+                    .setDefaultValue(80).setMin(20).setMax(1200)
+                    .setSaveConsumer(v -> current.attunement.intervalTicks = v)
+                    .build());
+            attunementCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.attunement_min_eterna"),
+                            current.attunement.minEterna)
+                    .setDefaultValue(15).setMin(0).setMax(100)
+                    .setSaveConsumer(v -> current.attunement.minEterna = v)
+                    .build());
+
             // Display
             ConfigCategory displayCategory = builder.getOrCreateCategory(
                     Component.translatable("config.meridian.category.display"));

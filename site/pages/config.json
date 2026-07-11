@@ -153,6 +153,23 @@
       ]
     },
     {
+      "id": "attunement",
+      "title": "attunement",
+      "blocks": [
+        {
+          "type": "table",
+          "bottomGap": true,
+          "headers": ["Key", "Type", "Default", "Description"],
+          "rows": [
+            ["<code class='text-accent2 whitespace-nowrap'>radius</code>", "int", "8", "Blocks from a qualifying enchanting table within which Attunement gear repairs (1&ndash;32)"],
+            ["<code class='text-accent2 whitespace-nowrap'>intervalTicks</code>", "int", "80", "Server ticks between repair pulses; each pulse repairs durability equal to the Attunement level per item (20&ndash;1200)"],
+            ["<code class='text-accent2 whitespace-nowrap'>minEterna</code>", "int", "15", "Minimum shelf-scan Eterna a table needs to count as an enchanting setup (0&ndash;100)"]
+          ]
+        },
+        { "type": "code", "small": true, "code": "{\n  \"attunement\": {\n    \"radius\": 8,\n    \"intervalTicks\": 80,\n    \"minEterna\": 15\n  }\n}" }
+      ]
+    },
+    {
       "id": "display",
       "title": "display",
       "blocks": [
@@ -203,7 +220,7 @@
       "plainTitle": true,
       "intro": "The complete default <code class='text-accent2'>config/meridian.json</code> generated on first launch.",
       "blocks": [
-        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 4,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"globalMinEnchantability\": 1\n  },\n  \"tableCrafting\": {\n    \"allowDuplication\": true\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10,\n    \"temperedCoreEnabled\": true\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"everfeast\": {\n    \"enabled\": true,\n    \"bites\": 128\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"combat\": {\n    \"sunderAffectsPlayers\": false,\n    \"seekerTargetsPlayers\": false,\n    \"harpoonAffectsPlayers\": false\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
+        { "type": "code", "small": true, "code": "{\n  \"configVersion\": 5,\n  \"enchantingTable\": {\n    \"allowTreasureWithoutShelf\": false,\n    \"maxEterna\": 50,\n    \"globalMinEnchantability\": 1\n  },\n  \"tableCrafting\": {\n    \"allowDuplication\": true\n  },\n  \"shelves\": {\n    \"sculkShelfShriekerChance\": 0.02,\n    \"sculkParticleChance\": 0.05\n  },\n  \"anvil\": {\n    \"prismaticWebRemovesCurses\": true,\n    \"prismaticWebLevelCost\": 30,\n    \"ironBlockRepairsAnvil\": true,\n    \"temperedCoreLevelCost\": 10,\n    \"temperedCoreEnabled\": true\n  },\n  \"library\": {\n    \"ioRateLimitTicks\": 0\n  },\n  \"tomes\": {\n    \"scrapTomeXpCost\": 3,\n    \"improvedScrapTomeXpCost\": 5,\n    \"extractionTomeXpCost\": 10,\n    \"extractionTomeItemDamage\": 50,\n    \"extractionTomeRepairPercent\": 0.25\n  },\n  \"everfeast\": {\n    \"enabled\": true,\n    \"bites\": 128\n  },\n  \"warden\": {\n    \"tendrilDropChance\": 1.0,\n    \"tendrilLootingBonus\": 0.10\n  },\n  \"combat\": {\n    \"sunderAffectsPlayers\": false,\n    \"seekerTargetsPlayers\": false,\n    \"harpoonAffectsPlayers\": false\n  },\n  \"attunement\": {\n    \"radius\": 8,\n    \"intervalTicks\": 80,\n    \"minEterna\": 15\n  },\n  \"display\": {\n    \"showBookTooltips\": true,\n    \"overLeveledColor\": \"#FF6600\",\n    \"enableInlineEnchDescs\": false\n  },\n  \"enchantmentOverrides\": {}\n}" }
       ]
     }
   ]
