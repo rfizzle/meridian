@@ -61,6 +61,7 @@
             "com.rfizzle.meridian.gametest.enchantments.MarkConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.RangedEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MiningEnchantmentGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.BrushEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.DefenseEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.AttributeAndProtectionTest",
             "com.rfizzle.meridian.gametest.enchantments.DefinitionVerificationTest",

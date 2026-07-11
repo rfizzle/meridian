@@ -101,6 +101,8 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> REAP = key("reap");
     public static final ResourceKey<Enchantment> MARK = key("mark");
     public static final ResourceKey<Enchantment> VOLLEY = key("volley");
+    public static final ResourceKey<Enchantment> KILN = key("kiln");
+    public static final ResourceKey<Enchantment> METICULOUS = key("meticulous");
 
     private EnchantmentEffects() {}
 

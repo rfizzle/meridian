@@ -168,6 +168,41 @@ public class EdgeCaseEnchantmentTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- Kiln: exclusive with Silk Touch and Fortune, free otherwise ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void kilnIsExclusiveWithSilkTouchAndFortune(GameTestHelper helper) {
+        Holder<Enchantment> kiln = lookup(helper, "kiln");
+        if (kiln == null) { helper.fail("kiln not in registry"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> silkTouch = reg.getHolderOrThrow(Enchantments.SILK_TOUCH);
+        Holder<Enchantment> fortune = reg.getHolderOrThrow(Enchantments.FORTUNE);
+        Holder<Enchantment> efficiency = reg.getHolderOrThrow(Enchantments.EFFICIENCY);
+
+        if (Enchantment.areCompatible(kiln, silkTouch)) {
+            helper.fail("Kiln and Silk Touch must be mutually exclusive");
+            return;
+        }
+        if (Enchantment.areCompatible(kiln, fortune)) {
+            helper.fail("Kiln and Fortune must be mutually exclusive");
+            return;
+        }
+        // Reclaim composes with Kiln (both mining tools, no shared exclusive set), and Kiln
+        // does not annex unrelated mining enchants like Efficiency.
+        Holder<Enchantment> reclaim = lookup(helper, "reclaim");
+        if (reclaim != null && !Enchantment.areCompatible(kiln, reclaim)) {
+            helper.fail("Kiln and Reclaim should be compatible");
+            return;
+        }
+        if (!Enchantment.areCompatible(kiln, efficiency)) {
+            helper.fail("Kiln should be compatible with Efficiency");
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Snare: spawn egg IDs are vanilla-correct ---
 
     @GameTest(template = "meridian:empty_3x3")

@@ -61,11 +61,19 @@
       "required": false
     },
     {
+      "id": "meridian:kiln",
+      "required": false
+    },
+    {
       "id": "meridian:loft",
       "required": false
     },
     {
       "id": "meridian:longshot",
+      "required": false
+    },
+    {
+      "id": "meridian:meticulous",
       "required": false
     },
     {
