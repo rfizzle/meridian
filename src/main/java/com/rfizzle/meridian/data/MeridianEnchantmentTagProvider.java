@@ -205,6 +205,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("nightfall"))
                 .addOptional(Meridian.id("outreach"))
                 .addOptional(Meridian.id("pummel"))
+                .addOptional(Meridian.id("reap"))
                 .addOptional(Meridian.id("rift_strike"))
                 .addOptional(Meridian.id("sanctify"))
                 .addOptional(Meridian.id("sentinel"))
@@ -270,6 +271,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("loft"))
                 .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("luminance"))
+                .addOptional(Meridian.id("mark"))
                 .addOptional(Meridian.id("masons_reach"))
                 .addOptional(Meridian.id("nightfall"))
                 .addOptional(Meridian.id("outreach"))
@@ -280,6 +282,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("prospect"))
                 .addOptional(Meridian.id("pummel"))
                 .addOptional(Meridian.id("quell"))
+                .addOptional(Meridian.id("reap"))
                 .addOptional(Meridian.id("reclaim"))
                 .addOptional(Meridian.id("renewal"))
                 .addOptional(Meridian.id("reprieve"))
@@ -313,7 +316,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("updraft"))
                 .addOptional(Meridian.id("vault"))
                 .addOptional(Meridian.id("vitality"))
-                .addOptional(Meridian.id("voidbane"));
+                .addOptional(Meridian.id("voidbane"))
+                .addOptional(Meridian.id("volley"));
 
         getOrCreateTagBuilder(EnchantmentTags.TREASURE)
                 .addOptional(Meridian.id("abyss_ward"))
@@ -444,6 +448,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("rift_strike"))
                 .addOptional(Meridian.id("keen_edge"))
                 .addOptional(Meridian.id("ambush"))
+                .addOptional(Meridian.id("reap"))
                 .addOptional(Meridian.id("pinpoint"))
                 .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("crescendo"));

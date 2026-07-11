@@ -21,7 +21,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -127,6 +129,7 @@ public final class ProjectileEnchantmentHandler {
         EffectGuard.run("stormcall", arrow, () -> handleStormcall(arrow, weapon, pos));
         EffectGuard.run("glacial_lance", arrow, () -> handleGlacialLance(arrow, weapon, pos));
         EffectGuard.run("harpoon", arrow, () -> handleHarpoon(arrow, weapon, hit));
+        EffectGuard.run("mark", arrow, () -> handleMark(weapon, hit));
     }
 
     public static boolean handleBlockImpact(AbstractArrow arrow, BlockHitResult hit) {
@@ -369,6 +372,62 @@ public final class ProjectileEnchantmentHandler {
         if (!(victim instanceof Player)) return true;
         MeridianConfig config = Meridian.getConfig();
         return config != null && config.combat.harpoonAffectsPlayers;
+    }
+
+    /**
+     * Whether Mark may make this victim glow: mobs always, players only when
+     * {@code combat.markAffectsPlayers} is enabled.
+     */
+    public static boolean markVictimAllowed(LivingEntity victim) {
+        if (!(victim instanceof Player)) return true;
+        MeridianConfig config = Meridian.getConfig();
+        return config != null && config.combat.markAffectsPlayers;
+    }
+
+    /**
+     * Volley: after the bow's normal shot lands, loose extra arrows in a symmetric fan. Each
+     * extra is built the same way vanilla builds the primary — the fired ammo's own
+     * {@link ArrowItem#createArrow} with the bow as the weapon item — so it matches the shot's
+     * arrow type (tipped, spectral) and inherits the bow's enchantments (Power, Flame, …), then
+     * has its base damage cut and pickup disabled so the fan can't be recovered. Called from
+     * {@code ProjectileWeaponItemMixin} at the tail of the vanilla shoot loop.
+     */
+    public static void handleVolley(ServerLevel level, LivingEntity shooter, ItemStack weapon,
+                                    ItemStack firedAmmo, float velocity, float inaccuracy,
+                                    boolean crit, int primaryCount) {
+        int levelValue = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.VOLLEY);
+        if (levelValue <= 0) return;
+
+        int extras = RangedEnchantMath.volleyExtraCount(levelValue, primaryCount);
+        if (extras <= 0) return;
+
+        // Reuse a single ammo template and its arrow factory for the whole fan — createArrow
+        // copies the stack per arrow, so no per-extra ItemStack allocation is needed. Mirror
+        // vanilla's own fallback to a plain arrow when the ammo isn't an ArrowItem.
+        ItemStack ammo = (firedAmmo == null || firedAmmo.isEmpty()) ? new ItemStack(Items.ARROW) : firedAmmo;
+        ArrowItem arrowItem = ammo.getItem() instanceof ArrowItem ai ? ai : (ArrowItem) Items.ARROW;
+
+        for (int i = 0; i < extras; i++) {
+            AbstractArrow arrow = arrowItem.createArrow(level, ammo, shooter, weapon);
+            if (crit) arrow.setCritArrow(true);
+            arrow.setBaseDamage(arrow.getBaseDamage() * RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER);
+            arrow.pickup = AbstractArrow.Pickup.DISALLOWED;
+            arrow.shootFromRotation(shooter, shooter.getXRot(),
+                    shooter.getYRot() + RangedEnchantMath.volleyArrowYawOffset(i),
+                    0.0f, velocity, inaccuracy);
+            level.addFreshEntity(arrow);
+        }
+    }
+
+    private static void handleMark(ItemStack weapon, EntityHitResult hit) {
+        int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.MARK);
+        if (level <= 0) return;
+        if (!(hit.getEntity() instanceof LivingEntity victim)) return;
+        if (!markVictimAllowed(victim)) return;
+
+        // ambient=true, no particles, no icon: an unobtrusive tracking glow, not a status debuff.
+        victim.addEffect(new MobEffectInstance(
+                MobEffects.GLOWING, RangedEnchantMath.MARK_GLOW_TICKS, 0, true, false, false));
     }
 
     private static void handleHarpoon(AbstractArrow arrow, ItemStack weapon, EntityHitResult hit) {

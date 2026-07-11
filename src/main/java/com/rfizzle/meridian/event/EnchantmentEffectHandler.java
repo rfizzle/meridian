@@ -70,12 +70,15 @@ public final class EnchantmentEffectHandler {
     private static final Set<UUID> BONUS_HIT_PROCESSING = Collections.synchronizedSet(new HashSet<>());
 
     /**
-     * Victim health snapshotted in {@code ALLOW_DAMAGE} for Ambush's opener scaling.
-     * {@code AFTER_DAMAGE}'s {@code damageTaken} is pre-armor/-resistance, so reconstructing
-     * pre-hit health from it would overestimate against mitigated targets and Ambush would
-     * barely fade as an armored victim weakens.
+     * Victim health snapshotted in {@code ALLOW_DAMAGE} for the two health-scaled damage
+     * enchantments — Ambush's opener and Reap's finisher. One shared map serves both: they
+     * sit in the {@code #minecraft:exclusive_set/damage} group, so a single weapon can never
+     * carry both, and each handler consumes the snapshot with {@code remove}. Snapshotting in
+     * {@code ALLOW_DAMAGE} matters because {@code AFTER_DAMAGE}'s {@code damageTaken} is
+     * pre-armor/-resistance, so reconstructing pre-hit health from it would overestimate
+     * against mitigated targets and the scaling would misread how weakened the victim is.
      */
-    private static final Map<LivingEntity, Float> AMBUSH_PRE_HIT_HEALTH =
+    private static final Map<LivingEntity, Float> DAMAGE_SCALE_PRE_HIT_HEALTH =
             Collections.synchronizedMap(new WeakHashMap<>());
 
     /**
@@ -205,7 +208,7 @@ public final class EnchantmentEffectHandler {
             abyssWardCooldowns.clear();
             BLOODRAGE_PROCESSING.clear();
             BONUS_HIT_PROCESSING.clear();
-            AMBUSH_PRE_HIT_HEALTH.clear();
+            DAMAGE_SCALE_PRE_HIT_HEALTH.clear();
             CRESCENDO_STREAKS.clear();
             RIPOSTE_BLOCK_TICKS.clear();
             decoyCooldowns.clear();
@@ -229,7 +232,7 @@ public final class EnchantmentEffectHandler {
 
     private static boolean onAllowDamage(LivingEntity entity, DamageSource source, float amount) {
         if (entity.level().isClientSide()) return true;
-        EffectGuard.run("ambush_snapshot", entity, () -> snapshotAmbushHealth(entity, source));
+        EffectGuard.run("damage_scale_snapshot", entity, () -> snapshotDamageScaleHealth(entity, source));
         EffectGuard.run("decoy_snapshot", entity, () -> snapshotDecoyHealth(entity, source));
 
         // Cheap applicability gates stay outside the guard: this event fires for every damage
@@ -324,21 +327,25 @@ public final class EnchantmentEffectHandler {
     }
 
     /**
-     * Records the victim's health before an Ambush-carrying attacker's hit is applied.
-     * Skipped while the attacker is landing a bonus hit, so the nested damage event can't
-     * overwrite the snapshot with post-hit health.
+     * Records the victim's health before an Ambush- or Reap-carrying attacker's hit is applied.
+     * One snapshot serves both health-scaled damage enchantments; they are mutually exclusive on
+     * a weapon, so at most one consumes it. Skipped while the attacker is landing a bonus hit, so
+     * the nested damage event can't overwrite the snapshot with post-hit health.
      */
-    private static void snapshotAmbushHealth(LivingEntity entity, DamageSource source) {
+    private static void snapshotDamageScaleHealth(LivingEntity entity, DamageSource source) {
         if (source.getEntity() instanceof LivingEntity attacker
-                && !BONUS_HIT_PROCESSING.contains(attacker.getUUID())
-                && EnchantmentEffects.getEnchantmentLevel(attacker.getMainHandItem(), EnchantmentEffects.AMBUSH) > 0) {
-            AMBUSH_PRE_HIT_HEALTH.put(entity, entity.getHealth());
+                && !BONUS_HIT_PROCESSING.contains(attacker.getUUID())) {
+            ItemStack weapon = attacker.getMainHandItem();
+            if (EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.AMBUSH) > 0
+                    || EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.REAP) > 0) {
+                DAMAGE_SCALE_PRE_HIT_HEALTH.put(entity, entity.getHealth());
+            }
         }
     }
 
     /**
      * Records a Decoy wearer's health before a hit lands. Skipped while the attacker is landing a
-     * mod-originated bonus hit — mirroring {@link #snapshotAmbushHealth} — so a nested bonus hit
+     * mod-originated bonus hit — mirroring {@link #snapshotDamageScaleHealth} — so a nested bonus hit
      * can't overwrite the outer hit's pre-health with a mid-combo value and mask a genuine
      * half-health crossing. Overwrites otherwise, so the snapshot always reflects health
      * immediately before the most recent real blow.
@@ -376,6 +383,7 @@ public final class EnchantmentEffectHandler {
             EffectGuard.run("siphon", entity, () -> handleSiphon(entity, source));
             EffectGuard.run("soul_tax", entity, () -> handleSoulTax(entity, source));
             EffectGuard.run("ambush", entity, () -> handleAmbush(entity, source, damageTaken));
+            EffectGuard.run("reap", entity, () -> handleReap(entity, source, damageTaken));
             EffectGuard.run("crescendo", entity, () -> handleCrescendo(entity, source, damageTaken));
             EffectGuard.run("riposte", entity, () -> handleRiposte(entity, source, damageTaken));
             EffectGuard.run("joust", entity, () -> handleJoust(entity, source, damageTaken));
@@ -769,10 +777,35 @@ public final class EnchantmentEffectHandler {
 
         // Prefer the ALLOW_DAMAGE snapshot (true pre-hit health); fall back to the
         // pre-mitigation reconstruction if some damage path skipped that event.
-        Float snapshot = AMBUSH_PRE_HIT_HEALTH.remove(entity);
+        Float snapshot = DAMAGE_SCALE_PRE_HIT_HEALTH.remove(entity);
         float preHitHealth = snapshot != null ? snapshot : entity.getHealth() + damageTaken;
         float fraction = CombatEnchantMath.ambushHealthFraction(preHitHealth, entity.getMaxHealth());
         float bonusDamage = CombatEnchantMath.ambushBonusDamage(level, fraction);
+        if (bonusDamage <= 0) return;
+
+        withReentrancyGuard(BONUS_HIT_PROCESSING, livingAttacker.getUUID(),
+                () -> dealBonusDamage(entity, livingAttacker.damageSources().mobAttack(livingAttacker), bonusDamage));
+    }
+
+    /**
+     * Reap: bonus damage scaled by how far the victim's health had already fallen before the
+     * hit — a finisher, the mirror of {@link #handleAmbush}, maximal against a near-dead target
+     * and zero against an untouched one. Shares the {@code damageTaken} block gate.
+     */
+    private static void handleReap(LivingEntity entity, DamageSource source, float damageTaken) {
+        if (damageTaken <= 0) return;
+        Entity attacker = source.getEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+
+        int level = EnchantmentEffects.getEnchantmentLevel(livingAttacker.getMainHandItem(), EnchantmentEffects.REAP);
+        if (level <= 0) return;
+
+        // Prefer the ALLOW_DAMAGE snapshot (true pre-hit health); fall back to the
+        // pre-mitigation reconstruction if some damage path skipped that event.
+        Float snapshot = DAMAGE_SCALE_PRE_HIT_HEALTH.remove(entity);
+        float preHitHealth = snapshot != null ? snapshot : entity.getHealth() + damageTaken;
+        float fraction = CombatEnchantMath.ambushHealthFraction(preHitHealth, entity.getMaxHealth());
+        float bonusDamage = CombatEnchantMath.reapBonusDamage(level, fraction);
         if (bonusDamage <= 0) return;
 
         withReentrancyGuard(BONUS_HIT_PROCESSING, livingAttacker.getUUID(),

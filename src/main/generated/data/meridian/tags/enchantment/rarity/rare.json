@@ -89,6 +89,10 @@
       "required": false
     },
     {
+      "id": "meridian:reap",
+      "required": false
+    },
+    {
       "id": "meridian:reclaim",
       "required": false
     },

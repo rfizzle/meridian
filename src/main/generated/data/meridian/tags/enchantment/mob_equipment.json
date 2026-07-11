@@ -37,6 +37,10 @@
       "required": false
     },
     {
+      "id": "meridian:reap",
+      "required": false
+    },
+    {
       "id": "meridian:rift_strike",
       "required": false
     },

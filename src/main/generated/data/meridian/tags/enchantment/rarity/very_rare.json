@@ -91,6 +91,10 @@
     {
       "id": "meridian:vital_mend",
       "required": false
+    },
+    {
+      "id": "meridian:volley",
+      "required": false
     }
   ]
 }

@@ -31,6 +31,14 @@ public final class RangedEnchantMath {
      */
     public static final double HARPOON_CLOSE_RANGE_FACTOR = 0.25;
 
+    /** How long a Mark-struck creature glows through walls, in server ticks (6 seconds). */
+    public static final int MARK_GLOW_TICKS = 120;
+
+    /** Base-damage multiplier applied to each Volley extra arrow (the primary shot is untouched). */
+    public static final float VOLLEY_DAMAGE_MULTIPLIER = 0.5f;
+    /** Yaw offset between adjacent arrows in Volley's fan, in degrees. */
+    public static final float VOLLEY_SPREAD_DEGREES = 10.0f;
+
     private RangedEnchantMath() {}
 
     /**
@@ -61,5 +69,33 @@ public final class RangedEnchantMath {
         if (level <= 0 || distance <= 0.0) return 0.0;
         double strength = HARPOON_PULL_BASE + HARPOON_PULL_PER_LEVEL * level;
         return Math.min(strength, distance * HARPOON_CLOSE_RANGE_FACTOR);
+    }
+
+    /**
+     * Total arrows in a Volley fan at {@code level}: three at level I, five at level II —
+     * an odd count so the fan stays symmetric about the aim line. Zero without the enchant.
+     */
+    public static int volleyArrowCount(int level) {
+        if (level <= 0) return 0;
+        return 1 + 2 * level;
+    }
+
+    /**
+     * Extra arrows Volley adds on top of the {@code primaryCount} vanilla already fired
+     * (one for a bow). Never negative, so a larger vanilla volley is left alone rather than
+     * having arrows removed.
+     */
+    public static int volleyExtraCount(int level, int primaryCount) {
+        return Math.max(0, volleyArrowCount(level) - primaryCount);
+    }
+
+    /**
+     * Yaw offset for Volley's {@code extraIndex}-th extra arrow (0-based), fanning them
+     * symmetrically out from the aim line: +step, -step, +2·step, -2·step, and so on.
+     */
+    public static float volleyArrowYawOffset(int extraIndex) {
+        int magnitude = extraIndex / 2 + 1;
+        float sign = (extraIndex % 2 == 0) ? 1.0f : -1.0f;
+        return sign * magnitude * VOLLEY_SPREAD_DEGREES;
     }
 }

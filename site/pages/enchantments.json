@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 102 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 105 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "102 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "105 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "102 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "105 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -178,6 +178,13 @@
               "Deals bonus damage to healthy targets, fading as they weaken <span class='text-smoke'>(exclusive: damage)</span>"
             ],
             [
+              "<span class='text-bone'>Reap</span>",
+              "IV",
+              "Sword / Axe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Deals bonus damage to wounded targets, growing as their health falls <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
               "<span class='text-bone'>Pinpoint</span>",
               "IV",
               "Sword / Axe / Mace",
@@ -323,11 +330,25 @@
               "Arrows deal bonus damage the farther they fly, up to a cap <span class='text-smoke'>(exclusive: damage)</span>"
             ],
             [
+              "<span class='text-bone'>Volley</span>",
+              "II",
+              "Bow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Firing looses a fan of arrows — three at level I, five at level II — each dealing reduced damage; the extra arrows can't be recovered"
+            ],
+            [
               "<span class='text-bone'>Seeker</span>",
               "II",
               "Crossbow",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
               "Bolts curve gently toward the creature under your crosshair when fired — mobs only unless <code class='text-accent2'>combat.seekerTargetsPlayers</code> is enabled"
+            ],
+            [
+              "<span class='text-bone'>Mark</span>",
+              "I",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Struck creatures glow through walls for a few seconds — mobs only unless <code class='text-accent2'>combat.markAffectsPlayers</code> is enabled"
             ],
             [
               "<span class='text-bone'>Glacial Lance</span>",
@@ -910,7 +931,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 102 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 105 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

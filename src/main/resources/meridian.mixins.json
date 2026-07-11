@@ -30,6 +30,7 @@
         "LivingEntityLootLuckMixin",
         "LoftMixin",
         "PlayerMixin",
+        "ProjectileWeaponItemMixin",
         "SaddleguardMixin",
         "SheepMixin",
         "ShieldFortifyMixin",

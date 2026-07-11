@@ -92,6 +92,92 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         });
     }
 
+    // --- Reap: a weakened target takes the finisher bonus an identical plain hit doesn't ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void reapDealsBonusDamageToWeakenedTarget(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "reap");
+        if (ench == null) { helper.fail("reap not in registry"); return; }
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
+        clearEquipment(attacker);
+        ItemStack reapSword = new ItemStack(Items.DIAMOND_SWORD);
+        reapSword.enchant(ench, 4);
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, reapSword);
+
+        Mob controlAttacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+        clearEquipment(controlAttacker);
+        controlAttacker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+
+        // Weaken both targets to a fifth of their health so Reap's finisher is near its peak,
+        // then clear the hurt window so the measured hit lands in full.
+        Mob target = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(0, 1, 2));
+        Mob controlTarget = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(2, 1, 2));
+        float weakened = target.getMaxHealth() * 0.2f;
+        target.setHealth(weakened);
+        controlTarget.setHealth(weakened);
+        resetHurtState(target);
+        resetHurtState(controlTarget);
+        float startHealth = target.getHealth();
+        float controlStartHealth = controlTarget.getHealth();
+
+        attacker.doHurtTarget(target);
+        controlAttacker.doHurtTarget(controlTarget);
+
+        helper.runAfterDelay(2, () -> {
+            float reapLoss = startHealth - target.getHealth();
+            float plainLoss = controlStartHealth - controlTarget.getHealth();
+            float expectedBonus = CombatEnchantMath.reapBonusDamage(4, 0.2f);
+            if (reapLoss < plainLoss + expectedBonus - 1.0f) {
+                helper.fail("Reap IV vs a 20%-health target should add ~" + expectedBonus
+                        + " damage over a plain hit. reap=" + reapLoss + ", plain=" + plainLoss);
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
+    // --- Reap: an unharmed target takes no finisher bonus (the mirror image of Ambush) ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void reapDealsNoBonusToFullHealthTarget(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "reap");
+        if (ench == null) { helper.fail("reap not in registry"); return; }
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
+        clearEquipment(attacker);
+        ItemStack reapSword = new ItemStack(Items.DIAMOND_SWORD);
+        reapSword.enchant(ench, 4);
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, reapSword);
+
+        Mob controlAttacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+        clearEquipment(controlAttacker);
+        controlAttacker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD));
+
+        Mob target = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(0, 1, 2));
+        Mob controlTarget = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(2, 1, 2));
+        resetHurtState(target);
+        resetHurtState(controlTarget);
+        float startHealth = target.getHealth();
+        float controlStartHealth = controlTarget.getHealth();
+
+        attacker.doHurtTarget(target);
+        controlAttacker.doHurtTarget(controlTarget);
+
+        helper.runAfterDelay(2, () -> {
+            float reapLoss = startHealth - target.getHealth();
+            float plainLoss = controlStartHealth - controlTarget.getHealth();
+            // Reap contributes ~0 against a full-health target; allow a small margin for
+            // ambient chip in the shared arena.
+            if (reapLoss > plainLoss + 1.0f) {
+                helper.fail("Reap IV vs a full-health target should add no meaningful bonus. reap="
+                        + reapLoss + ", plain=" + plainLoss);
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
     // --- Pinpoint: the crit hook applies exactly the flat bonus ---
 
     @GameTest(template = "meridian:empty_3x3")

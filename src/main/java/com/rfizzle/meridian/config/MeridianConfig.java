@@ -357,6 +357,8 @@ public class MeridianConfig {
         public boolean seekerTargetsPlayers = false;
         /** Whether Harpoon may drag player victims toward the thrower; mobs are always eligible. */
         public boolean harpoonAffectsPlayers = false;
+        /** Whether Mark may make struck players glow through walls; mobs are always eligible. */
+        public boolean markAffectsPlayers = false;
     }
 
     public static class Attunement {

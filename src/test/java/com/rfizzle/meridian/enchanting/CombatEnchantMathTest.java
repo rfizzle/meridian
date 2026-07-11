@@ -60,6 +60,44 @@ class CombatEnchantMathTest {
         assertEquals(0.0f, CombatEnchantMath.ambushBonusDamage(0, 1.0f), EPS);
     }
 
+    // --- Reap: finisher bonus damage (the Ambush mirror) ---
+
+    @Test
+    void reapBonusDamage_maxAgainstNearDeath_growsAsHealthFalls() {
+        float atDeath = CombatEnchantMath.reapBonusDamage(4, 0.0f);
+        assertEquals(CombatEnchantMath.REAP_DAMAGE_PER_LEVEL * 4, atDeath, EPS);
+        assertEquals(atDeath * 0.5f, CombatEnchantMath.reapBonusDamage(4, 0.5f), EPS);
+        assertEquals(0.0f, CombatEnchantMath.reapBonusDamage(4, 1.0f), EPS);
+    }
+
+    @Test
+    void reapBonusDamage_mirrorsAmbushAboutFullHealth() {
+        // Reap at fraction f equals Ambush at (1 - f): they are exact opposites over the range.
+        for (float f = 0.0f; f <= 1.0f; f += 0.25f) {
+            assertEquals(CombatEnchantMath.ambushBonusDamage(3, 1.0f - f),
+                    CombatEnchantMath.reapBonusDamage(3, f), EPS);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4})
+    void reapBonusDamage_scalesWithLevel(int level) {
+        assertEquals(CombatEnchantMath.REAP_DAMAGE_PER_LEVEL * level,
+                CombatEnchantMath.reapBonusDamage(level, 0.0f), EPS);
+    }
+
+    @Test
+    void reapBonusDamage_zeroLevel_isZero() {
+        assertEquals(0.0f, CombatEnchantMath.reapBonusDamage(0, 0.0f), EPS);
+    }
+
+    @Test
+    void reapBonusDamage_clampsOutOfRangeFraction() {
+        assertEquals(0.0f, CombatEnchantMath.reapBonusDamage(4, 1.5f), EPS);
+        assertEquals(CombatEnchantMath.REAP_DAMAGE_PER_LEVEL * 4,
+                CombatEnchantMath.reapBonusDamage(4, -0.5f), EPS);
+    }
+
     // --- Pinpoint ---
 
     @Test
