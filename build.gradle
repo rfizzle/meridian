@@ -320,7 +320,18 @@ tasks.register('verifyDatagenIdempotent') {
 // data/meridian/enchantment/. Documented count claims in README.md and the site
 // are generated from it (syncEnchantmentCount) and asserted in CI
 // (verifyEnchantmentCount, wired into `check`) so a stale number can't reach master.
-def enchantmentCountFiles = ['README.md', 'site/pages/enchantments.json']
+def enchantmentCountFiles = [
+        'README.md',
+        'site/pages/enchantments.json',
+        'site/pages/index.json',
+        'site/pages/guide.json',
+        'site/pages/faq.json',
+        'site/listing-curseforge.md',
+        'site/listing-modrinth.md',
+        'site/listing-summary.txt',
+        'design/VISION.md',
+        'design/SPEC.md',
+]
 // Each pattern anchors the roster count to a claim idiom (not any "N enchantments"
 // phrase), so unrelated prose like "combine 2 enchantments" is never touched. Every
 // digit run inside a match is a roster count — the "(N of N)" attribution carries two
@@ -332,6 +343,13 @@ def enchantmentCountClaims = [
         /(\d+) enchantments are original/,
         /(\d+) of its own enchantments/,
         /Enchantment data \((\d+) of (\d+)\)/,
+        /(\d+) Original Enchantments/,
+        /adds (\d+) new enchantments/,
+        /roster of (\d+) enchantments/,
+        /(\d+) original ones/,
+        /(\d+) enchantments, deeply configurable/,
+        /all (\d+) <a href='\/enchantments\.html'/,
+        /enchantment\/` \((\d+) files\)/,
 ]
 def enchantmentCount = {
     def dir = file('src/main/resources/data/meridian/enchantment')
