@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.attunement"
+  },
+  "exclusive_set": "#meridian:exclusive_set/mending",
+  "supported_items": "#minecraft:enchantable/durability",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 14
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 14
+  },
+  "anvil_cost": 8,
+  "slots": [
+    "any"
+  ],
+  "effects": {}
+}

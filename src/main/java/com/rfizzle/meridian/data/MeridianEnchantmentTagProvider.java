@@ -317,6 +317,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(EnchantmentTags.TREASURE)
                 .addOptional(Meridian.id("abyss_ward"))
+                .addOptional(Meridian.id("attunement"))
                 .addOptional(Meridian.id("aurify"))
                 .addOptional(Meridian.id("bloodrage"))
                 .addOptional(Meridian.id("colossus"))
@@ -336,6 +337,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(EnchantmentTags.TRADEABLE)
                 .addOptional(Meridian.id("abyss_ward"))
+                .addOptional(Meridian.id("attunement"))
                 .addOptional(Meridian.id("aurify"))
                 .addOptional(Meridian.id("bloodrage"))
                 .addOptional(Meridian.id("colossus"))
@@ -354,6 +356,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(EnchantmentTags.ON_RANDOM_LOOT)
                 .addOptional(Meridian.id("abyss_ward"))
+                .addOptional(Meridian.id("attunement"))
                 .addOptional(Meridian.id("aurify"))
                 .addOptional(Meridian.id("bloodrage"))
                 .addOptional(Meridian.id("colossus"))
@@ -411,6 +414,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("reprieve"));
 
         getOrCreateTagBuilder(MENDING_EXCLUSIVE)
+                .addOptional(Meridian.id("attunement"))
                 .addOptional(Meridian.id("vital_mend"))
                 .addOptional(mc("mending"));
 

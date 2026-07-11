@@ -461,6 +461,8 @@
     "enchantment.meridian.renewal.desc": "Chance for sheep to instantly regrow wool after shearing",
     "enchantment.meridian.vital_mend": "Vital Mend",
     "enchantment.meridian.vital_mend.desc": "Incoming healing repairs durability instead of restoring health",
+    "enchantment.meridian.attunement": "Attunement",
+    "enchantment.meridian.attunement.desc": "Slowly repairs while you are near a shelf-lined enchanting table",
     "enchantment.meridian.plunder": "Plunder",
     "enchantment.meridian.plunder.desc": "Slain creatures may drop their loot a second time",
     "enchantment.meridian.ambush": "Ambush",

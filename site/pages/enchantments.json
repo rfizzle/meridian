@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 101 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 102 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "101 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "102 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "101 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "102 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -903,7 +903,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 101 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 102 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",
