@@ -9,6 +9,7 @@
         "AnvilMenuAccessor",
         "AnvilMenuMixin",
         "BlockDropsMixin",
+        "BrushableBlockEntityMeticulousMixin",
         "CandleBlockMixin",
         "CreeperEntityAccessor",
         "EnchantmentHelperMixin",
