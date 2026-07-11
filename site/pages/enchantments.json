@@ -862,6 +862,13 @@
               "Any (durability)",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
               "Incoming healing repairs durability instead of restoring health <span class='text-smoke'>(exclusive: mending)</span>"
+            ],
+            [
+              "<span class='text-bone'>Attunement</span>",
+              "II",
+              "Any (durability)",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Slowly repairs while the holder is near an enchanting table with shelves <span class='text-smoke'>(exclusive: mending)</span>"
             ]
           ]
         }
