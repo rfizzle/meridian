@@ -40,8 +40,8 @@ class EnchantmentJsonValidationTest {
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
-            "joust", "keen_edge", "loft", "longshot", "luminance",
-            "mark", "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
+            "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
+            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
             "quell", "rally", "reap", "reckless", "reclaim", "renewal",
             "reprieve", "repulse", "resonance", "retribution", "ricochet",
@@ -70,6 +70,8 @@ class EnchantmentJsonValidationTest {
                     List.of("cinderwalk")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/mace.json",
                     List.of("tempest", "seismic_slam", "updraft")),
+            Map.entry("minecraft/tags/enchantment/exclusive_set/mining.json",
+                    List.of("kiln")),
             Map.entry("meridian/tags/enchantment/exclusive_set/aspect.json",
                     List.of("blight", "decay", "shackle", "nightfall")),
             Map.entry("meridian/tags/enchantment/exclusive_set/arrow_impact.json",
@@ -101,6 +103,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("sentinel", "#minecraft:exclusive_set/damage"),
             Map.entry("rift_strike", "#minecraft:exclusive_set/damage"),
             Map.entry("keen_edge", "#minecraft:exclusive_set/damage"),
+            Map.entry("kiln", "#minecraft:exclusive_set/mining"),
             Map.entry("spellguard", "#minecraft:exclusive_set/armor"),
             Map.entry("cinderwalk", "#minecraft:exclusive_set/boots"),
             Map.entry("tempest", "#minecraft:exclusive_set/mace"),
@@ -178,11 +181,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is105() throws Exception {
+    void enchantmentCount_is107() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(105, count, "expected exactly 105 enchantment JSON files");
+        assertEquals(107, count, "expected exactly 107 enchantment JSON files");
     }
 
     @TestFactory

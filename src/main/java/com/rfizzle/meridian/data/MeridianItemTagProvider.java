@@ -32,6 +32,8 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
     private static final TagKey<Item> ENCHANTABLE_SWORD_OR_MACE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/sword_or_mace"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes"));
+    private static final TagKey<Item> ENCHANTABLE_PICKAXES_AND_SHOVELS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes_and_shovels"));
+    private static final TagKey<Item> ENCHANTABLE_BRUSH = TagKey.create(Registries.ITEM, Meridian.id("enchantable/brush"));
     private static final TagKey<Item> ENCHANTABLE_RANGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/range"));
     private static final TagKey<Item> ENCHANTABLE_CROSSBOW = TagKey.create(Registries.ITEM, Meridian.id("enchantable/crossbow"));
     private static final TagKey<Item> ENCHANTABLE_CHEST_AND_LEG = TagKey.create(Registries.ITEM, Meridian.id("enchantable/chest_and_leg_armor"));
@@ -103,6 +105,17 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_PICKAXES)
                 .addOptionalTag(ItemTags.PICKAXES);
+
+        // Kiln — smelts mined drops; scoped to the two block-digging tools the issue
+        // targets, narrower than the axe/hoe-inclusive #minecraft:enchantable/mining_loot.
+        getOrCreateTagBuilder(ENCHANTABLE_PICKAXES_AND_SHOVELS)
+                .addOptionalTag(ItemTags.PICKAXES)
+                .addOptionalTag(ItemTags.SHOVELS);
+
+        // Meticulous — the brush is the only tool it lands on; vanilla ships no
+        // #minecraft:enchantable/brush tag, so Meridian defines one.
+        getOrCreateTagBuilder(ENCHANTABLE_BRUSH)
+                .add(Items.BRUSH);
 
         getOrCreateTagBuilder(ENCHANTABLE_RANGE)
                 .add(Items.BOW)

@@ -23,20 +23,20 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
-            "joust", "keen_edge", "loft", "longshot", "luminance",
-            "masons_reach", "nightfall", "outreach", "permafrost", "pinpoint",
+            "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
+            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
-            "quell", "rally", "reckless", "reclaim", "renewal",
+            "quell", "rally", "reap", "reckless", "reclaim", "renewal",
             "reprieve", "repulse", "resonance", "retribution", "ricochet",
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
             "slipstream", "snare", "soul_tax", "spellguard", "steadfast",
             "stormcall", "sunder", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "trample", "trophy", "true_flight", "updraft",
-            "vault", "vital_mend", "vitality", "voidbane");
+            "vault", "vital_mend", "vitality", "voidbane", "volley");
 
     @GameTest(template = "meridian:empty_3x3")
-    public void all102EnchantmentsResolveInRegistry(GameTestHelper helper) {
+    public void allRosterEnchantmentsResolveInRegistry(GameTestHelper helper) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
         List<String> missing = new ArrayList<>();
@@ -60,8 +60,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 105) {
-            helper.fail("Expected 105 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 107) {
+            helper.fail("Expected 107 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

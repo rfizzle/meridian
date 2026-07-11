@@ -268,11 +268,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("ironwing"))
                 .addOptional(Meridian.id("joust"))
                 .addOptional(Meridian.id("keen_edge"))
+                .addOptional(Meridian.id("kiln"))
                 .addOptional(Meridian.id("loft"))
                 .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("luminance"))
                 .addOptional(Meridian.id("mark"))
                 .addOptional(Meridian.id("masons_reach"))
+                .addOptional(Meridian.id("meticulous"))
                 .addOptional(Meridian.id("nightfall"))
                 .addOptional(Meridian.id("outreach"))
                 .addOptional(Meridian.id("permafrost"))
@@ -458,6 +460,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
         getOrCreateTagBuilder(EnchantmentTags.BOOTS_EXCLUSIVE)
                 .addOptional(Meridian.id("cinderwalk"));
+
+        // Vanilla mining exclusive set — Silk Touch and Fortune. Kiln joins it (and declares
+        // it in its own definition) so a tool can carry only one drop-altering mining enchant.
+        getOrCreateTagBuilder(EnchantmentTags.MINING_EXCLUSIVE)
+                .addOptional(Meridian.id("kiln"));
 
         getOrCreateTagBuilder(MACE_EXCLUSIVE)
                 .addOptional(Meridian.id("tempest"))
