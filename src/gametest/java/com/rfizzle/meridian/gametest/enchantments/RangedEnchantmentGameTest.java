@@ -15,18 +15,26 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
+import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.entity.projectile.ThrownTrident;
+import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Behavior coverage for the ranged/thrown trio: Longshot's distance-scaled damage
@@ -346,6 +354,136 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         thrower.discard();
         if (delta.length() > 1.0e-6) {
             helper.fail("Harpoon must not move a #meridian:harpoon_immune entity, got " + delta);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Mark: an enchanted arrow hitting a mob makes it glow through walls.
+    @GameTest(template = "meridian:empty_3x3")
+    public void markGlowsStruckMob(GameTestHelper helper) {
+        Holder<Enchantment> mark = lookup(helper, "mark");
+        if (mark == null) { helper.fail("mark not in registry"); return; }
+
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+
+        ItemStack bow = new ItemStack(Items.BOW);
+        bow.enchant(mark, 1);
+        Arrow arrow = arrowAt(helper, new BlockPos(1, 1, 1), bow);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(arrow, new EntityHitResult(victim));
+
+        if (!victim.hasEffect(MobEffects.GLOWING)) {
+            helper.fail("Mark should apply Glowing to a struck mob");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Mark: with the default config, a struck player is left unmarked.
+    @GameTest(template = "meridian:empty_3x3")
+    public void markIgnoresPlayersByDefault(GameTestHelper helper) {
+        Holder<Enchantment> mark = lookup(helper, "mark");
+        if (mark == null) { helper.fail("mark not in registry"); return; }
+
+        var victim = MockPlayers.serverPlayerInLevel(helper);
+        BlockPos victimAbs = helper.absolutePos(new BlockPos(1, 1, 2));
+        victim.teleportTo(victimAbs.getX() + 0.5, victimAbs.getY(), victimAbs.getZ() + 0.5);
+
+        ItemStack bow = new ItemStack(Items.BOW);
+        bow.enchant(mark, 1);
+        Arrow arrow = arrowAt(helper, new BlockPos(1, 1, 1), bow);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(arrow, new EntityHitResult(victim));
+
+        boolean glowing = victim.hasEffect(MobEffects.GLOWING);
+        victim.discard();
+        if (glowing) {
+            helper.fail("Mark must not glow a player while combat.markAffectsPlayers is false");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Volley: firing looses the extra arrows — a reduced-damage, unrecoverable fan.
+    @GameTest(template = "meridian:empty_3x3")
+    public void volleyLoosesReducedUnrecoverableFan(GameTestHelper helper) {
+        Holder<Enchantment> volley = lookup(helper, "volley");
+        if (volley == null) { helper.fail("volley not in registry"); return; }
+
+        ServerLevel level = helper.getLevel();
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos shooterAbs = helper.absolutePos(new BlockPos(1, 1, 1));
+        shooter.moveTo(shooterAbs.getX() + 0.5, shooterAbs.getY(), shooterAbs.getZ() + 0.5);
+
+        ItemStack bow = new ItemStack(Items.BOW);
+        bow.enchant(volley, 2); // level II: five in the fan, four beyond the one primary shot
+
+        // Reference primary arrow (built the vanilla way) for the base-damage comparison.
+        AbstractArrow reference = ((ArrowItem) Items.ARROW).createArrow(
+                level, new ItemStack(Items.ARROW), shooter, bow);
+        double fullBaseDamage = reference.getBaseDamage();
+        reference.discard();
+
+        AABB area = new AABB(shooterAbs).inflate(48);
+        List<Arrow> before = level.getEntitiesOfClass(Arrow.class, area);
+        ProjectileEnchantmentHandler.handleVolley(
+                level, shooter, bow, new ItemStack(Items.ARROW), 3.0f, 1.0f, false, 1);
+        List<Arrow> extras = new ArrayList<>();
+        for (Arrow a : level.getEntitiesOfClass(Arrow.class, area)) {
+            if (!before.contains(a)) extras.add(a);
+        }
+
+        int expectedExtra = RangedEnchantMath.volleyExtraCount(2, 1);
+        shooter.discard();
+        if (extras.size() != expectedExtra) {
+            helper.fail("Volley II should loose " + expectedExtra + " extra arrows, loosed " + extras.size());
+            return;
+        }
+        double expectedDamage = fullBaseDamage * RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER;
+        for (Arrow extra : extras) {
+            if (Math.abs(extra.getBaseDamage() - expectedDamage) > 1.0e-4) {
+                helper.fail("Volley extra arrows should deal reduced damage " + expectedDamage
+                        + ", got " + extra.getBaseDamage());
+                return;
+            }
+            if (extra.pickup != AbstractArrow.Pickup.DISALLOWED) {
+                helper.fail("Volley extra arrows must not be recoverable, pickup was " + extra.pickup);
+                return;
+            }
+        }
+        helper.succeed();
+    }
+
+    // Volley: the extra arrows match the fired ammo type — spectral ammo yields spectral extras.
+    @GameTest(template = "meridian:empty_3x3")
+    public void volleyExtrasMatchFiredAmmoType(GameTestHelper helper) {
+        Holder<Enchantment> volley = lookup(helper, "volley");
+        if (volley == null) { helper.fail("volley not in registry"); return; }
+
+        ServerLevel level = helper.getLevel();
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos shooterAbs = helper.absolutePos(new BlockPos(1, 1, 1));
+        shooter.moveTo(shooterAbs.getX() + 0.5, shooterAbs.getY(), shooterAbs.getZ() + 0.5);
+
+        ItemStack bow = new ItemStack(Items.BOW);
+        bow.enchant(volley, 1); // level I: three in the fan, two extras
+
+        AABB area = new AABB(shooterAbs).inflate(48);
+        List<AbstractArrow> before = level.getEntitiesOfClass(AbstractArrow.class, area);
+        ProjectileEnchantmentHandler.handleVolley(
+                level, shooter, bow, new ItemStack(Items.SPECTRAL_ARROW), 3.0f, 1.0f, false, 1);
+
+        List<SpectralArrow> spectral = new ArrayList<>();
+        for (AbstractArrow a : level.getEntitiesOfClass(AbstractArrow.class, area)) {
+            if (!before.contains(a) && a instanceof SpectralArrow sa) spectral.add(sa);
+        }
+
+        int expectedExtra = RangedEnchantMath.volleyExtraCount(1, 1);
+        shooter.discard();
+        if (spectral.size() != expectedExtra) {
+            helper.fail("Volley extras should match the fired ammo type: expected " + expectedExtra
+                    + " spectral arrows, got " + spectral.size());
             return;
         }
         helper.succeed();

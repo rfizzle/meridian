@@ -102,4 +102,47 @@ class RangedEnchantMathTest {
     void harpoonPullSpeed_isZeroAtZeroDistance() {
         assertEquals(0.0, RangedEnchantMath.harpoonPullSpeed(2, 0.0), EPSILON);
     }
+
+    // ---- Volley ----
+
+    @Test
+    void volleyArrowCount_isThreeAtOneAndFiveAtTwo() {
+        assertEquals(3, RangedEnchantMath.volleyArrowCount(1));
+        assertEquals(5, RangedEnchantMath.volleyArrowCount(2));
+    }
+
+    @Test
+    void volleyArrowCount_isZeroWithoutEnchant() {
+        assertEquals(0, RangedEnchantMath.volleyArrowCount(0));
+        assertEquals(0, RangedEnchantMath.volleyArrowCount(-1));
+    }
+
+    @Test
+    void volleyExtraCount_subtractsThePrimaryShots() {
+        // A bow fires one primary arrow, so Volley adds two at I and four at II.
+        assertEquals(2, RangedEnchantMath.volleyExtraCount(1, 1));
+        assertEquals(4, RangedEnchantMath.volleyExtraCount(2, 1));
+    }
+
+    @Test
+    void volleyExtraCount_neverGoesNegative() {
+        // A larger vanilla volley than Volley's own count is left untouched, not trimmed.
+        assertEquals(0, RangedEnchantMath.volleyExtraCount(1, 5));
+        assertEquals(0, RangedEnchantMath.volleyExtraCount(0, 1));
+    }
+
+    @Test
+    void volleyArrowYawOffset_fansSymmetricallyOutward() {
+        float step = RangedEnchantMath.VOLLEY_SPREAD_DEGREES;
+        assertEquals(step, RangedEnchantMath.volleyArrowYawOffset(0), 1.0e-6);
+        assertEquals(-step, RangedEnchantMath.volleyArrowYawOffset(1), 1.0e-6);
+        assertEquals(2 * step, RangedEnchantMath.volleyArrowYawOffset(2), 1.0e-6);
+        assertEquals(-2 * step, RangedEnchantMath.volleyArrowYawOffset(3), 1.0e-6);
+    }
+
+    @Test
+    void volleyDamageMultiplier_reducesPerArrowDamage() {
+        assertTrue(RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER > 0.0f
+                && RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER < 1.0f);
+    }
 }
