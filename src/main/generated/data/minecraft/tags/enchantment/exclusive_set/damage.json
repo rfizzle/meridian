@@ -25,6 +25,10 @@
       "required": false
     },
     {
+      "id": "meridian:reap",
+      "required": false
+    },
+    {
       "id": "meridian:pinpoint",
       "required": false
     },
