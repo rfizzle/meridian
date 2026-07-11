@@ -30,6 +30,7 @@ class MeridianConfigTest {
         assertNotNull(cfg.library);
         assertNotNull(cfg.tomes);
         assertNotNull(cfg.warden);
+        assertNotNull(cfg.attunement);
         assertNotNull(cfg.display);
 
         // enchantingTable.maxEterna — clamp [1, 100]
@@ -56,6 +57,14 @@ class MeridianConfigTest {
         // warden — clampUnit
         assertTrue(inUnit(cfg.warden.tendrilDropChance), "tendrilDropChance must be in [0, 1]");
         assertTrue(inUnit(cfg.warden.tendrilLootingBonus), "tendrilLootingBonus must be in [0, 1]");
+
+        // attunement — clampIntRange bounds
+        assertTrue(cfg.attunement.radius >= 1 && cfg.attunement.radius <= 32,
+                "attunement.radius default must be in [1, 32]");
+        assertTrue(cfg.attunement.intervalTicks >= 20 && cfg.attunement.intervalTicks <= 1200,
+                "attunement.intervalTicks default must be in [20, 1200]");
+        assertTrue(cfg.attunement.minEterna >= 0 && cfg.attunement.minEterna <= 100,
+                "attunement.minEterna default must be in [0, 100]");
 
         // display.overLeveledColor — hex pattern
         assertNotNull(cfg.display.overLeveledColor);
@@ -92,6 +101,9 @@ class MeridianConfigTest {
         assertEquals(1.0, cfg.warden.tendrilDropChance);
         assertEquals(0.10, cfg.warden.tendrilLootingBonus);
 
+        assertEquals(8, cfg.attunement.radius);
+        assertEquals(80, cfg.attunement.intervalTicks);
+        assertEquals(15, cfg.attunement.minEterna);
 
         assertEquals(true, cfg.display.showBookTooltips);
         assertEquals("#FF6600", cfg.display.overLeveledColor);
@@ -150,6 +162,11 @@ class MeridianConfigTest {
         assertEquals(1.0, loaded.warden.tendrilDropChance);
         assertEquals(0.10, loaded.warden.tendrilLootingBonus);
 
+        assertNotNull(loaded.attunement);
+        assertEquals(8, loaded.attunement.radius);
+        assertEquals(80, loaded.attunement.intervalTicks);
+        assertEquals(15, loaded.attunement.minEterna);
+
         assertNotNull(loaded.display);
         assertEquals(true, loaded.display.showBookTooltips);
         assertEquals("#FF6600", loaded.display.overLeveledColor);
@@ -171,7 +188,8 @@ class MeridianConfigTest {
                     "extractionTomeItemDamage": -4,
                     "extractionTomeRepairPercent": 2.5
                   },
-                  "warden": {"tendrilDropChance": -0.25, "tendrilLootingBonus": 2.0}
+                  "warden": {"tendrilDropChance": -0.25, "tendrilLootingBonus": 2.0},
+                  "attunement": {"radius": 0, "intervalTicks": 999999, "minEterna": -5}
                 }
                 """);
 
@@ -188,6 +206,9 @@ class MeridianConfigTest {
         assertEquals(1.0, loaded.tomes.extractionTomeRepairPercent);
         assertEquals(0.0, loaded.warden.tendrilDropChance);
         assertEquals(1.0, loaded.warden.tendrilLootingBonus);
+        assertEquals(1, loaded.attunement.radius);
+        assertEquals(1200, loaded.attunement.intervalTicks);
+        assertEquals(0, loaded.attunement.minEterna);
     }
 
     @Test
@@ -271,6 +292,26 @@ class MeridianConfigTest {
         String rewritten = Files.readString(path);
         assertTrue(rewritten.contains("\"allowDuplication\": true"),
                 "the re-saved file must surface the new toggle for operators to discover");
+        assertTrue(rewritten.contains("\"configVersion\": " + ConfigMigrator.CURRENT_VERSION));
+    }
+
+    @Test
+    void load_v4File_migratesAndSurfacesAttunementGroup(@TempDir Path tmp) throws IOException {
+        // v4 → v5 is purely additive: existing settings survive, the attunement group (#206) comes
+        // up at its defaults, and the re-save writes it into the file so operators can discover it.
+        Path path = tmp.resolve("meridian.json");
+        Files.writeString(path, "{\"configVersion\":4,\"enchantingTable\":{\"maxEterna\":42}}");
+
+        MeridianConfig loaded = MeridianConfig.load(path);
+
+        assertEquals(ConfigMigrator.CURRENT_VERSION, loaded.configVersion);
+        assertEquals(42, loaded.enchantingTable.maxEterna);
+        assertEquals(8, loaded.attunement.radius);
+        assertEquals(80, loaded.attunement.intervalTicks);
+        assertEquals(15, loaded.attunement.minEterna);
+        String rewritten = Files.readString(path);
+        assertTrue(rewritten.contains("\"attunement\""),
+                "the re-saved file must surface the attunement group for operators to discover");
         assertTrue(rewritten.contains("\"configVersion\": " + ConfigMigrator.CURRENT_VERSION));
     }
 

@@ -59,6 +59,7 @@ public class MeridianConfig {
     public Everfeast everfeast = new Everfeast();
     public Warden warden = new Warden();
     public Combat combat = new Combat();
+    public Attunement attunement = new Attunement();
     public Display display = new Display();
     public Map<String, EnchantmentOverride> enchantmentOverrides = new HashMap<>();
 
@@ -183,6 +184,7 @@ public class MeridianConfig {
         if (everfeast == null) everfeast = new Everfeast();
         if (warden == null) warden = new Warden();
         if (combat == null) combat = new Combat();
+        if (attunement == null) attunement = new Attunement();
         if (display == null) display = new Display();
         if (enchantmentOverrides == null) enchantmentOverrides = new HashMap<>();
     }
@@ -215,6 +217,10 @@ public class MeridianConfig {
 
         warden.tendrilDropChance = clampUnit("warden.tendrilDropChance", warden.tendrilDropChance);
         warden.tendrilLootingBonus = clampUnit("warden.tendrilLootingBonus", warden.tendrilLootingBonus);
+
+        attunement.radius = clampIntRange("attunement.radius", attunement.radius, 1, 32);
+        attunement.intervalTicks = clampIntRange("attunement.intervalTicks", attunement.intervalTicks, 20, 1200);
+        attunement.minEterna = clampIntRange("attunement.minEterna", attunement.minEterna, 0, 100);
 
         if (display.overLeveledColor == null || !HEX_COLOR.matcher(display.overLeveledColor).matches()) {
             Meridian.LOGGER.warn("clamped {} from {} to {}",
@@ -351,6 +357,15 @@ public class MeridianConfig {
         public boolean seekerTargetsPlayers = false;
         /** Whether Harpoon may drag player victims toward the thrower; mobs are always eligible. */
         public boolean harpoonAffectsPlayers = false;
+    }
+
+    public static class Attunement {
+        /** Blocks from a qualifying enchanting table within which attuned gear repairs. */
+        public int radius = 8;
+        /** Server ticks between repair pulses; each pulse repairs {@code level} durability per item. */
+        public int intervalTicks = 80;
+        /** Minimum shelf-scan Eterna a table needs to count as an enchanting setup. */
+        public int minEterna = 15;
     }
 
     public static class Display {
