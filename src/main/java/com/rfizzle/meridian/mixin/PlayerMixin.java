@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.mixin;
 
+import com.rfizzle.meridian.enchanting.CombatEnchantMath;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.enchanting.MiningEnchantMath;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -79,5 +81,22 @@ public abstract class PlayerMixin {
                      target = "Lnet/minecraft/world/entity/player/Player;crit(Lnet/minecraft/world/entity/Entity;)V"))
     private void meridian$pinpointCrit(Entity target, CallbackInfo ci) {
         EnchantmentEffectHandler.handlePinpointCrit((Player) (Object) this, target);
+    }
+
+    /**
+     * Curse of Blunting: a chance per swing that the strike glances off, scaling the damage passed
+     * to the target's {@code hurt} down to a fraction. The roll is per swing, so a glance is felt as
+     * an occasional weak hit rather than a constant penalty. Only the primary target hit is modified
+     * (the sweep spill-over strikes on {@code LivingEntity#hurt} are a different call site).
+     */
+    @ModifyArg(method = "attack",
+            at = @At(value = "INVOKE",
+                     target = "Lnet/minecraft/world/entity/Entity;hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z"),
+            index = 1)
+    private float meridian$bluntingGlance(float damage) {
+        Player self = (Player) (Object) this;
+        int level = EnchantmentEffects.getEnchantmentLevel(self.getMainHandItem(), EnchantmentEffects.CURSE_OF_BLUNTING);
+        if (level <= 0) return damage;
+        return damage * CombatEnchantMath.bluntingDamageMultiplier(level, self.getRandom().nextFloat());
     }
 }

@@ -2,6 +2,7 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.TraversalEnchantMath;
 import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -169,6 +170,46 @@ public class ArmorTickHandlerGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
+            player.discard();
+        }
+    }
+
+    // Curse of Molting: while gliding, the elytra sheds an extra burst of durability; standing
+    // still it sheds none.
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfMoltingShedsElytraDurabilityWhileGliding(GameTestHelper helper) {
+        Holder<Enchantment> ench = curse(helper, "curse_of_molting");
+        if (ench == null) { helper.fail("curse_of_molting not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            player.getAbilities().invulnerable = false;
+            player.getAbilities().instabuild = false;
+            player.onUpdateAbilities();
+
+            ItemStack elytra = new ItemStack(Items.ELYTRA);
+            elytra.enchant(ench, 1);
+            elytra.setDamageValue(0);
+            player.setItemSlot(EquipmentSlot.CHEST, elytra);
+
+            // Not gliding: no shed.
+            ArmorTickHandler.handleCurseOfMolting(player);
+            if (elytra.getDamageValue() != 0) {
+                helper.fail("Curse of Molting must not shed durability when the wearer is not gliding");
+                return;
+            }
+
+            // Gliding: a burst of durability is shed.
+            player.startFallFlying();
+            ArmorTickHandler.handleCurseOfMolting(player);
+            if (elytra.getDamageValue() < TraversalEnchantMath.MOLTING_SHED_DURABILITY) {
+                helper.fail("Curse of Molting should shed at least " + TraversalEnchantMath.MOLTING_SHED_DURABILITY
+                        + " durability while gliding, got " + elytra.getDamageValue());
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.stopFallFlying();
             player.discard();
         }
     }

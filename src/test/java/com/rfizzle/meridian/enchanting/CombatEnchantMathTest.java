@@ -252,4 +252,29 @@ class CombatEnchantMathTest {
     void joustBonusDamage_zeroWithoutEnchant() {
         assertEquals(0.0f, CombatEnchantMath.joustBonusDamage(0, 0.5), EPS);
     }
+
+    // ---- Curse of Blunting ----
+
+    @Test
+    void bluntingGlanceChance_scalesPerLevelAndClamps() {
+        for (int level = 1; level <= 3; level++) {
+            assertEquals(Math.min(1.0f, CombatEnchantMath.BLUNTING_GLANCE_CHANCE_PER_LEVEL * level),
+                    CombatEnchantMath.bluntingGlanceChance(level), EPS);
+        }
+        assertEquals(0.0f, CombatEnchantMath.bluntingGlanceChance(0), EPS);
+        assertEquals(1.0f, CombatEnchantMath.bluntingGlanceChance(1000), EPS);
+    }
+
+    @Test
+    void bluntingDamageMultiplier_reducesWhenRollLandsInsideChance() {
+        // Roll below the chance glances; roll above leaves the strike full.
+        assertEquals(CombatEnchantMath.BLUNTING_GLANCE_MULTIPLIER,
+                CombatEnchantMath.bluntingDamageMultiplier(3, 0.0f), EPS);
+        assertEquals(1.0f, CombatEnchantMath.bluntingDamageMultiplier(3, 0.99f), EPS);
+    }
+
+    @Test
+    void bluntingDamageMultiplier_neverReducesWithoutEnchant() {
+        assertEquals(1.0f, CombatEnchantMath.bluntingDamageMultiplier(0, 0.0f), EPS);
+    }
 }

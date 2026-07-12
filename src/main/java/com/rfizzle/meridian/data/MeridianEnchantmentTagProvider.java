@@ -93,7 +93,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Meridian.id("curse_of_echoes"),
             Meridian.id("curse_of_hunger"),
             Meridian.id("curse_of_attraction"),
-            Meridian.id("curse_of_leaden"));
+            Meridian.id("curse_of_leaden"),
+            Meridian.id("curse_of_blunting"),
+            Meridian.id("curse_of_fumbling"),
+            Meridian.id("curse_of_wavering"),
+            Meridian.id("curse_of_timidity"),
+            Meridian.id("curse_of_molting"),
+            Meridian.id("curse_of_skittishness"),
+            Meridian.id("curse_of_obscurity"));
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
@@ -194,7 +201,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       carry them)</li>
      *   <li>loot/trophy payoff, meaningless when a mob holds it — {@code trophy, fortuity}</li>
      *   <li>curses — {@code curse_of_decay, curse_of_sealing, curse_of_echoes, curse_of_hunger,
-     *       curse_of_attraction, curse_of_leaden}</li>
+     *       curse_of_attraction, curse_of_leaden, curse_of_blunting, curse_of_fumbling,
+     *       curse_of_wavering, curse_of_timidity, curse_of_molting, curse_of_skittishness,
+     *       curse_of_obscurity}</li>
      * </ul>
      * All entries use {@code addOptional} so the tag loads cleanly regardless of which enchants a
      * given world-state has registered.
@@ -374,7 +383,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_echoes"))
                 .addOptional(Meridian.id("curse_of_hunger"))
                 .addOptional(Meridian.id("curse_of_attraction"))
-                .addOptional(Meridian.id("curse_of_leaden"));
+                .addOptional(Meridian.id("curse_of_leaden"))
+                .addOptional(Meridian.id("curse_of_blunting"))
+                .addOptional(Meridian.id("curse_of_fumbling"))
+                .addOptional(Meridian.id("curse_of_wavering"))
+                .addOptional(Meridian.id("curse_of_timidity"))
+                .addOptional(Meridian.id("curse_of_molting"))
+                .addOptional(Meridian.id("curse_of_skittishness"))
+                .addOptional(Meridian.id("curse_of_obscurity"));
 
         getOrCreateTagBuilder(EnchantmentTags.ON_RANDOM_LOOT)
                 .addOptional(Meridian.id("abyss_ward"))
@@ -397,7 +413,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_echoes"))
                 .addOptional(Meridian.id("curse_of_hunger"))
                 .addOptional(Meridian.id("curse_of_attraction"))
-                .addOptional(Meridian.id("curse_of_leaden"));
+                .addOptional(Meridian.id("curse_of_leaden"))
+                .addOptional(Meridian.id("curse_of_blunting"))
+                .addOptional(Meridian.id("curse_of_fumbling"))
+                .addOptional(Meridian.id("curse_of_wavering"))
+                .addOptional(Meridian.id("curse_of_timidity"))
+                .addOptional(Meridian.id("curse_of_molting"))
+                .addOptional(Meridian.id("curse_of_skittishness"))
+                .addOptional(Meridian.id("curse_of_obscurity"));
 
         getOrCreateTagBuilder(EnchantmentTags.DOUBLE_TRADE_PRICE)
                 .addOptional(Meridian.id("curse_of_decay"))
@@ -405,7 +428,14 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_echoes"))
                 .addOptional(Meridian.id("curse_of_hunger"))
                 .addOptional(Meridian.id("curse_of_attraction"))
-                .addOptional(Meridian.id("curse_of_leaden"));
+                .addOptional(Meridian.id("curse_of_leaden"))
+                .addOptional(Meridian.id("curse_of_blunting"))
+                .addOptional(Meridian.id("curse_of_fumbling"))
+                .addOptional(Meridian.id("curse_of_wavering"))
+                .addOptional(Meridian.id("curse_of_timidity"))
+                .addOptional(Meridian.id("curse_of_molting"))
+                .addOptional(Meridian.id("curse_of_skittishness"))
+                .addOptional(Meridian.id("curse_of_obscurity"));
     }
 
     private void addMeridianExclusiveSets() {

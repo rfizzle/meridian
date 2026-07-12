@@ -37,6 +37,8 @@ class EnchantmentJsonValidationTest {
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
+            "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
+            "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
             "decay", "decoy", "detonation", "diminish", "emberward", "endurance", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
@@ -57,7 +59,9 @@ class EnchantmentJsonValidationTest {
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
             "vital_mend", "attunement", "tether", "curse_of_decay", "curse_of_sealing", "aurify",
-            "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden");
+            "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
+            "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
+            "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity");
 
     /**
      * Maps each exclusive set tag path (relative to GENERATED_TAGS_DIR) to the
@@ -184,11 +188,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is117() throws Exception {
+    void enchantmentCount_is124() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(117, count, "expected exactly 117 enchantment JSON files");
+        assertEquals(124, count, "expected exactly 124 enchantment JSON files");
     }
 
     @TestFactory
@@ -361,7 +365,14 @@ class EnchantmentJsonValidationTest {
                 Map.entry("curse_of_echoes", 2),
                 Map.entry("curse_of_hunger", 2),
                 Map.entry("curse_of_attraction", 1),
-                Map.entry("curse_of_leaden", 2)
+                Map.entry("curse_of_leaden", 2),
+                Map.entry("curse_of_blunting", 2),
+                Map.entry("curse_of_fumbling", 1),
+                Map.entry("curse_of_wavering", 2),
+                Map.entry("curse_of_timidity", 2),
+                Map.entry("curse_of_molting", 2),
+                Map.entry("curse_of_skittishness", 2),
+                Map.entry("curse_of_obscurity", 1)
         );
         return expectedWeights.entrySet().stream()
                 .map(entry -> DynamicTest.dynamicTest(entry.getKey(), () -> {

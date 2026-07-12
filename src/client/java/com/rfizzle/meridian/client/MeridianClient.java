@@ -7,6 +7,7 @@ import com.rfizzle.meridian.client.net.LoftClientHandler;
 import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
 import com.rfizzle.meridian.client.screen.MeridianEnchantmentScreen;
 import com.rfizzle.meridian.client.tooltip.InlineEnchDescTooltipHandler;
+import com.rfizzle.meridian.client.tooltip.ObscurityTooltipHandler;
 import com.rfizzle.meridian.client.tooltip.OverLeveledTooltipHandler;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
@@ -29,6 +30,9 @@ public class MeridianClient implements ClientModInitializer {
         });
         MenuScreens.register(MeridianRegistry.ENCHANTING_TABLE_MENU, MeridianEnchantmentScreen::new);
         MenuScreens.register(MeridianRegistry.LIBRARY_MENU, EnchantmentLibraryScreen::new);
+        // Obscurity strips hidden enchantment lines before any handler that keys additions off
+        // those names (over-leveled warnings, inline descriptions) can attach to them.
+        ObscurityTooltipHandler.register();
         OverLeveledTooltipHandler.register();
         InlineEnchDescTooltipHandler.register();
         registerParticleProviders();

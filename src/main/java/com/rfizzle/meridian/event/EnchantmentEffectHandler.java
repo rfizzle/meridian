@@ -27,6 +27,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.player.Player;
@@ -369,6 +370,7 @@ public final class EnchantmentEffectHandler {
             EffectGuard.run("riposte_block", entity, () -> recordRiposteBlock(entity));
             EffectGuard.run("bastion", entity, () -> handleBastion(entity));
             EffectGuard.run("stagger", entity, () -> handleStagger(entity, source));
+            EffectGuard.run("curse_of_timidity", entity, () -> handleTimidity(entity, source));
         }
 
         if (damageTaken <= 0 && !blocked) return;
@@ -404,6 +406,13 @@ public final class EnchantmentEffectHandler {
         EffectGuard.run("bloodrage", entity, () -> handleBloodrage(entity));
         EffectGuard.run("emberward", entity, () -> handleEmberward(entity, source));
         EffectGuard.run("reprieve", entity, () -> handleReprieve(entity));
+        EffectGuard.run("curse_of_fumbling", entity, () -> handleFumbling(entity));
+
+        // Curse of Skittishness only concerns a ridden/wearable mount; the cheap type gate stays
+        // outside the guard since this event fires for every damaged entity.
+        if (entity instanceof AbstractHorse horse) {
+            EffectGuard.run("curse_of_skittishness", horse, () -> MountedEnchantmentHandler.handleSkittishness(horse));
+        }
     }
 
     /**
@@ -769,6 +778,54 @@ public final class EnchantmentEffectHandler {
                 DefenseEnchantMath.staggerSlownessAmplifier(level)));
         livingAttacker.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, duration,
                 DefenseEnchantMath.STAGGER_WEAKNESS_AMPLIFIER));
+    }
+
+    /**
+     * Curse of Timidity: blocking a melee hit with the raised shield briefly slows the blocker
+     * themselves — Stagger's daze turned inward. The {@code blocked} flag confirms a real block, so
+     * the level is read straight off the actively-used shield. Ranged/projectile blocks are excluded
+     * via {@link #isMeleeAttack}. Public for the gametests, which raise a shield and drive the daze
+     * directly rather than choreographing a real block.
+     */
+    public static void handleTimidity(LivingEntity entity, DamageSource source) {
+        ItemStack useItem = entity.getUseItem();
+        int level = EnchantmentEffects.getEnchantmentLevel(useItem, EnchantmentEffects.CURSE_OF_TIMIDITY);
+        if (level <= 0) return;
+
+        Entity attacker = source.getDirectEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (!isMeleeAttack(source, livingAttacker)) return;
+
+        entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,
+                DefenseEnchantMath.TIMIDITY_SLOW_TICKS, DefenseEnchantMath.TIMIDITY_SLOW_AMPLIFIER));
+    }
+
+    /**
+     * Curse of Fumbling: on taking a hit, a chance to knock the held weapon or tool out of the
+     * wearer's own hands — the self-inflicted mirror of Sunder.
+     */
+    private static void handleFumbling(LivingEntity entity) {
+        int level = EnchantmentEffects.getEnchantmentLevel(entity.getMainHandItem(), EnchantmentEffects.CURSE_OF_FUMBLING);
+        if (level <= 0) return;
+        if (entity.getRandom().nextFloat() >= CombatEnchantMath.FUMBLING_DROP_CHANCE) return;
+        fumbleDropMainhand(entity);
+    }
+
+    /**
+     * Drops the entity's mainhand stack as a recoverable item entity and clears the slot,
+     * respecting Curse of Binding. Returns the dropped stack, or {@link ItemStack#EMPTY} if the
+     * hand was empty or the item was locked in place. Public for the gametests, which drive the
+     * drop directly rather than relying on the on-hit chance.
+     */
+    public static ItemStack fumbleDropMainhand(LivingEntity entity) {
+        ItemStack held = entity.getMainHandItem();
+        if (held.isEmpty()) return ItemStack.EMPTY;
+        if (EnchantmentHelper.has(held, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) return ItemStack.EMPTY;
+
+        ItemStack dropped = held.copy();
+        entity.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+        entity.spawnAtLocation(dropped);
+        return dropped;
     }
 
     private static void handlePummel(LivingEntity entity, DamageSource source) {

@@ -10,6 +10,22 @@ class RangedEnchantMathTest {
 
     private static final double EPSILON = 1.0e-9;
 
+    // ---- Curse of Wavering ----
+
+    @Test
+    void waveringInaccuracy_addsPerLevelOnTopOfBase() {
+        float base = 1.0f;
+        assertEquals(base + RangedEnchantMath.WAVERING_INACCURACY_PER_LEVEL,
+                RangedEnchantMath.waveringInaccuracy(1, base), EPSILON);
+        assertEquals(base + RangedEnchantMath.WAVERING_INACCURACY_PER_LEVEL * 2,
+                RangedEnchantMath.waveringInaccuracy(2, base), EPSILON);
+    }
+
+    @Test
+    void waveringInaccuracy_leavesCleanWeaponUnchanged() {
+        assertEquals(1.0f, RangedEnchantMath.waveringInaccuracy(0, 1.0f), EPSILON);
+    }
+
     // ---- Longshot ----
 
     @Test

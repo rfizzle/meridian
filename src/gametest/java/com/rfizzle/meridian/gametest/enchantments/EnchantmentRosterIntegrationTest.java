@@ -20,6 +20,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
+            "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
+            "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
             "decay", "decoy", "detonation", "diminish", "emberward", "endurance", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
@@ -62,8 +64,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 117) {
-            helper.fail("Expected 117 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 124) {
+            helper.fail("Expected 124 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

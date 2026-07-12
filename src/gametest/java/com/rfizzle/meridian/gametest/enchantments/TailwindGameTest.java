@@ -135,4 +135,58 @@ public class TailwindGameTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    // --- Curse of Molting: a share of firework boosts fizzle (the rocket is discarded on its first
+    // gliding tick before any push); a plain elytra never fizzles. Exercises the real
+    // FireworkRocketMixin tick path, not just the fizzle-decision constant. ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfMoltingFizzlesFireworkBoost(GameTestHelper helper) {
+        Holder<Enchantment> molting = lookup(helper, "curse_of_molting");
+        if (molting == null) { helper.fail("curse_of_molting not in registry"); return; }
+        ServerLevel level = helper.getLevel();
+
+        ItemStack moltingElytra = new ItemStack(Items.ELYTRA);
+        moltingElytra.enchant(molting, 1);
+        ServerPlayer cursed = glidingPlayer(helper, new BlockPos(1, 2, 1), moltingElytra);
+        ServerPlayer plain = glidingPlayer(helper, new BlockPos(2, 2, 1), new ItemStack(Items.ELYTRA));
+
+        int trials = 64;
+        int cursedFizzled = countFizzledBoosts(level, cursed, trials);
+        int plainFizzled = countFizzledBoosts(level, plain, trials);
+        cursed.discard();
+        plain.discard();
+
+        // A plain elytra never fizzles; the curse fizzles roughly a quarter of boosts. Over 64 trials
+        // the odds of zero cursed fizzles are ~1e-8, so ">0" is a safe assertion, not a flaky one.
+        if (plainFizzled != 0) {
+            helper.fail("A plain elytra must never fizzle a firework boost, got " + plainFizzled);
+            return;
+        }
+        if (cursedFizzled <= 0) {
+            helper.fail("Curse of Molting should fizzle some firework boosts, got "
+                    + cursedFizzled + "/" + trials);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Constructs `trials` boost rockets on the gliding player, ticks each once, and returns how many
+    // fizzled — were discarded by the Molting mixin before applying any boost. A non-fizzled rocket
+    // survives its first tick (vanilla removes it only past its lifetime), so it is discarded here.
+    private static int countFizzledBoosts(ServerLevel level, ServerPlayer glider, int trials) {
+        int fizzled = 0;
+        for (int i = 0; i < trials; i++) {
+            FireworkRocketEntity rocket = new FireworkRocketEntity(
+                    level, new ItemStack(Items.FIREWORK_ROCKET), glider);
+            level.addFreshEntity(rocket);
+            rocket.tick();
+            if (rocket.isRemoved()) {
+                fizzled++;
+            } else {
+                rocket.discard();
+            }
+        }
+        return fizzled;
+    }
 }

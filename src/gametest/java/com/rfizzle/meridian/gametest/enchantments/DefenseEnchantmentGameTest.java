@@ -3,6 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
+import com.rfizzle.meridian.event.EnchantmentEffectHandler;
 import com.rfizzle.meridian.event.LoftHandler;
 import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -13,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
@@ -345,6 +347,37 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         }
         if (wearerDamage != 0.0f) {
             helper.fail("Loft II should absorb a 5-block fall entirely, took " + wearerDamage);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Curse of Timidity: blocking a melee hit briefly slows the blocker themselves; a non-melee
+    // source does not. Drives the daze through the actively-used shield, as the AFTER_DAMAGE
+    // blocked branch would.
+    @GameTest(template = "meridian:empty_3x3")
+    public void timidityStaggersTheBlocker(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "curse_of_timidity");
+        if (ench == null) { helper.fail("curse_of_timidity not in registry"); return; }
+
+        ItemStack shield = new ItemStack(Items.SHIELD);
+        shield.enchant(ench, 1);
+        Zombie blocker = spawnWearing(helper, EquipmentSlot.OFFHAND, shield);
+        blocker.startUsingItem(InteractionHand.OFF_HAND);
+
+        Zombie attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 2, 1));
+        EnchantmentEffectHandler.handleTimidity(blocker, attacker.damageSources().mobAttack(attacker));
+        if (!blocker.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+            helper.fail("Curse of Timidity should slow the blocker after a melee block");
+            return;
+        }
+
+        // A non-melee source (no attacker) is not a block worth punishing — no daze.
+        Zombie clean = spawnWearing(helper, EquipmentSlot.OFFHAND, shield.copy());
+        clean.startUsingItem(InteractionHand.OFF_HAND);
+        EnchantmentEffectHandler.handleTimidity(clean, clean.damageSources().magic());
+        if (clean.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+            helper.fail("Curse of Timidity must not fire for a non-melee hit");
             return;
         }
         helper.succeed();

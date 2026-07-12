@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.curse_of_timidity"
+  },
+  "supported_items": "#meridian:enchantable/shield",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "offhand"
+  ],
+  "effects": {}
+}

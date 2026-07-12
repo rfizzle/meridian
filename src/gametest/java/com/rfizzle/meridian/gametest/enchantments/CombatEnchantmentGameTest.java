@@ -899,4 +899,36 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    // Curse of Fumbling: the drop seam knocks the held item loose and clears the mainhand, and does
+    // nothing when the hand is already empty.
+    @GameTest(template = "meridian:empty_3x3")
+    public void fumblingDropsHeldItem(GameTestHelper helper) {
+        Holder<Enchantment> fumbling = lookup(helper, "curse_of_fumbling");
+        if (fumbling == null) { helper.fail("curse_of_fumbling not in registry"); return; }
+
+        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        clearEquipment(mob);
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.enchant(fumbling, 1);
+        mob.setItemSlot(EquipmentSlot.MAINHAND, sword);
+
+        ItemStack dropped = EnchantmentEffectHandler.fumbleDropMainhand(mob);
+        if (dropped.isEmpty()) {
+            helper.fail("Fumbling should drop the held sword");
+            return;
+        }
+        if (!mob.getMainHandItem().isEmpty()) {
+            helper.fail("Fumbling should clear the mainhand after dropping the item");
+            return;
+        }
+
+        // Empty hand: nothing to drop.
+        ItemStack none = EnchantmentEffectHandler.fumbleDropMainhand(mob);
+        if (!none.isEmpty()) {
+            helper.fail("Fumbling on an empty hand should drop nothing");
+            return;
+        }
+        helper.succeed();
+    }
 }
