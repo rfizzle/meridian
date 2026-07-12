@@ -372,6 +372,7 @@ public class DefinitionVerificationTest implements FabricGameTest {
                 Map.entry("cleave", new int[]{3, 2}),
                 Map.entry("curse_of_decay", new int[]{5, 2}),
                 Map.entry("curse_of_sealing", new int[]{1, 1}),
+                Map.entry("endurance", new int[]{3, 5}),
                 Map.entry("fortify", new int[]{3, 5}),
                 Map.entry("frostguard", new int[]{3, 2}),
                 Map.entry("furrow", new int[]{3, 5}),
@@ -404,7 +405,8 @@ public class DefinitionVerificationTest implements FabricGameTest {
                 Map.entry("tether", new int[]{1, 1}),
                 Map.entry("trample", new int[]{3, 5}),
                 Map.entry("true_flight", new int[]{1, 2}),
-                Map.entry("vault", new int[]{3, 5})
+                Map.entry("vault", new int[]{3, 5}),
+                Map.entry("wavestride", new int[]{1, 2})
         );
 
         List<String> failures = new ArrayList<>();
