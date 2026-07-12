@@ -106,6 +106,28 @@ public class MountedEnchantmentHandlerGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // Endurance end to end: a wounded, enchanted mount left to tick in a real level heals through
+    // the EnduranceMixin AbstractHorse#tick inject within one pulse interval — exercises the mixin
+    // target, the tickCount gate, and the isClientSide guard, not just the handler seam. The
+    // timeout gives one full PULSE_INTERVAL_TICKS (plus margin) for the first pulse to land.
+    @GameTest(template = "meridian:empty_3x3", timeoutTicks = EnduranceHealMath.PULSE_INTERVAL_TICKS + 40)
+    public void enduranceRegenFiresThroughTheHorseTick(GameTestHelper helper) {
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> endurance = reg.getHolder(Meridian.id("endurance")).orElse(null);
+        if (endurance == null) { helper.fail("endurance not in registry"); return; }
+
+        Horse horse = helper.spawnWithNoFreeWill(EntityType.HORSE, new BlockPos(1, 1, 1));
+        ItemStack armor = new ItemStack(Items.IRON_HORSE_ARMOR);
+        armor.enchant(endurance, 3);
+        horse.setItemSlot(EquipmentSlot.BODY, armor);
+        float wounded = horse.getMaxHealth() - 8.0f;
+        horse.setHealth(wounded);
+
+        helper.succeedWhen(() -> helper.assertTrue(horse.getHealth() > wounded,
+                "Endurance mount should regenerate through its own tick"));
+    }
+
     // Wavestride: a moving mount stands on the water surface, a stationary one sinks, and a mount
     // without the enchant never stands on water. Drives the canStandOnFluid gate directly.
     @GameTest(template = "meridian:empty_3x3")
