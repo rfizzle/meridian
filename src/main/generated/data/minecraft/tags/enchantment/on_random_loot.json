@@ -83,6 +83,34 @@
     {
       "id": "meridian:curse_of_leaden",
       "required": false
+    },
+    {
+      "id": "meridian:curse_of_blunting",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_fumbling",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_wavering",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_timidity",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_molting",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_skittishness",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_obscurity",
+      "required": false
     }
   ]
 }

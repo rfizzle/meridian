@@ -112,6 +112,13 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> UMBRAL = key("umbral");
     public static final ResourceKey<Enchantment> WAVESTRIDE = key("wavestride");
     public static final ResourceKey<Enchantment> ENDURANCE = key("endurance");
+    public static final ResourceKey<Enchantment> CURSE_OF_BLUNTING = key("curse_of_blunting");
+    public static final ResourceKey<Enchantment> CURSE_OF_FUMBLING = key("curse_of_fumbling");
+    public static final ResourceKey<Enchantment> CURSE_OF_WAVERING = key("curse_of_wavering");
+    public static final ResourceKey<Enchantment> CURSE_OF_TIMIDITY = key("curse_of_timidity");
+    public static final ResourceKey<Enchantment> CURSE_OF_MOLTING = key("curse_of_molting");
+    public static final ResourceKey<Enchantment> CURSE_OF_SKITTISHNESS = key("curse_of_skittishness");
+    public static final ResourceKey<Enchantment> CURSE_OF_OBSCURITY = key("curse_of_obscurity");
 
     private EnchantmentEffects() {}
 

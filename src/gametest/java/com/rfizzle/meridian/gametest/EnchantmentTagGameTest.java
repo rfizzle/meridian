@@ -59,7 +59,9 @@ public class EnchantmentTagGameTest implements FabricGameTest {
         // Every Meridian curse must carry identical tag membership so the cleansing/removal paths
         // and the trade/loot pool treat them all like Curse of Decay.
         for (String id : List.of("curse_of_decay", "curse_of_sealing", "curse_of_echoes",
-                "curse_of_hunger", "curse_of_attraction", "curse_of_leaden")) {
+                "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
+                "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
+                "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity")) {
             Holder<Enchantment> curse =
                     reg.getHolderOrThrow(reg.getResourceKey(reg.get(Meridian.id(id))).get());
 

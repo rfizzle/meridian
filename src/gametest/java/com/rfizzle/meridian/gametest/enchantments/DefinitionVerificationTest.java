@@ -110,6 +110,48 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void curseOfBluntingDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_blunting", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfFumblingDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_fumbling", 1, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfWaveringDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_wavering", 2, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfTimidityDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_timidity", 1, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfMoltingDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_molting", 1, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfSkittishnessDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_skittishness", 1, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfObscurityDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_obscurity", 1, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void fortifyDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "fortify", 3, 5);
         helper.succeed();
