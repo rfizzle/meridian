@@ -346,7 +346,7 @@ Left = any damageable, not-already-unbreakable item, right = a Tempered Core. Ma
 
 ## 8. Enchantments
 
-115 original enchantments, defined as JSON in `data/meridian/enchantment/` (115 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
+117 original enchantments, defined as JSON in `data/meridian/enchantment/` (117 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
 
 ### JSON Structure
 Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈29) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈76 carry custom behavior driven by Java event handlers.
@@ -358,7 +358,7 @@ Each file is a standard 1.21.1 enchantment definition: `description` (translatio
 | Ranged | Detonation, Stormcall, Resonance, Gale Shot, Permafrost, Ricochet, True Flight, Glacial Lance | `ProjectileEnchantmentHandler` |
 | Tools | Excavate (3×3), Prospect (vein), Bounty, Furrow, Terrasculpt | `ToolEnchantmentHandler`, `ArmorTickHandler` (Terrasculpt) |
 | Mobility / Armor | Alacrity, Clamber, Vault, Slipstream, Cinderwalk, Diminish, Colossus, Luminance, Gravitas, Abyss Ward, Premonition, Antidote, Steadfast | `ArmorTickHandler`, `EnchantmentEffectHandler` |
-| Mounts | Gallop, Trample, Skybound, Saddleguard | `MountedEnchantmentHandler`, `SaddleguardMixin` |
+| Mounts | Gallop, Trample, Skybound, Saddleguard, Wavestride, Endurance | `MountedEnchantmentHandler`, `SaddleguardMixin`, `WavestrideMixin`, `EnduranceMixin` |
 | Elytra | Ironwing, Impact Ward | data + handlers |
 | Shield | Retribution, Pummel, Fortify | `EnchantmentEffectHandler`, `ShieldFortifyMixin` |
 | Utility | Mason's Reach, Aurify, Tether | `AurifyHandler`, `TetherHandler` |

@@ -19,6 +19,7 @@
         "EnchantmentTableBlockMixin",
         "EnchantRandomlyFunctionMixin",
         "EnderDragonMixin",
+        "EnduranceMixin",
         "EverbloomMixin",
         "FireworkRocketMixin",
         "FishingHookMixin",
@@ -41,6 +42,7 @@
         "TemptGoalMixin",
         "ThrownTridentMixin",
         "UmbralVisibilityMixin",
+        "WavestrideMixin",
         "WinterwardFreezeMixin",
         "WinterwardPowderSnowMixin"
     ],

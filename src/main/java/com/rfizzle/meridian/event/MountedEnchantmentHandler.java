@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
+import com.rfizzle.meridian.enchanting.EnduranceHealMath;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
@@ -72,5 +73,21 @@ public final class MountedEnchantmentHandler {
                 target.hurt(horse.damageSources().mobAttack(horse), damage);
             }
         }
+    }
+
+    /**
+     * A single Endurance heal pulse: a mount wearing Endurance on its body slot that is below
+     * full health recovers {@link EnduranceHealMath#healPerPulse(int)}. Endurance heals whether
+     * or not the mount is ridden, so a wounded horse recovers even while stabled.
+     *
+     * <p>Public and side-effect-scoped to the heal itself so the pulse can be driven directly in
+     * a gametest; {@code EnduranceMixin} throttles it to one call every
+     * {@link EnduranceHealMath#PULSE_INTERVAL_TICKS} on the server side.
+     */
+    public static void handleEndurance(AbstractHorse horse) {
+        int level = EnchantmentEffects.getEquippedLevel(horse, EnchantmentEffects.ENDURANCE, EquipmentSlot.BODY);
+        if (level <= 0) return;
+        if (horse.getHealth() >= horse.getMaxHealth()) return;
+        horse.heal(EnduranceHealMath.healPerPulse(level));
     }
 }

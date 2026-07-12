@@ -37,7 +37,7 @@ class EnchantmentJsonValidationTest {
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
-            "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
+            "decay", "decoy", "detonation", "diminish", "emberward", "endurance", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
@@ -52,7 +52,7 @@ class EnchantmentJsonValidationTest {
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "trample", "trophy", "true_flight",
             "umbral", "updraft",
-            "vault", "vital_mend", "vitality", "voidbane", "volley", "winterward");
+            "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
@@ -184,11 +184,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is115() throws Exception {
+    void enchantmentCount_is117() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(115, count, "expected exactly 115 enchantment JSON files");
+        assertEquals(117, count, "expected exactly 117 enchantment JSON files");
     }
 
     @TestFactory

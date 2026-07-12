@@ -20,7 +20,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
-            "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
+            "decay", "decoy", "detonation", "diminish", "emberward", "endurance", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
@@ -35,7 +35,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "trample", "trophy", "true_flight",
             "umbral", "updraft",
-            "vault", "vital_mend", "vitality", "voidbane", "volley", "winterward");
+            "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
 
     @GameTest(template = "meridian:empty_3x3")
     public void allRosterEnchantmentsResolveInRegistry(GameTestHelper helper) {
@@ -62,8 +62,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 115) {
-            helper.fail("Expected 115 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 117) {
+            helper.fail("Expected 117 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();
