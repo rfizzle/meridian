@@ -11,6 +11,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.enchantment.Enchantment;
 
+import java.util.List;
+
 public class EnchantmentTagGameTest implements FabricGameTest {
 
     @GameTest(template = "meridian:empty_3x3")
@@ -53,22 +55,26 @@ public class EnchantmentTagGameTest implements FabricGameTest {
     @GameTest(template = "meridian:empty_3x3")
     public void meridianCursesInCurseTag(GameTestHelper helper) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
-        Holder<Enchantment> curseOfDecay = reg.getHolderOrThrow(reg.getResourceKey(reg.get(Meridian.id("curse_of_decay"))).get());
 
-        if (!curseOfDecay.is(EnchantmentTags.CURSE)) {
-            helper.fail("meridian:curse_of_decay should be in minecraft:curse");
-        }
+        // Every Meridian curse must carry identical tag membership so the cleansing/removal paths
+        // and the trade/loot pool treat them all like Curse of Decay.
+        for (String id : List.of("curse_of_decay", "curse_of_sealing", "curse_of_echoes",
+                "curse_of_hunger", "curse_of_attraction", "curse_of_leaden")) {
+            Holder<Enchantment> curse =
+                    reg.getHolderOrThrow(reg.getResourceKey(reg.get(Meridian.id(id))).get());
 
-        if (!curseOfDecay.is(EnchantmentTags.TRADEABLE)) {
-            helper.fail("meridian:curse_of_decay should be in minecraft:tradeable");
-        }
-
-        if (!curseOfDecay.is(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
-            helper.fail("meridian:curse_of_decay should be in minecraft:double_trade_price");
-        }
-
-        if (curseOfDecay.is(EnchantmentTags.NON_TREASURE)) {
-            helper.fail("meridian:curse_of_decay should NOT be in minecraft:non_treasure");
+            if (!curse.is(EnchantmentTags.CURSE)) {
+                helper.fail("meridian:" + id + " should be in minecraft:curse");
+            }
+            if (!curse.is(EnchantmentTags.TRADEABLE)) {
+                helper.fail("meridian:" + id + " should be in minecraft:tradeable");
+            }
+            if (!curse.is(EnchantmentTags.DOUBLE_TRADE_PRICE)) {
+                helper.fail("meridian:" + id + " should be in minecraft:double_trade_price");
+            }
+            if (curse.is(EnchantmentTags.NON_TREASURE)) {
+                helper.fail("meridian:" + id + " should NOT be in minecraft:non_treasure");
+            }
         }
 
         helper.succeed();

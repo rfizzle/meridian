@@ -41,7 +41,9 @@ class RarityTagPartitionTest {
             "common", "uncommon", "rare", "very_rare");
 
     private static final Set<String> CURSES = Set.of(
-            "meridian:curse_of_decay", "meridian:curse_of_sealing");
+            "meridian:curse_of_decay", "meridian:curse_of_sealing",
+            "meridian:curse_of_echoes", "meridian:curse_of_hunger",
+            "meridian:curse_of_attraction", "meridian:curse_of_leaden");
 
     @Test
     void rarityTagsPartitionTheNonCurseCatalogByWeightBucket() throws IOException {

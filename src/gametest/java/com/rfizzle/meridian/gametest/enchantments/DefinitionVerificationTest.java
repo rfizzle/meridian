@@ -86,6 +86,30 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void curseOfEchoesDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_echoes", 1, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfHungerDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_hunger", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfAttractionDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_attraction", 1, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfLeadenDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "curse_of_leaden", 2, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void fortifyDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "fortify", 3, 5);
         helper.succeed();

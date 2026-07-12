@@ -1,15 +1,30 @@
 // Tier: 3 (Fabric Gametest)
 package com.rfizzle.meridian.event;
 
+import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+
+import java.lang.reflect.Field;
 
 public class ArmorTickHandlerGameTest implements FabricGameTest {
 
@@ -59,6 +74,102 @@ public class ArmorTickHandlerGameTest implements FabricGameTest {
             helper.succeed();
         } finally {
             ArmorTickHandler.cinderwalkResetForTest();
+        }
+    }
+
+    private Holder<Enchantment> curse(GameTestHelper helper, String id) {
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        return reg.getHolder(Meridian.id(id)).orElse(null);
+    }
+
+    // Curse of Hunger: wearing it adds food exhaustion each tick, scaled by level; not wearing it
+    // adds none. Exhaustion has no public getter, so read it reflectively off the live FoodData.
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfHungerAddsExhaustionWhileWorn(GameTestHelper helper) throws Exception {
+        Holder<Enchantment> ench = curse(helper, "curse_of_hunger");
+        if (ench == null) { helper.fail("curse_of_hunger not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            // causeFoodExhaustion is a no-op for an invulnerable player; force it off so the
+            // survival exhaustion path runs.
+            player.getAbilities().invulnerable = false;
+            player.onUpdateAbilities();
+
+            Field exhaustionField = FoodData.class.getDeclaredField("exhaustionLevel");
+            exhaustionField.setAccessible(true);
+
+            // Not worn: exhaustion must not move.
+            float baseline = exhaustionField.getFloat(player.getFoodData());
+            ArmorTickHandler.handleCurseOfHunger(player);
+            if (exhaustionField.getFloat(player.getFoodData()) != baseline) {
+                helper.fail("Curse of Hunger must not add exhaustion when it is not worn");
+                return;
+            }
+
+            // Worn at level 3: exhaustion grows by rate * level per call.
+            ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+            boots.enchant(ench, 3);
+            player.setItemSlot(EquipmentSlot.FEET, boots);
+
+            float before = exhaustionField.getFloat(player.getFoodData());
+            ArmorTickHandler.handleCurseOfHunger(player);
+            float after = exhaustionField.getFloat(player.getFoodData());
+
+            float expectedDelta = ArmorTickHandler.CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL * 3;
+            if (after - before < expectedDelta - 1.0e-4f) {
+                helper.fail("Curse of Hunger III should add " + expectedDelta
+                        + " exhaustion, got delta " + (after - before));
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.discard();
+        }
+    }
+
+    // Curse of Attraction: a nearby hostile with no target is pulled onto the wearer; without the
+    // curse it is left alone.
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfAttractionPullsHostilesOntoWearer(GameTestHelper helper) {
+        Holder<Enchantment> ench = curse(helper, "curse_of_attraction");
+        if (ench == null) { helper.fail("curse_of_attraction not in registry"); return; }
+
+        Mob zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            player.getAbilities().invulnerable = false;
+            player.onUpdateAbilities();
+            BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
+            player.teleportTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5);
+
+            if (zombie.getTarget() != null) {
+                helper.fail("precondition: a freshly spawned zombie should have no target");
+                return;
+            }
+
+            // Not worn: no forced target.
+            ArmorTickHandler.handleCurseOfAttraction(player);
+            if (zombie.getTarget() != null) {
+                helper.fail("Curse of Attraction must not pull hostiles when it is not worn");
+                return;
+            }
+
+            // Worn: the nearby zombie is pulled onto the wearer.
+            ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+            boots.enchant(ench, 1);
+            player.setItemSlot(EquipmentSlot.FEET, boots);
+            ArmorTickHandler.handleCurseOfAttraction(player);
+
+            if (zombie.getTarget() != player) {
+                helper.fail("Curse of Attraction should set the wearer as the zombie's target, got "
+                        + zombie.getTarget());
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.discard();
         }
     }
 }
