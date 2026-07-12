@@ -169,8 +169,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      * health), and ranged combat meaningful on a mob that shoots. Everything else is excluded:
      * <ul>
      *   <li>mobility/mount — {@code alacrity, clamber, loft, slipstream, skybound, true_flight,
-     *       updraft, vault, gallop, trample, saddleguard}, plus {@code joust} (mount-gated,
-     *       inert on an unmounted mob)</li>
+     *       updraft, vault, gallop, trample, saddleguard, wavestride, endurance}, plus
+     *       {@code joust} (mount-gated, inert on an unmounted mob)</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
      *       cinderwalk}</li>
@@ -254,6 +254,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("decay"))
                 .addOptional(Meridian.id("decoy"))
                 .addOptional(Meridian.id("emberward"))
+                .addOptional(Meridian.id("endurance"))
                 .addOptional(Meridian.id("everbloom"))
                 .addOptional(Meridian.id("excavate"))
                 .addOptional(Meridian.id("fortify"))
@@ -329,6 +330,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("vitality"))
                 .addOptional(Meridian.id("voidbane"))
                 .addOptional(Meridian.id("volley"))
+                .addOptional(Meridian.id("wavestride"))
                 .addOptional(Meridian.id("winterward"));
 
         getOrCreateTagBuilder(EnchantmentTags.TREASURE)

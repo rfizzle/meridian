@@ -110,6 +110,8 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> CURSE_OF_ATTRACTION = key("curse_of_attraction");
     public static final ResourceKey<Enchantment> WINTERWARD = key("winterward");
     public static final ResourceKey<Enchantment> UMBRAL = key("umbral");
+    public static final ResourceKey<Enchantment> WAVESTRIDE = key("wavestride");
+    public static final ResourceKey<Enchantment> ENDURANCE = key("endurance");
 
     private EnchantmentEffects() {}
 

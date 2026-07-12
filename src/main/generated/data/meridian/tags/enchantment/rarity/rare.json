@@ -187,6 +187,10 @@
     {
       "id": "meridian:umbral",
       "required": false
+    },
+    {
+      "id": "meridian:wavestride",
+      "required": false
     }
   ]
 }

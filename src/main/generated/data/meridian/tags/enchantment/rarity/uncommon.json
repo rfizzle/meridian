@@ -21,6 +21,10 @@
       "required": false
     },
     {
+      "id": "meridian:endurance",
+      "required": false
+    },
+    {
       "id": "meridian:everbloom",
       "required": false
     },
