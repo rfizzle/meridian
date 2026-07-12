@@ -39,6 +39,16 @@ public final class ArmorTickHandler {
     private static final Map<TrackedBlock, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
     static final int CINDERWALK_REVERT_TICKS = 80;
 
+    /** Curse of Hunger: extra food exhaustion added per level, every tick, while worn. */
+    static final float CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL = 0.005f;
+
+    /**
+     * Curse of Attraction: hostile mobs within this radius of the wearer that have no current
+     * target are pulled onto the wearer, so they notice and close in from well beyond their native
+     * detection range.
+     */
+    static final double CURSE_OF_ATTRACTION_RADIUS = 24.0;
+
     private ArmorTickHandler() {}
 
     public static void register() {
@@ -58,9 +68,11 @@ public final class ArmorTickHandler {
             EffectGuard.run("cinderwalk", player, () -> handleCinderwalk(player));
             EffectGuard.run("terrasculpt", player, () -> handleTerrasculpt(player));
             EffectGuard.run("thermal", player, () -> handleThermal(player));
+            EffectGuard.run("curse_of_hunger", player, () -> handleCurseOfHunger(player));
 
             if (tickCounter % 20 == 0) {
                 EffectGuard.run("premonition", player, () -> handlePremonition(player));
+                EffectGuard.run("curse_of_attraction", player, () -> handleCurseOfAttraction(player));
             }
         }
 
@@ -247,6 +259,30 @@ public final class ArmorTickHandler {
 
         for (Monster mob : hostiles) {
             mob.addEffect(new MobEffectInstance(MobEffects.GLOWING, 30, 0, true, false, false));
+        }
+    }
+
+    // Package-private so ArmorTickHandlerGameTest can drive the effect directly with a mock player,
+    // matching the *ForTest seam convention used elsewhere in this class.
+    static void handleCurseOfHunger(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_HUNGER,
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        if (level <= 0) return;
+
+        player.causeFoodExhaustion(CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL * level);
+    }
+
+    static void handleCurseOfAttraction(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_ATTRACTION,
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        if (level <= 0) return;
+
+        AABB area = player.getBoundingBox().inflate(CURSE_OF_ATTRACTION_RADIUS);
+        List<Monster> hostiles = player.serverLevel().getEntitiesOfClass(Monster.class, area,
+                mob -> mob.isAlive() && mob.getTarget() == null && mob.canAttack(player));
+
+        for (Monster mob : hostiles) {
+            mob.setTarget(player);
         }
     }
 }

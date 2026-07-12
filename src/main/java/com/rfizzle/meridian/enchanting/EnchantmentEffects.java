@@ -103,6 +103,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> VOLLEY = key("volley");
     public static final ResourceKey<Enchantment> KILN = key("kiln");
     public static final ResourceKey<Enchantment> METICULOUS = key("meticulous");
+    public static final ResourceKey<Enchantment> CURSE_OF_ECHOES = key("curse_of_echoes");
+    public static final ResourceKey<Enchantment> CURSE_OF_HUNGER = key("curse_of_hunger");
+    public static final ResourceKey<Enchantment> CURSE_OF_ATTRACTION = key("curse_of_attraction");
 
     private EnchantmentEffects() {}
 
