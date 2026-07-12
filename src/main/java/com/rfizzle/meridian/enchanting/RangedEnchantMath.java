@@ -39,6 +39,14 @@ public final class RangedEnchantMath {
     /** Yaw offset between adjacent arrows in Volley's fan, in degrees. */
     public static final float VOLLEY_SPREAD_DEGREES = 10.0f;
 
+    /**
+     * Curse of Wavering: extra firing inaccuracy added per level, on top of the weapon's own
+     * inaccuracy. A vanilla bow fires at inaccuracy 1.0, so at max level II this triples the cone
+     * the projectile scatters within — a clear handicap that still leaves the weapon aimable at
+     * close range, rather than a dead weapon.
+     */
+    public static final float WAVERING_INACCURACY_PER_LEVEL = 2.0f;
+
     private RangedEnchantMath() {}
 
     /**
@@ -97,5 +105,15 @@ public final class RangedEnchantMath {
         int magnitude = extraIndex / 2 + 1;
         float sign = (extraIndex % 2 == 0) ? 1.0f : -1.0f;
         return sign * magnitude * VOLLEY_SPREAD_DEGREES;
+    }
+
+    /**
+     * Firing inaccuracy for a shot from a weapon carrying Curse of Wavering: the weapon's own
+     * {@code baseInaccuracy} plus a per-level penalty. Level 0 returns the base unchanged, so a
+     * clean weapon is never made less accurate.
+     */
+    public static float waveringInaccuracy(int level, float baseInaccuracy) {
+        if (level <= 0) return baseInaccuracy;
+        return baseInaccuracy + WAVERING_INACCURACY_PER_LEVEL * level;
     }
 }

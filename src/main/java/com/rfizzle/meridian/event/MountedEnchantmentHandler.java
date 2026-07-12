@@ -23,6 +23,11 @@ public final class MountedEnchantmentHandler {
     private static final Map<Entity, Long> trampleCooldowns = Collections.synchronizedMap(new WeakHashMap<>());
     private static final int TRAMPLE_COOLDOWN_TICKS = 10;
 
+    /** Curse of Skittishness: horizontal impulse of the mount's panic bolt (blocks/tick). */
+    private static final double SKITTISH_BOLT_SPEED = 0.6;
+    /** Curse of Skittishness: chance a spook also throws the rider. */
+    private static final float SKITTISH_BUCK_CHANCE = 0.15f;
+
     private MountedEnchantmentHandler() {}
 
     public static void register() {
@@ -89,5 +94,28 @@ public final class MountedEnchantmentHandler {
         if (level <= 0) return;
         if (horse.getHealth() >= horse.getMaxHealth()) return;
         horse.heal(EnduranceHealMath.healPerPulse(level));
+    }
+
+    /**
+     * Curse of Skittishness: a mount wearing the curse on its body panics when it takes damage —
+     * lurching a short distance in a random direction and, on a small chance, bucking its rider.
+     * Public and side-effect-scoped to the spook itself so a gametest can drive it directly;
+     * {@code EnchantmentEffectHandler}'s {@code AFTER_DAMAGE} dispatch calls it whenever a horse
+     * takes a hit.
+     */
+    public static void handleSkittishness(AbstractHorse horse) {
+        int level = EnchantmentEffects.getEquippedLevel(horse, EnchantmentEffects.CURSE_OF_SKITTISHNESS, EquipmentSlot.BODY);
+        if (level <= 0) return;
+
+        // Bolt: a horizontal impulse in a random direction, so the mount lurches off from where it
+        // stood. hurtMarked forces the velocity change out to the client so the mount visibly bolts.
+        float angle = horse.getRandom().nextFloat() * (float) (Math.PI * 2.0);
+        horse.setDeltaMovement(horse.getDeltaMovement().add(
+                Math.cos(angle) * SKITTISH_BOLT_SPEED, 0.0, Math.sin(angle) * SKITTISH_BOLT_SPEED));
+        horse.hurtMarked = true;
+
+        if (horse.getRandom().nextFloat() < SKITTISH_BUCK_CHANCE) {
+            horse.ejectPassengers();
+        }
     }
 }

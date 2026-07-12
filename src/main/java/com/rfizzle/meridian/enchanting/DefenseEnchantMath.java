@@ -99,6 +99,15 @@ public final class DefenseEnchantMath {
     public static final float EVERBLOOM_DURATION_BONUS_PER_LEVEL = 0.15f;
     public static final float EVERBLOOM_MAX_DURATION_BONUS = 0.50f;
 
+    /**
+     * Curse of Timidity: a successful melee block briefly slows the blocker themselves — Stagger's
+     * daze turned inward. The window stays short (two seconds) so it taxes the block without
+     * stun-locking, and the Slowness runs one tier deeper than Stagger's opener since it is the
+     * curse's whole downside.
+     */
+    public static final int TIMIDITY_SLOW_TICKS = 40;
+    public static final int TIMIDITY_SLOW_AMPLIFIER = 1;
+
     private DefenseEnchantMath() {}
 
     /**

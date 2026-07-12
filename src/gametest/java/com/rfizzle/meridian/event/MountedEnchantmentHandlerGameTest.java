@@ -166,4 +166,38 @@ public class MountedEnchantmentHandlerGameTest implements FabricGameTest {
 
         helper.succeed();
     }
+
+    // Curse of Skittishness: a damaged mount wearing the curse bolts — it gains horizontal velocity
+    // from a standstill. A mount without the curse stays put.
+    @GameTest(template = "meridian:empty_3x3")
+    public void skittishHorseBoltsWhenDamaged(GameTestHelper helper) {
+        Registry<Enchantment> reg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> skittish = reg.getHolder(Meridian.id("curse_of_skittishness")).orElse(null);
+        if (skittish == null) { helper.fail("curse_of_skittishness not in registry"); return; }
+
+        Horse horse = helper.spawnWithNoFreeWill(EntityType.HORSE, new BlockPos(1, 1, 1));
+        ItemStack armor = new ItemStack(Items.IRON_HORSE_ARMOR);
+        armor.enchant(skittish, 1);
+        horse.setItemSlot(EquipmentSlot.BODY, armor);
+        horse.setDeltaMovement(Vec3.ZERO);
+
+        MountedEnchantmentHandler.handleSkittishness(horse);
+        if (horse.getDeltaMovement().horizontalDistance() <= 0.0) {
+            helper.fail("A damaged Skittishness mount should bolt (gain horizontal velocity)");
+            return;
+        }
+
+        // A mount without the curse never bolts.
+        Horse plain = helper.spawnWithNoFreeWill(EntityType.HORSE, new BlockPos(1, 1, 1));
+        plain.setItemSlot(EquipmentSlot.BODY, new ItemStack(Items.IRON_HORSE_ARMOR));
+        plain.setDeltaMovement(Vec3.ZERO);
+        MountedEnchantmentHandler.handleSkittishness(plain);
+        if (plain.getDeltaMovement().horizontalDistance() > 0.0) {
+            helper.fail("A mount without Skittishness must not bolt");
+            return;
+        }
+
+        helper.succeed();
+    }
 }

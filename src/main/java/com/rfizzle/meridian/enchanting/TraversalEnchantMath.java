@@ -58,6 +58,13 @@ public final class TraversalEnchantMath {
      */
     public static final double TAILWIND_PUSH_PER_LEVEL = 0.05;
 
+    /** Curse of Molting: chance an elytra firework boost fizzles out instead of pushing the glider. */
+    public static final float MOLTING_FIZZLE_CHANCE = 0.25f;
+    /** Curse of Molting: how often (in ticks) a glide sheds an extra burst of elytra durability. */
+    public static final int MOLTING_SHED_INTERVAL_TICKS = 20;
+    /** Curse of Molting: extra durability shed from the elytra on each burst while gliding. */
+    public static final int MOLTING_SHED_DURABILITY = 2;
+
     private TraversalEnchantMath() {}
 
     /**

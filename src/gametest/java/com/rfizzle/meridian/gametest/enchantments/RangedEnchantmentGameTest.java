@@ -14,6 +14,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.animal.Pig;
@@ -26,6 +28,7 @@ import net.minecraft.world.entity.projectile.ThrownTrident;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ProjectileWeaponItem;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
@@ -487,5 +490,64 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
             return;
         }
         helper.succeed();
+    }
+
+    // Curse of Wavering: a cursed bow fires with visibly wider scatter than a clean one. Fires real
+    // shots through ProjectileWeaponItem.shoot so the inaccuracy @ModifyVariable is exercised end to
+    // end — guarding the ordinal-based capture against a future mapping bump silently breaking it.
+    @GameTest(template = "meridian:empty_3x3")
+    public void waveringWidensArrowScatter(GameTestHelper helper) {
+        Holder<Enchantment> wavering = lookup(helper, "curse_of_wavering");
+        if (wavering == null) { helper.fail("curse_of_wavering not in registry"); return; }
+
+        ItemStack cleanBow = new ItemStack(Items.BOW);
+        ItemStack waveringBow = new ItemStack(Items.BOW);
+        waveringBow.enchant(wavering, 2);
+
+        int shots = 48;
+        double cleanMaxDev = maxArrowDeviation(helper, cleanBow, shots);
+        double waveringMaxDev = maxArrowDeviation(helper, waveringBow, shots);
+
+        // Wavering II fires at inaccuracy 5.0 vs the bow's base 1.0 — a fivefold scatter. Over 48
+        // shots the cursed maximum deviation clears the clean one with an overwhelming margin, so
+        // this compares aggregates rather than one flaky roll.
+        if (!(waveringMaxDev > cleanMaxDev)) {
+            helper.fail("Curse of Wavering should widen arrow scatter (cleanMaxDev=" + cleanMaxDev
+                    + ", waveringMaxDev=" + waveringMaxDev + ")");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Fires `shots` arrows from `bow` through the real ProjectileWeaponItem.shoot path (base
+    // inaccuracy 1.0) with the shooter aimed down +Z, and returns the largest deviation of any
+    // arrow's launch velocity from that aim, as 1 - cos(angle) so wider scatter reads larger.
+    private double maxArrowDeviation(GameTestHelper helper, ItemStack bow, int shots) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer shooter = MockPlayers.serverPlayerInLevel(helper);
+        shooter.setGameMode(GameType.SURVIVAL);
+        BlockPos abs = helper.absolutePos(new BlockPos(1, 3, 1));
+        shooter.moveTo(abs.getX() + 0.5, abs.getY(), abs.getZ() + 0.5, 0.0f, 0.0f);
+        shooter.setYHeadRot(0.0f);
+        Vec3 aim = new Vec3(0.0, 0.0, 1.0);
+        ProjectileWeaponItem weapon = (ProjectileWeaponItem) bow.getItem();
+
+        double maxDeviation = 0.0;
+        try {
+            for (int i = 0; i < shots; i++) {
+                weapon.shoot(level, shooter, InteractionHand.MAIN_HAND, bow,
+                        List.of(new ItemStack(Items.ARROW)), 3.0f, 1.0f, false, null);
+                AABB box = shooter.getBoundingBox().inflate(6.0);
+                for (Arrow arrow : level.getEntitiesOfClass(Arrow.class, box)) {
+                    Vec3 dir = arrow.getDeltaMovement().normalize();
+                    double deviation = 1.0 - dir.dot(aim);
+                    if (deviation > maxDeviation) maxDeviation = deviation;
+                    arrow.discard();
+                }
+            }
+        } finally {
+            shooter.discard();
+        }
+        return maxDeviation;
     }
 }

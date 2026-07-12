@@ -33,6 +33,14 @@ public final class CombatEnchantMath {
     public static final float JOUST_DAMAGE_PER_SPEED_PER_LEVEL = 3.0f;
     public static final float JOUST_DAMAGE_CAP_PER_LEVEL = 2.0f;
 
+    /** Curse of Blunting: chance per level that a melee strike glances off. */
+    public static final float BLUNTING_GLANCE_CHANCE_PER_LEVEL = 0.08f;
+    /** Curse of Blunting: fraction of the swing's damage that lands on a glance. */
+    public static final float BLUNTING_GLANCE_MULTIPLIER = 0.4f;
+
+    /** Curse of Fumbling: flat chance on taking a hit to drop the held item. */
+    public static final float FUMBLING_DROP_CHANCE = 0.15f;
+
     private CombatEnchantMath() {}
 
     /**
@@ -132,5 +140,22 @@ public final class CombatEnchantMath {
         if (level <= 0 || mountSpeed < JOUST_MIN_SPEED) return 0.0f;
         float raw = (float) (JOUST_DAMAGE_PER_SPEED_PER_LEVEL * level * mountSpeed);
         return Math.min(JOUST_DAMAGE_CAP_PER_LEVEL * level, raw);
+    }
+
+    /** Chance per swing that Curse of Blunting makes a strike glance off, clamped to [0, 1]. */
+    public static float bluntingGlanceChance(int level) {
+        if (level <= 0) return 0.0f;
+        return Math.min(1.0f, BLUNTING_GLANCE_CHANCE_PER_LEVEL * level);
+    }
+
+    /**
+     * Damage multiplier Curse of Blunting applies to a strike: {@link #BLUNTING_GLANCE_MULTIPLIER}
+     * when {@code roll} lands inside the level's glance chance, otherwise 1.0 (unchanged). Taking
+     * the roll as a parameter keeps the decision deterministic and unit-testable; the caller feeds
+     * {@code random.nextFloat()}.
+     */
+    public static float bluntingDamageMultiplier(int level, float roll) {
+        if (level <= 0) return 1.0f;
+        return roll < bluntingGlanceChance(level) ? BLUNTING_GLANCE_MULTIPLIER : 1.0f;
     }
 }

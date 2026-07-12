@@ -16,6 +16,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -73,6 +74,10 @@ public final class ArmorTickHandler {
             if (tickCounter % 20 == 0) {
                 EffectGuard.run("premonition", player, () -> handlePremonition(player));
                 EffectGuard.run("curse_of_attraction", player, () -> handleCurseOfAttraction(player));
+            }
+
+            if (tickCounter % TraversalEnchantMath.MOLTING_SHED_INTERVAL_TICKS == 0) {
+                EffectGuard.run("curse_of_molting", player, () -> handleCurseOfMolting(player));
             }
         }
 
@@ -270,6 +275,20 @@ public final class ArmorTickHandler {
         if (level <= 0) return;
 
         player.causeFoodExhaustion(CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL * level);
+    }
+
+    /**
+     * Curse of Molting (durability): while gliding, the elytra sheds an extra burst of durability on
+     * each interval — the call-site gate throttles the interval, so this always sheds when invoked.
+     * Package-private so ArmorTickHandlerGameTest can drive it directly with a mock player.
+     */
+    static void handleCurseOfMolting(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_MOLTING, EquipmentSlot.CHEST);
+        if (level <= 0) return;
+        if (!player.isFallFlying()) return;
+
+        ItemStack elytra = player.getItemBySlot(EquipmentSlot.CHEST);
+        elytra.hurtAndBreak(TraversalEnchantMath.MOLTING_SHED_DURABILITY, player, EquipmentSlot.CHEST);
     }
 
     static void handleCurseOfAttraction(ServerPlayer player) {

@@ -2,3 +2,4 @@ accessWidener v2 named
 
 mutable field net/minecraft/world/inventory/Slot y I
 accessible method net/minecraft/client/gui/screens/inventory/EnchantmentScreen renderBook (Lnet/minecraft/client/gui/GuiGraphics;IIF)V
+accessible method net/minecraft/world/item/ProjectileWeaponItem shoot (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/world/entity/LivingEntity;)V
