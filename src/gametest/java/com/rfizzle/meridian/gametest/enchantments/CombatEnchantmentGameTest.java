@@ -18,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -282,6 +283,25 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- Stagger: mobs-only default (the enabled path is covered by StaggerConfigGameTest) ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void staggerIgnoresPlayersByDefault(GameTestHelper helper) {
+        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        if (!EnchantmentEffectHandler.staggerTargetAllowed(mob)) {
+            helper.fail("Mobs must always be eligible Stagger targets");
+            return;
+        }
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        boolean allowed = EnchantmentEffectHandler.staggerTargetAllowed(player);
+        player.discard();
+        if (allowed) {
+            helper.fail("Players must not be staggered with the default config");
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Trophy: per-victim head mapping ---
 
     @GameTest(template = "meridian:empty_3x3")
@@ -523,6 +543,65 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
                 helper.succeed();
             });
         });
+    }
+
+    // --- Stagger: a real shield block dazes the melee attacker with Slowness + Weakness ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void staggerRealShieldBlockDazesAttacker(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "stagger");
+        if (ench == null) { helper.fail("stagger not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        player.setGameMode(GameType.SURVIVAL);
+        ItemStack shield = new ItemStack(Items.SHIELD);
+        shield.enchant(ench, 2);
+        player.setItemSlot(EquipmentSlot.OFFHAND, shield);
+
+        // Face north toward the attacker — a shield only blocks hits from the front, and the
+        // block check reads HEAD rotation, which moveTo does not set.
+        BlockPos playerPos = helper.absolutePos(new BlockPos(1, 1, 2));
+        player.moveTo(playerPos.getX() + 0.5, playerPos.getY(), playerPos.getZ() + 0.5, 180.0f, 0.0f);
+        player.setYHeadRot(180.0f);
+        player.startUsingItem(InteractionHand.OFF_HAND);
+
+        // A mock player is never ticked by a connection, so the shield's raise delay and the
+        // join invulnerability would both hold forever; age both by hand (no accessors).
+        player.invulnerableTime = 0;
+        try {
+            java.lang.reflect.Field useItemRemaining =
+                    net.minecraft.world.entity.LivingEntity.class.getDeclaredField("useItemRemaining");
+            useItemRemaining.setAccessible(true);
+            useItemRemaining.setInt(player, player.getUseItem().getUseDuration(player) - 10);
+            java.lang.reflect.Field spawnInvulnerableTime =
+                    ServerPlayer.class.getDeclaredField("spawnInvulnerableTime");
+            spawnInvulnerableTime.setAccessible(true);
+            spawnInvulnerableTime.setInt(player, 0);
+        } catch (ReflectiveOperationException e) {
+            player.discard();
+            helper.fail("useItemRemaining/spawnInvulnerableTime not found — mapping changed? " + e);
+            return;
+        }
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 0));
+        clearEquipment(attacker);
+
+        if (!player.isBlocking()) {
+            player.discard();
+            helper.fail("test setup: the mock player never raised its shield");
+            return;
+        }
+        attacker.doHurtTarget(player);
+
+        boolean slowed = attacker.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        boolean weakened = attacker.hasEffect(MobEffects.WEAKNESS);
+        player.discard();
+        if (!slowed || !weakened) {
+            helper.fail("A Stagger shield block must daze the attacker "
+                    + "(slowness=" + slowed + ", weakness=" + weakened + ")");
+            return;
+        }
+        helper.succeed();
     }
 
     // --- Riposte: post-block window grants one bonus hit, then is consumed ---

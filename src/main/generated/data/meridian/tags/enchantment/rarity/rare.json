@@ -153,6 +153,10 @@
       "required": false
     },
     {
+      "id": "meridian:stagger",
+      "required": false
+    },
+    {
       "id": "meridian:steadfast",
       "required": false
     },

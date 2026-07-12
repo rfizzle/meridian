@@ -149,4 +149,25 @@ class DefenseEnchantMathTest {
     void everbloom_leavesInfiniteDurationUntouched() {
         assertEquals(-1, DefenseEnchantMath.everbloomExtendedDuration(-1, 3));
     }
+
+    // --- Stagger daze ---
+
+    @Test
+    void staggerDazeTicks_isZeroAtLevelZero() {
+        assertEquals(0, DefenseEnchantMath.staggerDazeTicks(0));
+    }
+
+    @Test
+    void staggerDazeTicks_scalesWithLevel() {
+        assertEquals(60, DefenseEnchantMath.staggerDazeTicks(1)); // 40 + 20
+        assertEquals(80, DefenseEnchantMath.staggerDazeTicks(2)); // 40 + 40
+        assertTrue(DefenseEnchantMath.staggerDazeTicks(2) > DefenseEnchantMath.staggerDazeTicks(1));
+    }
+
+    @Test
+    void staggerSlownessAmplifier_deepensOneTierPerLevel() {
+        assertEquals(0, DefenseEnchantMath.staggerSlownessAmplifier(0));
+        assertEquals(0, DefenseEnchantMath.staggerSlownessAmplifier(1)); // Slowness I
+        assertEquals(1, DefenseEnchantMath.staggerSlownessAmplifier(2)); // Slowness II
+    }
 }

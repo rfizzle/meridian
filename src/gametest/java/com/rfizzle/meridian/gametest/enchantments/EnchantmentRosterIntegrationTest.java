@@ -31,8 +31,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "reprieve", "repulse", "resonance", "retribution", "ricochet",
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
-            "slipstream", "snare", "soul_tax", "spellguard", "steadfast",
-            "stormcall", "sunder", "tempest", "tempo", "terrasculpt",
+            "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
+            "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "trample", "trophy", "true_flight",
             "umbral", "updraft",
             "vault", "vital_mend", "vitality", "voidbane", "volley", "winterward");
@@ -62,8 +62,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 113) {
-            helper.fail("Expected 113 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 115) {
+            helper.fail("Expected 115 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

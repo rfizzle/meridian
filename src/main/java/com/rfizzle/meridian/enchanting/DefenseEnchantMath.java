@@ -79,6 +79,19 @@ public final class DefenseEnchantMath {
     public static final int BASTION_RESIST_TICKS_PER_LEVEL = 80;
 
     /**
+     * Stagger's daze duration per level. A blocked melee hit briefly saps the attacker; the
+     * window stays short (three to four seconds) so it punishes the swing without stun-locking.
+     */
+    public static final int STAGGER_BASE_DAZE_TICKS = 40;
+    public static final int STAGGER_DAZE_TICKS_PER_LEVEL = 20;
+
+    /**
+     * Weakness stays at level I at every Stagger level — only Slowness deepens with level, so the
+     * daze never fully neuters an attacker's damage output.
+     */
+    public static final int STAGGER_WEAKNESS_AMPLIFIER = 0;
+
+    /**
      * Everbloom's beneficial-duration bonus per level and its cap. Deliberately held well below
      * doubling (a +100% cap) so it lengthens buffs without trivializing potion economy — at
      * max level three it lands at +45%, short of the +50% ceiling.
@@ -102,6 +115,21 @@ public final class DefenseEnchantMath {
     public static int bastionResistanceTicks(int level) {
         if (level <= 0) return 0;
         return BASTION_BASE_RESIST_TICKS + BASTION_RESIST_TICKS_PER_LEVEL * level;
+    }
+
+    /** Duration in ticks of the Slowness/Weakness daze a Stagger block inflicts. Zero at level 0. */
+    public static int staggerDazeTicks(int level) {
+        if (level <= 0) return 0;
+        return STAGGER_BASE_DAZE_TICKS + STAGGER_DAZE_TICKS_PER_LEVEL * level;
+    }
+
+    /**
+     * Slowness amplifier for a Stagger daze — Slowness I at level 1, deepening one tier per level
+     * ({@code level - 1}). Zero at level 0.
+     */
+    public static int staggerSlownessAmplifier(int level) {
+        if (level <= 0) return 0;
+        return level - 1;
     }
 
     /**
