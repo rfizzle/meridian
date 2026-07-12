@@ -39,6 +39,7 @@
         "TetherMixin",
         "TemptGoalMixin",
         "ThrownTridentMixin",
+        "UmbralVisibilityMixin",
         "WinterwardFreezeMixin",
         "WinterwardPowderSnowMixin"
     ],
