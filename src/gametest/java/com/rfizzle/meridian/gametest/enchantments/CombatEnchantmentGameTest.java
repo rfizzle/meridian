@@ -25,6 +25,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
 
@@ -930,5 +931,104 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
             return;
         }
         helper.succeed();
+    }
+
+    // --- Torrent: a melee trident hit adds bonus damage while the wielder is in water ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void torrentAddsBonusDamageWhileInWater(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "torrent");
+        if (ench == null) { helper.fail("torrent not in registry"); return; }
+
+        // Flood the attacker's cell so the swing lands while it is in water.
+        helper.setBlock(new BlockPos(0, 1, 1), Blocks.WATER);
+        helper.setBlock(new BlockPos(0, 2, 1), Blocks.WATER);
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
+        clearEquipment(attacker);
+        ItemStack torrentTrident = new ItemStack(Items.TRIDENT);
+        torrentTrident.enchant(ench, 3);
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, torrentTrident);
+
+        // Control: an identical trident with no Torrent, on dry land.
+        Mob controlAttacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+        clearEquipment(controlAttacker);
+        controlAttacker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+
+        Mob target = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(0, 1, 2));
+        Mob controlTarget = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(2, 1, 2));
+
+        // Let the attacker's in-water state settle before the swing.
+        helper.runAfterDelay(3, () -> {
+            if (!attacker.isInWaterOrRain()) {
+                helper.fail("test setup: attacker did not register as in water");
+                return;
+            }
+            resetHurtState(target);
+            resetHurtState(controlTarget);
+            float startHealth = target.getHealth();
+            float controlStartHealth = controlTarget.getHealth();
+
+            attacker.doHurtTarget(target);
+            controlAttacker.doHurtTarget(controlTarget);
+
+            helper.runAfterDelay(2, () -> {
+                float torrentLoss = startHealth - target.getHealth();
+                float plainLoss = controlStartHealth - controlTarget.getHealth();
+                float expectedBonus = CombatEnchantMath.torrentBonusDamage(3);
+                if (torrentLoss < plainLoss + expectedBonus - 1.0f) {
+                    helper.fail("Torrent III in water should add ~" + expectedBonus
+                            + " damage over a plain trident hit. torrent=" + torrentLoss
+                            + ", plain=" + plainLoss);
+                    return;
+                }
+                helper.succeed();
+            });
+        });
+    }
+
+    // --- Torrent: on dry land the melee bonus does not apply ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void torrentAddsNoBonusOnDryLand(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "torrent");
+        if (ench == null) { helper.fail("torrent not in registry"); return; }
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(0, 1, 1));
+        clearEquipment(attacker);
+        ItemStack torrentTrident = new ItemStack(Items.TRIDENT);
+        torrentTrident.enchant(ench, 3);
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, torrentTrident);
+
+        Mob controlAttacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 1, 1));
+        clearEquipment(controlAttacker);
+        controlAttacker.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
+
+        Mob target = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(0, 1, 2));
+        Mob controlTarget = helper.spawnWithNoFreeWill(EntityType.IRON_GOLEM, new BlockPos(2, 1, 2));
+
+        if (attacker.isInWaterOrRain()) {
+            helper.fail("test setup: attacker should be dry");
+            return;
+        }
+        resetHurtState(target);
+        resetHurtState(controlTarget);
+        float startHealth = target.getHealth();
+        float controlStartHealth = controlTarget.getHealth();
+
+        attacker.doHurtTarget(target);
+        controlAttacker.doHurtTarget(controlTarget);
+
+        helper.runAfterDelay(2, () -> {
+            float torrentLoss = startHealth - target.getHealth();
+            float plainLoss = controlStartHealth - controlTarget.getHealth();
+            // No water, no rain: the two identical trident hits should match within noise.
+            if (torrentLoss > plainLoss + 2.0f) {
+                helper.fail("Torrent should add no bonus on dry land. torrent=" + torrentLoss
+                        + ", plain=" + plainLoss);
+                return;
+            }
+            helper.succeed();
+        });
     }
 }

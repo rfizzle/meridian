@@ -31,6 +31,20 @@ public final class RangedEnchantMath {
      */
     public static final double HARPOON_CLOSE_RANGE_FACTOR = 0.25;
 
+    /** Radius of Undertow's crowd-gather pull at level 1, in blocks; grows per level. */
+    public static final double UNDERTOW_RADIUS_BASE = 3.0;
+    public static final double UNDERTOW_RADIUS_PER_LEVEL = 2.0;
+    public static final double UNDERTOW_PULL_BASE = 0.5;
+    public static final double UNDERTOW_PULL_PER_LEVEL = 0.3;
+    /** Upward kick on Undertow's pull so gathered creatures clear low terrain. */
+    public static final double UNDERTOW_LIFT = 0.2;
+    /**
+     * Close-range damping for Undertow, mirroring Harpoon: the pull speed is capped at
+     * {@code distance * factor} so a creature already on the impact point is nudged, never
+     * flung across it.
+     */
+    public static final double UNDERTOW_CLOSE_RANGE_FACTOR = 0.25;
+
     /** How long a Mark-struck creature glows through walls, in server ticks (6 seconds). */
     public static final int MARK_GLOW_TICKS = 120;
 
@@ -77,6 +91,26 @@ public final class RangedEnchantMath {
         if (level <= 0 || distance <= 0.0) return 0.0;
         double strength = HARPOON_PULL_BASE + HARPOON_PULL_PER_LEVEL * level;
         return Math.min(strength, distance * HARPOON_CLOSE_RANGE_FACTOR);
+    }
+
+    /**
+     * Radius, in blocks, within which Undertow gathers creatures toward the thrown trident's
+     * impact point. Scales with level; zero without the enchant.
+     */
+    public static double undertowRadius(int level) {
+        if (level <= 0) return 0.0;
+        return UNDERTOW_RADIUS_BASE + UNDERTOW_RADIUS_PER_LEVEL * level;
+    }
+
+    /**
+     * Speed of Undertow's pull impulse toward the impact point, for a creature {@code distance}
+     * blocks away. Scales with level and is damped at close range (mirroring
+     * {@link #harpoonPullSpeed}) so a creature on top of the point isn't flung across it.
+     */
+    public static double undertowPullSpeed(int level, double distance) {
+        if (level <= 0 || distance <= 0.0) return 0.0;
+        double strength = UNDERTOW_PULL_BASE + UNDERTOW_PULL_PER_LEVEL * level;
+        return Math.min(strength, distance * UNDERTOW_CLOSE_RANGE_FACTOR);
     }
 
     /**

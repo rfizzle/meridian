@@ -16,6 +16,9 @@ public final class CombatEnchantMath {
     public static final float PINPOINT_BASE_DAMAGE = 0.5f;
     public static final float PINPOINT_DAMAGE_PER_LEVEL = 1.0f;
 
+    public static final float TORRENT_BASE_DAMAGE = 1.5f;
+    public static final float TORRENT_DAMAGE_PER_LEVEL = 1.5f;
+
     public static final float SUNDER_CHANCE_PER_LEVEL = 0.04f;
 
     public static final float TROPHY_CHANCE_PER_LEVEL = 0.05f;
@@ -79,6 +82,15 @@ public final class CombatEnchantMath {
     public static float pinpointBonusDamage(int level) {
         if (level <= 0) return 0.0f;
         return PINPOINT_BASE_DAMAGE + PINPOINT_DAMAGE_PER_LEVEL * level;
+    }
+
+    /**
+     * Torrent's flat bonus melee damage, added when the wielder is in water or rain. Scales
+     * with level; zero without the enchant. The water/rain gate lives in the handler shell.
+     */
+    public static float torrentBonusDamage(int level) {
+        if (level <= 0) return 0.0f;
+        return TORRENT_BASE_DAMAGE + TORRENT_DAMAGE_PER_LEVEL * level;
     }
 
     /** Chance per hit that Sunder knocks a piece of the victim's equipment loose. */

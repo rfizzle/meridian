@@ -129,6 +129,7 @@ public final class ProjectileEnchantmentHandler {
         EffectGuard.run("stormcall", arrow, () -> handleStormcall(arrow, weapon, pos));
         EffectGuard.run("glacial_lance", arrow, () -> handleGlacialLance(arrow, weapon, pos));
         EffectGuard.run("harpoon", arrow, () -> handleHarpoon(arrow, weapon, hit));
+        EffectGuard.run("undertow", arrow, () -> handleUndertow(arrow, weapon, pos));
         EffectGuard.run("mark", arrow, () -> handleMark(weapon, hit));
     }
 
@@ -149,6 +150,7 @@ public final class ProjectileEnchantmentHandler {
         EffectGuard.run("detonation", arrow, () -> handleDetonation(arrow, weapon, pos, owner));
         EffectGuard.run("stormcall", arrow, () -> handleStormcall(arrow, weapon, pos));
         EffectGuard.run("glacial_lance", arrow, () -> handleGlacialLance(arrow, weapon, pos));
+        EffectGuard.run("undertow", arrow, () -> handleUndertow(arrow, weapon, pos));
 
         return false;
     }
@@ -375,6 +377,16 @@ public final class ProjectileEnchantmentHandler {
     }
 
     /**
+     * Whether Undertow may gather this creature: mobs always, players only when
+     * {@code combat.undertowAffectsPlayers} is enabled. Mirrors {@link #harpoonVictimAllowed}.
+     */
+    public static boolean undertowVictimAllowed(LivingEntity victim) {
+        if (!(victim instanceof Player)) return true;
+        MeridianConfig config = Meridian.getConfig();
+        return config != null && config.combat.undertowAffectsPlayers;
+    }
+
+    /**
      * Whether Mark may make this victim glow: mobs always, players only when
      * {@code combat.markAffectsPlayers} is enabled.
      */
@@ -451,6 +463,48 @@ public final class ProjectileEnchantmentHandler {
 
         arrow.level().playSound(null, BlockPos.containing(victim.position()),
                 SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS, 1.0f, 0.7f);
+    }
+
+    /**
+     * Undertow: on impact (entity or block), drag every eligible creature within a level-scaled
+     * radius toward the impact point — a crowd-gather, the inverse of Harpoon's single-target
+     * yank to the thrower. Shares Harpoon's mobs-only stance: bosses in {@link #HARPOON_IMMUNE}
+     * are exempt and players only when {@code combat.undertowAffectsPlayers} is enabled.
+     */
+    private static void handleUndertow(AbstractArrow arrow, ItemStack weapon, Vec3 pos) {
+        int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.UNDERTOW);
+        if (level <= 0) return;
+
+        Level world = arrow.level();
+        Entity owner = arrow.getOwner();
+        double radius = RangedEnchantMath.undertowRadius(level);
+
+        AABB area = new AABB(pos.x - radius, pos.y - radius, pos.z - radius,
+                pos.x + radius, pos.y + radius, pos.z + radius);
+        List<LivingEntity> nearby = world.getEntitiesOfClass(LivingEntity.class, area,
+                e -> e != owner && e.isAlive()
+                        && !e.getType().is(HARPOON_IMMUNE)
+                        && undertowVictimAllowed(e));
+
+        boolean gathered = false;
+        for (LivingEntity target : nearby) {
+            Vec3 toPoint = pos.subtract(target.position());
+            double distance = toPoint.length();
+            if (distance < 1.0e-3) continue;
+
+            double pullSpeed = RangedEnchantMath.undertowPullSpeed(level, distance);
+            Vec3 pull = toPoint.scale(pullSpeed / distance);
+            target.push(pull.x, pull.y + RangedEnchantMath.UNDERTOW_LIFT, pull.z);
+            if (target instanceof net.minecraft.server.level.ServerPlayer sp) {
+                sp.hurtMarked = true;
+            }
+            gathered = true;
+        }
+
+        if (gathered) {
+            world.playSound(null, BlockPos.containing(pos),
+                    SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS, 1.0f, 0.5f);
+        }
     }
 
     private static boolean handleRicochet(AbstractArrow arrow, ItemStack weapon, BlockHitResult hit) {

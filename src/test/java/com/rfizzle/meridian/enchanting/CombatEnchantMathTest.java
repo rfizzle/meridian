@@ -113,6 +113,21 @@ class CombatEnchantMathTest {
         }
     }
 
+    // --- Torrent ---
+
+    @Test
+    void torrentBonusDamage_zeroWithoutEnchant_monotonicWithLevel() {
+        assertEquals(0.0f, CombatEnchantMath.torrentBonusDamage(0), EPS);
+        float previous = 0.0f;
+        for (int level = 1; level <= 3; level++) {
+            float bonus = CombatEnchantMath.torrentBonusDamage(level);
+            assertEquals(CombatEnchantMath.TORRENT_BASE_DAMAGE
+                    + CombatEnchantMath.TORRENT_DAMAGE_PER_LEVEL * level, bonus, EPS);
+            assertTrue(bonus > previous, "bonus must grow with level");
+            previous = bonus;
+        }
+    }
+
     // --- Sunder / Trophy chances ---
 
     @Test

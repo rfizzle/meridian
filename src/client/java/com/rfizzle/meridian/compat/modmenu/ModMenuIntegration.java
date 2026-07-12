@@ -213,6 +213,12 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setSaveConsumer(v -> current.combat.harpoonAffectsPlayers = v)
                     .build());
             combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.undertow_affects_players"),
+                            current.combat.undertowAffectsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.undertowAffectsPlayers = v)
+                    .build());
+            combatCategory.addEntry(entry.startBooleanToggle(
                             Component.translatable("config.meridian.mark_affects_players"),
                             current.combat.markAffectsPlayers)
                     .setDefaultValue(false)
