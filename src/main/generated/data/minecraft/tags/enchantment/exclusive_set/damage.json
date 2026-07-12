@@ -39,6 +39,10 @@
     {
       "id": "meridian:crescendo",
       "required": false
+    },
+    {
+      "id": "meridian:torrent",
+      "required": false
     }
   ]
 }

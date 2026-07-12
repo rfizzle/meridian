@@ -13,7 +13,7 @@ list, config reference, and command guide.
 
 Meridian is a **ground-up rewrite of Minecraft's enchanting system** for
 **Minecraft 1.21.1 (Fabric)**. It replaces the single-stat enchanting table
-with a five-axis progression system, adds 124 original enchantments, introduces
+with a five-axis progression system, adds 126 original enchantments, introduces
 25+ biome-themed shelf blocks, and gives you real tools for managing your
 enchantment collection — libraries, salvage tomes, and anvil upgrades included.
 
@@ -76,9 +76,9 @@ Every shelf contributes a unique combination of stats, and they're organized int
 
 Each shelf tier displays themed enchanting particles — fire, water, end, and sculk.
 
-### 124 Original Enchantments
+### 126 Original Enchantments
 
-Meridian adds 124 new enchantments across every equipment slot and playstyle. Every enchantment is fully data-driven and can be individually configured or disabled by server operators.
+Meridian adds 126 new enchantments across every equipment slot and playstyle. Every enchantment is fully data-driven and can be individually configured or disabled by server operators.
 
 #### Combat
 **Tempo** — Increases attack speed. **Keen Edge** — Chance to deal a burst of bonus damage. **Cleave** — Strikes hit nearby enemies in an arc. **Siphon** — Drains life from targets on hit. **Final Gambit** — Sacrifice your weapon for devastating burst damage. **Soul Tax** — Spend XP to amplify strikes. **Blight** — Poisons targets. **Decay** — Inflicts Wither. **Nightfall** — Blinds targets with Darkness.
