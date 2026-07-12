@@ -1,0 +1,45 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.curse_of_leaden"
+  },
+  "supported_items": "#meridian:enchantable/leg_and_foot_armor",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "legs",
+    "feet"
+  ],
+  "effects": {
+    "minecraft:attributes": [
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": -0.03,
+          "per_level_above_first": -0.03
+        },
+        "attribute": "minecraft:generic.jump_strength",
+        "id": "meridian:enchantment.curse_of_leaden",
+        "operation": "add_value"
+      },
+      {
+        "amount": {
+          "type": "minecraft:linear",
+          "base": 0.012,
+          "per_level_above_first": 0.012
+        },
+        "attribute": "minecraft:generic.gravity",
+        "id": "meridian:enchantment.curse_of_leaden.gravity",
+        "operation": "add_value"
+      }
+    ]
+  }
+}

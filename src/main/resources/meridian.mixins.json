@@ -12,6 +12,7 @@
         "BrushableBlockEntityMeticulousMixin",
         "CandleBlockMixin",
         "CreeperEntityAccessor",
+        "EchoesVibrationMixin",
         "EnchantmentHelperMixin",
         "EnchantmentMaxLevelMixin",
         "EnchantmentMenuAccessor",

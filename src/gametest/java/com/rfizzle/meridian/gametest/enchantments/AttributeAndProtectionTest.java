@@ -123,6 +123,67 @@ public class AttributeAndProtectionTest implements FabricGameTest {
         helper.fail("Gallop should define a movement_speed attribute");
     }
 
+    // --- Curse of Leaden: reduces jump height and increases gravity (faster falling) ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfLeadenReducesJumpAndIncreasesGravity(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "curse_of_leaden");
+        if (ench == null) { helper.fail("curse_of_leaden not in registry"); return; }
+
+        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        double baseJump = mob.getAttributeValue(Attributes.JUMP_STRENGTH);
+        double baseGravity = mob.getAttributeValue(Attributes.GRAVITY);
+
+        ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+        boots.enchant(ench, 2);
+        mob.setItemSlot(EquipmentSlot.FEET, boots);
+
+        helper.runAfterDelay(1, () -> {
+            double jump = mob.getAttributeValue(Attributes.JUMP_STRENGTH);
+            double gravity = mob.getAttributeValue(Attributes.GRAVITY);
+            if (jump >= baseJump) {
+                helper.fail("Curse of Leaden II should reduce jump strength. Base: " + baseJump + ", got: " + jump);
+                return;
+            }
+            if (gravity <= baseGravity) {
+                helper.fail("Curse of Leaden II should increase gravity. Base: " + baseGravity + ", got: " + gravity);
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfLeadenScalesWithLevel(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "curse_of_leaden");
+        if (ench == null) { helper.fail("curse_of_leaden not in registry"); return; }
+
+        var attrEffects = ench.value().getEffects(EnchantmentEffectComponents.ATTRIBUTES);
+        boolean sawJump = false;
+        for (var effect : attrEffects) {
+            if (effect.attribute().is(Attributes.JUMP_STRENGTH)) {
+                sawJump = true;
+                var mod1 = effect.getModifier(1, EquipmentSlot.FEET);
+                var mod2 = effect.getModifier(2, EquipmentSlot.FEET);
+                if (mod1.amount() >= 0 || mod2.amount() >= 0) {
+                    helper.fail("Curse of Leaden jump_strength modifiers must be negative. L1: "
+                            + mod1.amount() + ", L2: " + mod2.amount());
+                    return;
+                }
+                if (mod2.amount() >= mod1.amount()) {
+                    helper.fail("Curse of Leaden II should reduce jump more than I. L1: "
+                            + mod1.amount() + ", L2: " + mod2.amount());
+                    return;
+                }
+            }
+        }
+        if (!sawJump) {
+            helper.fail("Curse of Leaden should define a jump_strength attribute effect");
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Skybound: increases jump strength for mounts ---
 
     @GameTest(template = "meridian:empty_3x3")

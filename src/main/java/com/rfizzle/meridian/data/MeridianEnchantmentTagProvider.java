@@ -89,7 +89,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      */
     private static final List<ResourceLocation> CURSES = List.of(
             Meridian.id("curse_of_decay"),
-            Meridian.id("curse_of_sealing"));
+            Meridian.id("curse_of_sealing"),
+            Meridian.id("curse_of_echoes"),
+            Meridian.id("curse_of_hunger"),
+            Meridian.id("curse_of_attraction"),
+            Meridian.id("curse_of_leaden"));
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
@@ -188,7 +192,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       (kept out of the baseline pool; a future {@code mob_equipment/elite} sub-tag could
      *       carry them)</li>
      *   <li>loot/trophy payoff, meaningless when a mob holds it — {@code trophy, fortuity}</li>
-     *   <li>curses — {@code curse_of_decay, curse_of_sealing}</li>
+     *   <li>curses — {@code curse_of_decay, curse_of_sealing, curse_of_echoes, curse_of_hunger,
+     *       curse_of_attraction, curse_of_leaden}</li>
      * </ul>
      * All entries use {@code addOptional} so the tag loads cleanly regardless of which enchants a
      * given world-state has registered.
@@ -358,7 +363,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("tether"))
                 .addOptional(Meridian.id("vital_mend"))
                 .addOptional(Meridian.id("curse_of_decay"))
-                .addOptional(Meridian.id("curse_of_sealing"));
+                .addOptional(Meridian.id("curse_of_sealing"))
+                .addOptional(Meridian.id("curse_of_echoes"))
+                .addOptional(Meridian.id("curse_of_hunger"))
+                .addOptional(Meridian.id("curse_of_attraction"))
+                .addOptional(Meridian.id("curse_of_leaden"));
 
         getOrCreateTagBuilder(EnchantmentTags.ON_RANDOM_LOOT)
                 .addOptional(Meridian.id("abyss_ward"))
@@ -377,11 +386,19 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("tether"))
                 .addOptional(Meridian.id("vital_mend"))
                 .addOptional(Meridian.id("curse_of_decay"))
-                .addOptional(Meridian.id("curse_of_sealing"));
+                .addOptional(Meridian.id("curse_of_sealing"))
+                .addOptional(Meridian.id("curse_of_echoes"))
+                .addOptional(Meridian.id("curse_of_hunger"))
+                .addOptional(Meridian.id("curse_of_attraction"))
+                .addOptional(Meridian.id("curse_of_leaden"));
 
         getOrCreateTagBuilder(EnchantmentTags.DOUBLE_TRADE_PRICE)
                 .addOptional(Meridian.id("curse_of_decay"))
-                .addOptional(Meridian.id("curse_of_sealing"));
+                .addOptional(Meridian.id("curse_of_sealing"))
+                .addOptional(Meridian.id("curse_of_echoes"))
+                .addOptional(Meridian.id("curse_of_hunger"))
+                .addOptional(Meridian.id("curse_of_attraction"))
+                .addOptional(Meridian.id("curse_of_leaden"));
     }
 
     private void addMeridianExclusiveSets() {

@@ -36,6 +36,7 @@ class EnchantmentJsonValidationTest {
             "antidote", "attunement", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
+            "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "decay", "decoy", "detonation", "diminish", "emberward", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
@@ -54,7 +55,8 @@ class EnchantmentJsonValidationTest {
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
-            "vital_mend", "attunement", "tether", "curse_of_decay", "curse_of_sealing", "aurify");
+            "vital_mend", "attunement", "tether", "curse_of_decay", "curse_of_sealing", "aurify",
+            "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden");
 
     /**
      * Maps each exclusive set tag path (relative to GENERATED_TAGS_DIR) to the
@@ -181,11 +183,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is107() throws Exception {
+    void enchantmentCount_is111() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(107, count, "expected exactly 107 enchantment JSON files");
+        assertEquals(111, count, "expected exactly 111 enchantment JSON files");
     }
 
     @TestFactory
@@ -354,7 +356,11 @@ class EnchantmentJsonValidationTest {
                 Map.entry("tether", 1),
                 Map.entry("curse_of_decay", 2),
                 Map.entry("curse_of_sealing", 1),
-                Map.entry("aurify", 1)
+                Map.entry("aurify", 1),
+                Map.entry("curse_of_echoes", 2),
+                Map.entry("curse_of_hunger", 2),
+                Map.entry("curse_of_attraction", 1),
+                Map.entry("curse_of_leaden", 2)
         );
         return expectedWeights.entrySet().stream()
                 .map(entry -> DynamicTest.dynamicTest(entry.getKey(), () -> {

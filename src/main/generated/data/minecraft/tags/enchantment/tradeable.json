@@ -67,6 +67,22 @@
     {
       "id": "meridian:curse_of_sealing",
       "required": false
+    },
+    {
+      "id": "meridian:curse_of_echoes",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_hunger",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_attraction",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_leaden",
+      "required": false
     }
   ]
 }
