@@ -341,6 +341,10 @@
       "required": false
     },
     {
+      "id": "meridian:umbral",
+      "required": false
+    },
+    {
       "id": "meridian:updraft",
       "required": false
     },
@@ -358,6 +362,10 @@
     },
     {
       "id": "meridian:volley",
+      "required": false
+    },
+    {
+      "id": "meridian:winterward",
       "required": false
     }
   ]
