@@ -101,6 +101,10 @@
       "required": false
     },
     {
+      "id": "meridian:tailwind",
+      "required": false
+    },
+    {
       "id": "meridian:tempo",
       "required": false
     },

@@ -59,6 +59,8 @@
             "com.rfizzle.meridian.gametest.enchantments.SeekerConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.HarpoonConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MarkConfigGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.StaggerConfigGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.TailwindGameTest",
             "com.rfizzle.meridian.gametest.enchantments.RangedEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MiningEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.BrushEnchantmentGameTest",

@@ -368,6 +368,7 @@ public final class EnchantmentEffectHandler {
             EffectGuard.run("retribution", entity, () -> handleRetribution(entity, source, baseDamageTaken));
             EffectGuard.run("riposte_block", entity, () -> recordRiposteBlock(entity));
             EffectGuard.run("bastion", entity, () -> handleBastion(entity));
+            EffectGuard.run("stagger", entity, () -> handleStagger(entity, source));
         }
 
         if (damageTaken <= 0 && !blocked) return;
@@ -746,6 +747,30 @@ public final class EnchantmentEffectHandler {
         }
     }
 
+    /**
+     * Stagger: blocking a melee hit with the raised shield dazes the attacker with Slowness and
+     * Weakness. The {@code blocked} flag confirms a real block, so the level is read straight off
+     * the actively-used shield. Ranged/projectile blocks are excluded via {@link #isMeleeAttack}
+     * (the issue's out-of-scope boundary), and player attackers are only affected when
+     * {@code combat.staggerAffectsPlayers} is enabled.
+     */
+    private static void handleStagger(LivingEntity entity, DamageSource source) {
+        ItemStack useItem = entity.getUseItem();
+        int level = EnchantmentEffects.getEnchantmentLevel(useItem, EnchantmentEffects.STAGGER);
+        if (level <= 0) return;
+
+        Entity attacker = source.getDirectEntity();
+        if (!(attacker instanceof LivingEntity livingAttacker)) return;
+        if (!isMeleeAttack(source, livingAttacker)) return;
+        if (!staggerTargetAllowed(livingAttacker)) return;
+
+        int duration = DefenseEnchantMath.staggerDazeTicks(level);
+        livingAttacker.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration,
+                DefenseEnchantMath.staggerSlownessAmplifier(level)));
+        livingAttacker.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, duration,
+                DefenseEnchantMath.STAGGER_WEAKNESS_AMPLIFIER));
+    }
+
     private static void handlePummel(LivingEntity entity, DamageSource source) {
         Entity attacker = source.getEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
@@ -977,6 +1002,16 @@ public final class EnchantmentEffectHandler {
         if (!(victim instanceof Player)) return true;
         MeridianConfig config = Meridian.getConfig();
         return config != null && config.combat.sunderAffectsPlayers;
+    }
+
+    /**
+     * Whether Stagger may daze the given attacker. Mobs are always eligible; player attackers only
+     * when {@code combat.staggerAffectsPlayers} is enabled.
+     */
+    public static boolean staggerTargetAllowed(LivingEntity attacker) {
+        if (!(attacker instanceof Player)) return true;
+        MeridianConfig config = Meridian.getConfig();
+        return config != null && config.combat.staggerAffectsPlayers;
     }
 
     /**

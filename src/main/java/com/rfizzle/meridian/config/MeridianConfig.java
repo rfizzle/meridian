@@ -359,6 +359,8 @@ public class MeridianConfig {
         public boolean harpoonAffectsPlayers = false;
         /** Whether Mark may make struck players glow through walls; mobs are always eligible. */
         public boolean markAffectsPlayers = false;
+        /** Whether a Stagger shield block may daze player attackers; mobs are always eligible. */
+        public boolean staggerAffectsPlayers = false;
     }
 
     public static class Attunement {

@@ -174,10 +174,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
      *       cinderwalk}</li>
-     *   <li>no meaningful mob behavior — {@code impact_ward} & {@code ironwing} (elytra-only),
-     *       {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest} (player
-     *       crouch-slam input), {@code pinpoint} (player crit input), {@code riposte}
-     *       (mobs never shield-block, so the window can never open), {@code quell, gravitas,
+     *   <li>no meaningful mob behavior — {@code impact_ward}, {@code ironwing} & {@code tailwind}
+     *       (elytra-only), {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest}
+     *       (player crouch-slam input), {@code pinpoint} (player crit input), {@code riposte} &
+     *       {@code stagger} (mobs never shield-block, so the block never triggers — and Stagger's
+     *       player-attacker path is config-gated off by default besides), {@code quell, gravitas,
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
      *       path is config-gated off by default, so it would be inert on mob gear),
      *       {@code seeker} (its player-target path is config-gated off by default, and
@@ -309,9 +310,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("slipstream"))
                 .addOptional(Meridian.id("soul_tax"))
                 .addOptional(Meridian.id("spellguard"))
+                .addOptional(Meridian.id("stagger"))
                 .addOptional(Meridian.id("steadfast"))
                 .addOptional(Meridian.id("stormcall"))
                 .addOptional(Meridian.id("sunder"))
+                .addOptional(Meridian.id("tailwind"))
                 .addOptional(Meridian.id("tempest"))
                 .addOptional(Meridian.id("tempo"))
                 .addOptional(Meridian.id("terrasculpt"))

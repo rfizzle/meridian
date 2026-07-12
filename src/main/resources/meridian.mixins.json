@@ -20,6 +20,7 @@
         "EnchantRandomlyFunctionMixin",
         "EnderDragonMixin",
         "EverbloomMixin",
+        "FireworkRocketMixin",
         "FishingHookMixin",
         "HushMixin",
         "InexorableEntityMixin",

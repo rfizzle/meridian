@@ -48,6 +48,16 @@ public final class TraversalEnchantMath {
     public static final int THERMAL_SCAN_DEPTH_BASE = 5;
     public static final int THERMAL_SCAN_DEPTH_PER_LEVEL = 2;
 
+    // ---- Tailwind: firework rockets give a stronger, longer boost while gliding ----
+
+    /** Extra ticks of boost lifetime a Tailwind firework burns per level — the "longer-burning" half. */
+    public static final int TAILWIND_LIFETIME_TICKS_PER_LEVEL = 10;
+    /**
+     * Extra forward velocity (blocks/tick, along the glider's look) Tailwind adds each gliding tick
+     * per level — the "stronger" half, layered on top of vanilla's own boost.
+     */
+    public static final double TAILWIND_PUSH_PER_LEVEL = 0.05;
+
     private TraversalEnchantMath() {}
 
     /**
@@ -89,5 +99,17 @@ public final class TraversalEnchantMath {
     public static int thermalScanDepth(int level) {
         if (level <= 0) return 0;
         return THERMAL_SCAN_DEPTH_BASE + THERMAL_SCAN_DEPTH_PER_LEVEL * level;
+    }
+
+    /** Extra lifetime (ticks) a boost firework burns when carried by a Tailwind elytra. Zero at level 0. */
+    public static int tailwindLifetimeBonus(int level) {
+        if (level <= 0) return 0;
+        return TAILWIND_LIFETIME_TICKS_PER_LEVEL * level;
+    }
+
+    /** Extra forward push (blocks/tick, along look) Tailwind adds each gliding tick. Zero at level 0. */
+    public static double tailwindPush(int level) {
+        if (level <= 0) return 0.0;
+        return TAILWIND_PUSH_PER_LEVEL * level;
     }
 }

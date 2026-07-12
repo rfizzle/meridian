@@ -97,4 +97,30 @@ class TraversalEnchantMathTest {
                 TraversalEnchantMath.thermalScanDepth(1));
         assertTrue(TraversalEnchantMath.thermalScanDepth(2) > TraversalEnchantMath.thermalScanDepth(1));
     }
+
+    // ---- Tailwind: firework boost lifetime + push ----
+
+    @Test
+    void tailwindLifetimeBonus_isZeroAtLevelZero() {
+        assertEquals(0, TraversalEnchantMath.tailwindLifetimeBonus(0));
+    }
+
+    @Test
+    void tailwindLifetimeBonus_scalesPerLevel() {
+        assertEquals(10, TraversalEnchantMath.tailwindLifetimeBonus(1));
+        assertEquals(20, TraversalEnchantMath.tailwindLifetimeBonus(2));
+        assertEquals(30, TraversalEnchantMath.tailwindLifetimeBonus(3));
+    }
+
+    @Test
+    void tailwindPush_isZeroAtLevelZero() {
+        assertEquals(0.0, TraversalEnchantMath.tailwindPush(0), EPSILON);
+    }
+
+    @Test
+    void tailwindPush_scalesPerLevel() {
+        assertEquals(0.05, TraversalEnchantMath.tailwindPush(1), EPSILON);
+        assertEquals(0.15, TraversalEnchantMath.tailwindPush(3), EPSILON);
+        assertTrue(TraversalEnchantMath.tailwindPush(3) > TraversalEnchantMath.tailwindPush(1));
+    }
 }
