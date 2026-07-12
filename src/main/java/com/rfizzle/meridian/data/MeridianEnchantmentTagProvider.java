@@ -320,11 +320,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("trample"))
                 .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("true_flight"))
+                .addOptional(Meridian.id("umbral"))
                 .addOptional(Meridian.id("updraft"))
                 .addOptional(Meridian.id("vault"))
                 .addOptional(Meridian.id("vitality"))
                 .addOptional(Meridian.id("voidbane"))
-                .addOptional(Meridian.id("volley"));
+                .addOptional(Meridian.id("volley"))
+                .addOptional(Meridian.id("winterward"));
 
         getOrCreateTagBuilder(EnchantmentTags.TREASURE)
                 .addOptional(Meridian.id("abyss_ward"))

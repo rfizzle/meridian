@@ -123,6 +123,10 @@
     {
       "id": "meridian:voidbane",
       "required": false
+    },
+    {
+      "id": "meridian:winterward",
+      "required": false
     }
   ]
 }

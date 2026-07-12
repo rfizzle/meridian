@@ -38,7 +38,10 @@
         "ShieldFortifyMixin",
         "TetherMixin",
         "TemptGoalMixin",
-        "ThrownTridentMixin"
+        "ThrownTridentMixin",
+        "UmbralVisibilityMixin",
+        "WinterwardFreezeMixin",
+        "WinterwardPowderSnowMixin"
     ],
     "client": [],
     "injectors": {

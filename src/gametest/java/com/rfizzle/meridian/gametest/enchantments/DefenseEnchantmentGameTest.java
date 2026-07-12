@@ -22,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.PowderSnowBlock;
 
 public class DefenseEnchantmentGameTest implements FabricGameTest {
 
@@ -156,6 +157,51 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
                     + resistance.getDuration() + " ticks");
             return;
         }
+        helper.succeed();
+    }
+
+    // --- Winterward: freeze immunity and walking on powder snow ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void winterwardGrantsFreezeImmunity(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "winterward");
+        if (ench == null) { helper.fail("winterward not in registry"); return; }
+
+        ItemStack leggings = new ItemStack(Items.DIAMOND_LEGGINGS);
+        leggings.enchant(ench, 1);
+        Zombie wearer = spawnWearing(helper, EquipmentSlot.LEGS, leggings);
+        // Control: identical unenchanted leggings — the only difference is the enchant.
+        Zombie control = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 2, 1));
+        control.setItemSlot(EquipmentSlot.LEGS, new ItemStack(Items.DIAMOND_LEGGINGS));
+
+        boolean wearerCanFreeze = wearer.canFreeze();
+        boolean controlCanFreeze = control.canFreeze();
+        wearer.discard();
+        control.discard();
+
+        if (wearerCanFreeze) { helper.fail("Winterward wearer should be immune to freezing"); return; }
+        if (!controlCanFreeze) { helper.fail("Unenchanted control should still freeze"); return; }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void winterwardWalksOnPowderSnow(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "winterward");
+        if (ench == null) { helper.fail("winterward not in registry"); return; }
+
+        ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+        boots.enchant(ench, 1);
+        Zombie wearer = spawnWearing(helper, EquipmentSlot.FEET, boots);
+        Zombie control = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 2, 1));
+        control.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+
+        boolean wearerWalks = PowderSnowBlock.canEntityWalkOnPowderSnow(wearer);
+        boolean controlWalks = PowderSnowBlock.canEntityWalkOnPowderSnow(control);
+        wearer.discard();
+        control.discard();
+
+        if (!wearerWalks) { helper.fail("Winterward wearer should walk on powder snow"); return; }
+        if (controlWalks) { helper.fail("Unenchanted control (diamond boots) should sink into powder snow"); return; }
         helper.succeed();
     }
 

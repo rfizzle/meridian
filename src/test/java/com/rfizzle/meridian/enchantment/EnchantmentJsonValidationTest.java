@@ -50,8 +50,9 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
             "slipstream", "snare", "soul_tax", "spellguard", "steadfast",
             "stormcall", "sunder", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "timberfell", "trample", "trophy", "true_flight", "updraft",
-            "vault", "vital_mend", "vitality", "voidbane", "volley");
+            "tether", "thermal", "timberfell", "trample", "trophy", "true_flight",
+            "umbral", "updraft",
+            "vault", "vital_mend", "vitality", "voidbane", "volley", "winterward");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
@@ -183,11 +184,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is111() throws Exception {
+    void enchantmentCount_is113() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(111, count, "expected exactly 111 enchantment JSON files");
+        assertEquals(113, count, "expected exactly 113 enchantment JSON files");
     }
 
     @TestFactory
