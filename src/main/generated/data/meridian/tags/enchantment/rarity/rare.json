@@ -193,7 +193,15 @@
       "required": false
     },
     {
+      "id": "meridian:trailblaze",
+      "required": false
+    },
+    {
       "id": "meridian:true_flight",
+      "required": false
+    },
+    {
+      "id": "meridian:twin_hook",
       "required": false
     },
     {

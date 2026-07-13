@@ -69,6 +69,10 @@
       "required": false
     },
     {
+      "id": "meridian:dowse",
+      "required": false
+    },
+    {
       "id": "meridian:emberward",
       "required": false
     },
@@ -353,6 +357,10 @@
       "required": false
     },
     {
+      "id": "meridian:trailblaze",
+      "required": false
+    },
+    {
       "id": "meridian:trample",
       "required": false
     },
@@ -362,6 +370,10 @@
     },
     {
       "id": "meridian:true_flight",
+      "required": false
+    },
+    {
+      "id": "meridian:twin_hook",
       "required": false
     },
     {

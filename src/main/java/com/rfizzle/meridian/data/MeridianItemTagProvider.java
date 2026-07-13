@@ -32,6 +32,7 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
     private static final TagKey<Item> ENCHANTABLE_SWORD_OR_MACE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/sword_or_mace"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes"));
+    private static final TagKey<Item> ENCHANTABLE_SHOVELS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shovels"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES_AND_SHOVELS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes_and_shovels"));
     private static final TagKey<Item> ENCHANTABLE_BRUSH = TagKey.create(Registries.ITEM, Meridian.id("enchantable/brush"));
     private static final TagKey<Item> ENCHANTABLE_RANGE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/range"));
@@ -105,6 +106,11 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_PICKAXES)
                 .addOptionalTag(ItemTags.PICKAXES);
+
+        // Trailblaze — the shovel-only path enchantment; narrower than the
+        // pickaxe-inclusive #minecraft:enchantable/mining that would sweep in the harder diggers.
+        getOrCreateTagBuilder(ENCHANTABLE_SHOVELS)
+                .addOptionalTag(ItemTags.SHOVELS);
 
         // Kiln — smelts mined drops; scoped to the two block-digging tools the issue
         // targets, narrower than the axe/hoe-inclusive #minecraft:enchantable/mining_loot.
