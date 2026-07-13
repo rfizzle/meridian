@@ -52,4 +52,47 @@ public class ToolEnchantmentHandlerGameTest implements FabricGameTest {
 
         helper.succeed();
     }
+
+    // Trailblaze paths the surrounding 3x3 using vanilla's shovel eligibility: pathable blocks
+    // with air above become DIRT_PATH, the center is left to vanilla, and non-pathable or
+    // covered neighbours stay untouched.
+    @GameTest(template = "meridian:empty_5x5x5")
+    public void trailblazePavesEligibleRing(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+
+        BlockPos center = new BlockPos(2, 1, 2);
+        BlockPos grassNeighbor = new BlockPos(1, 1, 2);   // pathable, air above -> DIRT_PATH
+        BlockPos dirtNeighbor = new BlockPos(3, 1, 2);    // pathable, air above -> DIRT_PATH
+        BlockPos stoneNeighbor = new BlockPos(2, 1, 1);   // not pathable -> untouched
+        BlockPos coveredNeighbor = new BlockPos(2, 1, 3); // pathable but roofed -> untouched
+
+        level.setBlockAndUpdate(helper.absolutePos(center), Blocks.GRASS_BLOCK.defaultBlockState());
+        level.setBlockAndUpdate(helper.absolutePos(grassNeighbor), Blocks.GRASS_BLOCK.defaultBlockState());
+        level.setBlockAndUpdate(helper.absolutePos(dirtNeighbor), Blocks.DIRT.defaultBlockState());
+        level.setBlockAndUpdate(helper.absolutePos(stoneNeighbor), Blocks.STONE.defaultBlockState());
+        level.setBlockAndUpdate(helper.absolutePos(coveredNeighbor), Blocks.GRASS_BLOCK.defaultBlockState());
+        level.setBlockAndUpdate(helper.absolutePos(coveredNeighbor.above()), Blocks.STONE.defaultBlockState());
+
+        ToolEnchantmentHandler.applyTrailblaze(level, helper.absolutePos(center), 1);
+
+        if (!level.getBlockState(helper.absolutePos(grassNeighbor)).is(Blocks.DIRT_PATH)
+                || !level.getBlockState(helper.absolutePos(dirtNeighbor)).is(Blocks.DIRT_PATH)) {
+            helper.fail("Trailblaze must path eligible neighbours with air above");
+            return;
+        }
+        if (level.getBlockState(helper.absolutePos(center)).is(Blocks.DIRT_PATH)) {
+            helper.fail("Trailblaze must leave the center to vanilla, not path it");
+            return;
+        }
+        if (!level.getBlockState(helper.absolutePos(stoneNeighbor)).is(Blocks.STONE)) {
+            helper.fail("Trailblaze must not path a non-pathable neighbour");
+            return;
+        }
+        if (!level.getBlockState(helper.absolutePos(coveredNeighbor)).is(Blocks.GRASS_BLOCK)) {
+            helper.fail("Trailblaze must not path a neighbour with a block above it");
+            return;
+        }
+
+        helper.succeed();
+    }
 }
