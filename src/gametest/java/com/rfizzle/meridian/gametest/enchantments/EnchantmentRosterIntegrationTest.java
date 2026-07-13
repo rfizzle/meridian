@@ -25,7 +25,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "decay", "decoy", "detonation", "diminish", "dowse", "emberward", "endurance", "everbloom", "excavate",
             "falconstrike", "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
-            "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
+            "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironclasp", "ironwing",
             "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
             "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pin", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
@@ -34,7 +34,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
-            "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
+            "stormcall", "stormward", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
@@ -65,8 +65,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 133) {
-            helper.fail("Expected 133 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 135) {
+            helper.fail("Expected 135 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

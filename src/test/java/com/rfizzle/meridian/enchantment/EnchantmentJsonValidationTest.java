@@ -42,7 +42,7 @@ class EnchantmentJsonValidationTest {
             "decay", "decoy", "detonation", "diminish", "dowse", "emberward", "endurance", "everbloom", "excavate",
             "falconstrike", "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
-            "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
+            "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironclasp", "ironwing",
             "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
             "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pin", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
@@ -51,7 +51,7 @@ class EnchantmentJsonValidationTest {
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
-            "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
+            "stormcall", "stormward", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
@@ -59,7 +59,7 @@ class EnchantmentJsonValidationTest {
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
-            "vital_mend", "attunement", "tether", "curse_of_decay", "curse_of_sealing", "aurify",
+            "vital_mend", "attunement", "tether", "ironclasp", "curse_of_decay", "curse_of_sealing", "aurify",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
             "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity");
@@ -192,11 +192,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is131() throws Exception {
+    void enchantmentCount_isExpected() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(133, count, "expected exactly 133 enchantment JSON files");
+        assertEquals(135, count, "expected exactly 135 enchantment JSON files");
     }
 
     @TestFactory
@@ -363,6 +363,7 @@ class EnchantmentJsonValidationTest {
                 Map.entry("vital_mend", 1),
                 Map.entry("attunement", 1),
                 Map.entry("tether", 1),
+                Map.entry("ironclasp", 1),
                 Map.entry("curse_of_decay", 2),
                 Map.entry("curse_of_sealing", 1),
                 Map.entry("aurify", 1),

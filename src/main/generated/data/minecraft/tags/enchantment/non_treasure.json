@@ -333,6 +333,10 @@
       "required": false
     },
     {
+      "id": "meridian:stormward",
+      "required": false
+    },
+    {
       "id": "meridian:sunder",
       "required": false
     },

@@ -35,6 +35,22 @@ public final class DefenseEnchantMath {
 
     public static final int EMBERWARD_FIRE_RES_TICKS = 100;
 
+    /** Duration of Stormward's Strength surge after a nearby lightning strike (5 seconds). */
+    public static final int STORMWARD_SURGE_TICKS = 100;
+
+    /** Amplifier of Stormward's Strength surge — Strength I. */
+    public static final int STORMWARD_SURGE_AMPLIFIER = 0;
+
+    /**
+     * How close (in blocks) a strike must land for a Stormward wearer to catch the surge. A
+     * direct hit is distance ~0; this radius also rewards standing near a bolt — e.g. a Tempest
+     * or Stormcall strike landing beside an ally.
+     */
+    public static final double STORMWARD_SURGE_RANGE = 8.0;
+
+    /** Squared {@link #STORMWARD_SURGE_RANGE}, for comparison against squared distances. */
+    public static final double STORMWARD_SURGE_RANGE_SQ = STORMWARD_SURGE_RANGE * STORMWARD_SURGE_RANGE;
+
     /** Vanilla's post-hit invulnerability window, set by {@code LivingEntity#hurt}. */
     public static final int VANILLA_HURT_INVULNERABILITY_TICKS = 20;
 
@@ -227,5 +243,13 @@ public final class DefenseEnchantMath {
     public static float loftSafeFallReduction(int level) {
         if (level <= 0) return 0.0f;
         return LOFT_SAFE_FALL_PER_LEVEL * level;
+    }
+
+    /**
+     * Whether a lightning strike at squared distance {@code distanceSq} from a Stormward wearer
+     * is close enough to grant the Strength surge. Inclusive of the exact edge.
+     */
+    public static boolean withinStormwardSurge(double distanceSq) {
+        return distanceSq <= STORMWARD_SURGE_RANGE_SQ;
     }
 }

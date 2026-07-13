@@ -13,12 +13,14 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -380,6 +382,82 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
             helper.fail("Curse of Timidity must not fire for a non-melee hit");
             return;
         }
+        helper.succeed();
+    }
+
+    // --- Stormward: lightning immunity and a nearby-strike Strength surge ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void stormwardGrantsLightningImmunity(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "stormward");
+        if (ench == null) { helper.fail("stormward not in registry"); return; }
+        ServerLevel level = helper.getLevel();
+
+        ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+        boots.enchant(ench, 1);
+        Zombie wearer = spawnWearing(helper, EquipmentSlot.FEET, boots);
+        // Control: identical unenchanted boots — the only difference is the enchant.
+        Zombie control = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 2, 1));
+        control.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+
+        LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
+        if (bolt == null) { helper.fail("could not create lightning bolt"); return; }
+
+        wearer.setRemainingFireTicks(0);
+        control.setRemainingFireTicks(0);
+        float wearerHealth = wearer.getHealth();
+
+        wearer.thunderHit(level, bolt);
+        control.thunderHit(level, bolt);
+
+        boolean wearerHurt = wearer.getHealth() < wearerHealth;
+        boolean wearerIgnited = wearer.getRemainingFireTicks() > 0;
+        boolean controlIgnited = control.getRemainingFireTicks() > 0;
+        wearer.discard();
+        control.discard();
+
+        if (wearerHurt) { helper.fail("Stormward wearer should take no lightning damage"); return; }
+        if (wearerIgnited) { helper.fail("Stormward wearer should not be ignited by lightning"); return; }
+        if (!controlIgnited) { helper.fail("Unenchanted control should be ignited by lightning"); return; }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void stormwardStrikeGrantsStrengthSurge(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "stormward");
+        if (ench == null) { helper.fail("stormward not in registry"); return; }
+        ServerLevel level = helper.getLevel();
+
+        ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+        boots.enchant(ench, 1);
+        Zombie wearer = spawnWearing(helper, EquipmentSlot.FEET, boots);
+        // Control at the strike itself — unenchanted, so it must catch nothing.
+        Zombie control = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(2, 2, 1));
+        control.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.DIAMOND_BOOTS));
+
+        // Strike lands a short distance from the wearer (not on it): the surge is radius-based.
+        LightningBolt bolt = EntityType.LIGHTNING_BOLT.create(level);
+        if (bolt == null) { helper.fail("could not create lightning bolt"); return; }
+        BlockPos strike = helper.absolutePos(new BlockPos(2, 2, 1));
+        bolt.moveTo(strike.getX() + 0.5, strike.getY(), strike.getZ() + 0.5);
+
+        EnchantmentEffectHandler.applyStormwardSurge(bolt);
+
+        MobEffectInstance surge = wearer.getEffect(MobEffects.DAMAGE_BOOST);
+        boolean controlSurge = control.hasEffect(MobEffects.DAMAGE_BOOST);
+        wearer.discard();
+        control.discard();
+
+        if (surge == null) { helper.fail("Stormward wearer should gain a Strength surge from a nearby strike"); return; }
+        if (surge.getAmplifier() != DefenseEnchantMath.STORMWARD_SURGE_AMPLIFIER) {
+            helper.fail("Stormward surge amplifier mismatch: " + surge.getAmplifier());
+            return;
+        }
+        if (surge.getDuration() > DefenseEnchantMath.STORMWARD_SURGE_TICKS) {
+            helper.fail("Stormward surge should be a short burst, found " + surge.getDuration() + " ticks");
+            return;
+        }
+        if (controlSurge) { helper.fail("Unenchanted control should not gain a surge"); return; }
         helper.succeed();
     }
 }

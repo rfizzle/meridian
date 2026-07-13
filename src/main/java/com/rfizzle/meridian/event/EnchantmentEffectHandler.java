@@ -699,6 +699,31 @@ public final class EnchantmentEffectHandler {
         player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, immunityTicks, 0));
     }
 
+    /**
+     * Stormward's reward half: a lightning strike grants a short Strength surge to every
+     * Stormward wearer within {@link DefenseEnchantMath#STORMWARD_SURGE_RANGE} of the bolt —
+     * whether struck directly or merely standing nearby. Driven once per real strike by
+     * {@code StormwardStrikeMixin}. The box is a coarse pre-filter; the exact radius is the
+     * circular {@link DefenseEnchantMath#withinStormwardSurge} check.
+     */
+    public static void applyStormwardSurge(LightningBolt bolt) {
+        if (!(bolt.level() instanceof ServerLevel serverLevel)) return;
+        Vec3 center = bolt.position();
+        double r = DefenseEnchantMath.STORMWARD_SURGE_RANGE;
+        AABB box = new AABB(center.x - r, center.y - r, center.z - r,
+                center.x + r, center.y + r, center.z + r);
+        for (LivingEntity wearer : serverLevel.getEntitiesOfClass(LivingEntity.class, box, LivingEntity::isAlive)) {
+            EffectGuard.run("stormward", wearer, () -> {
+                if (EnchantmentEffects.getEquippedLevel(wearer, EnchantmentEffects.STORMWARD,
+                        EquipmentSlot.LEGS, EquipmentSlot.FEET) <= 0) return;
+                if (!DefenseEnchantMath.withinStormwardSurge(wearer.distanceToSqr(center))) return;
+                wearer.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST,
+                        DefenseEnchantMath.STORMWARD_SURGE_TICKS,
+                        DefenseEnchantMath.STORMWARD_SURGE_AMPLIFIER, true, false, true));
+            });
+        }
+    }
+
     private static void handleSeismicSlam(LivingEntity entity, ServerPlayer player, ItemStack weapon) {
         int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.SEISMIC_SLAM);
         if (level <= 0) return;
@@ -822,6 +847,8 @@ public final class EnchantmentEffectHandler {
         ItemStack held = entity.getMainHandItem();
         if (held.isEmpty()) return ItemStack.EMPTY;
         if (EnchantmentHelper.has(held, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) return ItemStack.EMPTY;
+        // Ironclasp cannot be knocked loose.
+        if (EnchantmentEffects.getEnchantmentLevel(held, EnchantmentEffects.IRONCLASP) > 0) return ItemStack.EMPTY;
 
         ItemStack dropped = held.copy();
         entity.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
@@ -1120,6 +1147,8 @@ public final class EnchantmentEffectHandler {
             if (candidate.isEmpty()) continue;
             // Curse of Binding locks gear in place; Sunder respects it.
             if (EnchantmentHelper.has(candidate, EnchantmentEffectComponents.PREVENT_ARMOR_CHANGE)) continue;
+            // Ironclasp cannot be knocked loose.
+            if (EnchantmentEffects.getEnchantmentLevel(candidate, EnchantmentEffects.IRONCLASP) > 0) continue;
             occupied.add(slot);
         }
         if (occupied.isEmpty()) return null;
