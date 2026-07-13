@@ -57,6 +57,25 @@ public record StatCollection(
     }
 
     /**
+     * Returns a copy with {@code eternaDelta} eterna and {@code cluesDelta} clues removed, then
+     * clamped once so neither can fall below 0. Quanta, arcana, rectification, {@code maxEterna},
+     * the blacklist, and the treasure flag pass through unchanged. Used by Curse of Dissonance to
+     * sabotage the wearer's own table session without touching any other axis.
+     */
+    public StatCollection withDissonanceReduction(float eternaDelta, int cluesDelta) {
+        return new StatCollection(
+                eterna - eternaDelta,
+                quanta,
+                arcana,
+                rectification,
+                clues - cluesDelta,
+                maxEterna,
+                blacklist,
+                treasureAllowed
+        ).clamped();
+    }
+
+    /**
      * Applies the enchanting table's inherent baseline stats on top of raw shelf contributions,
      * then clamps once. The table provides, independent of surrounding shelves:
      * <ul>

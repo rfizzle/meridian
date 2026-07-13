@@ -51,6 +51,14 @@
     {
       "id": "meridian:curse_of_obscurity",
       "required": false
+    },
+    {
+      "id": "meridian:curse_of_toll",
+      "required": false
+    },
+    {
+      "id": "meridian:curse_of_dissonance",
+      "required": false
     }
   ]
 }

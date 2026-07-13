@@ -26,6 +26,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -67,11 +68,24 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
     private static final int INPUT_SLOT = 0;
     private static final int LAPIS_SLOT = 1;
 
+    /**
+     * Every equipment slot, cached once — Curse of Dissonance is a durability-item curse, so it can
+     * be held or worn in any slot. Reused each tick by {@link #broadcastChanges()} to avoid cloning
+     * a fresh {@code EquipmentSlot.values()} array on every scan while a table menu is open.
+     */
+    private static final EquipmentSlot[] ALL_SLOTS = EquipmentSlot.values();
+
     private final ContainerLevelAccess access;
     private final Inventory playerInventory;
 
     /** Last-gathered stats — retained for the client HUD and click-time replay. */
     private StatCollection lastStats = StatCollection.EMPTY;
+    /**
+     * Last-seen Curse of Dissonance level on the opening player's equipment, tracked so a change
+     * from equipping or removing a cursed item mid-session re-runs the stat gather immediately (the
+     * enchant-slot {@link #slotsChanged} recompute never fires on an equipment change). See #225.
+     */
+    private int lastDissonanceLevel = 0;
     /**
      * Client-side mirror of the player's combined XP-tome balance, synced via {@link StatsPayload}.
      * Lets the screen preview the level/tome cost split before the click. Server-side this is
@@ -241,7 +255,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         if (input.isEmpty()) {
             clearSlotState();
             access.execute((level, pos) -> {
-                StatCollection stats = EnchantingStatRegistry.gatherStats(level, pos);
+                StatCollection stats = applyDissonance(EnchantingStatRegistry.gatherStats(level, pos));
                 this.lastStats = stats;
                 broadcastStats(stats);
             });
@@ -251,6 +265,41 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
             return;
         }
         access.execute((level, pos) -> recompute(level, pos, input));
+    }
+
+    /**
+     * Applies Curse of Dissonance to freshly gathered session stats: reads the opening player's
+     * equipped Dissonance level (held or worn) and drops Eterna and Clues accordingly. Runs on the
+     * per-open compute path only, so the reduction is scoped to this player's session and never
+     * written back into the shared shelf snapshot or the block — other players' sessions are
+     * untouched. Returns {@code stats} unchanged when the curse is absent.
+     */
+    private StatCollection applyDissonance(StatCollection stats) {
+        int level = EnchantmentEffects.getEquippedLevel(playerInventory.player,
+                EnchantmentEffects.CURSE_OF_DISSONANCE, ALL_SLOTS);
+        return DissonanceMath.apply(stats, level);
+    }
+
+    /**
+     * Vanilla calls this every server tick for the open menu. We piggyback on it to notice when the
+     * player's Curse of Dissonance level changes — equipping or removing a cursed item never touches
+     * the enchant-slot container that drives {@link #slotsChanged} — and re-run the stat gather so
+     * "removing the item restores full stats" takes effect immediately, not only on the next input
+     * change. The costly rescan is gated on an actual level change, so a player without the curse
+     * pays only a cheap fixed-slot enchantment scan and never triggers a shelf re-gather.
+     */
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        if (!(playerInventory.player instanceof ServerPlayer)) {
+            return;
+        }
+        int level = EnchantmentEffects.getEquippedLevel(playerInventory.player,
+                EnchantmentEffects.CURSE_OF_DISSONANCE, ALL_SLOTS);
+        if (level != lastDissonanceLevel) {
+            lastDissonanceLevel = level;
+            slotsChanged(enchantSlots());
+        }
     }
 
     private static boolean isEnchantableEnough(ItemStack stack) {
@@ -265,7 +314,7 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         // exactly once — see StatCollection#applyBaselines. Clamping the raw sum first would floor a
         // net-negative contribution (e.g. a Treasure Shelf's −10 quanta) to 0 before the +15 base.
         StatCollection rawStats = EnchantingStatRegistry.gatherRawStats(level, pos);
-        StatCollection stats = rawStats.applyBaselines(input.getItem().getEnchantmentValue());
+        StatCollection stats = applyDissonance(rawStats.applyBaselines(input.getItem().getEnchantmentValue()));
         this.lastStats = stats;
         this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats, Meridian.getConfig());
 

@@ -47,7 +47,8 @@ class RarityTagPartitionTest {
             "meridian:curse_of_blunting", "meridian:curse_of_fumbling",
             "meridian:curse_of_wavering", "meridian:curse_of_timidity",
             "meridian:curse_of_molting", "meridian:curse_of_skittishness",
-            "meridian:curse_of_obscurity");
+            "meridian:curse_of_obscurity", "meridian:curse_of_toll",
+            "meridian:curse_of_dissonance");
 
     @Test
     void rarityTagsPartitionTheNonCurseCatalogByWeightBucket() throws IOException {
