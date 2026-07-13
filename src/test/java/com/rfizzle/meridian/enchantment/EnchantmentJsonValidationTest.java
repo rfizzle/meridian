@@ -52,8 +52,8 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "timberfell", "trample", "trophy", "true_flight",
-            "umbral", "updraft",
+            "tether", "thermal", "timberfell", "torrent", "trample", "trophy", "true_flight",
+            "umbral", "undertow", "updraft",
             "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
@@ -70,7 +70,7 @@ class EnchantmentJsonValidationTest {
     private static final Map<String, List<String>> EXCLUSIVE_SET_MEMBERS = Map.ofEntries(
             Map.entry("minecraft/tags/enchantment/exclusive_set/damage.json",
                     List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge",
-                            "ambush", "reap", "pinpoint", "longshot", "crescendo")),
+                            "ambush", "reap", "pinpoint", "longshot", "crescendo", "torrent")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/armor.json",
                     List.of("spellguard")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/boots.json",
@@ -143,6 +143,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("pinpoint", "#minecraft:exclusive_set/damage"),
             Map.entry("longshot", "#minecraft:exclusive_set/damage"),
             Map.entry("crescendo", "#minecraft:exclusive_set/damage"),
+            Map.entry("torrent", "#minecraft:exclusive_set/damage"),
             Map.entry("fortuity", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("plunder", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("trophy", "#meridian:exclusive_set/trophy"),
@@ -188,11 +189,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is124() throws Exception {
+    void enchantmentCount_is126() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(124, count, "expected exactly 124 enchantment JSON files");
+        assertEquals(126, count, "expected exactly 126 enchantment JSON files");
     }
 
     @TestFactory

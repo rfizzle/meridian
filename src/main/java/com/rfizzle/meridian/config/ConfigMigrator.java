@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 6;
+    static final int CURRENT_VERSION = 7;
 
     @FunctionalInterface
     interface Migration {
@@ -56,6 +56,10 @@ final class ConfigMigrator {
             // v5 → v6: combat.markAffectsPlayers (#201). Purely additive; Gson deserializes an absent
             // boolean as false, which already matches the field default, and the post-migration re-save
             // writes it into the file so operators can discover the toggle.
+            json -> { },
+            // v6 → v7: combat.undertowAffectsPlayers (#218). Purely additive; Gson deserializes an
+            // absent boolean as false, which already matches the field default, and the post-migration
+            // re-save writes it into the file so operators can discover the toggle.
             json -> { },
     };
 

@@ -192,8 +192,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       aim-assist on mob bolts is pure frustration besides)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
      *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}, plus
-     *       {@code harpoon} (a drowned dragging players to it is pure frustration,
-     *       not challenge)</li>
+     *       {@code harpoon, undertow} (a drowned dragging players to it, or gathering a
+     *       crowd, is pure frustration, not challenge)</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
      *       detonation, diminish, rally, plunder, abyss_ward, vital_mend}, plus {@code blink}
      *       (a mob that cheats death and teleports away is pure frustration, not challenge)
@@ -227,6 +227,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("shackle"))
                 .addOptional(Meridian.id("siphon"))
                 .addOptional(Meridian.id("tempo"))
+                .addOptional(Meridian.id("torrent"))
                 .addOptional(Meridian.id("voidbane"))
                 // Armor — damage reduction, defensive retaliation, bonus health
                 .addOptional(Meridian.id("bulwark"))
@@ -330,10 +331,12 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("terrasculpt"))
                 .addOptional(Meridian.id("thermal"))
                 .addOptional(Meridian.id("timberfell"))
+                .addOptional(Meridian.id("torrent"))
                 .addOptional(Meridian.id("trample"))
                 .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("true_flight"))
                 .addOptional(Meridian.id("umbral"))
+                .addOptional(Meridian.id("undertow"))
                 .addOptional(Meridian.id("updraft"))
                 .addOptional(Meridian.id("vault"))
                 .addOptional(Meridian.id("vitality"))
@@ -507,7 +510,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("reap"))
                 .addOptional(Meridian.id("pinpoint"))
                 .addOptional(Meridian.id("longshot"))
-                .addOptional(Meridian.id("crescendo"));
+                .addOptional(Meridian.id("crescendo"))
+                .addOptional(Meridian.id("torrent"));
 
         getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
                 .addOptional(Meridian.id("spellguard"));

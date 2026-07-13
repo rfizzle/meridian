@@ -346,7 +346,7 @@ Left = any damageable, not-already-unbreakable item, right = a Tempered Core. Ma
 
 ## 8. Enchantments
 
-124 original enchantments, defined as JSON in `data/meridian/enchantment/` (124 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
+126 original enchantments, defined as JSON in `data/meridian/enchantment/` (126 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
 
 ### JSON Structure
 Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. Pure-data enchantments (≈29) carry vanilla effect codecs (e.g. `minecraft:attributes`). The remaining ≈83 carry custom behavior driven by Java event handlers.

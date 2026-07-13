@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 124 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 126 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "124 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "126 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "124 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "126 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -24,7 +24,7 @@
     },
     {
       "id": "combat",
-      "title": "Combat (Swords, Axes &amp; Mace)",
+      "title": "Combat (Swords, Axes, Mace &amp; Trident)",
       "blocks": [
         {
           "type": "table",
@@ -220,6 +220,13 @@
               "Consecutive hits on the same target ramp up bonus damage; switching targets or pausing resets the ramp <span class='text-smoke'>(exclusive: damage)</span>"
             ],
             [
+              "<span class='text-bone'>Torrent</span>",
+              "III",
+              "Trident",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Melee trident strikes deal bonus damage while you are in water or rain <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
               "<span class='text-bone'>Riposte</span>",
               "III",
               "Sword",
@@ -363,6 +370,13 @@
               "Trident",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
               "Thrown trident drags the struck creature back toward you — mobs only unless <code class='text-accent2'>combat.harpoonAffectsPlayers</code> is enabled; bosses are immune"
+            ],
+            [
+              "<span class='text-bone'>Undertow</span>",
+              "II",
+              "Trident",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Thrown trident drags nearby creatures toward its impact point — mobs only unless <code class='text-accent2'>combat.undertowAffectsPlayers</code> is enabled; bosses are immune"
             ]
           ]
         }
@@ -1064,7 +1078,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 124 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 126 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

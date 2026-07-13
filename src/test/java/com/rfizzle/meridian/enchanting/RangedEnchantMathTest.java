@@ -119,6 +119,47 @@ class RangedEnchantMathTest {
         assertEquals(0.0, RangedEnchantMath.harpoonPullSpeed(2, 0.0), EPSILON);
     }
 
+    // ---- Undertow ----
+
+    @Test
+    void undertowRadius_isZeroAtLevelZero() {
+        assertEquals(0.0, RangedEnchantMath.undertowRadius(0), EPSILON);
+    }
+
+    @Test
+    void undertowRadius_growsWithLevel() {
+        assertEquals(RangedEnchantMath.UNDERTOW_RADIUS_BASE + RangedEnchantMath.UNDERTOW_RADIUS_PER_LEVEL,
+                RangedEnchantMath.undertowRadius(1), EPSILON);
+        assertTrue(RangedEnchantMath.undertowRadius(2) > RangedEnchantMath.undertowRadius(1),
+                "radius must grow with level");
+    }
+
+    @Test
+    void undertowPullSpeed_isZeroAtLevelZero() {
+        assertEquals(0.0, RangedEnchantMath.undertowPullSpeed(0, 10.0), EPSILON);
+    }
+
+    @Test
+    void undertowPullSpeed_scalesWithLevel() {
+        assertEquals(RangedEnchantMath.UNDERTOW_PULL_BASE + RangedEnchantMath.UNDERTOW_PULL_PER_LEVEL,
+                RangedEnchantMath.undertowPullSpeed(1, 100.0), EPSILON);
+        assertEquals(RangedEnchantMath.UNDERTOW_PULL_BASE + RangedEnchantMath.UNDERTOW_PULL_PER_LEVEL * 2,
+                RangedEnchantMath.undertowPullSpeed(2, 100.0), EPSILON);
+    }
+
+    @Test
+    void undertowPullSpeed_dampedAtCloseRange() {
+        // On top of the impact point the cap is distance * factor, so a creature there is
+        // nudged, not flung across the point.
+        assertEquals(2.0 * RangedEnchantMath.UNDERTOW_CLOSE_RANGE_FACTOR,
+                RangedEnchantMath.undertowPullSpeed(2, 2.0), EPSILON);
+    }
+
+    @Test
+    void undertowPullSpeed_isZeroAtZeroDistance() {
+        assertEquals(0.0, RangedEnchantMath.undertowPullSpeed(2, 0.0), EPSILON);
+    }
+
     // ---- Volley ----
 
     @Test

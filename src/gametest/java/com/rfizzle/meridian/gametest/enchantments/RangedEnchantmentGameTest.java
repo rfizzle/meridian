@@ -362,6 +362,107 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // Undertow: on impact, a nearby bystander is dragged toward the impact point (crowd-gather).
+    @GameTest(template = "meridian:empty_3x3")
+    public void undertowGathersCreaturesTowardImpact(GameTestHelper helper) {
+        Holder<Enchantment> undertow = lookup(helper, "undertow");
+        if (undertow == null) { helper.fail("undertow not in registry"); return; }
+
+        Player thrower = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos throwerAbs = helper.absolutePos(new BlockPos(1, 1, 0));
+        thrower.moveTo(throwerAbs.getX() + 0.5, throwerAbs.getY(), throwerAbs.getZ() + 0.5);
+
+        // The struck creature sits at the impact point; a bystander stands one block off it.
+        Pig struck = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+        struck.setDeltaMovement(Vec3.ZERO);
+        Pig bystander = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 1));
+        bystander.setDeltaMovement(Vec3.ZERO);
+
+        ItemStack trident = new ItemStack(Items.TRIDENT);
+        trident.enchant(undertow, 2);
+        ThrownTrident thrown = new ThrownTrident(helper.getLevel(), thrower, trident);
+        thrown.setPos(struck.getX(), struck.getY(), struck.getZ());
+
+        ProjectileEnchantmentHandler.handleEntityImpact(thrown, new EntityHitResult(struck));
+
+        Vec3 delta = bystander.getDeltaMovement();
+        Vec3 toImpact = struck.position().subtract(bystander.position());
+        double alignment = delta.x * toImpact.x + delta.z * toImpact.z;
+        boolean gathered = alignment > 1.0e-4 && delta.y > 0.0;
+        thrower.discard();
+        if (!gathered) {
+            helper.fail("Undertow should drag a nearby creature toward the impact point with lift, got " + delta);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Undertow: with the default config, a player bystander is never gathered.
+    @GameTest(template = "meridian:empty_3x3")
+    public void undertowIgnoresPlayersByDefault(GameTestHelper helper) {
+        Holder<Enchantment> undertow = lookup(helper, "undertow");
+        if (undertow == null) { helper.fail("undertow not in registry"); return; }
+
+        Player thrower = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos throwerAbs = helper.absolutePos(new BlockPos(1, 1, 0));
+        thrower.moveTo(throwerAbs.getX() + 0.5, throwerAbs.getY(), throwerAbs.getZ() + 0.5);
+
+        Pig struck = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+        struck.setDeltaMovement(Vec3.ZERO);
+        var bystander = MockPlayers.serverPlayerInLevel(helper);
+        BlockPos byAbs = helper.absolutePos(new BlockPos(1, 1, 1));
+        bystander.teleportTo(byAbs.getX() + 0.5, byAbs.getY(), byAbs.getZ() + 0.5);
+        bystander.setDeltaMovement(Vec3.ZERO);
+
+        ItemStack trident = new ItemStack(Items.TRIDENT);
+        trident.enchant(undertow, 2);
+        ThrownTrident thrown = new ThrownTrident(helper.getLevel(), thrower, trident);
+        thrown.setPos(struck.getX(), struck.getY(), struck.getZ());
+
+        ProjectileEnchantmentHandler.handleEntityImpact(thrown, new EntityHitResult(struck));
+
+        Vec3 delta = bystander.getDeltaMovement();
+        thrower.discard();
+        bystander.discard();
+        if (delta.length() > 1.0e-6) {
+            helper.fail("Undertow must not move a player while combat.undertowAffectsPlayers is false, got "
+                    + delta);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Undertow: entities in #meridian:harpoon_immune (bosses) are unaffected.
+    @GameTest(template = "meridian:empty_3x3")
+    public void undertowLeavesBossTagEntitiesAlone(GameTestHelper helper) {
+        Holder<Enchantment> undertow = lookup(helper, "undertow");
+        if (undertow == null) { helper.fail("undertow not in registry"); return; }
+
+        Player thrower = helper.makeMockPlayer(GameType.SURVIVAL);
+        BlockPos throwerAbs = helper.absolutePos(new BlockPos(1, 1, 0));
+        thrower.moveTo(throwerAbs.getX() + 0.5, throwerAbs.getY(), throwerAbs.getZ() + 0.5);
+
+        Pig struck = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+        struck.setDeltaMovement(Vec3.ZERO);
+        ElderGuardian boss = helper.spawn(EntityType.ELDER_GUARDIAN, new BlockPos(1, 1, 1));
+        boss.setDeltaMovement(Vec3.ZERO);
+
+        ItemStack trident = new ItemStack(Items.TRIDENT);
+        trident.enchant(undertow, 2);
+        ThrownTrident thrown = new ThrownTrident(helper.getLevel(), thrower, trident);
+        thrown.setPos(struck.getX(), struck.getY(), struck.getZ());
+
+        ProjectileEnchantmentHandler.handleEntityImpact(thrown, new EntityHitResult(struck));
+
+        Vec3 delta = boss.getDeltaMovement();
+        thrower.discard();
+        if (delta.length() > 1.0e-6) {
+            helper.fail("Undertow must not move a #meridian:harpoon_immune entity, got " + delta);
+            return;
+        }
+        helper.succeed();
+    }
+
     // Mark: an enchanted arrow hitting a mob makes it glow through walls.
     @GameTest(template = "meridian:empty_3x3")
     public void markGlowsStruckMob(GameTestHelper helper) {

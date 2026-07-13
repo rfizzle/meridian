@@ -176,6 +176,18 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void undertowDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "undertow", 2, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void torrentDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "torrent", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void furrowDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "furrow", 3, 5);
         helper.succeed();
