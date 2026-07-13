@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.curse_of_toll"
+  },
+  "supported_items": "#minecraft:enchantable/armor",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 25,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 65,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "armor"
+  ],
+  "effects": {}
+}

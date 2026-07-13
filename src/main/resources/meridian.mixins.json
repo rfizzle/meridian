@@ -46,6 +46,7 @@
         "TetherMixin",
         "TemptGoalMixin",
         "ThrownTridentMixin",
+        "TollExperienceMixin",
         "UmbralVisibilityMixin",
         "WavestrideMixin",
         "WinterwardFreezeMixin",

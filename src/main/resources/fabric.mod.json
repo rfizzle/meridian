@@ -55,6 +55,8 @@
             "com.rfizzle.meridian.gametest.enchantments.MechanicsEnchantmentTest",
             "com.rfizzle.meridian.gametest.enchantments.ArmorShieldEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.ClearsightGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.CurseOfTollGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.CurseOfDissonanceGameTest",
             "com.rfizzle.meridian.gametest.enchantments.VerdureGameTest",
             "com.rfizzle.meridian.gametest.enchantments.CombatEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.IronclaspGameTest",
