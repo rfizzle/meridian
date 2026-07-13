@@ -170,4 +170,46 @@ class DefenseEnchantMathTest {
         assertEquals(0, DefenseEnchantMath.staggerSlownessAmplifier(1)); // Slowness I
         assertEquals(1, DefenseEnchantMath.staggerSlownessAmplifier(2)); // Slowness II
     }
+
+    // --- Bullrush bash ---
+
+    @Test
+    void bullrushDazeTicks_isZeroAtLevelZero() {
+        assertEquals(0, DefenseEnchantMath.bullrushDazeTicks(0));
+    }
+
+    @Test
+    void bullrushDazeTicks_scalesWithLevel() {
+        assertEquals(40, DefenseEnchantMath.bullrushDazeTicks(1)); // 20 + 20
+        assertEquals(60, DefenseEnchantMath.bullrushDazeTicks(2)); // 20 + 40
+        assertTrue(DefenseEnchantMath.bullrushDazeTicks(2) > DefenseEnchantMath.bullrushDazeTicks(1));
+    }
+
+    @Test
+    void bullrushDaze_outlastsTheBashInterval_soAContinuousChargeKeepsMobsSlowed() {
+        // The daze is longer than the bash interval, so a mob held under a continuous charge stays
+        // slowed between bashes; the knockback (not daze expiry) is what clears ordinary mobs.
+        assertTrue(DefenseEnchantMath.bullrushDazeTicks(1) > DefenseEnchantMath.BULLRUSH_BASH_INTERVAL_TICKS);
+        assertTrue(DefenseEnchantMath.bullrushDazeTicks(2) > DefenseEnchantMath.BULLRUSH_BASH_INTERVAL_TICKS);
+    }
+
+    @Test
+    void bullrushSlownessAmplifier_deepensOneTierPerLevel() {
+        assertEquals(0, DefenseEnchantMath.bullrushSlownessAmplifier(0));
+        assertEquals(0, DefenseEnchantMath.bullrushSlownessAmplifier(1)); // Slowness I
+        assertEquals(1, DefenseEnchantMath.bullrushSlownessAmplifier(2)); // Slowness II
+    }
+
+    @Test
+    void bullrushKnockbackStrength_isZeroAtLevelZero() {
+        assertEquals(0.0, DefenseEnchantMath.bullrushKnockbackStrength(0), 1.0e-9);
+    }
+
+    @Test
+    void bullrushKnockbackStrength_scalesWithLevel() {
+        assertEquals(0.8, DefenseEnchantMath.bullrushKnockbackStrength(1), 1.0e-9); // 0.5 + 0.3
+        assertEquals(1.1, DefenseEnchantMath.bullrushKnockbackStrength(2), 1.0e-9); // 0.5 + 0.6
+        assertTrue(DefenseEnchantMath.bullrushKnockbackStrength(2)
+                > DefenseEnchantMath.bullrushKnockbackStrength(1));
+    }
 }
