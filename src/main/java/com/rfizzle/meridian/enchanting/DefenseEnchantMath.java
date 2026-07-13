@@ -92,6 +92,32 @@ public final class DefenseEnchantMath {
     public static final int STAGGER_WEAKNESS_AMPLIFIER = 0;
 
     /**
+     * Bullrush's daze duration per level. A shield-charge bash knocks a creature aside and saps it
+     * with Slowness (not a hard stun). The daze outlasts the bash interval, so a mob cornered under a
+     * continuous charge stays slowed; it is the per-bash knockback, shoving ordinary mobs clear of
+     * the reach AABB, that keeps a plowed-through crowd from being pinned rather than the daze
+     * expiring between passes.
+     */
+    public static final int BULLRUSH_BASE_DAZE_TICKS = 20;
+    public static final int BULLRUSH_DAZE_TICKS_PER_LEVEL = 20;
+
+    /** Knockback impulse a Bullrush bash imparts, growing with level to shove tougher crowds aside. */
+    public static final double BULLRUSH_KNOCKBACK_BASE = 0.5;
+    public static final double BULLRUSH_KNOCKBACK_PER_LEVEL = 0.3;
+
+    /** Shield durability spent per creature a Bullrush charge bashes — the price of clearing a path. */
+    public static final int BULLRUSH_DURABILITY_COST = 2;
+
+    /**
+     * Ticks between Bullrush bashes. The scan is interval-gated rather than every-tick so a sustained
+     * sprint into a mob is a rhythmic shove (twice a second), not a 20 Hz knockback lock.
+     */
+    public static final int BULLRUSH_BASH_INTERVAL_TICKS = 10;
+
+    /** Blocks the bash AABB reaches beyond the charging player's own bounds — a body-check, not a swing. */
+    public static final double BULLRUSH_REACH = 0.6;
+
+    /**
      * Everbloom's beneficial-duration bonus per level and its cap. Deliberately held well below
      * doubling (a +100% cap) so it lengthens buffs without trivializing potion economy — at
      * max level three it lands at +45%, short of the +50% ceiling.
@@ -139,6 +165,27 @@ public final class DefenseEnchantMath {
     public static int staggerSlownessAmplifier(int level) {
         if (level <= 0) return 0;
         return level - 1;
+    }
+
+    /** Duration in ticks of the Slowness daze a Bullrush bash inflicts. Zero at level 0. */
+    public static int bullrushDazeTicks(int level) {
+        if (level <= 0) return 0;
+        return BULLRUSH_BASE_DAZE_TICKS + BULLRUSH_DAZE_TICKS_PER_LEVEL * level;
+    }
+
+    /**
+     * Slowness amplifier for a Bullrush daze — Slowness I at level 1, deepening one tier per level
+     * ({@code level - 1}). Zero at level 0.
+     */
+    public static int bullrushSlownessAmplifier(int level) {
+        if (level <= 0) return 0;
+        return level - 1;
+    }
+
+    /** Knockback impulse strength a Bullrush bash imparts at the given level. Zero at level 0. */
+    public static double bullrushKnockbackStrength(int level) {
+        if (level <= 0) return 0.0;
+        return BULLRUSH_KNOCKBACK_BASE + BULLRUSH_KNOCKBACK_PER_LEVEL * level;
     }
 
     /**

@@ -41,6 +41,10 @@
       "required": false
     },
     {
+      "id": "meridian:bullrush",
+      "required": false
+    },
+    {
       "id": "meridian:bulwark",
       "required": false
     },
@@ -86,6 +90,10 @@
     },
     {
       "id": "meridian:excavate",
+      "required": false
+    },
+    {
+      "id": "meridian:falconstrike",
       "required": false
     },
     {
