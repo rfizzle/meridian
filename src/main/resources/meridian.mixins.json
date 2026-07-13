@@ -22,6 +22,7 @@
         "EnduranceMixin",
         "EverbloomMixin",
         "FireworkRocketMixin",
+        "FishingHookLootMixin",
         "FishingHookMixin",
         "HushMixin",
         "InexorableEntityMixin",

@@ -84,6 +84,8 @@
             "com.rfizzle.meridian.event.AttunementHandlerGameTest",
             "com.rfizzle.meridian.event.ProjectileEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.ToolEnchantmentHandlerGameTest",
+            "com.rfizzle.meridian.event.DowseGameTest",
+            "com.rfizzle.meridian.event.TwinHookGameTest",
             "com.rfizzle.meridian.event.AurifyHandlerGameTest",
             "com.rfizzle.meridian.event.MountedEnchantmentHandlerGameTest",
             "com.rfizzle.meridian.event.TetherHandlerGameTest",

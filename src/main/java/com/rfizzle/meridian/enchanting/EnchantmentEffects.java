@@ -62,6 +62,8 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> PROSPECT = key("prospect");
     public static final ResourceKey<Enchantment> BOUNTY = key("bounty");
     public static final ResourceKey<Enchantment> FURROW = key("furrow");
+    public static final ResourceKey<Enchantment> TRAILBLAZE = key("trailblaze");
+    public static final ResourceKey<Enchantment> DOWSE = key("dowse");
     public static final ResourceKey<Enchantment> BECKON = key("beckon");
     public static final ResourceKey<Enchantment> TERRASCULPT = key("terrasculpt");
     public static final ResourceKey<Enchantment> GALLOP = key("gallop");
@@ -100,6 +102,7 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> EVERBLOOM = key("everbloom");
     public static final ResourceKey<Enchantment> TIMBERFELL = key("timberfell");
     public static final ResourceKey<Enchantment> GRAPNEL = key("grapnel");
+    public static final ResourceKey<Enchantment> TWIN_HOOK = key("twin_hook");
     public static final ResourceKey<Enchantment> THERMAL = key("thermal");
     public static final ResourceKey<Enchantment> ATTUNEMENT = key("attunement");
     public static final ResourceKey<Enchantment> REAP = key("reap");

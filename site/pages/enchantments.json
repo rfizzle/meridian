@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 128 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 131 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "128 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "131 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "128 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "131 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -426,6 +426,13 @@
               "Breaking an ore shatters the entire connected vein <span class='text-smoke'>(exclusive: mining)</span>"
             ],
             [
+              "<span class='text-bone'>Dowse</span>",
+              "I",
+              "Pickaxe",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
+              "Sneak-use makes the nearest ore vein glow through walls for a few seconds, on a substantial cooldown"
+            ],
+            [
               "<span class='text-bone'>Grind</span>",
               "III",
               "Pickaxe / Axe / Shovel",
@@ -475,6 +482,13 @@
               "Tilling soil with a hoe also tills surrounding blocks"
             ],
             [
+              "<span class='text-bone'>Trailblaze</span>",
+              "I",
+              "Shovel",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Carving a dirt path also paves the surrounding blocks"
+            ],
+            [
               "<span class='text-bone'>Terrasculpt</span>",
               "I",
               "Hoe",
@@ -515,6 +529,13 @@
               "Fishing rod",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
               "Reeling in a hook lodged in a block pulls you toward it, within a per-level range and on a short cooldown"
+            ],
+            [
+              "<span class='text-bone'>Twin Hook</span>",
+              "II",
+              "Fishing rod",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "A catch has a per-level chance to reel in a second copy, including junk and treasure"
             ]
           ]
         }
@@ -1092,7 +1113,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 128 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 131 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

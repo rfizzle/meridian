@@ -4,6 +4,8 @@ import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.client.net.ClientPayloadHandlers;
 import com.rfizzle.meridian.client.net.LoftClientHandler;
+import com.rfizzle.meridian.client.render.ClientDowseState;
+import com.rfizzle.meridian.client.render.DowseOverlayRenderer;
 import com.rfizzle.meridian.client.screen.EnchantmentLibraryScreen;
 import com.rfizzle.meridian.client.screen.MeridianEnchantmentScreen;
 import com.rfizzle.meridian.client.tooltip.InlineEnchDescTooltipHandler;
@@ -23,10 +25,12 @@ public class MeridianClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientPayloadHandlers.register();
         LoftClientHandler.register();
+        DowseOverlayRenderer.register();
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             EnchantmentInfoRegistry.clear();
             EnchantingStatRegistry.getInstance().clearClientState();
             ClientMeridianConfig.clear();
+            ClientDowseState.clear();
         });
         MenuScreens.register(MeridianRegistry.ENCHANTING_TABLE_MENU, MeridianEnchantmentScreen::new);
         MenuScreens.register(MeridianRegistry.LIBRARY_MENU, EnchantmentLibraryScreen::new);

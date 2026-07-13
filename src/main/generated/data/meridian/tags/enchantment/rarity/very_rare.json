@@ -37,6 +37,10 @@
       "required": false
     },
     {
+      "id": "meridian:dowse",
+      "required": false
+    },
+    {
       "id": "meridian:final_gambit",
       "required": false
     },

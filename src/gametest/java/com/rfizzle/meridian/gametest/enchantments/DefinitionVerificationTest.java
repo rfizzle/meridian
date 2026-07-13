@@ -68,6 +68,24 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void trailblazeDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "trailblaze", 1, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void dowseDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "dowse", 1, 1);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void twinHookDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "twin_hook", 2, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void cleaveDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "cleave", 3, 2);
         helper.succeed();

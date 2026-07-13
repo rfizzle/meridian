@@ -13,6 +13,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -142,19 +143,42 @@ public final class ToolEnchantmentHandler {
         if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
 
         ItemStack tool = player.getMainHandItem();
-        if (!(tool.getItem() instanceof HoeItem)) return InteractionResult.PASS;
+        if (tool.getItem() instanceof HoeItem) {
+            handleFurrow(player, world, tool, hitResult);
+        } else if (tool.getItem() instanceof ShovelItem) {
+            handleTrailblaze(player, world, tool, hitResult);
+        }
 
+        return InteractionResult.PASS;
+    }
+
+    private static void handleFurrow(Player player, Level world, ItemStack tool, BlockHitResult hitResult) {
         int level = EnchantmentEffects.getEnchantmentLevel(tool, EnchantmentEffects.FURROW);
-        if (level <= 0) return InteractionResult.PASS;
+        if (level <= 0) return;
 
         BlockPos center = hitResult.getBlockPos();
         BlockState centerState = world.getBlockState(center);
-        if (!isTillable(centerState)) return InteractionResult.PASS;
+        if (!isTillable(centerState)) return;
 
         int radius = level;
         EffectGuard.run("furrow", player, () -> applyFurrow(world, center, radius));
+    }
 
-        return InteractionResult.PASS;
+    private static void handleTrailblaze(Player player, Level world, ItemStack tool, BlockHitResult hitResult) {
+        int level = EnchantmentEffects.getEnchantmentLevel(tool, EnchantmentEffects.TRAILBLAZE);
+        if (level <= 0) return;
+
+        // Fire only when vanilla itself would carve a path from the center: never the down
+        // face, the center must be pathable, and its top must be clear (same gate as
+        // ShovelItem#useOn). Vanilla still paths the center on PASS; Trailblaze fills the ring.
+        if (hitResult.getDirection() == Direction.DOWN) return;
+        BlockPos center = hitResult.getBlockPos();
+        BlockState centerState = world.getBlockState(center);
+        if (!isPathable(centerState)) return;
+        if (!world.getBlockState(center.above()).isAir()) return;
+
+        int radius = level;
+        EffectGuard.run("trailblaze", player, () -> applyTrailblaze(world, center, radius));
     }
 
     private static void applyFurrow(Level world, BlockPos center, int radius) {
@@ -169,10 +193,29 @@ public final class ToolEnchantmentHandler {
         }
     }
 
+    static void applyTrailblaze(Level world, BlockPos center, int radius) {
+        for (BlockPos bp : BlockPos.betweenClosed(center.offset(-radius, 0, -radius),
+                center.offset(radius, 0, radius))) {
+            if (bp.equals(center)) continue;
+            BlockState state = world.getBlockState(bp);
+            if (!isPathable(state)) continue;
+            if (!world.getBlockState(bp.above()).isAir()) continue;
+
+            world.setBlockAndUpdate(bp, Blocks.DIRT_PATH.defaultBlockState());
+        }
+    }
+
     private static boolean isTillable(BlockState state) {
         return state.is(Blocks.DIRT) || state.is(Blocks.GRASS_BLOCK)
                 || state.is(Blocks.DIRT_PATH) || state.is(Blocks.COARSE_DIRT)
                 || state.is(Blocks.ROOTED_DIRT);
+    }
+
+    // Vanilla's ShovelItem.FLATTENABLES key set — the blocks a shovel turns into a dirt path.
+    private static boolean isPathable(BlockState state) {
+        return state.is(Blocks.GRASS_BLOCK) || state.is(Blocks.DIRT)
+                || state.is(Blocks.PODZOL) || state.is(Blocks.COARSE_DIRT)
+                || state.is(Blocks.MYCELIUM) || state.is(Blocks.ROOTED_DIRT);
     }
 
     private static Direction getMiningFace(ServerPlayer player) {

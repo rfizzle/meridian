@@ -3,6 +3,7 @@ package com.rfizzle.meridian.enchanting;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MiningEnchantMathTest {
 
@@ -74,5 +75,40 @@ class MiningEnchantMathTest {
         // Diamond (3) + II clamps at netherite (4); netherite stays netherite.
         assertEquals(4, MiningEnchantMath.adamantEffectiveTierIndex(3, 2, 4));
         assertEquals(4, MiningEnchantMath.adamantEffectiveTierIndex(4, 2, 4));
+    }
+
+    // --- Dowse: reveal-glow fade ---
+
+    @Test
+    void glowAlpha_expiredIsZero() {
+        assertEquals(0.0f, MiningEnchantMath.glowAlpha(0), EPS);
+        assertEquals(0.0f, MiningEnchantMath.glowAlpha(-5), EPS);
+    }
+
+    @Test
+    void glowAlpha_fullBeforeFadeWindow() {
+        assertEquals(MiningEnchantMath.DOWSE_GLOW_MAX_ALPHA,
+                MiningEnchantMath.glowAlpha(MiningEnchantMath.DOWSE_FADE_TICKS), EPS);
+        assertEquals(MiningEnchantMath.DOWSE_GLOW_MAX_ALPHA,
+                MiningEnchantMath.glowAlpha(MiningEnchantMath.DOWSE_GLOW_TICKS), EPS);
+    }
+
+    @Test
+    void glowAlpha_fadesLinearlyToZero() {
+        // Halfway through the fade window is half peak opacity.
+        float half = MiningEnchantMath.glowAlpha(MiningEnchantMath.DOWSE_FADE_TICKS / 2);
+        assertEquals(MiningEnchantMath.DOWSE_GLOW_MAX_ALPHA / 2f, half, EPS);
+    }
+
+    @Test
+    void glowAlpha_isMonotonicAndBounded() {
+        float prev = -1f;
+        for (int t = 0; t <= MiningEnchantMath.DOWSE_GLOW_TICKS; t++) {
+            float a = MiningEnchantMath.glowAlpha(t);
+            assertTrue(a >= 0f && a <= MiningEnchantMath.DOWSE_GLOW_MAX_ALPHA,
+                    "alpha out of range at t=" + t + ": " + a);
+            assertTrue(a >= prev, "alpha not monotonic at t=" + t);
+            prev = a;
+        }
     }
 }

@@ -1,18 +1,22 @@
 package com.rfizzle.meridian.client.net;
 
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
+import com.rfizzle.meridian.client.render.ClientDowseState;
 import com.rfizzle.meridian.compat.client.ViewerRefreshTrigger;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
+import com.rfizzle.meridian.enchanting.MiningEnchantMath;
 import com.rfizzle.meridian.net.CluesPayload;
 import com.rfizzle.meridian.net.ConfigSyncPayload;
+import com.rfizzle.meridian.net.DowseGlowPayload;
 import com.rfizzle.meridian.net.EnchantingStatSyncPayload;
 import com.rfizzle.meridian.net.EnchantmentInfoPayload;
 import com.rfizzle.meridian.net.StatsPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.resources.ResourceLocation;
 
@@ -65,6 +69,14 @@ public final class ClientPayloadHandlers {
                                     .map(t -> Map.entry(t.tagId(), t.stats()))
                                     .toList();
                     EnchantingStatRegistry.getInstance().applySync(payload.blocks(), tagEntries);
+                }));
+
+        ClientPlayNetworking.registerGlobalReceiver(DowseGlowPayload.TYPE,
+                (payload, context) -> context.client().execute(() -> {
+                    ClientLevel level = context.client().level;
+                    if (level == null) return;
+                    long expiry = level.getGameTime() + MiningEnchantMath.DOWSE_GLOW_TICKS;
+                    ClientDowseState.set(payload.positions(), expiry, level.dimension());
                 }));
 
         ClientPlayNetworking.registerGlobalReceiver(ConfigSyncPayload.TYPE,

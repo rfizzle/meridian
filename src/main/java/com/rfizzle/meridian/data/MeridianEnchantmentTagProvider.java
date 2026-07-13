@@ -180,11 +180,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       {@code joust} (mount-gated, inert on an unmounted mob) and {@code skyfall}
      *       (airborne/gliding-gated, inert on a grounded mob)</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
-     *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
-     *       cinderwalk}</li>
+     *       terrasculpt, masons_reach, steadfast, furrow, trailblaze, beckon, bounty, prismatic,
+     *       renewal, cinderwalk}</li>
      *   <li>no meaningful mob behavior — {@code impact_ward}, {@code ironwing} & {@code tailwind}
      *       (elytra-only), {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest}
-     *       (player crouch-slam input), {@code pinpoint} (player crit input), {@code riposte} &
+     *       (player crouch-slam input), {@code pinpoint} (player crit input), {@code dowse}
+     *       (sneak-use input, and revealing ore to a mob is meaningless), {@code twin_hook}
+     *       (fishing-only), {@code riposte} &
      *       {@code stagger} (mobs never shield-block, so the block never triggers — and Stagger's
      *       player-attacker path is config-gated off by default besides), {@code quell, gravitas,
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
@@ -266,6 +268,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("crescendo"))
                 .addOptional(Meridian.id("decay"))
                 .addOptional(Meridian.id("decoy"))
+                .addOptional(Meridian.id("dowse"))
                 .addOptional(Meridian.id("emberward"))
                 .addOptional(Meridian.id("endurance"))
                 .addOptional(Meridian.id("everbloom"))
@@ -337,9 +340,11 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("thermal"))
                 .addOptional(Meridian.id("timberfell"))
                 .addOptional(Meridian.id("torrent"))
+                .addOptional(Meridian.id("trailblaze"))
                 .addOptional(Meridian.id("trample"))
                 .addOptional(Meridian.id("trophy"))
                 .addOptional(Meridian.id("true_flight"))
+                .addOptional(Meridian.id("twin_hook"))
                 .addOptional(Meridian.id("umbral"))
                 .addOptional(Meridian.id("undertow"))
                 .addOptional(Meridian.id("updraft"))

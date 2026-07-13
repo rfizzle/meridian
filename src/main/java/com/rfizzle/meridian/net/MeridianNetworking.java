@@ -32,6 +32,7 @@ public final class MeridianNetworking {
         PayloadTypeRegistry.playS2C().register(EnchantmentInfoPayload.TYPE, EnchantmentInfoPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(EnchantingStatSyncPayload.TYPE, EnchantingStatSyncPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(DowseGlowPayload.TYPE, DowseGlowPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LoftJumpPayload.TYPE, LoftJumpPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(LoftJumpPayload.TYPE, (payload, context) ->

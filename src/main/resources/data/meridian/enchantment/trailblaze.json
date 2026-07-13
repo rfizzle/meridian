@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.trailblaze"
+  },
+  "supported_items": "#meridian:enchantable/shovels",
+  "weight": 2,
+  "max_level": 1,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 0
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 0
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {}
+}
