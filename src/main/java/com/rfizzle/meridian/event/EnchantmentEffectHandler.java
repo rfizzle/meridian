@@ -388,7 +388,7 @@ public final class EnchantmentEffectHandler {
             EffectGuard.run("ambush", entity, () -> handleAmbush(entity, source, damageTaken));
             EffectGuard.run("reap", entity, () -> handleReap(entity, source, damageTaken));
             EffectGuard.run("crescendo", entity, () -> handleCrescendo(entity, source, damageTaken));
-            EffectGuard.run("torrent", entity, () -> handleTorrent(entity, source));
+            EffectGuard.run("torrent", entity, () -> handleTorrent(entity, source, damageTaken));
             EffectGuard.run("riposte", entity, () -> handleRiposte(entity, source, damageTaken));
             EffectGuard.run("joust", entity, () -> handleJoust(entity, source, damageTaken));
             EffectGuard.run("sunder", entity, () -> handleSunder(entity, source));
@@ -901,8 +901,11 @@ public final class EnchantmentEffectHandler {
      * a thrown-trident hit carries the projectile as its direct entity and a non-melee damage
      * type, so it never qualifies (ranged bonus is out of scope). The bonus lands as a follow-up
      * hit through {@link #dealBonusDamage}, matching the other damage-group enchantments.
+     * Shares their {@code damageTaken} block gate: a swing fully absorbed by a shield (or
+     * otherwise dealing nothing) must not proc the bonus.
      */
-    private static void handleTorrent(LivingEntity entity, DamageSource source) {
+    private static void handleTorrent(LivingEntity entity, DamageSource source, float damageTaken) {
+        if (damageTaken <= 0) return;
         Entity attacker = source.getEntity();
         if (!(attacker instanceof LivingEntity livingAttacker)) return;
         if (!isMeleeAttack(source, livingAttacker)) return;

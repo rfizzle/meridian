@@ -31,7 +31,7 @@ public final class RangedEnchantMath {
      */
     public static final double HARPOON_CLOSE_RANGE_FACTOR = 0.25;
 
-    /** Radius of Undertow's crowd-gather pull at level 1, in blocks; grows per level. */
+    /** Base term of Undertow's crowd-gather radius, in blocks; {@code undertowRadius} adds {@link #UNDERTOW_RADIUS_PER_LEVEL} per level. */
     public static final double UNDERTOW_RADIUS_BASE = 3.0;
     public static final double UNDERTOW_RADIUS_PER_LEVEL = 2.0;
     public static final double UNDERTOW_PULL_BASE = 0.5;

@@ -192,8 +192,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       aim-assist on mob bolts is pure frustration besides)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
      *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}, plus
-     *       {@code harpoon} (a drowned dragging players to it is pure frustration,
-     *       not challenge)</li>
+     *       {@code harpoon, undertow} (a drowned dragging players to it, or gathering a
+     *       crowd, is pure frustration, not challenge)</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
      *       detonation, diminish, rally, plunder, abyss_ward, vital_mend}, plus {@code blink}
      *       (a mob that cheats death and teleports away is pure frustration, not challenge)
