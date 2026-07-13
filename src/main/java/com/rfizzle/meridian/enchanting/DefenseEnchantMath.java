@@ -150,6 +150,33 @@ public final class DefenseEnchantMath {
     public static final int TIMIDITY_SLOW_TICKS = 40;
     public static final int TIMIDITY_SLOW_AMPLIFIER = 1;
 
+    /**
+     * Abyssal's damage reduction per block of depth per level. The wearer's armor turns the water
+     * pressure into a shield: reduction grows the deeper below sea level they sink and the higher the
+     * enchant level, until it flattens at {@link #abyssalDamageReduction the per-level cap}.
+     */
+    public static final float ABYSSAL_REDUCTION_PER_BLOCK_PER_LEVEL = 0.0025f;
+
+    /**
+     * The ceiling on Abyssal's reduction — a base plus per-level term. At max level three the cap is
+     * 28%, deliberately short of trivializing deep-water combat; a pressure bonus, not a god-plate.
+     */
+    public static final float ABYSSAL_CAP_BASE = 0.10f;
+    public static final float ABYSSAL_CAP_PER_LEVEL = 0.06f;
+
+    /**
+     * How long (ticks) Curse of Waterlogging's Slowness lingers after the wearer leaves water. It is
+     * refreshed every tick while they are wet, so this is only ever felt as the dry-off tail — the
+     * "persists for a short while after leaving water" of the curse.
+     */
+    public static final int WATERLOGGING_SLOW_DECAY_TICKS = 60;
+
+    /**
+     * The Slowness is topped back up to its full duration once its remaining time drops below this,
+     * keeping the wearer steadily slowed while wet without re-applying the effect every single tick.
+     */
+    public static final int WATERLOGGING_SLOW_REFRESH_BELOW_TICKS = 40;
+
     private DefenseEnchantMath() {}
 
     /**
@@ -251,5 +278,27 @@ public final class DefenseEnchantMath {
      */
     public static boolean withinStormwardSurge(double distanceSq) {
         return distanceSq <= STORMWARD_SURGE_RANGE_SQ;
+    }
+
+    /**
+     * The fraction [0, cap] of incoming damage Abyssal absorbs for a wearer {@code depthBelowSea}
+     * blocks beneath sea level. Zero at level 0 and at or above sea level ({@code depthBelowSea <= 0});
+     * otherwise it scales linearly with depth and level up to the per-level cap
+     * ({@link #ABYSSAL_CAP_BASE} + {@link #ABYSSAL_CAP_PER_LEVEL} per level).
+     */
+    public static float abyssalDamageReduction(int level, double depthBelowSea) {
+        if (level <= 0 || depthBelowSea <= 0) return 0.0f;
+        float cap = ABYSSAL_CAP_BASE + ABYSSAL_CAP_PER_LEVEL * level;
+        float raw = (float) (ABYSSAL_REDUCTION_PER_BLOCK_PER_LEVEL * level * depthBelowSea);
+        return Math.min(cap, raw);
+    }
+
+    /**
+     * Slowness amplifier for Curse of Waterlogging — Slowness I at level 1, deepening one tier per
+     * level ({@code level - 1}). Zero at level 0.
+     */
+    public static int waterloggingSlownessAmplifier(int level) {
+        if (level <= 0) return 0;
+        return level - 1;
     }
 }

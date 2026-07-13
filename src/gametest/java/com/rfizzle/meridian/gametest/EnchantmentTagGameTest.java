@@ -62,7 +62,7 @@ public class EnchantmentTagGameTest implements FabricGameTest {
                 "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
                 "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
                 "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
-                "curse_of_toll", "curse_of_dissonance")) {
+                "curse_of_toll", "curse_of_dissonance", "curse_of_waterlogging")) {
             Holder<Enchantment> curse =
                     reg.getHolderOrThrow(reg.getResourceKey(reg.get(Meridian.id(id))).get());
 

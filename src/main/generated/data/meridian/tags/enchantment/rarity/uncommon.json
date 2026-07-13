@@ -9,6 +9,10 @@
       "required": false
     },
     {
+      "id": "meridian:ballast",
+      "required": false
+    },
+    {
       "id": "meridian:blight",
       "required": false
     },

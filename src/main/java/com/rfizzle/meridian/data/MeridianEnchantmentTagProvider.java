@@ -102,7 +102,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Meridian.id("curse_of_skittishness"),
             Meridian.id("curse_of_obscurity"),
             Meridian.id("curse_of_toll"),
-            Meridian.id("curse_of_dissonance"));
+            Meridian.id("curse_of_dissonance"),
+            Meridian.id("curse_of_waterlogging"));
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
@@ -258,11 +259,13 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
 
     private void addMeridianObtainabilityTags() {
         getOrCreateTagBuilder(EnchantmentTags.NON_TREASURE)
+                .addOptional(Meridian.id("abyssal"))
                 .addOptional(Meridian.id("adamant"))
                 .addOptional(Meridian.id("alacrity"))
                 .addOptional(Meridian.id("ambush"))
                 .addOptional(Meridian.id("animus"))
                 .addOptional(Meridian.id("antidote"))
+                .addOptional(Meridian.id("ballast"))
                 .addOptional(Meridian.id("bastion"))
                 .addOptional(Meridian.id("beckon"))
                 .addOptional(Meridian.id("blight"))
@@ -420,7 +423,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_skittishness"))
                 .addOptional(Meridian.id("curse_of_obscurity"))
                 .addOptional(Meridian.id("curse_of_toll"))
-                .addOptional(Meridian.id("curse_of_dissonance"));
+                .addOptional(Meridian.id("curse_of_dissonance"))
+                .addOptional(Meridian.id("curse_of_waterlogging"));
 
         getOrCreateTagBuilder(EnchantmentTags.ON_RANDOM_LOOT)
                 .addOptional(Meridian.id("abyss_ward"))
@@ -453,7 +457,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_skittishness"))
                 .addOptional(Meridian.id("curse_of_obscurity"))
                 .addOptional(Meridian.id("curse_of_toll"))
-                .addOptional(Meridian.id("curse_of_dissonance"));
+                .addOptional(Meridian.id("curse_of_dissonance"))
+                .addOptional(Meridian.id("curse_of_waterlogging"));
 
         getOrCreateTagBuilder(EnchantmentTags.DOUBLE_TRADE_PRICE)
                 .addOptional(Meridian.id("curse_of_decay"))
@@ -470,7 +475,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_skittishness"))
                 .addOptional(Meridian.id("curse_of_obscurity"))
                 .addOptional(Meridian.id("curse_of_toll"))
-                .addOptional(Meridian.id("curse_of_dissonance"));
+                .addOptional(Meridian.id("curse_of_dissonance"))
+                .addOptional(Meridian.id("curse_of_waterlogging"));
     }
 
     private void addMeridianExclusiveSets() {

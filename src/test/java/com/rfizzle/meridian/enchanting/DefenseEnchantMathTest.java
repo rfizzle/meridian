@@ -232,4 +232,48 @@ class DefenseEnchantMathTest {
         double justOutside = DefenseEnchantMath.STORMWARD_SURGE_RANGE + 0.01;
         assertFalse(DefenseEnchantMath.withinStormwardSurge(justOutside * justOutside));
     }
+
+    // --- Abyssal: depth-scaled damage reduction ---
+
+    @Test
+    void abyssalDamageReduction_isZeroAtLevelZero() {
+        assertEquals(0.0f, DefenseEnchantMath.abyssalDamageReduction(0, 40.0), 1.0e-6f);
+    }
+
+    @Test
+    void abyssalDamageReduction_isZeroAtOrAboveSeaLevel() {
+        assertEquals(0.0f, DefenseEnchantMath.abyssalDamageReduction(3, 0.0), 1.0e-6f);
+        assertEquals(0.0f, DefenseEnchantMath.abyssalDamageReduction(3, -10.0), 1.0e-6f);
+    }
+
+    @Test
+    void abyssalDamageReduction_scalesWithDepthAndLevel() {
+        assertTrue(DefenseEnchantMath.abyssalDamageReduction(1, 20.0)
+                > DefenseEnchantMath.abyssalDamageReduction(1, 10.0));
+        assertTrue(DefenseEnchantMath.abyssalDamageReduction(2, 10.0)
+                > DefenseEnchantMath.abyssalDamageReduction(1, 10.0));
+        // Shallow, before the cap: 0.0025 * level * depth.
+        assertEquals(DefenseEnchantMath.ABYSSAL_REDUCTION_PER_BLOCK_PER_LEVEL * 1 * 10.0f,
+                DefenseEnchantMath.abyssalDamageReduction(1, 10.0), 1.0e-6f);
+    }
+
+    @Test
+    void abyssalDamageReduction_clampsAtPerLevelCap() {
+        float capL3 = DefenseEnchantMath.ABYSSAL_CAP_BASE + DefenseEnchantMath.ABYSSAL_CAP_PER_LEVEL * 3;
+        assertEquals(capL3, DefenseEnchantMath.abyssalDamageReduction(3, 10_000.0), 1.0e-6f);
+        assertTrue(DefenseEnchantMath.abyssalDamageReduction(3, 10_000.0) < 1.0f);
+    }
+
+    // --- Curse of Waterlogging: slowness amplifier ---
+
+    @Test
+    void waterloggingSlownessAmplifier_isZeroAtLevelZero() {
+        assertEquals(0, DefenseEnchantMath.waterloggingSlownessAmplifier(0));
+    }
+
+    @Test
+    void waterloggingSlownessAmplifier_isLevelMinusOne() {
+        assertEquals(0, DefenseEnchantMath.waterloggingSlownessAmplifier(1)); // Slowness I
+        assertEquals(1, DefenseEnchantMath.waterloggingSlownessAmplifier(2)); // Slowness II
+    }
 }

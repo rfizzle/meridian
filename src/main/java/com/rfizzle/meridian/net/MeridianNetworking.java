@@ -3,6 +3,7 @@ package com.rfizzle.meridian.net;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantingStats;
+import com.rfizzle.meridian.event.BallastHandler;
 import com.rfizzle.meridian.event.LoftHandler;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
@@ -34,9 +35,19 @@ public final class MeridianNetworking {
         PayloadTypeRegistry.playS2C().register(ConfigSyncPayload.TYPE, ConfigSyncPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(DowseGlowPayload.TYPE, DowseGlowPayload.CODEC);
         PayloadTypeRegistry.playC2S().register(LoftJumpPayload.TYPE, LoftJumpPayload.CODEC);
+        PayloadTypeRegistry.playC2S().register(BallastAscendPayload.TYPE, BallastAscendPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(LoftJumpPayload.TYPE, (payload, context) ->
                 context.player().server.execute(() -> LoftHandler.tryAirJump(context.player())));
+        ServerPlayNetworking.registerGlobalReceiver(BallastAscendPayload.TYPE, (payload, context) -> {
+            ServerPlayer player = context.player();
+            player.server.execute(() -> {
+                // The DISCONNECT cleanup may have already run by the time this deferred task fires;
+                // re-adding a departed player's UUID would leak it into the rising set.
+                if (player.hasDisconnected()) return;
+                BallastHandler.setRising(player, payload.rising());
+            });
+        });
     }
 
     /**

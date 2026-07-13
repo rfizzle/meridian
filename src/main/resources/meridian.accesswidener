@@ -4,6 +4,10 @@ mutable field net/minecraft/world/inventory/Slot y I
 accessible method net/minecraft/client/gui/screens/inventory/EnchantmentScreen renderBook (Lnet/minecraft/client/gui/GuiGraphics;IIF)V
 accessible method net/minecraft/world/item/ProjectileWeaponItem shoot (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/world/entity/LivingEntity;)V
 
+# Lets gametests deterministically settle an entity's in-water state (Ballast / Curse of
+# Waterlogging) without waiting on a server tick, which is unreliable for a placed mock player.
+accessible method net/minecraft/world/entity/Entity updateInWaterStateAndDoFluidPushing ()Z
+
 # Dowse reveal overlay — the render-state shards its custom xray RenderType composes from.
 accessible field net/minecraft/client/renderer/RenderStateShard TRANSLUCENT_TRANSPARENCY Lnet/minecraft/client/renderer/RenderStateShard$TransparencyStateShard;
 accessible field net/minecraft/client/renderer/RenderStateShard NO_DEPTH_TEST Lnet/minecraft/client/renderer/RenderStateShard$DepthTestStateShard;

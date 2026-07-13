@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:abyssal",
+      "required": false
+    },
+    {
       "id": "meridian:adamant",
       "required": false
     },
@@ -18,6 +22,10 @@
     },
     {
       "id": "meridian:antidote",
+      "required": false
+    },
+    {
+      "id": "meridian:ballast",
       "required": false
     },
     {

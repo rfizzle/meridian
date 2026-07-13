@@ -123,6 +123,10 @@
     {
       "id": "meridian:curse_of_dissonance",
       "required": false
+    },
+    {
+      "id": "meridian:curse_of_waterlogging",
+      "required": false
     }
   ]
 }
