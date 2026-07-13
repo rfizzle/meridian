@@ -68,11 +68,13 @@ public final class ArmorTickHandler {
             EffectGuard.run("luminance", player, () -> handleLuminance(player));
             EffectGuard.run("gravitas", player, () -> handleGravitas(player));
             EffectGuard.run("slipstream", player, () -> handleSlipstream(player));
+            EffectGuard.run("ballast", player, () -> handleBallast(player));
             EffectGuard.run("cinderwalk", player, () -> handleCinderwalk(player));
             EffectGuard.run("terrasculpt", player, () -> handleTerrasculpt(player));
             EffectGuard.run("thermal", player, () -> handleThermal(player));
             EffectGuard.run("falconstrike", player, () -> handleFalconstrike(player));
             EffectGuard.run("curse_of_hunger", player, () -> handleCurseOfHunger(player));
+            EffectGuard.run("curse_of_waterlogging", player, () -> handleCurseOfWaterlogging(player));
 
             if (tickCounter % DefenseEnchantMath.BULLRUSH_BASH_INTERVAL_TICKS == 0) {
                 EffectGuard.run("bullrush", player, () -> handleBullrush(player));
@@ -133,6 +135,36 @@ public final class ArmorTickHandler {
         if (existing == null || existing.getDuration() < 20) {
             player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 40, 0, true, false, true));
         }
+    }
+
+    /**
+     * Ballast's controlled vertical mobility in water: crouching drives the wearer down and a held
+     * jump drives them up, each toward a per-level terminal speed. Crouch is read straight off the
+     * server's player state; the rising intent is the client-reported jump held in
+     * {@link BallastHandler}, re-gated here on the enchant and the water check so a spoofed flag only
+     * ever swims a wearer up, never flies them. Package-private so ArmorTickHandlerGameTest can drive
+     * it directly with a mock player.
+     */
+    static void handleBallast(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.BALLAST,
+                EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        if (level <= 0) return;
+        if (!player.isInWater()) return;
+
+        boolean sink = player.isShiftKeyDown();
+        boolean rise = !sink && BallastHandler.isRising(player.getUUID());
+        if (!sink && !rise) return;
+
+        double terminal = TraversalEnchantMath.ballastVerticalSpeed(level);
+        Vec3 velocity = player.getDeltaMovement();
+        double newY = sink
+                ? Math.max(-terminal, velocity.y - TraversalEnchantMath.BALLAST_ACCEL_PER_TICK)
+                : Math.min(terminal, velocity.y + TraversalEnchantMath.BALLAST_ACCEL_PER_TICK);
+        if (newY == velocity.y) return;
+
+        player.setDeltaMovement(velocity.x, newY, velocity.z);
+        player.hurtMarked = true;
+        player.resetFallDistance();
     }
 
     private static void handleCinderwalk(ServerPlayer player) {
@@ -282,6 +314,29 @@ public final class ArmorTickHandler {
         if (level <= 0) return;
 
         player.causeFoodExhaustion(CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL * level);
+    }
+
+    /**
+     * Curse of Waterlogging: the wearer wades heavy while wet, slowed by a Slowness the water keeps
+     * refreshed and that lingers a few seconds after they climb out. Reapplying only once the effect
+     * runs low keeps a steady slow without spamming the effect every tick, and never downgrades a
+     * stronger Slowness from another source. Package-private so ArmorTickHandlerGameTest can drive it
+     * directly with a mock player.
+     */
+    static void handleCurseOfWaterlogging(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_WATERLOGGING,
+                EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
+        if (level <= 0) return;
+        if (!player.isInWaterOrRain()) return;
+
+        int amplifier = DefenseEnchantMath.waterloggingSlownessAmplifier(level);
+        MobEffectInstance existing = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        if (existing == null
+                || existing.getDuration() < DefenseEnchantMath.WATERLOGGING_SLOW_REFRESH_BELOW_TICKS
+                || existing.getAmplifier() < amplifier) {
+            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,
+                    DefenseEnchantMath.WATERLOGGING_SLOW_DECAY_TICKS, amplifier, false, false, true));
+        }
     }
 
     /**

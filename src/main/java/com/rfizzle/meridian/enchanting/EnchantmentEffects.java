@@ -135,6 +135,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> GROOM = key("groom");
     public static final ResourceKey<Enchantment> CURSE_OF_TOLL = key("curse_of_toll");
     public static final ResourceKey<Enchantment> CURSE_OF_DISSONANCE = key("curse_of_dissonance");
+    public static final ResourceKey<Enchantment> BALLAST = key("ballast");
+    public static final ResourceKey<Enchantment> ABYSSAL = key("abyssal");
+    public static final ResourceKey<Enchantment> CURSE_OF_WATERLOGGING = key("curse_of_waterlogging");
 
     private EnchantmentEffects() {}
 

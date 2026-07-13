@@ -2,6 +2,7 @@ package com.rfizzle.meridian.client;
 
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
+import com.rfizzle.meridian.client.net.BallastClientHandler;
 import com.rfizzle.meridian.client.net.ClientPayloadHandlers;
 import com.rfizzle.meridian.client.net.LoftClientHandler;
 import com.rfizzle.meridian.client.render.ClientDowseState;
@@ -25,6 +26,7 @@ public class MeridianClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientPayloadHandlers.register();
         LoftClientHandler.register();
+        BallastClientHandler.register();
         DowseOverlayRenderer.register();
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             EnchantmentInfoRegistry.clear();

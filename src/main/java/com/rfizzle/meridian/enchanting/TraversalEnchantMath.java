@@ -89,6 +89,21 @@ public final class TraversalEnchantMath {
     /** Blocks the strike AABB reaches beyond the glider's own bounds — a collision, not a lunge. */
     public static final double FALCONSTRIKE_REACH = 0.4;
 
+    /**
+     * Ballast's terminal vertical speed (blocks/tick) in water. The base plus per-level term set how
+     * fast a crouch sinks the wearer and a held jump raises them — brisk next to vanilla's sluggish
+     * water ascent, and deepening with level.
+     */
+    public static final double BALLAST_SPEED_BASE = 0.06;
+    public static final double BALLAST_SPEED_PER_LEVEL = 0.06;
+
+    /**
+     * How much Ballast nudges vertical velocity toward its terminal each tick. The approach is
+     * gradual (never a hard velocity snap) and is always clamped to the terminal, so the pull can
+     * accelerate a sink or climb but never overshoot it.
+     */
+    public static final double BALLAST_ACCEL_PER_TICK = 0.08;
+
     private TraversalEnchantMath() {}
 
     /**
@@ -154,5 +169,14 @@ public final class TraversalEnchantMath {
         if (level <= 0 || horizontalSpeed < FALCONSTRIKE_MIN_SPEED) return 0.0f;
         float raw = (float) (FALCONSTRIKE_DAMAGE_PER_SPEED_PER_LEVEL * level * horizontalSpeed);
         return Math.min(FALCONSTRIKE_DAMAGE_CAP_PER_LEVEL * level, raw);
+    }
+
+    /**
+     * Terminal vertical speed (blocks/tick) Ballast drives the wearer toward in water — downward
+     * while crouching, upward while rising. Zero at level 0.
+     */
+    public static double ballastVerticalSpeed(int level) {
+        if (level <= 0) return 0.0;
+        return BALLAST_SPEED_BASE + BALLAST_SPEED_PER_LEVEL * level;
     }
 }

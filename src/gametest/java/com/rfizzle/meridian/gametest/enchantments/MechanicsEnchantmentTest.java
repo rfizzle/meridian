@@ -576,4 +576,68 @@ public class MechanicsEnchantmentTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    // --- Ballast: enchantable on legs/feet only ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void ballastIsEnchantableOnLegOrFootArmor(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "ballast");
+        if (ench == null) { helper.fail("ballast not in registry"); return; }
+
+        boolean onBoots = ench.value().canEnchant(new ItemStack(Items.DIAMOND_BOOTS));
+        boolean onLegs = ench.value().canEnchant(new ItemStack(Items.DIAMOND_LEGGINGS));
+        if (!onBoots && !onLegs) {
+            helper.fail("Ballast should be enchantable on boots or leggings");
+            return;
+        }
+        boolean notOnChest = !ench.value().canEnchant(new ItemStack(Items.DIAMOND_CHESTPLATE));
+        if (!notOnChest) {
+            helper.fail("Ballast should NOT be enchantable on chestplate");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- Abyssal: enchantable on any armor, not tools ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void abyssalIsEnchantableOnAnyArmor(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "abyssal");
+        if (ench == null) { helper.fail("abyssal not in registry"); return; }
+
+        boolean onHelmet = ench.value().canEnchant(new ItemStack(Items.DIAMOND_HELMET));
+        boolean onChest = ench.value().canEnchant(new ItemStack(Items.DIAMOND_CHESTPLATE));
+        boolean onBoots = ench.value().canEnchant(new ItemStack(Items.DIAMOND_BOOTS));
+        if (!onHelmet || !onChest || !onBoots) {
+            helper.fail("Abyssal should be enchantable on any armor piece");
+            return;
+        }
+        boolean notOnSword = !ench.value().canEnchant(new ItemStack(Items.DIAMOND_SWORD));
+        if (!notOnSword) {
+            helper.fail("Abyssal should NOT be enchantable on a sword (armor only)");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- Curse of Waterlogging: enchantable on any armor, not tools ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfWaterloggingIsEnchantableOnAnyArmor(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "curse_of_waterlogging");
+        if (ench == null) { helper.fail("curse_of_waterlogging not in registry"); return; }
+
+        boolean onHelmet = ench.value().canEnchant(new ItemStack(Items.DIAMOND_HELMET));
+        boolean onBoots = ench.value().canEnchant(new ItemStack(Items.DIAMOND_BOOTS));
+        if (!onHelmet || !onBoots) {
+            helper.fail("Curse of Waterlogging should be enchantable on any armor piece");
+            return;
+        }
+        boolean notOnPickaxe = !ench.value().canEnchant(new ItemStack(Items.DIAMOND_PICKAXE));
+        if (!notOnPickaxe) {
+            helper.fail("Curse of Waterlogging should NOT be enchantable on a pickaxe (armor only)");
+            return;
+        }
+        helper.succeed();
+    }
 }

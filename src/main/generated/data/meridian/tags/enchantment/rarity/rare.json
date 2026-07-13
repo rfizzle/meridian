@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "meridian:abyssal",
+      "required": false
+    },
+    {
       "id": "meridian:ambush",
       "required": false
     },

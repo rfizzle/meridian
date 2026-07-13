@@ -162,4 +162,26 @@ class TraversalEnchantMathTest {
         assertTrue(TraversalEnchantMath.FALCONSTRIKE_MOMENTUM_RETENTION > 0.0);
         assertTrue(TraversalEnchantMath.FALCONSTRIKE_MOMENTUM_RETENTION < 1.0);
     }
+
+    // ---- Ballast: vertical speed ----
+
+    @Test
+    void ballastVerticalSpeed_isZeroAtLevelZero() {
+        assertEquals(0.0, TraversalEnchantMath.ballastVerticalSpeed(0), EPSILON);
+    }
+
+    @Test
+    void ballastVerticalSpeed_growsPerLevel() {
+        assertEquals(TraversalEnchantMath.BALLAST_SPEED_BASE + TraversalEnchantMath.BALLAST_SPEED_PER_LEVEL,
+                TraversalEnchantMath.ballastVerticalSpeed(1), EPSILON);
+        assertEquals(TraversalEnchantMath.BALLAST_SPEED_BASE + 2 * TraversalEnchantMath.BALLAST_SPEED_PER_LEVEL,
+                TraversalEnchantMath.ballastVerticalSpeed(2), EPSILON);
+        assertTrue(TraversalEnchantMath.ballastVerticalSpeed(2) > TraversalEnchantMath.ballastVerticalSpeed(1));
+    }
+
+    @Test
+    void ballastVerticalSpeed_outpacesVanillaWaterAscent() {
+        // The whole point of Ballast is a brisk sink/rise — even level 1 clears a tenth of a block a tick.
+        assertTrue(TraversalEnchantMath.ballastVerticalSpeed(1) > 0.1);
+    }
 }

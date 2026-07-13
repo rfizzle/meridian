@@ -1,0 +1,22 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.ballast"
+  },
+  "supported_items": "#meridian:enchantable/leg_and_foot_armor",
+  "weight": 6,
+  "max_level": 2,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 8
+  },
+  "max_cost": {
+    "base": 55,
+    "per_level_above_first": 8
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "legs",
+    "feet"
+  ],
+  "effects": {}
+}

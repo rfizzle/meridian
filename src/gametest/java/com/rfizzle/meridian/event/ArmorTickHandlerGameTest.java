@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.food.FoodData;
@@ -377,6 +378,146 @@ public class ArmorTickHandlerGameTest implements FabricGameTest {
             helper.succeed();
         } finally {
             player.stopFallFlying();
+            player.discard();
+        }
+    }
+
+    // Ballast: while in water, crouching sinks the wearer and a held jump (rising intent) raises them.
+    @GameTest(template = "meridian:empty_3x3")
+    public void ballastControlsVerticalMotionInWater(GameTestHelper helper) {
+        Holder<Enchantment> ench = curse(helper, "ballast");
+        if (ench == null) { helper.fail("ballast not in registry"); return; }
+
+        // Flood a column so the wearer registers as in water.
+        helper.setBlock(new BlockPos(1, 1, 1), Blocks.WATER);
+        helper.setBlock(new BlockPos(1, 2, 1), Blocks.WATER);
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
+            player.teleportTo(abs.getX() + 0.5, abs.getY() + 0.5, abs.getZ() + 0.5);
+            player.updateInWaterStateAndDoFluidPushing();
+            if (!player.isInWater()) {
+                helper.fail("test setup: wearer did not register as in water");
+                return;
+            }
+
+            ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+            boots.enchant(ench, 2);
+            player.setItemSlot(EquipmentSlot.FEET, boots);
+
+            // Crouch → sink.
+            player.setShiftKeyDown(true);
+            BallastHandler.setRisingForTest(player.getUUID(), false);
+            player.setDeltaMovement(Vec3.ZERO);
+            ArmorTickHandler.handleBallast(player);
+            if (player.getDeltaMovement().y >= 0.0) {
+                helper.fail("Ballast should sink the wearer while crouching, y="
+                        + player.getDeltaMovement().y);
+                return;
+            }
+
+            // Held jump (rising intent), not crouching → rise.
+            player.setShiftKeyDown(false);
+            BallastHandler.setRisingForTest(player.getUUID(), true);
+            player.setDeltaMovement(Vec3.ZERO);
+            ArmorTickHandler.handleBallast(player);
+            if (player.getDeltaMovement().y <= 0.0) {
+                helper.fail("Ballast should raise the wearer while holding jump, y="
+                        + player.getDeltaMovement().y);
+                return;
+            }
+            helper.succeed();
+        } finally {
+            BallastHandler.clearPlayerForTest(player.getUUID());
+            player.discard();
+        }
+    }
+
+    // Ballast: out of water it does nothing, even crouching with the enchant worn.
+    @GameTest(template = "meridian:empty_3x3")
+    public void ballastInertOnDryLand(GameTestHelper helper) {
+        Holder<Enchantment> ench = curse(helper, "ballast");
+        if (ench == null) { helper.fail("ballast not in registry"); return; }
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
+            player.teleportTo(abs.getX() + 0.5, abs.getY() + 0.5, abs.getZ() + 0.5);
+
+            ItemStack boots = new ItemStack(Items.DIAMOND_BOOTS);
+            boots.enchant(ench, 2);
+            player.setItemSlot(EquipmentSlot.FEET, boots);
+
+            if (player.isInWater()) {
+                helper.fail("test setup: wearer should be on dry land");
+                return;
+            }
+
+            player.setShiftKeyDown(true);
+            BallastHandler.setRisingForTest(player.getUUID(), false);
+            player.setDeltaMovement(Vec3.ZERO);
+            ArmorTickHandler.handleBallast(player);
+            if (player.getDeltaMovement().y != 0.0) {
+                helper.fail("Ballast must not move the wearer out of water, y="
+                        + player.getDeltaMovement().y);
+                return;
+            }
+            helper.succeed();
+        } finally {
+            BallastHandler.clearPlayerForTest(player.getUUID());
+            player.discard();
+        }
+    }
+
+    // Curse of Waterlogging: while wet the wearer is slowed; not worn, nothing happens.
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfWaterloggingSlowsWhileWet(GameTestHelper helper) {
+        Holder<Enchantment> ench = curse(helper, "curse_of_waterlogging");
+        if (ench == null) { helper.fail("curse_of_waterlogging not in registry"); return; }
+
+        helper.setBlock(new BlockPos(1, 1, 1), Blocks.WATER);
+        helper.setBlock(new BlockPos(1, 2, 1), Blocks.WATER);
+
+        ServerPlayer player = MockPlayers.serverPlayerInLevel(helper);
+        try {
+            BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 1));
+            player.teleportTo(abs.getX() + 0.5, abs.getY() + 0.5, abs.getZ() + 0.5);
+            player.updateInWaterStateAndDoFluidPushing();
+            if (!player.isInWaterOrRain()) {
+                helper.fail("test setup: wearer did not register as wet");
+                return;
+            }
+
+            // Not worn: no slowdown.
+            player.setItemSlot(EquipmentSlot.CHEST, new ItemStack(Items.DIAMOND_CHESTPLATE));
+            player.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            ArmorTickHandler.handleCurseOfWaterlogging(player);
+            if (player.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
+                helper.fail("Curse of Waterlogging must not slow when it is not worn");
+                return;
+            }
+
+            // Worn at level 2: Slowness applied at the level-scaled amplifier.
+            ItemStack chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
+            chest.enchant(ench, 2);
+            player.setItemSlot(EquipmentSlot.CHEST, chest);
+            player.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            ArmorTickHandler.handleCurseOfWaterlogging(player);
+
+            MobEffectInstance slow = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            if (slow == null) {
+                helper.fail("Curse of Waterlogging II should slow the wearer while wet");
+                return;
+            }
+            if (slow.getAmplifier() != DefenseEnchantMath.waterloggingSlownessAmplifier(2)) {
+                helper.fail("expected Slowness amplifier "
+                        + DefenseEnchantMath.waterloggingSlownessAmplifier(2)
+                        + ", got " + slow.getAmplifier());
+                return;
+            }
+            helper.succeed();
+        } finally {
             player.discard();
         }
     }
