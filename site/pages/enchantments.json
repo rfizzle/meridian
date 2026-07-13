@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 126 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 128 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "126 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "128 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "126 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "128 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -337,6 +337,13 @@
               "Arrows deal bonus damage the farther they fly, up to a cap <span class='text-smoke'>(exclusive: damage)</span>"
             ],
             [
+              "<span class='text-bone'>Skyfall</span>",
+              "III",
+              "Bow / Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Arrows loosed while airborne or gliding deal bonus damage <span class='text-smoke'>(exclusive: damage)</span>"
+            ],
+            [
               "<span class='text-bone'>Volley</span>",
               "II",
               "Bow",
@@ -349,6 +356,13 @@
               "Crossbow",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent2/15 border border-accent2/30 text-accent2'>Very Rare</span>",
               "Bolts curve gently toward the creature under your crosshair when fired — mobs only unless <code class='text-accent2'>combat.seekerTargetsPlayers</code> is enabled"
+            ],
+            [
+              "<span class='text-bone'>Pin</span>",
+              "II",
+              "Crossbow",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
+              "Bolts root a struck creature against a wall or the ground for a few seconds — mobs only unless <code class='text-accent2'>combat.pinAffectsPlayers</code> is enabled; bosses are immune"
             ],
             [
               "<span class='text-bone'>Mark</span>",
@@ -1078,7 +1092,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 126 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 128 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",
