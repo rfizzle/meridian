@@ -100,7 +100,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
             Meridian.id("curse_of_timidity"),
             Meridian.id("curse_of_molting"),
             Meridian.id("curse_of_skittishness"),
-            Meridian.id("curse_of_obscurity"));
+            Meridian.id("curse_of_obscurity"),
+            Meridian.id("curse_of_toll"),
+            Meridian.id("curse_of_dissonance"));
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
@@ -416,7 +418,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_timidity"))
                 .addOptional(Meridian.id("curse_of_molting"))
                 .addOptional(Meridian.id("curse_of_skittishness"))
-                .addOptional(Meridian.id("curse_of_obscurity"));
+                .addOptional(Meridian.id("curse_of_obscurity"))
+                .addOptional(Meridian.id("curse_of_toll"))
+                .addOptional(Meridian.id("curse_of_dissonance"));
 
         getOrCreateTagBuilder(EnchantmentTags.ON_RANDOM_LOOT)
                 .addOptional(Meridian.id("abyss_ward"))
@@ -447,7 +451,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_timidity"))
                 .addOptional(Meridian.id("curse_of_molting"))
                 .addOptional(Meridian.id("curse_of_skittishness"))
-                .addOptional(Meridian.id("curse_of_obscurity"));
+                .addOptional(Meridian.id("curse_of_obscurity"))
+                .addOptional(Meridian.id("curse_of_toll"))
+                .addOptional(Meridian.id("curse_of_dissonance"));
 
         getOrCreateTagBuilder(EnchantmentTags.DOUBLE_TRADE_PRICE)
                 .addOptional(Meridian.id("curse_of_decay"))
@@ -462,7 +468,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("curse_of_timidity"))
                 .addOptional(Meridian.id("curse_of_molting"))
                 .addOptional(Meridian.id("curse_of_skittishness"))
-                .addOptional(Meridian.id("curse_of_obscurity"));
+                .addOptional(Meridian.id("curse_of_obscurity"))
+                .addOptional(Meridian.id("curse_of_toll"))
+                .addOptional(Meridian.id("curse_of_dissonance"));
     }
 
     private void addMeridianExclusiveSets() {

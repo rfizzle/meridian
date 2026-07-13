@@ -39,6 +39,7 @@ class EnchantmentJsonValidationTest {
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
             "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
+            "curse_of_toll", "curse_of_dissonance",
             "decay", "decoy", "detonation", "diminish", "dowse", "emberward", "endurance", "everbloom", "excavate",
             "falconstrike", "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind", "groom",
@@ -62,7 +63,8 @@ class EnchantmentJsonValidationTest {
             "vital_mend", "attunement", "tether", "ironclasp", "curse_of_decay", "curse_of_sealing", "aurify",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
-            "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity");
+            "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
+            "curse_of_toll", "curse_of_dissonance");
 
     /**
      * Maps each exclusive set tag path (relative to GENERATED_TAGS_DIR) to the
@@ -196,7 +198,7 @@ class EnchantmentJsonValidationTest {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(138, count, "expected exactly 138 enchantment JSON files");
+        assertEquals(140, count, "expected exactly 140 enchantment JSON files");
     }
 
     @TestFactory
@@ -377,7 +379,9 @@ class EnchantmentJsonValidationTest {
                 Map.entry("curse_of_timidity", 2),
                 Map.entry("curse_of_molting", 2),
                 Map.entry("curse_of_skittishness", 2),
-                Map.entry("curse_of_obscurity", 1)
+                Map.entry("curse_of_obscurity", 1),
+                Map.entry("curse_of_toll", 2),
+                Map.entry("curse_of_dissonance", 1)
         );
         return expectedWeights.entrySet().stream()
                 .map(entry -> DynamicTest.dynamicTest(entry.getKey(), () -> {
