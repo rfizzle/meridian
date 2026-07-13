@@ -11,6 +11,7 @@
         "BlockDropsMixin",
         "BrushableBlockEntityMeticulousMixin",
         "CandleBlockMixin",
+        "ClearsightMixin",
         "CreeperEntityAccessor",
         "EchoesVibrationMixin",
         "EnchantmentHelperMixin",

@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.config;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.GroomMath;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -58,6 +59,7 @@ public class MeridianConfig {
     public Tomes tomes = new Tomes();
     public Everfeast everfeast = new Everfeast();
     public Warden warden = new Warden();
+    public Groom groom = new Groom();
     public Combat combat = new Combat();
     public Attunement attunement = new Attunement();
     public Display display = new Display();
@@ -218,6 +220,10 @@ public class MeridianConfig {
         warden.tendrilDropChance = clampUnit("warden.tendrilDropChance", warden.tendrilDropChance);
         warden.tendrilLootingBonus = clampUnit("warden.tendrilLootingBonus", warden.tendrilLootingBonus);
 
+        groom.chanceLevel1 = clampUnit("groom.chanceLevel1", groom.chanceLevel1);
+        groom.chanceLevel2 = clampUnit("groom.chanceLevel2", groom.chanceLevel2);
+        groom.cooldownTicks = clampIntRange("groom.cooldownTicks", groom.cooldownTicks, 0, 1728000);
+
         attunement.radius = clampIntRange("attunement.radius", attunement.radius, 1, 32);
         attunement.intervalTicks = clampIntRange("attunement.intervalTicks", attunement.intervalTicks, 20, 1200);
         attunement.minEterna = clampIntRange("attunement.minEterna", attunement.minEterna, 0, 100);
@@ -348,6 +354,15 @@ public class MeridianConfig {
     public static class Warden {
         public double tendrilDropChance = 1.0;
         public double tendrilLootingBonus = 0.10;
+    }
+
+    public static class Groom {
+        /** Chance that a groom attempt at Groom I yields the animal's renewable drop. */
+        public double chanceLevel1 = GroomMath.DEFAULT_CHANCE_LEVEL_1;
+        /** Chance that a groom attempt at Groom II yields the animal's renewable drop. */
+        public double chanceLevel2 = GroomMath.DEFAULT_CHANCE_LEVEL_2;
+        /** Ticks an animal stays on cooldown after a groom attempt, so a pen can't be farmed continuously. */
+        public int cooldownTicks = GroomMath.DEFAULT_COOLDOWN_TICKS;
     }
 
     public static class Combat {

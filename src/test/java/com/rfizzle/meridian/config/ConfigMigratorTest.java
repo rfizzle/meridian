@@ -113,6 +113,28 @@ class ConfigMigratorTest {
     }
 
     @Test
+    void migrate_v9_advancesToCurrentWithoutStructuralChange() {
+        // v9 → v10 (the groom section, #224) is purely additive: the migration only advances the
+        // version stamp; Gson field initializers supply the section's defaults on deserialize, and
+        // the post-migration re-save writes it into the file so operators can discover the levers.
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 9);
+        JsonObject warden = new JsonObject();
+        warden.addProperty("tendrilDropChance", 0.5);
+        json.add("warden", warden);
+
+        boolean changed = ConfigMigrator.migrate(json);
+
+        assertTrue(changed, "migrating a v9 config must report a change");
+        assertEquals(0.5, json.getAsJsonObject("warden").get("tendrilDropChance").getAsDouble(),
+                "unrelated sections must survive the migration");
+        assertFalse(json.has("groom"),
+                "the migration itself does not seed the groom section — Gson defaults do on deserialize");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt(),
+                "configVersion must be stamped to the current version");
+    }
+
+    @Test
     void migrate_currentVersion_isNoOp() {
         JsonObject json = new JsonObject();
         json.addProperty("configVersion", ConfigMigrator.CURRENT_VERSION);

@@ -2,6 +2,7 @@ package com.rfizzle.meridian.compat.modmenu;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
+import com.rfizzle.meridian.enchanting.GroomMath;
 import com.rfizzle.meridian.net.MeridianNetworking;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
@@ -189,6 +190,31 @@ public class ModMenuIntegration implements ModMenuApi {
                             current.warden.tendrilLootingBonus)
                     .setDefaultValue(0.10).setMin(0.0).setMax(1.0)
                     .setSaveConsumer(v -> current.warden.tendrilLootingBonus = v)
+                    .build());
+
+            // Groom
+            ConfigCategory groomCategory = builder.getOrCreateCategory(
+                    Component.translatable("config.meridian.category.groom"));
+            groomCategory.addEntry(entry.startDoubleField(
+                            Component.translatable("config.meridian.groom_chance_level_1"),
+                            current.groom.chanceLevel1)
+                    .setDefaultValue(GroomMath.DEFAULT_CHANCE_LEVEL_1)
+                    .setMin(0.0).setMax(1.0)
+                    .setSaveConsumer(v -> current.groom.chanceLevel1 = v)
+                    .build());
+            groomCategory.addEntry(entry.startDoubleField(
+                            Component.translatable("config.meridian.groom_chance_level_2"),
+                            current.groom.chanceLevel2)
+                    .setDefaultValue(GroomMath.DEFAULT_CHANCE_LEVEL_2)
+                    .setMin(0.0).setMax(1.0)
+                    .setSaveConsumer(v -> current.groom.chanceLevel2 = v)
+                    .build());
+            groomCategory.addEntry(entry.startIntField(
+                            Component.translatable("config.meridian.groom_cooldown_ticks"),
+                            current.groom.cooldownTicks)
+                    .setDefaultValue(GroomMath.DEFAULT_COOLDOWN_TICKS)
+                    .setMin(0).setMax(1728000)
+                    .setSaveConsumer(v -> current.groom.cooldownTicks = v)
                     .build());
 
             // Combat

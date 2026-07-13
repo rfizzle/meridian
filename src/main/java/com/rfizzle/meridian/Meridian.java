@@ -20,6 +20,8 @@ import com.rfizzle.meridian.event.MountedEnchantmentHandler;
 import com.rfizzle.meridian.event.ProjectileEnchantmentHandler;
 import com.rfizzle.meridian.event.TetherHandler;
 import com.rfizzle.meridian.event.ToolEnchantmentHandler;
+import com.rfizzle.meridian.event.GroomHandler;
+import com.rfizzle.meridian.event.VerdureLootHandler;
 import com.rfizzle.meridian.event.WardenLootHandler;
 import com.rfizzle.meridian.net.EnchantmentInfoPayload;
 import com.rfizzle.meridian.net.MeridianNetworking;
@@ -57,6 +59,7 @@ public class Meridian implements ModInitializer {
         EnchantingRecipeRegistry.register();
         MeridianAnvilHandlers.register();
         WardenLootHandler.register();
+        VerdureLootHandler.register();
         EnchantmentEffectHandler.register();
         ArmorTickHandler.register();
         AttunementHandler.register();
@@ -64,6 +67,7 @@ public class Meridian implements ModInitializer {
         LoftHandler.register();
         ToolEnchantmentHandler.register();
         DowseHandler.register();
+        GroomHandler.register();
         MountedEnchantmentHandler.register();
         ProjectileEnchantmentHandler.register();
         TetherHandler.register();
