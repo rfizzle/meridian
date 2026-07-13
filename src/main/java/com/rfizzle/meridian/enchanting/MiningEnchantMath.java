@@ -1,13 +1,26 @@
 package com.rfizzle.meridian.enchanting;
 
 /**
- * Pure balance math for the Grind / Adamant / Reclaim mining enchantments. Kept free
+ * Pure balance math for the Grind / Adamant / Reclaim / Dowse mining enchantments. Kept free
  * of Minecraft and Fabric imports so plain JUnit tests can exercise the formulas;
- * {@code PlayerMixin}, {@code ItemStackMixin}, and {@code BlockDropsMixin} are the
- * only runtime callers. The per-effect tuning constants live here (not in the mixins)
- * for the same reason.
+ * {@code PlayerMixin}, {@code ItemStackMixin}, {@code BlockDropsMixin}, {@code DowseHandler},
+ * and {@code DowseOverlayRenderer} are the runtime callers. The per-effect tuning constants
+ * live here (not in the mixins/handlers) for the same reason.
  */
 public final class MiningEnchantMath {
+
+    /** Half-extent, in blocks, of the cube Dowse scans around the player for the nearest ore. */
+    public static final int DOWSE_SEARCH_RADIUS = 12;
+    /** Upper bound on the ore positions Dowse floods and reveals, so a huge vein can't flood the packet. */
+    public static final int DOWSE_MAX_VEIN = 64;
+    /** How long a revealed vein glows, in ticks (8 seconds). */
+    public static final int DOWSE_GLOW_TICKS = 160;
+    /** Ticks over which the glow fades out as it expires. */
+    public static final int DOWSE_FADE_TICKS = 20;
+    /** Cooldown after a Dowse pulse, in ticks (30 seconds) — the "substantial cooldown" the issue asks for. */
+    public static final int DOWSE_COOLDOWN_TICKS = 600;
+    /** Peak opacity of the reveal glow; the fade curve scales down from here. */
+    public static final float DOWSE_GLOW_MAX_ALPHA = 0.45f;
 
     /**
      * Blocks softer than this gain nothing from Grind. Stone (1.5) and everything a
@@ -25,6 +38,17 @@ public final class MiningEnchantMath {
     public static final float GRIND_MAX_BONUS = 24.0f;
 
     private MiningEnchantMath() {}
+
+    /**
+     * Glow opacity in {@code [0, DOWSE_GLOW_MAX_ALPHA]} for a vein with {@code ticksRemaining}
+     * left before it expires. Full strength until the final {@link #DOWSE_FADE_TICKS}, then a
+     * linear fade to zero. Negative/expired remainders clamp to zero.
+     */
+    public static float glowAlpha(int ticksRemaining) {
+        if (ticksRemaining <= 0) return 0.0f;
+        float fade = ticksRemaining >= DOWSE_FADE_TICKS ? 1.0f : (float) ticksRemaining / DOWSE_FADE_TICKS;
+        return DOWSE_GLOW_MAX_ALPHA * fade;
+    }
 
     /**
      * Grind's additive break-speed bonus for a block of the given hardness. Zero below

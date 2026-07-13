@@ -3,3 +3,9 @@ accessWidener v2 named
 mutable field net/minecraft/world/inventory/Slot y I
 accessible method net/minecraft/client/gui/screens/inventory/EnchantmentScreen renderBook (Lnet/minecraft/client/gui/GuiGraphics;IIF)V
 accessible method net/minecraft/world/item/ProjectileWeaponItem shoot (Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/InteractionHand;Lnet/minecraft/world/item/ItemStack;Ljava/util/List;FFZLnet/minecraft/world/entity/LivingEntity;)V
+
+# Dowse reveal overlay — the render-state shards its custom xray RenderType composes from.
+accessible field net/minecraft/client/renderer/RenderStateShard TRANSLUCENT_TRANSPARENCY Lnet/minecraft/client/renderer/RenderStateShard$TransparencyStateShard;
+accessible field net/minecraft/client/renderer/RenderStateShard NO_DEPTH_TEST Lnet/minecraft/client/renderer/RenderStateShard$DepthTestStateShard;
+accessible field net/minecraft/client/renderer/RenderStateShard NO_CULL Lnet/minecraft/client/renderer/RenderStateShard$CullStateShard;
+accessible field net/minecraft/client/renderer/RenderStateShard COLOR_WRITE Lnet/minecraft/client/renderer/RenderStateShard$WriteMaskStateShard;
