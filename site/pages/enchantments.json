@@ -36,6 +36,14 @@
             "Rarity",
             "Effect"
           ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
+          ],
           "rows": [
             [
               "<span class='text-bone'>Keen Edge</span>",
@@ -279,6 +287,14 @@
             "Rarity",
             "Effect"
           ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
+          ],
           "rows": [
             [
               "<span class='text-bone'>Detonation</span>",
@@ -409,6 +425,14 @@
             "Applies to",
             "Rarity",
             "Effect"
+          ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
           ],
           "rows": [
             [
@@ -568,6 +592,14 @@
             "Applies to",
             "Rarity",
             "Effect"
+          ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
           ],
           "rows": [
             [
@@ -833,6 +865,14 @@
             "Rarity",
             "Effect"
           ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
+          ],
           "rows": [
             [
               "<span class='text-bone'>Retribution</span>",
@@ -894,6 +934,14 @@
             "Rarity",
             "Effect"
           ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
+          ],
           "rows": [
             [
               "<span class='text-bone'>Ironwing</span>",
@@ -947,6 +995,14 @@
             "Applies to",
             "Rarity",
             "Effect"
+          ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
           ],
           "rows": [
             [
@@ -1009,6 +1065,14 @@
             "Rarity",
             "Effect"
           ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
+          ],
           "rows": [
             [
               "<span class='text-bone'>Aurify</span>",
@@ -1062,6 +1126,14 @@
             "Applies to",
             "Rarity",
             "Effect"
+          ],
+          "sortable": true,
+          "sort": [
+            "text",
+            "roman",
+            "text",
+            { "type": "order", "order": ["Common", "Uncommon", "Rare", "Very Rare"] },
+            false
           ],
           "rows": [
             [
