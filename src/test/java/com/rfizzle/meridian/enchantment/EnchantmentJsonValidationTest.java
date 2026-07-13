@@ -39,7 +39,7 @@ class EnchantmentJsonValidationTest {
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
             "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
-            "decay", "decoy", "detonation", "diminish", "emberward", "endurance", "everbloom", "excavate",
+            "decay", "decoy", "detonation", "diminish", "dowse", "emberward", "endurance", "everbloom", "excavate",
             "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
@@ -52,7 +52,8 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "timberfell", "torrent", "trample", "trophy", "true_flight",
+            "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
+            "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
             "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
 
@@ -191,11 +192,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is128() throws Exception {
+    void enchantmentCount_is131() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(128, count, "expected exactly 128 enchantment JSON files");
+        assertEquals(131, count, "expected exactly 131 enchantment JSON files");
     }
 
     @TestFactory
