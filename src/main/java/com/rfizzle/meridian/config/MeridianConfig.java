@@ -365,6 +365,8 @@ public class MeridianConfig {
         public boolean pinAffectsPlayers = false;
         /** Whether a Stagger shield block may daze player attackers; mobs are always eligible. */
         public boolean staggerAffectsPlayers = false;
+        /** Whether a Bullrush shield charge may knock back and daze player victims; mobs are always eligible. */
+        public boolean bullrushAffectsPlayers = false;
     }
 
     public static class Attunement {

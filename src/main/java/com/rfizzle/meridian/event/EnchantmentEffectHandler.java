@@ -1099,6 +1099,16 @@ public final class EnchantmentEffectHandler {
     }
 
     /**
+     * Whether a Bullrush charge may bash the given victim. Mobs are always eligible; player victims
+     * only when {@code combat.bullrushAffectsPlayers} is enabled.
+     */
+    public static boolean bullrushTargetAllowed(LivingEntity victim) {
+        if (!(victim instanceof Player)) return true;
+        MeridianConfig config = Meridian.getConfig();
+        return config != null && config.combat.bullrushAffectsPlayers;
+    }
+
+    /**
      * Removes one random occupied equipment slot from the victim and drops the stack as
      * a recoverable item entity. Returns the stripped slot, or {@code null} if the
      * victim had nothing equipped.

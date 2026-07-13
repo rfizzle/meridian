@@ -182,13 +182,16 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, trailblaze, beckon, bounty, prismatic,
      *       renewal, cinderwalk}</li>
-     *   <li>no meaningful mob behavior — {@code impact_ward}, {@code ironwing} & {@code tailwind}
-     *       (elytra-only), {@code animus, insight, soul_tax} (XP), {@code seismic_slam, tempest}
+     *   <li>no meaningful mob behavior — {@code impact_ward}, {@code ironwing}, {@code tailwind} &
+     *       {@code falconstrike} (elytra-only — a grounded mob never glides), {@code animus, insight,
+     *       soul_tax} (XP), {@code seismic_slam, tempest}
      *       (player crouch-slam input), {@code pinpoint} (player crit input), {@code dowse}
      *       (sneak-use input, and revealing ore to a mob is meaningless), {@code twin_hook}
      *       (fishing-only), {@code riposte} &
      *       {@code stagger} (mobs never shield-block, so the block never triggers — and Stagger's
-     *       player-attacker path is config-gated off by default besides), {@code quell, gravitas,
+     *       player-attacker path is config-gated off by default besides), {@code bullrush} (a
+     *       sprint-charge with a raised shield is a player movement input mobs never perform, and its
+     *       player-victim path is config-gated off by default), {@code quell, gravitas,
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
      *       path is config-gated off by default, so it would be inert on mob gear),
      *       {@code seeker} (its player-target path is config-gated off by default, and
@@ -261,6 +264,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("blight"))
                 .addOptional(Meridian.id("blink"))
                 .addOptional(Meridian.id("bounty"))
+                .addOptional(Meridian.id("bullrush"))
                 .addOptional(Meridian.id("bulwark"))
                 .addOptional(Meridian.id("cinderwalk"))
                 .addOptional(Meridian.id("clamber"))
@@ -273,6 +277,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("endurance"))
                 .addOptional(Meridian.id("everbloom"))
                 .addOptional(Meridian.id("excavate"))
+                .addOptional(Meridian.id("falconstrike"))
                 .addOptional(Meridian.id("fortify"))
                 .addOptional(Meridian.id("fortuity"))
                 .addOptional(Meridian.id("frostguard"))

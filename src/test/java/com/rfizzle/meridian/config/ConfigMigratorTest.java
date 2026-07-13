@@ -93,6 +93,26 @@ class ConfigMigratorTest {
     }
 
     @Test
+    void migrate_v8_advancesToCurrentWithoutStructuralChange() {
+        // v8 → v9 (combat.bullrushAffectsPlayers, #221) is purely additive: the migration only
+        // advances the version stamp; Gson's absent-boolean default (false) already matches the
+        // field default on deserialize.
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 8);
+        JsonObject combat = new JsonObject();
+        combat.addProperty("staggerAffectsPlayers", true);
+        json.add("combat", combat);
+
+        boolean changed = ConfigMigrator.migrate(json);
+
+        assertTrue(changed, "migrating a v8 config must report a change");
+        assertTrue(json.getAsJsonObject("combat").get("staggerAffectsPlayers").getAsBoolean(),
+                "unrelated combat toggles must survive the migration");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt(),
+                "configVersion must be stamped to the current version");
+    }
+
+    @Test
     void migrate_currentVersion_isNoOp() {
         JsonObject json = new JsonObject();
         json.addProperty("configVersion", ConfigMigrator.CURRENT_VERSION);

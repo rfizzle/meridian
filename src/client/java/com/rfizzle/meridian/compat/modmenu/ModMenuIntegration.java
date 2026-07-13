@@ -236,6 +236,12 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(false)
                     .setSaveConsumer(v -> current.combat.staggerAffectsPlayers = v)
                     .build());
+            combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.bullrush_affects_players"),
+                            current.combat.bullrushAffectsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.bullrushAffectsPlayers = v)
+                    .build());
 
             // Attunement
             ConfigCategory attunementCategory = builder.getOrCreateCategory(

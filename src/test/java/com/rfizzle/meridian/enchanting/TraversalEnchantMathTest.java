@@ -123,4 +123,43 @@ class TraversalEnchantMathTest {
         assertEquals(0.15, TraversalEnchantMath.tailwindPush(3), EPSILON);
         assertTrue(TraversalEnchantMath.tailwindPush(3) > TraversalEnchantMath.tailwindPush(1));
     }
+
+    // ---- Falconstrike: kinetic glide-strike ----
+
+    @Test
+    void falconstrikeKineticDamage_isZeroAtLevelZero() {
+        assertEquals(0.0f, TraversalEnchantMath.falconstrikeKineticDamage(0, 2.0), EPSILON);
+    }
+
+    @Test
+    void falconstrikeKineticDamage_isZeroBelowDriftThreshold() {
+        double slow = TraversalEnchantMath.FALCONSTRIKE_MIN_SPEED - 0.01;
+        assertEquals(0.0f, TraversalEnchantMath.falconstrikeKineticDamage(2, slow), EPSILON);
+    }
+
+    @Test
+    void falconstrikeKineticDamage_scalesWithSpeedAndLevel() {
+        // At the drift threshold (0.5), level 1: 3.0 * 1 * 0.5 = 1.5, below the 6.0 cap.
+        assertEquals(1.5f, TraversalEnchantMath.falconstrikeKineticDamage(1,
+                TraversalEnchantMath.FALCONSTRIKE_MIN_SPEED), 1.0e-6);
+        assertTrue(TraversalEnchantMath.falconstrikeKineticDamage(1, 1.0)
+                > TraversalEnchantMath.falconstrikeKineticDamage(1, 0.6));
+        assertTrue(TraversalEnchantMath.falconstrikeKineticDamage(2, 1.0)
+                > TraversalEnchantMath.falconstrikeKineticDamage(1, 1.0));
+    }
+
+    @Test
+    void falconstrikeKineticDamage_isCappedPerLevel() {
+        // A steep power-dive can't scale unbounded — a huge speed clamps to CAP * level.
+        assertEquals(TraversalEnchantMath.FALCONSTRIKE_DAMAGE_CAP_PER_LEVEL * 1,
+                TraversalEnchantMath.falconstrikeKineticDamage(1, 100.0), 1.0e-6);
+        assertEquals(TraversalEnchantMath.FALCONSTRIKE_DAMAGE_CAP_PER_LEVEL * 2,
+                TraversalEnchantMath.falconstrikeKineticDamage(2, 100.0), 1.0e-6);
+    }
+
+    @Test
+    void falconstrikeMomentumRetention_preservesMostButNotAllSpeed() {
+        assertTrue(TraversalEnchantMath.FALCONSTRIKE_MOMENTUM_RETENTION > 0.0);
+        assertTrue(TraversalEnchantMath.FALCONSTRIKE_MOMENTUM_RETENTION < 1.0);
+    }
 }

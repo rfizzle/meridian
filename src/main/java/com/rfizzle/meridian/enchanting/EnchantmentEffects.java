@@ -73,6 +73,7 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> RETRIBUTION = key("retribution");
     public static final ResourceKey<Enchantment> PUMMEL = key("pummel");
     public static final ResourceKey<Enchantment> FORTIFY = key("fortify");
+    public static final ResourceKey<Enchantment> BULLRUSH = key("bullrush");
     public static final ResourceKey<Enchantment> AMBUSH = key("ambush");
     public static final ResourceKey<Enchantment> PINPOINT = key("pinpoint");
     public static final ResourceKey<Enchantment> SUNDER = key("sunder");
@@ -104,6 +105,7 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> GRAPNEL = key("grapnel");
     public static final ResourceKey<Enchantment> TWIN_HOOK = key("twin_hook");
     public static final ResourceKey<Enchantment> THERMAL = key("thermal");
+    public static final ResourceKey<Enchantment> FALCONSTRIKE = key("falconstrike");
     public static final ResourceKey<Enchantment> ATTUNEMENT = key("attunement");
     public static final ResourceKey<Enchantment> REAP = key("reap");
     public static final ResourceKey<Enchantment> MARK = key("mark");

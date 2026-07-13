@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.event;
 
+import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.enchanting.TraversalEnchantMath;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -69,7 +71,12 @@ public final class ArmorTickHandler {
             EffectGuard.run("cinderwalk", player, () -> handleCinderwalk(player));
             EffectGuard.run("terrasculpt", player, () -> handleTerrasculpt(player));
             EffectGuard.run("thermal", player, () -> handleThermal(player));
+            EffectGuard.run("falconstrike", player, () -> handleFalconstrike(player));
             EffectGuard.run("curse_of_hunger", player, () -> handleCurseOfHunger(player));
+
+            if (tickCounter % DefenseEnchantMath.BULLRUSH_BASH_INTERVAL_TICKS == 0) {
+                EffectGuard.run("bullrush", player, () -> handleBullrush(player));
+            }
 
             if (tickCounter % 20 == 0) {
                 EffectGuard.run("premonition", player, () -> handlePremonition(player));
@@ -289,6 +296,95 @@ public final class ArmorTickHandler {
 
         ItemStack elytra = player.getItemBySlot(EquipmentSlot.CHEST);
         elytra.hurtAndBreak(TraversalEnchantMath.MOLTING_SHED_DURABILITY, player, EquipmentSlot.CHEST);
+    }
+
+    /**
+     * Falconstrike: gliding into a creature transfers the glider's kinetic energy as damage — the
+     * offensive complement to Impact Ward's defensive fall-damage soak. Fires each tick while gliding
+     * above the drift threshold; vanilla's hurt cooldown throttles repeat hits on the same creature,
+     * and a slice of horizontal momentum is bled into the hit so the glide is preserved, not halted.
+     * Players are never struck — only Bullrush carries a player-affecting config gate. Package-private
+     * so ArmorTickHandlerGameTest can drive it directly with a mock player.
+     */
+    static void handleFalconstrike(ServerPlayer player) {
+        int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.FALCONSTRIKE, EquipmentSlot.CHEST);
+        if (level <= 0) return;
+        if (!player.isFallFlying()) return;
+
+        Vec3 velocity = player.getDeltaMovement();
+        double horizontalSpeed = Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+        float damage = TraversalEnchantMath.falconstrikeKineticDamage(level, horizontalSpeed);
+        if (damage <= 0.0f) return;
+
+        // Deliberately not modulo-gated (unlike Bullrush): a fast glide-through touches a mob for a
+        // single tick, so an interval gate would miss the contact. Three cheap rejects above (level,
+        // gliding, above drift speed) already keep the scan off the hot path for everyone else.
+        AABB area = player.getBoundingBox().inflate(TraversalEnchantMath.FALCONSTRIKE_REACH);
+        List<LivingEntity> targets = player.serverLevel().getEntitiesOfClass(LivingEntity.class, area,
+                e -> e.isAlive() && e != player && !(e instanceof Player) && !player.isAlliedTo(e));
+        if (targets.isEmpty()) return;
+
+        boolean struck = false;
+        for (LivingEntity target : targets) {
+            if (target.hurt(player.damageSources().mobAttack(player), damage)) {
+                struck = true;
+            }
+        }
+        if (!struck) return;
+
+        double retain = TraversalEnchantMath.FALCONSTRIKE_MOMENTUM_RETENTION;
+        player.setDeltaMovement(velocity.x * retain, velocity.y, velocity.z * retain);
+        player.hurtMarked = true;
+    }
+
+    /**
+     * Bullrush: sprinting with an enchanted shield in hand bashes creatures in the charge path aside,
+     * knocking them back and dazing them with Slowness at a shield-durability cost per bash. Players
+     * are spared unless {@code combat.bullrushAffectsPlayers} is set. Interval-gated by the tick loop
+     * so a sustained charge is a rhythmic shove, not a per-tick knockback lock. Package-private so
+     * ArmorTickHandlerGameTest can drive it directly with a mock player.
+     */
+    static void handleBullrush(ServerPlayer player) {
+        EquipmentSlot shieldSlot = bullrushShieldSlot(player);
+        if (shieldSlot == null) return;
+        if (!player.isSprinting()) return;
+
+        // Level and the charged shield both come from the one resolved stack, so a second Bullrush
+        // shield in the other hand can never lend its level to a bash the offhand pays the durability
+        // for — resolve the slot first, then read everything off it.
+        ItemStack shield = player.getItemBySlot(shieldSlot);
+        int level = EnchantmentEffects.getEnchantmentLevel(shield, EnchantmentEffects.BULLRUSH);
+
+        AABB area = player.getBoundingBox().inflate(DefenseEnchantMath.BULLRUSH_REACH);
+        List<LivingEntity> targets = player.serverLevel().getEntitiesOfClass(LivingEntity.class, area,
+                e -> e.isAlive() && e != player && !player.isAlliedTo(e)
+                        && EnchantmentEffectHandler.bullrushTargetAllowed(e));
+        if (targets.isEmpty()) return;
+
+        int dazeTicks = DefenseEnchantMath.bullrushDazeTicks(level);
+        int slowAmplifier = DefenseEnchantMath.bullrushSlownessAmplifier(level);
+        double knockback = DefenseEnchantMath.bullrushKnockbackStrength(level);
+
+        for (LivingEntity target : targets) {
+            target.knockback(knockback, player.getX() - target.getX(), player.getZ() - target.getZ());
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, dazeTicks, slowAmplifier,
+                    false, true, true));
+            shield.hurtAndBreak(DefenseEnchantMath.BULLRUSH_DURABILITY_COST, player, shieldSlot);
+        }
+    }
+
+    /**
+     * The hand holding a Bullrush-enchanted shield — the stack whose durability a bash spends.
+     * Offhand takes precedence (a shield's natural slot); {@code null} if neither hand carries one.
+     */
+    private static EquipmentSlot bullrushShieldSlot(ServerPlayer player) {
+        if (EnchantmentEffects.getEnchantmentLevel(player.getOffhandItem(), EnchantmentEffects.BULLRUSH) > 0) {
+            return EquipmentSlot.OFFHAND;
+        }
+        if (EnchantmentEffects.getEnchantmentLevel(player.getMainHandItem(), EnchantmentEffects.BULLRUSH) > 0) {
+            return EquipmentSlot.MAINHAND;
+        }
+        return null;
     }
 
     static void handleCurseOfAttraction(ServerPlayer player) {

@@ -303,6 +303,25 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- Bullrush: mobs-only default (the enabled path is covered by BullrushConfigGameTest) ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void bullrushIgnoresPlayersByDefault(GameTestHelper helper) {
+        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        if (!EnchantmentEffectHandler.bullrushTargetAllowed(mob)) {
+            helper.fail("Mobs must always be eligible Bullrush targets");
+            return;
+        }
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        boolean allowed = EnchantmentEffectHandler.bullrushTargetAllowed(player);
+        player.discard();
+        if (allowed) {
+            helper.fail("Players must not be bashed by Bullrush with the default config");
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Trophy: per-victim head mapping ---
 
     @GameTest(template = "meridian:empty_3x3")

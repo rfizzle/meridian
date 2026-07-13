@@ -1,0 +1,21 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.falconstrike"
+  },
+  "supported_items": "#meridian:enchantable/elytra",
+  "weight": 2,
+  "max_level": 2,
+  "min_cost": {
+    "base": 14,
+    "per_level_above_first": 10
+  },
+  "max_cost": {
+    "base": 54,
+    "per_level_above_first": 10
+  },
+  "anvil_cost": 2,
+  "slots": [
+    "chest"
+  ],
+  "effects": {}
+}

@@ -62,6 +62,7 @@
             "com.rfizzle.meridian.gametest.enchantments.PinConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MarkConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.StaggerConfigGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.BullrushConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.TailwindGameTest",
             "com.rfizzle.meridian.gametest.enchantments.RangedEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MiningEnchantmentGameTest",

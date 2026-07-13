@@ -65,6 +65,30 @@ public final class TraversalEnchantMath {
     /** Curse of Molting: extra durability shed from the elytra on each burst while gliding. */
     public static final int MOLTING_SHED_DURABILITY = 2;
 
+    // ---- Falconstrike: gliding into a creature transfers the glider's kinetic energy as damage ----
+
+    /**
+     * Minimum horizontal glide speed (blocks/tick) for a Falconstrike hit to land. Below this the
+     * glider is drifting, not striking, so a gentle bump into a mob does nothing.
+     */
+    public static final double FALCONSTRIKE_MIN_SPEED = 0.5;
+
+    /** Kinetic damage per level per block/tick of horizontal glide speed — the "faster hurts more" slope. */
+    public static final float FALCONSTRIKE_DAMAGE_PER_SPEED_PER_LEVEL = 3.0f;
+
+    /** Per-level cap on a single Falconstrike hit, so a steep power-dive can't scale damage unbounded. */
+    public static final float FALCONSTRIKE_DAMAGE_CAP_PER_LEVEL = 6.0f;
+
+    /**
+     * Fraction of horizontal momentum the glider keeps after a strike. The bled 15% is the kinetic
+     * energy handed to the creature — enough to feel the impact, not enough to halt the glide, so the
+     * wearer plows on rather than crashing.
+     */
+    public static final double FALCONSTRIKE_MOMENTUM_RETENTION = 0.85;
+
+    /** Blocks the strike AABB reaches beyond the glider's own bounds — a collision, not a lunge. */
+    public static final double FALCONSTRIKE_REACH = 0.4;
+
     private TraversalEnchantMath() {}
 
     /**
@@ -118,5 +142,17 @@ public final class TraversalEnchantMath {
     public static double tailwindPush(int level) {
         if (level <= 0) return 0.0;
         return TAILWIND_PUSH_PER_LEVEL * level;
+    }
+
+    /**
+     * Kinetic damage a Falconstrike glide-strike deals to a creature, for a glider moving at
+     * {@code horizontalSpeed} blocks/tick: linear in speed and level, zero below the drift
+     * threshold, and capped per level so a power-dive can't scale damage unbounded. Mirrors the
+     * shape of Joust's momentum bonus so the two "damage from motion" enchants read alike.
+     */
+    public static float falconstrikeKineticDamage(int level, double horizontalSpeed) {
+        if (level <= 0 || horizontalSpeed < FALCONSTRIKE_MIN_SPEED) return 0.0f;
+        float raw = (float) (FALCONSTRIKE_DAMAGE_PER_SPEED_PER_LEVEL * level * horizontalSpeed);
+        return Math.min(FALCONSTRIKE_DAMAGE_CAP_PER_LEVEL * level, raw);
     }
 }
