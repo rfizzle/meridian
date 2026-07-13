@@ -33,6 +33,10 @@
       "required": false
     },
     {
+      "id": "meridian:ironclasp",
+      "required": false
+    },
+    {
       "id": "meridian:plunder",
       "required": false
     },

@@ -53,6 +53,10 @@
       "required": false
     },
     {
+      "id": "meridian:ironclasp",
+      "required": false
+    },
+    {
       "id": "meridian:joust",
       "required": false
     },

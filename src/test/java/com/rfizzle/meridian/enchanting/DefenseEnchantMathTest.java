@@ -212,4 +212,24 @@ class DefenseEnchantMathTest {
         assertTrue(DefenseEnchantMath.bullrushKnockbackStrength(2)
                 > DefenseEnchantMath.bullrushKnockbackStrength(1));
     }
+
+    // --- Stormward surge range ---
+
+    @Test
+    void withinStormwardSurge_atCenterAndInsideRange() {
+        assertTrue(DefenseEnchantMath.withinStormwardSurge(0.0)); // direct hit
+        double half = DefenseEnchantMath.STORMWARD_SURGE_RANGE / 2.0;
+        assertTrue(DefenseEnchantMath.withinStormwardSurge(half * half));
+    }
+
+    @Test
+    void withinStormwardSurge_atExactEdgeIsInclusive() {
+        assertTrue(DefenseEnchantMath.withinStormwardSurge(DefenseEnchantMath.STORMWARD_SURGE_RANGE_SQ));
+    }
+
+    @Test
+    void withinStormwardSurge_justOutsideRange() {
+        double justOutside = DefenseEnchantMath.STORMWARD_SURGE_RANGE + 0.01;
+        assertFalse(DefenseEnchantMath.withinStormwardSurge(justOutside * justOutside));
+    }
 }

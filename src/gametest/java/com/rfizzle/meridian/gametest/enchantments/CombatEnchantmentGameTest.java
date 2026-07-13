@@ -1050,4 +1050,48 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
             helper.succeed();
         });
     }
+
+    // --- Ironclasp: cannot be knocked loose by Sunder or Curse of Fumbling ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void ironclaspResistsSunderStrip(GameTestHelper helper) {
+        Holder<Enchantment> ironclasp = lookup(helper, "ironclasp");
+        if (ironclasp == null) { helper.fail("ironclasp not in registry"); return; }
+
+        Mob victim = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        clearEquipment(victim);
+        ItemStack helmet = new ItemStack(Items.IRON_HELMET);
+        helmet.enchant(ironclasp, 1);
+        victim.setItemSlot(EquipmentSlot.HEAD, helmet);
+
+        // The Ironclasp helmet is the only occupied slot, so if it were eligible Sunder would
+        // strip it; instead the strip finds nothing to take.
+        EquipmentSlot stripped = EnchantmentEffectHandler.sunderStrip(victim);
+        boolean stillEquipped = !victim.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+        victim.discard();
+
+        if (stripped != null) { helper.fail("Sunder must not strip an Ironclasp item, got " + stripped); return; }
+        if (!stillEquipped) { helper.fail("Ironclasp helmet should remain equipped after a Sunder strip"); return; }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void ironclaspResistsFumbling(GameTestHelper helper) {
+        Holder<Enchantment> ironclasp = lookup(helper, "ironclasp");
+        if (ironclasp == null) { helper.fail("ironclasp not in registry"); return; }
+
+        Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        clearEquipment(mob);
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.enchant(ironclasp, 1);
+        mob.setItemSlot(EquipmentSlot.MAINHAND, sword);
+
+        ItemStack dropped = EnchantmentEffectHandler.fumbleDropMainhand(mob);
+        boolean stillHeld = !mob.getMainHandItem().isEmpty();
+        mob.discard();
+
+        if (!dropped.isEmpty()) { helper.fail("Curse of Fumbling must not knock an Ironclasp item loose"); return; }
+        if (!stillHeld) { helper.fail("Ironclasp sword should remain in the mainhand"); return; }
+        helper.succeed();
+    }
 }

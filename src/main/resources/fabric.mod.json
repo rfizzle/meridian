@@ -55,6 +55,7 @@
             "com.rfizzle.meridian.gametest.enchantments.MechanicsEnchantmentTest",
             "com.rfizzle.meridian.gametest.enchantments.ArmorShieldEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.CombatEnchantmentGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.IronclaspGameTest",
             "com.rfizzle.meridian.gametest.enchantments.SunderConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.SeekerConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.HarpoonConfigGameTest",
