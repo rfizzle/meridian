@@ -181,7 +181,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       (airborne/gliding-gated, inert on a grounded mob)</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, trailblaze, beckon, bounty, prismatic,
-     *       renewal, cinderwalk}</li>
+     *       renewal, cinderwalk}, plus {@code verdure} (shears leaf-harvest yield) and
+     *       {@code groom} (brush-a-farm-animal husbandry, a player use-on input)</li>
      *   <li>no meaningful mob behavior — {@code impact_ward}, {@code ironwing}, {@code tailwind} &
      *       {@code falconstrike} (elytra-only — a grounded mob never glides), {@code animus, insight,
      *       soul_tax} (XP), {@code seismic_slam, tempest}
@@ -195,7 +196,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *       luminance, premonition, snare, tether, aurify}, {@code sunder} (its player-victim
      *       path is config-gated off by default, so it would be inert on mob gear),
      *       {@code seeker} (its player-target path is config-gated off by default, and
-     *       aim-assist on mob bolts is pure frustration besides)</li>
+     *       aim-assist on mob bolts is pure frustration besides), {@code clearsight}
+     *       (blindness/darkness immunity — a vision-utility of no value to mob AI)</li>
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
      *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}, plus
      *       {@code harpoon, undertow} (a drowned dragging players to it, or gathering a
@@ -268,6 +270,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("bulwark"))
                 .addOptional(Meridian.id("cinderwalk"))
                 .addOptional(Meridian.id("clamber"))
+                .addOptional(Meridian.id("clearsight"))
                 .addOptional(Meridian.id("cleave"))
                 .addOptional(Meridian.id("crescendo"))
                 .addOptional(Meridian.id("decay"))
@@ -288,6 +291,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("grapnel"))
                 .addOptional(Meridian.id("gravitas"))
                 .addOptional(Meridian.id("grind"))
+                .addOptional(Meridian.id("groom"))
                 .addOptional(Meridian.id("harpoon"))
                 .addOptional(Meridian.id("hush"))
                 .addOptional(Meridian.id("impact_ward"))
@@ -355,6 +359,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("undertow"))
                 .addOptional(Meridian.id("updraft"))
                 .addOptional(Meridian.id("vault"))
+                .addOptional(Meridian.id("verdure"))
                 .addOptional(Meridian.id("vitality"))
                 .addOptional(Meridian.id("voidbane"))
                 .addOptional(Meridian.id("volley"))

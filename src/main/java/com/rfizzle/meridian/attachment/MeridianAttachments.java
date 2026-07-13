@@ -3,6 +3,7 @@ package com.rfizzle.meridian.attachment;
 import com.mojang.serialization.Codec;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
+import com.rfizzle.meridian.enchanting.GroomMath;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.world.item.ItemStack;
@@ -34,6 +35,18 @@ public final class MeridianAttachments {
             .copyOnDeath()
             .initializer(() -> DefenseEnchantMath.BLINK_NEVER_USED)
             .buildAndRegister(Meridian.id("blink_last_used"));
+
+    /**
+     * Game time when this animal was last groomed by the Groom brush enchantment,
+     * {@link GroomMath#NEVER_BRUSHED} if never. Persisted on the animal (not the player) so the
+     * per-animal cooldown survives chunk unload and server restart and can't be reset by
+     * approaching with a fresh player. Not {@code copyOnDeath()} — the cooldown belongs to the
+     * living animal; a bred replacement starts fresh.
+     */
+    public static final AttachmentType<Long> GROOM_LAST_BRUSHED = AttachmentRegistry.<Long>builder()
+            .persistent(Codec.LONG)
+            .initializer(() -> GroomMath.NEVER_BRUSHED)
+            .buildAndRegister(Meridian.id("groom_last_brushed"));
 
     private MeridianAttachments() {}
 

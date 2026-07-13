@@ -130,6 +130,9 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> CURSE_OF_OBSCURITY = key("curse_of_obscurity");
     public static final ResourceKey<Enchantment> STORMWARD = key("stormward");
     public static final ResourceKey<Enchantment> IRONCLASP = key("ironclasp");
+    public static final ResourceKey<Enchantment> CLEARSIGHT = key("clearsight");
+    public static final ResourceKey<Enchantment> VERDURE = key("verdure");
+    public static final ResourceKey<Enchantment> GROOM = key("groom");
 
     private EnchantmentEffects() {}
 

@@ -1,11 +1,11 @@
 {
   "nav": "Enchantments",
   "metaTitle": "Enchantments — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Complete reference for all 135 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
+  "metaDescription": "Complete reference for all 138 original Meridian enchantments — combat, ranged, tool, armor, shield, elytra, mount, universal, and curses — with max levels, targets, rarities, and effects.",
   "ogTitle": "Enchantments — Meridian",
-  "ogDescription": "135 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
+  "ogDescription": "138 original enchantments organized by category. Combat, ranged, tool, armor, shield, elytra, mount, universal, and curses.",
   "title": "Enchantments",
-  "lede": "135 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
+  "lede": "138 original enchantments organized by category. All enchantments are data-driven and can be customized or disabled via <a href='/config.html' class='text-accent hover:text-accent2 underline'>config overrides</a>.",
   "width": "6xl",
   "sections": [
     {
@@ -517,6 +517,20 @@
               "Sheared wool drops as a random color"
             ],
             [
+              "<span class='text-bone'>Verdure</span>",
+              "I",
+              "Shears",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Shearing leaves also drops the tree's sapling — and apples from oak and dark oak — at vanilla rates"
+            ],
+            [
+              "<span class='text-bone'>Groom</span>",
+              "II",
+              "Brush",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "Brushing a farm animal has a per-level chance to gather its renewable drop, on a per-animal cooldown"
+            ],
+            [
               "<span class='text-bone'>Meticulous</span>",
               "II",
               "Brush",
@@ -786,6 +800,13 @@
               "Helmet",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
               "Grants permanent night vision while the helmet is worn"
+            ],
+            [
+              "<span class='text-bone'>Clearsight</span>",
+              "I",
+              "Helmet",
+              "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/10 border border-accent/20 text-accent'>Uncommon</span>",
+              "The wearer cannot be blinded or struck with darkness — a direct answer to Nightfall and the deep dark"
             ],
             [
               "<span class='text-bone'>Premonition</span>",
@@ -1141,7 +1162,7 @@
     {
       "id": "descriptions",
       "title": "Enchantment Descriptions",
-      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 135 of its own enchantments and for every vanilla enchantment.",
+      "intro": "Turn on <code class='text-accent2'>display.enableInlineEnchDescs</code> in the <a href='/config.html' class='text-accent hover:text-accent2 underline'>config</a> to show a short description under each enchantment in item and book tooltips — the same lines shown in the enchanting-table preview and the Enchantment Library. Meridian ships descriptions for all 138 of its own enchantments and for every vanilla enchantment.",
       "blocks": [
         {
           "type": "prose",

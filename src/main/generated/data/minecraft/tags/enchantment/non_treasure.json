@@ -57,6 +57,10 @@
       "required": false
     },
     {
+      "id": "meridian:clearsight",
+      "required": false
+    },
+    {
       "id": "meridian:cleave",
       "required": false
     },
@@ -134,6 +138,10 @@
     },
     {
       "id": "meridian:grind",
+      "required": false
+    },
+    {
+      "id": "meridian:groom",
       "required": false
     },
     {
@@ -402,6 +410,10 @@
     },
     {
       "id": "meridian:vault",
+      "required": false
+    },
+    {
+      "id": "meridian:verdure",
       "required": false
     },
     {

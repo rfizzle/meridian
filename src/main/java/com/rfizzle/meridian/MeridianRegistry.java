@@ -2,6 +2,7 @@ package com.rfizzle.meridian;
 
 import com.rfizzle.meridian.anvil.PrismaticWebItem;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
+import com.rfizzle.meridian.event.VerdureToolCondition;
 import com.rfizzle.meridian.event.WardenPoolCondition;
 import com.rfizzle.meridian.item.DormantCoreItem;
 import com.rfizzle.meridian.item.EverfeastRationItem;
@@ -327,6 +328,13 @@ public final class MeridianRegistry {
      */
     public static final LootItemConditionType WARDEN_POOL_CONDITION = WardenPoolCondition.TYPE;
 
+    /**
+     * Gate for the Verdure sapling/apple loot pools. Exposed as a field so registration threads
+     * through the same {@code register<X>} pattern as every other entry, and so a reflective smoke
+     * test can pin the reference without triggering {@link VerdureToolCondition}'s class initializer.
+     */
+    public static final LootItemConditionType VERDURE_TOOL_CONDITION = VerdureToolCondition.TYPE;
+
     private static boolean registered = false;
 
     private MeridianRegistry() {
@@ -363,6 +371,7 @@ public final class MeridianRegistry {
         registerItem("xp_tome_t2", XP_TOME_T2);
         registerItem("xp_tome_t3", XP_TOME_T3);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
+        registerLootConditionType("verdure_tool", VERDURE_TOOL_CONDITION);
         registerEverfullFlaskBehaviors();
         registerCreativeTab();
     }

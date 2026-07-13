@@ -17,6 +17,10 @@
       "required": false
     },
     {
+      "id": "meridian:clearsight",
+      "required": false
+    },
+    {
       "id": "meridian:emberward",
       "required": false
     },
@@ -46,6 +50,10 @@
     },
     {
       "id": "meridian:gravitas",
+      "required": false
+    },
+    {
+      "id": "meridian:groom",
       "required": false
     },
     {
@@ -126,6 +134,10 @@
     },
     {
       "id": "meridian:vault",
+      "required": false
+    },
+    {
+      "id": "meridian:verdure",
       "required": false
     },
     {

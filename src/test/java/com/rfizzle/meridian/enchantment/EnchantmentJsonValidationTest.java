@@ -35,13 +35,13 @@ class EnchantmentJsonValidationTest {
             "abyss_ward", "adamant", "alacrity", "ambush", "animus",
             "antidote", "attunement", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bullrush", "bulwark", "cinderwalk", "clamber",
-            "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
+            "clearsight", "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
             "curse_of_echoes", "curse_of_hunger", "curse_of_attraction", "curse_of_leaden",
             "curse_of_blunting", "curse_of_fumbling", "curse_of_wavering", "curse_of_timidity",
             "curse_of_molting", "curse_of_skittishness", "curse_of_obscurity",
             "decay", "decoy", "detonation", "diminish", "dowse", "emberward", "endurance", "everbloom", "excavate",
             "falconstrike", "final_gambit", "fortify", "fortuity", "frostguard", "furrow",
-            "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
+            "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind", "groom",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironclasp", "ironwing",
             "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
             "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pin", "pinpoint",
@@ -55,7 +55,7 @@ class EnchantmentJsonValidationTest {
             "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
-            "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
+            "vault", "verdure", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
 
     private static final List<String> TREASURE_ENCHANTMENTS = List.of(
             "final_gambit", "snare", "abyss_ward", "rally", "cinderwalk",
@@ -196,7 +196,7 @@ class EnchantmentJsonValidationTest {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(135, count, "expected exactly 135 enchantment JSON files");
+        assertEquals(138, count, "expected exactly 138 enchantment JSON files");
     }
 
     @TestFactory
