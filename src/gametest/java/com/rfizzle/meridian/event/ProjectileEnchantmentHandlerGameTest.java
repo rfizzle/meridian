@@ -88,16 +88,17 @@ public class ProjectileEnchantmentHandlerGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    // Lifecycle hygiene: the per-projectile trackers (bounces, Longshot launches, Seeker locks)
-    // populated during flight are all emptied by the SERVER_STOPPED reset, exercised here through
-    // clearForTest() (the same reset path the lifecycle listener runs).
+    // Lifecycle hygiene: the per-projectile trackers (bounces, Longshot launches, Seeker locks,
+    // Skyfall launches) populated during flight are all emptied by the SERVER_STOPPED reset,
+    // exercised here through clearForTest() (the same reset path the lifecycle listener runs).
     @GameTest(template = "meridian:empty_3x3")
     public void resetClearsPerProjectileTrackers(GameTestHelper helper) {
         Holder<Enchantment> ricochet = lookup(helper, "ricochet");
         Holder<Enchantment> longshot = lookup(helper, "longshot");
         Holder<Enchantment> seeker = lookup(helper, "seeker");
-        if (ricochet == null || longshot == null || seeker == null) {
-            helper.fail("ricochet/longshot/seeker not in registry");
+        Holder<Enchantment> skyfall = lookup(helper, "skyfall");
+        if (ricochet == null || longshot == null || seeker == null || skyfall == null) {
+            helper.fail("ricochet/longshot/seeker/skyfall not in registry");
             return;
         }
 
@@ -122,13 +123,20 @@ public class ProjectileEnchantmentHandlerGameTest implements FabricGameTest {
         Arrow seekerArrow = arrowFiredFrom(helper, seekerBow);
         ProjectileEnchantmentHandler.handleTick(seekerArrow);
 
+        ItemStack skyfallBow = new ItemStack(Items.BOW);
+        skyfallBow.enchant(skyfall, 1);
+        Arrow skyfallArrow = arrowFiredFrom(helper, skyfallBow);
+        ProjectileEnchantmentHandler.handleTick(skyfallArrow);
+
         if (ProjectileEnchantmentHandler.bouncesRemainingSizeForTest() < 1
                 || ProjectileEnchantmentHandler.longshotLaunchesSizeForTest() < 1
-                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() < 1) {
+                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() < 1
+                || ProjectileEnchantmentHandler.skyfallLaunchesSizeForTest() < 1) {
             helper.fail("Trackers should be populated after flight events: bounces="
                     + ProjectileEnchantmentHandler.bouncesRemainingSizeForTest()
                     + " longshot=" + ProjectileEnchantmentHandler.longshotLaunchesSizeForTest()
-                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest());
+                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest()
+                    + " skyfall=" + ProjectileEnchantmentHandler.skyfallLaunchesSizeForTest());
             return;
         }
 
@@ -136,11 +144,13 @@ public class ProjectileEnchantmentHandlerGameTest implements FabricGameTest {
 
         if (ProjectileEnchantmentHandler.bouncesRemainingSizeForTest() != 0
                 || ProjectileEnchantmentHandler.longshotLaunchesSizeForTest() != 0
-                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() != 0) {
+                || ProjectileEnchantmentHandler.seekerLocksSizeForTest() != 0
+                || ProjectileEnchantmentHandler.skyfallLaunchesSizeForTest() != 0) {
             helper.fail("Reset should clear every per-projectile tracker: bounces="
                     + ProjectileEnchantmentHandler.bouncesRemainingSizeForTest()
                     + " longshot=" + ProjectileEnchantmentHandler.longshotLaunchesSizeForTest()
-                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest());
+                    + " seeker=" + ProjectileEnchantmentHandler.seekerLocksSizeForTest()
+                    + " skyfall=" + ProjectileEnchantmentHandler.skyfallLaunchesSizeForTest());
             return;
         }
 

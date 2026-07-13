@@ -570,6 +570,35 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // Pin: an airborne creature pressed against a wall is still rooted — the surface gate
+    // catches a wall, not just the ground.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinRootsAirborneMobAgainstWall(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 1));
+        victim.setOnGround(false);
+        // A solid block flush against the pig's east side — the only surface in reach.
+        helper.setBlock(new BlockPos(2, 1, 1), Blocks.STONE);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 0), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(victim));
+
+        boolean rooted = victim.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        if (!rooted) {
+            helper.fail("Pin should root an airborne creature that is pressed against a wall");
+            return;
+        }
+        helper.succeed();
+    }
+
     // Pin: with the default config, a struck player is not rooted.
     @GameTest(template = "meridian:empty_3x3")
     public void pinIgnoresPlayersByDefault(GameTestHelper helper) {
