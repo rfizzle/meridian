@@ -202,4 +202,38 @@ class RangedEnchantMathTest {
         assertTrue(RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER > 0.0f
                 && RangedEnchantMath.VOLLEY_DAMAGE_MULTIPLIER < 1.0f);
     }
+
+    // ---- Pin ----
+
+    @Test
+    void pinRootTicks_scalesPerLevelAboveBase() {
+        assertEquals(RangedEnchantMath.PIN_ROOT_TICKS_BASE + RangedEnchantMath.PIN_ROOT_TICKS_PER_LEVEL,
+                RangedEnchantMath.pinRootTicks(1));
+        assertEquals(RangedEnchantMath.PIN_ROOT_TICKS_BASE + RangedEnchantMath.PIN_ROOT_TICKS_PER_LEVEL * 2,
+                RangedEnchantMath.pinRootTicks(2));
+    }
+
+    @Test
+    void pinRootTicks_isZeroWithoutEnchant() {
+        assertEquals(0, RangedEnchantMath.pinRootTicks(0));
+        assertEquals(0, RangedEnchantMath.pinRootTicks(-1));
+    }
+
+    // ---- Skyfall ----
+
+    @Test
+    void skyfallMultiplier_addsBonusPerLevel() {
+        assertEquals(1.0 + RangedEnchantMath.SKYFALL_BONUS_PER_LEVEL,
+                RangedEnchantMath.skyfallMultiplier(1), EPSILON);
+        assertEquals(1.0 + RangedEnchantMath.SKYFALL_BONUS_PER_LEVEL * 2,
+                RangedEnchantMath.skyfallMultiplier(2), EPSILON);
+        assertEquals(1.0 + RangedEnchantMath.SKYFALL_BONUS_PER_LEVEL * 3,
+                RangedEnchantMath.skyfallMultiplier(3), EPSILON);
+    }
+
+    @Test
+    void skyfallMultiplier_isOneWithoutEnchant() {
+        assertEquals(1.0, RangedEnchantMath.skyfallMultiplier(0), EPSILON);
+        assertEquals(1.0, RangedEnchantMath.skyfallMultiplier(-1), EPSILON);
+    }
 }

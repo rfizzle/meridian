@@ -218,6 +218,18 @@ public class DefinitionVerificationTest implements FabricGameTest {
     }
 
     @GameTest(template = "meridian:empty_3x3")
+    public void pinDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "pin", 2, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void skyfallDefinitionIsCorrect(GameTestHelper helper) {
+        assertDefinition(helper, "skyfall", 3, 2);
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
     public void harpoonDefinitionIsCorrect(GameTestHelper helper) {
         assertDefinition(helper, "harpoon", 2, 2);
         helper.succeed();

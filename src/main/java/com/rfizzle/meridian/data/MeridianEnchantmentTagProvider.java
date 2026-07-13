@@ -177,7 +177,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      * <ul>
      *   <li>mobility/mount — {@code alacrity, clamber, loft, slipstream, skybound, true_flight,
      *       updraft, vault, gallop, trample, saddleguard, wavestride, endurance}, plus
-     *       {@code joust} (mount-gated, inert on an unmounted mob)</li>
+     *       {@code joust} (mount-gated, inert on an unmounted mob) and {@code skyfall}
+     *       (airborne/gliding-gated, inert on a grounded mob)</li>
      *   <li>mining/terrain/farming — {@code excavate, prospect, grind, adamant, reclaim,
      *       terrasculpt, masons_reach, steadfast, furrow, beckon, bounty, prismatic, renewal,
      *       cinderwalk}</li>
@@ -193,7 +194,9 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
      *   <li>pure utility, not combat/protection — {@code fortify} (shield durability),
      *       {@code antidote, inexorable, ricochet, permafrost, glacial_lance}, plus
      *       {@code harpoon, undertow} (a drowned dragging players to it, or gathering a
-     *       crowd, is pure frustration, not challenge)</li>
+     *       crowd, is pure frustration, not challenge), and {@code pin} (its player-root path
+     *       is config-gated off by default, and rooting the player against a wall is pure
+     *       frustration besides)</li>
      *   <li>treasure-tier swings — {@code bloodrage, colossus, reckless, retribution, final_gambit,
      *       detonation, diminish, rally, plunder, abyss_ward, vital_mend}, plus {@code blink}
      *       (a mob that cheats death and teleports away is pure frustration, not challenge)
@@ -295,6 +298,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("nightfall"))
                 .addOptional(Meridian.id("outreach"))
                 .addOptional(Meridian.id("permafrost"))
+                .addOptional(Meridian.id("pin"))
                 .addOptional(Meridian.id("pinpoint"))
                 .addOptional(Meridian.id("premonition"))
                 .addOptional(Meridian.id("prismatic"))
@@ -318,6 +322,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("shackle"))
                 .addOptional(Meridian.id("siphon"))
                 .addOptional(Meridian.id("skybound"))
+                .addOptional(Meridian.id("skyfall"))
                 .addOptional(Meridian.id("slipstream"))
                 .addOptional(Meridian.id("soul_tax"))
                 .addOptional(Meridian.id("spellguard"))
@@ -511,7 +516,8 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("pinpoint"))
                 .addOptional(Meridian.id("longshot"))
                 .addOptional(Meridian.id("crescendo"))
-                .addOptional(Meridian.id("torrent"));
+                .addOptional(Meridian.id("torrent"))
+                .addOptional(Meridian.id("skyfall"));
 
         getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
                 .addOptional(Meridian.id("spellguard"));

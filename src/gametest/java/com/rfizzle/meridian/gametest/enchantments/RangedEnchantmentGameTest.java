@@ -509,6 +509,205 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // Pin: a crossbow bolt roots a struck mob standing against the ground.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinRootsGroundedMob(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+        victim.setOnGround(true);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 1), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(victim));
+
+        var effect = victim.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        if (effect == null) {
+            helper.fail("Pin should root a grounded mob with Slowness");
+            return;
+        }
+        if (effect.getAmplifier() != RangedEnchantMath.PIN_ROOT_SLOWNESS_AMPLIFIER) {
+            helper.fail("Pin's root should use amplifier " + RangedEnchantMath.PIN_ROOT_SLOWNESS_AMPLIFIER
+                    + ", got " + effect.getAmplifier());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Pin: a creature loosed in open air, away from any surface, is left unrooted.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinLeavesAirborneMobAlone(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 2));
+        // Lift the pig high into open air, clear of the floor and any template wall, so the
+        // only thing under test is Pin's surface gate — not the 3x3 structure's geometry.
+        BlockPos abs = helper.absolutePos(new BlockPos(1, 1, 2));
+        victim.moveTo(abs.getX() + 0.5, abs.getY() + 20.0, abs.getZ() + 0.5);
+        victim.setOnGround(false);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 1), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(victim));
+
+        boolean rooted = victim.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        if (rooted) {
+            helper.fail("Pin must not root a creature that is not near a wall or the ground");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Pin: an airborne creature pressed against a wall is still rooted — the surface gate
+    // catches a wall, not just the ground.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinRootsAirborneMobAgainstWall(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 1));
+        victim.setOnGround(false);
+        // A solid block flush against the pig's east side — the only surface in reach.
+        helper.setBlock(new BlockPos(2, 1, 1), Blocks.STONE);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 0), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(victim));
+
+        boolean rooted = victim.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        if (!rooted) {
+            helper.fail("Pin should root an airborne creature that is pressed against a wall");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Pin: with the default config, a struck player is not rooted.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinIgnoresPlayersByDefault(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        var victim = MockPlayers.serverPlayerInLevel(helper);
+        BlockPos victimAbs = helper.absolutePos(new BlockPos(1, 1, 2));
+        victim.teleportTo(victimAbs.getX() + 0.5, victimAbs.getY(), victimAbs.getZ() + 0.5);
+        victim.setOnGround(true);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 1), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(victim));
+
+        boolean rooted = victim.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        victim.discard();
+        if (rooted) {
+            helper.fail("Pin must not root a player while combat.pinAffectsPlayers is false");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Pin: a #meridian:harpoon_immune boss is exempt, honouring the boss-immunity boundary.
+    @GameTest(template = "meridian:empty_3x3")
+    public void pinLeavesBossTagEntitiesAlone(GameTestHelper helper) {
+        Holder<Enchantment> pin = lookup(helper, "pin");
+        if (pin == null) { helper.fail("pin not in registry"); return; }
+
+        Player shooter = helper.makeMockPlayer(GameType.SURVIVAL);
+        ElderGuardian boss = helper.spawn(EntityType.ELDER_GUARDIAN, new BlockPos(1, 1, 2));
+        boss.setOnGround(true);
+
+        ItemStack crossbow = new ItemStack(Items.CROSSBOW);
+        crossbow.enchant(pin, 2);
+        Arrow bolt = arrowAt(helper, new BlockPos(1, 1, 1), crossbow);
+        bolt.setOwner(shooter);
+
+        ProjectileEnchantmentHandler.handleEntityImpact(bolt, new EntityHitResult(boss));
+
+        boolean rooted = boss.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        shooter.discard();
+        if (rooted) {
+            helper.fail("Pin must not root a #meridian:harpoon_immune entity");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // Skyfall: an arrow loosed while the shooter is airborne carries a per-level damage bonus,
+    // applied once; a grounded shot is left untouched.
+    @GameTest(template = "meridian:empty_3x3")
+    public void skyfallBoostsAirborneShotOnce(GameTestHelper helper) {
+        Holder<Enchantment> skyfall = lookup(helper, "skyfall");
+        if (skyfall == null) { helper.fail("skyfall not in registry"); return; }
+
+        ItemStack bow = new ItemStack(Items.BOW);
+        bow.enchant(skyfall, 3);
+
+        Player airborne = helper.makeMockPlayer(GameType.SURVIVAL);
+        airborne.setOnGround(false);
+        Arrow boosted = arrowAt(helper, new BlockPos(1, 1, 1), bow);
+        boosted.setOwner(airborne);
+        double base = boosted.getBaseDamage();
+        double expected = base * RangedEnchantMath.skyfallMultiplier(3);
+
+        ProjectileEnchantmentHandler.handleTick(boosted);
+        if (Math.abs(boosted.getBaseDamage() - expected) > 1.0e-6) {
+            helper.fail("Skyfall III airborne should scale base damage to " + expected
+                    + ", got " + boosted.getBaseDamage());
+            airborne.discard();
+            ProjectileEnchantmentHandler.clearForTest();
+            return;
+        }
+
+        // A second tick must not re-apply the bonus — the snapshot is once-only.
+        ProjectileEnchantmentHandler.handleTick(boosted);
+        if (Math.abs(boosted.getBaseDamage() - expected) > 1.0e-6) {
+            helper.fail("Skyfall must apply its bonus once, not compound each tick: "
+                    + boosted.getBaseDamage());
+            airborne.discard();
+            ProjectileEnchantmentHandler.clearForTest();
+            return;
+        }
+
+        Player grounded = helper.makeMockPlayer(GameType.SURVIVAL);
+        grounded.setOnGround(true);
+        Arrow flat = arrowAt(helper, new BlockPos(1, 1, 1), bow);
+        flat.setOwner(grounded);
+        double flatBase = flat.getBaseDamage();
+        ProjectileEnchantmentHandler.handleTick(flat);
+        boolean groundedUnchanged = Math.abs(flat.getBaseDamage() - flatBase) <= 1.0e-6;
+
+        airborne.discard();
+        grounded.discard();
+        ProjectileEnchantmentHandler.clearForTest();
+        if (!groundedUnchanged) {
+            helper.fail("Skyfall must not boost a grounded shot, damage changed to " + flat.getBaseDamage());
+            return;
+        }
+        helper.succeed();
+    }
+
     // Volley: firing looses the extra arrows — a reduced-damage, unrecoverable fan.
     @GameTest(template = "meridian:empty_3x3")
     public void volleyLoosesReducedUnrecoverableFan(GameTestHelper helper) {

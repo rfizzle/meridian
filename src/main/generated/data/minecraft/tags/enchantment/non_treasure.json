@@ -197,6 +197,10 @@
       "required": false
     },
     {
+      "id": "meridian:pin",
+      "required": false
+    },
+    {
       "id": "meridian:pinpoint",
       "required": false
     },
@@ -286,6 +290,10 @@
     },
     {
       "id": "meridian:skybound",
+      "required": false
+    },
+    {
+      "id": "meridian:skyfall",
       "required": false
     },
     {

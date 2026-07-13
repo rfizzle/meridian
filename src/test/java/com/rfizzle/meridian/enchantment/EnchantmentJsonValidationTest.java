@@ -44,12 +44,12 @@ class EnchantmentJsonValidationTest {
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
             "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
-            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pinpoint",
+            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pin", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
             "quell", "rally", "reap", "reckless", "reclaim", "renewal",
             "reprieve", "repulse", "resonance", "retribution", "ricochet",
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
-            "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
+            "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "torrent", "trample", "trophy", "true_flight",
@@ -70,7 +70,7 @@ class EnchantmentJsonValidationTest {
     private static final Map<String, List<String>> EXCLUSIVE_SET_MEMBERS = Map.ofEntries(
             Map.entry("minecraft/tags/enchantment/exclusive_set/damage.json",
                     List.of("voidbane", "sanctify", "sentinel", "rift_strike", "keen_edge",
-                            "ambush", "reap", "pinpoint", "longshot", "crescendo", "torrent")),
+                            "ambush", "reap", "pinpoint", "longshot", "crescendo", "torrent", "skyfall")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/armor.json",
                     List.of("spellguard")),
             Map.entry("minecraft/tags/enchantment/exclusive_set/boots.json",
@@ -144,6 +144,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("longshot", "#minecraft:exclusive_set/damage"),
             Map.entry("crescendo", "#minecraft:exclusive_set/damage"),
             Map.entry("torrent", "#minecraft:exclusive_set/damage"),
+            Map.entry("skyfall", "#minecraft:exclusive_set/damage"),
             Map.entry("fortuity", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("plunder", "#meridian:exclusive_set/loot_bonus"),
             Map.entry("trophy", "#meridian:exclusive_set/trophy"),
@@ -177,6 +178,7 @@ class EnchantmentJsonValidationTest {
             Map.entry("true_flight", "#minecraft:enchantable/bow"),
             Map.entry("longshot", "#minecraft:enchantable/bow"),
             Map.entry("mark", "#minecraft:enchantable/bow"),
+            Map.entry("skyfall", "#minecraft:enchantable/bow"),
             Map.entry("repulse", "#minecraft:enchantable/chest_armor"),
             Map.entry("frostguard", "#minecraft:enchantable/chest_armor"),
             Map.entry("bloodrage", "#minecraft:enchantable/chest_armor"),
@@ -189,11 +191,11 @@ class EnchantmentJsonValidationTest {
     // =========================================================================
 
     @Test
-    void enchantmentCount_is126() throws Exception {
+    void enchantmentCount_is128() throws Exception {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(126, count, "expected exactly 126 enchantment JSON files");
+        assertEquals(128, count, "expected exactly 128 enchantment JSON files");
     }
 
     @TestFactory

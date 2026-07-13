@@ -27,12 +27,12 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "gale_shot", "gallop", "glacial_lance", "grapnel", "gravitas", "grind",
             "harpoon", "hush", "impact_ward", "inexorable", "insight", "ironwing",
             "joust", "keen_edge", "kiln", "loft", "longshot", "luminance",
-            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pinpoint",
+            "mark", "masons_reach", "meticulous", "nightfall", "outreach", "permafrost", "pin", "pinpoint",
             "plunder", "premonition", "prismatic", "prospect", "pummel",
             "quell", "rally", "reap", "reckless", "reclaim", "renewal",
             "reprieve", "repulse", "resonance", "retribution", "ricochet",
             "rift_strike", "riposte", "saddleguard", "sanctify", "seeker",
-            "seismic_slam", "sentinel", "shackle", "siphon", "skybound",
+            "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
             "tether", "thermal", "timberfell", "torrent", "trample", "trophy", "true_flight",
@@ -64,8 +64,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 126) {
-            helper.fail("Expected 126 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 128) {
+            helper.fail("Expected 128 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();
