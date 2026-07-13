@@ -48,6 +48,19 @@ public final class RangedEnchantMath {
     /** How long a Mark-struck creature glows through walls, in server ticks (6 seconds). */
     public static final int MARK_GLOW_TICKS = 120;
 
+    /** Base root duration for a Pin-struck creature, in server ticks; {@code pinRootTicks} adds {@link #PIN_ROOT_TICKS_PER_LEVEL} per level. */
+    public static final int PIN_ROOT_TICKS_BASE = 30;
+    public static final int PIN_ROOT_TICKS_PER_LEVEL = 20;
+    /**
+     * Slowness amplifier Pin applies to root its victim. At amplifier 6 the stacked
+     * {@code -0.15}-per-level movement-speed modifier clamps a mob's walk speed to zero, so a
+     * server-pathing creature is held in place for the duration — the vanilla-idiomatic root.
+     */
+    public static final int PIN_ROOT_SLOWNESS_AMPLIFIER = 6;
+
+    /** Bonus base-damage fraction Skyfall grants per level to an arrow loosed while airborne or gliding. */
+    public static final double SKYFALL_BONUS_PER_LEVEL = 0.15;
+
     /** Base-damage multiplier applied to each Volley extra arrow (the primary shot is untouched). */
     public static final float VOLLEY_DAMAGE_MULTIPLIER = 0.5f;
     /** Yaw offset between adjacent arrows in Volley's fan, in degrees. */
@@ -74,6 +87,25 @@ public final class RangedEnchantMath {
         double progress = Math.min(1.0,
                 (distance - LONGSHOT_GRACE_DISTANCE) / (LONGSHOT_MAX_DISTANCE - LONGSHOT_GRACE_DISTANCE));
         return 1.0 + LONGSHOT_BONUS_PER_LEVEL * level * progress;
+    }
+
+    /**
+     * How long, in server ticks, Pin roots a struck creature at {@code level}: a base term plus a
+     * per-level increment (50 ticks at level I, 70 at level II). Zero without the enchant.
+     */
+    public static int pinRootTicks(int level) {
+        if (level <= 0) return 0;
+        return PIN_ROOT_TICKS_BASE + PIN_ROOT_TICKS_PER_LEVEL * level;
+    }
+
+    /**
+     * Skyfall's base-damage multiplier for an arrow loosed while the shooter was airborne or
+     * gliding: 1.0 without the enchant, ramping {@link #SKYFALL_BONUS_PER_LEVEL} per level
+     * (+15% / +30% / +45% at levels I–III). A grounded shot gets no multiplier and never calls this.
+     */
+    public static double skyfallMultiplier(int level) {
+        if (level <= 0) return 1.0;
+        return 1.0 + SKYFALL_BONUS_PER_LEVEL * level;
     }
 
     /** Seeker's per-tick steering limit, in radians — the "weak curve angle" tuning knob. */

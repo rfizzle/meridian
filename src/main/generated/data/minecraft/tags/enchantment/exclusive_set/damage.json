@@ -43,6 +43,10 @@
     {
       "id": "meridian:torrent",
       "required": false
+    },
+    {
+      "id": "meridian:skyfall",
+      "required": false
     }
   ]
 }

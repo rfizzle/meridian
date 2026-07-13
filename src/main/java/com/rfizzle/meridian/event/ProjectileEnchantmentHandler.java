@@ -64,6 +64,17 @@ public final class ProjectileEnchantmentHandler {
     private static final Map<AbstractArrow, SeekerLock> seekerLocks =
             Collections.synchronizedMap(new WeakHashMap<>());
 
+    /**
+     * Skyfall's fire-time snapshot: whether the shooter was airborne or gliding when the bolt was
+     * loosed. Captured once, on the arrow's first server tick (the same one-tick approximation of
+     * "fire time" Longshot and Seeker use), so a bolt that leaves the ground never loses its bonus
+     * mid-flight and a grounded shot never gains one.
+     */
+    private record SkyfallLaunch(boolean airborne) {}
+
+    private static final Map<AbstractArrow, SkyfallLaunch> skyfallLaunches =
+            Collections.synchronizedMap(new WeakHashMap<>());
+
     private ProjectileEnchantmentHandler() {}
 
     /**
@@ -81,6 +92,7 @@ public final class ProjectileEnchantmentHandler {
         bouncesRemaining.clear();
         longshotLaunches.clear();
         seekerLocks.clear();
+        skyfallLaunches.clear();
     }
 
     public static void handleTick(AbstractArrow arrow) {
@@ -93,6 +105,7 @@ public final class ProjectileEnchantmentHandler {
         int trueFlightLevel = 0;
         int longshotLevel = 0;
         int seekerLevel = 0;
+        int skyfallLevel = 0;
         for (var entry : weapon.getEnchantments().entrySet()) {
             if (entry.getKey().is(EnchantmentEffects.TRUE_FLIGHT)) {
                 trueFlightLevel = entry.getIntValue();
@@ -100,6 +113,8 @@ public final class ProjectileEnchantmentHandler {
                 longshotLevel = entry.getIntValue();
             } else if (entry.getKey().is(EnchantmentEffects.SEEKER)) {
                 seekerLevel = entry.getIntValue();
+            } else if (entry.getKey().is(EnchantmentEffects.SKYFALL)) {
+                skyfallLevel = entry.getIntValue();
             }
         }
 
@@ -109,8 +124,10 @@ public final class ProjectileEnchantmentHandler {
         if (!arrow.level().isClientSide()) {
             int longshot = longshotLevel;
             int seeker = seekerLevel;
+            int skyfall = skyfallLevel;
             EffectGuard.run("longshot", arrow, () -> handleLongshot(arrow, longshot));
             EffectGuard.run("seeker", arrow, () -> handleSeeker(arrow, seeker));
+            EffectGuard.run("skyfall", arrow, () -> handleSkyfall(arrow, skyfall));
         }
     }
 
@@ -131,6 +148,7 @@ public final class ProjectileEnchantmentHandler {
         EffectGuard.run("harpoon", arrow, () -> handleHarpoon(arrow, weapon, hit));
         EffectGuard.run("undertow", arrow, () -> handleUndertow(arrow, weapon, pos));
         EffectGuard.run("mark", arrow, () -> handleMark(weapon, hit));
+        EffectGuard.run("pin", arrow, () -> handlePin(arrow, weapon, hit));
     }
 
     public static boolean handleBlockImpact(AbstractArrow arrow, BlockHitResult hit) {
@@ -300,6 +318,27 @@ public final class ProjectileEnchantmentHandler {
         arrow.setBaseDamage(launch.baseDamage() * RangedEnchantMath.longshotMultiplier(level, distance));
     }
 
+    /**
+     * Skyfall: on the bolt's first tick, sample whether the shooter was airborne ({@code !onGround})
+     * or gliding ({@code isFallFlying}). If so, multiply the bolt's base damage once by the per-level
+     * factor — the ranged counterpart of Joust's mounted-charge bonus. The multiply lives inside the
+     * {@code computeIfAbsent} mapping so it runs exactly once, never re-applying each tick the way
+     * Longshot's distance ramp does. Skyfall shares the {@code damage} exclusive set with Longshot,
+     * so the two never ride the same bolt.
+     */
+    private static void handleSkyfall(AbstractArrow arrow, int level) {
+        if (level <= 0) return;
+
+        skyfallLaunches.computeIfAbsent(arrow, a -> {
+            boolean airborne = a.getOwner() instanceof LivingEntity shooter
+                    && (!shooter.onGround() || shooter.isFallFlying());
+            if (airborne) {
+                a.setBaseDamage(a.getBaseDamage() * RangedEnchantMath.skyfallMultiplier(level));
+            }
+            return new SkyfallLaunch(airborne);
+        });
+    }
+
     private static void handleSeeker(AbstractArrow arrow, int level) {
         if (level <= 0) return;
 
@@ -397,6 +436,16 @@ public final class ProjectileEnchantmentHandler {
     }
 
     /**
+     * Whether Pin may root this victim: mobs always, players only when
+     * {@code combat.pinAffectsPlayers} is enabled. Mirrors {@link #harpoonVictimAllowed}.
+     */
+    public static boolean pinVictimAllowed(LivingEntity victim) {
+        if (!(victim instanceof Player)) return true;
+        MeridianConfig config = Meridian.getConfig();
+        return config != null && config.combat.pinAffectsPlayers;
+    }
+
+    /**
      * Volley: after the bow's normal shot lands, loose extra arrows in a symmetric fan. Each
      * extra is built the same way vanilla builds the primary — the fired ammo's own
      * {@link ArrowItem#createArrow} with the bow as the weapon item — so it matches the shot's
@@ -463,6 +512,42 @@ public final class ProjectileEnchantmentHandler {
 
         arrow.level().playSound(null, BlockPos.containing(victim.position()),
                 SoundEvents.FISHING_BOBBER_RETRIEVE, SoundSource.PLAYERS, 1.0f, 0.7f);
+    }
+
+    /**
+     * Pin: a struck creature standing against a wall or the ground is rooted in place for a
+     * level-scaled duration via a high-amplifier Slowness — a bolt that nails a fleeing mob to
+     * the terrain. Mobs always; players only when {@code combat.pinAffectsPlayers} is enabled.
+     * Bosses and anchored fights are exempt via {@link #HARPOON_IMMUNE}, honouring the issue's
+     * "no pinning through boss knockback immunity" boundary. A creature loosed in open air (not
+     * near a surface) is left alone, so Pin can't freeze something in mid-flight.
+     */
+    private static void handlePin(AbstractArrow arrow, ItemStack weapon, EntityHitResult hit) {
+        int level = EnchantmentEffects.getEnchantmentLevel(weapon, EnchantmentEffects.PIN);
+        if (level <= 0) return;
+        if (!(arrow.getOwner() instanceof LivingEntity owner)) return;
+        if (!(hit.getEntity() instanceof LivingEntity victim)) return;
+        if (victim == owner || victim.getType().is(HARPOON_IMMUNE)) return;
+        if (!pinVictimAllowed(victim)) return;
+        if (!nearSurface(victim)) return;
+
+        victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN,
+                RangedEnchantMath.pinRootTicks(level), RangedEnchantMath.PIN_ROOT_SLOWNESS_AMPLIFIER,
+                false, true, true));
+
+        arrow.level().playSound(null, BlockPos.containing(victim.position()),
+                SoundEvents.CHAIN_PLACE, SoundSource.PLAYERS, 1.0f, 0.7f);
+    }
+
+    /**
+     * Whether {@code victim} is against the ground or a wall — Pin's surface gate. Standing on
+     * the ground qualifies; otherwise a single cheap collision probe, inflated horizontally around
+     * the victim's own box, catches an adjacent wall. Checked once at impact, never per tick.
+     */
+    private static boolean nearSurface(LivingEntity victim) {
+        if (victim.onGround()) return true;
+        AABB probe = victim.getBoundingBox().inflate(0.3, -0.1, 0.3);
+        return !victim.level().noCollision(victim, probe);
     }
 
     /**
@@ -546,6 +631,10 @@ public final class ProjectileEnchantmentHandler {
 
     public static int seekerLocksSizeForTest() {
         return seekerLocks.size();
+    }
+
+    public static int skyfallLaunchesSizeForTest() {
+        return skyfallLaunches.size();
     }
 
     public static void clearForTest() {
