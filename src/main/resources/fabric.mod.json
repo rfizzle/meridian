@@ -19,6 +19,7 @@
         "fabric-datagen": ["com.rfizzle.meridian.data.MeridianDataGenerator"],
         "fabric-gametest": [
             "com.rfizzle.meridian.gametest.RegistryGameTest",
+            "com.rfizzle.meridian.gametest.EnchantmentAuditGameTest",
             "com.rfizzle.meridian.gametest.MockPlayersGameTest",
             "com.rfizzle.meridian.gametest.ShelfRosterGameTest",
             "com.rfizzle.meridian.enchanting.FilteringTreasureGameTest",

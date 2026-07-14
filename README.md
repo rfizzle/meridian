@@ -179,6 +179,7 @@ See the full annotated reference: **[Configuration Guide](https://meridian.rfizz
 | Command | Permission | Description |
 |---------|-----------|-------------|
 | `/meridian reload` | 2 | Reload config from disk |
+| `/meridian audit` | Client | Client-side: list third-party enchantments missing a description or unable to roll at the enchanting table |
 
 ---
 

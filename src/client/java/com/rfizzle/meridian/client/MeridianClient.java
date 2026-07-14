@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.client;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.client.command.EnchantmentAuditCommand;
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.client.net.BallastClientHandler;
 import com.rfizzle.meridian.client.net.ClientPayloadHandlers;
@@ -25,6 +26,7 @@ public class MeridianClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPayloadHandlers.register();
+        EnchantmentAuditCommand.register();
         LoftClientHandler.register();
         BallastClientHandler.register();
         DowseOverlayRenderer.register();
