@@ -58,6 +58,14 @@ public final class TraversalEnchantMath {
      */
     public static final double TAILWIND_PUSH_PER_LEVEL = 0.05;
 
+    /**
+     * Thrift: chance per level that a firework boost while gliding leaves the rocket unspent. The
+     * boost itself is untouched — this only decides whether the rocket is consumed — so Thrift
+     * composes with Tailwind's stronger, longer boost rather than overlapping it. Capped at 1.0 so a
+     * high level never rolls a nonsensical >100% refund chance.
+     */
+    public static final float THRIFT_REFUND_CHANCE_PER_LEVEL = 0.25f;
+
     /** Curse of Molting: chance an elytra firework boost fizzles out instead of pushing the glider. */
     public static final float MOLTING_FIZZLE_CHANCE = 0.25f;
     /** Curse of Molting: how often (in ticks) a glide sheds an extra burst of elytra durability. */
@@ -157,6 +165,15 @@ public final class TraversalEnchantMath {
     public static double tailwindPush(int level) {
         if (level <= 0) return 0.0;
         return TAILWIND_PUSH_PER_LEVEL * level;
+    }
+
+    /**
+     * Chance a Thrift firework boost leaves the rocket unspent, for an elytra at the given level.
+     * Linear in level and clamped to 1.0. Zero at level 0 — a plain elytra always spends the rocket.
+     */
+    public static float thriftRefundChance(int level) {
+        if (level <= 0) return 0.0f;
+        return Math.min(1.0f, THRIFT_REFUND_CHANCE_PER_LEVEL * level);
     }
 
     /**

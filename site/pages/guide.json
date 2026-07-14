@@ -171,7 +171,7 @@
           "title": "Where to go next",
           "items": [
             "<a href='/shelves.html' class='text-accent hover:text-accent2 underline'>Shelves &amp; Setups</a> — every shelf's exact stats, all table recipes, and recommended layouts for each tier.",
-            "<a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Enchantments</a> — the full roster of 143 original enchantments.",
+            "<a href='/enchantments.html' class='text-accent hover:text-accent2 underline'>Enchantments</a> — the full roster of 145 original enchantments.",
             "<a href='/config.html' class='text-accent hover:text-accent2 underline'>Config</a> — every key, type, and default in <code class='text-accent2'>meridian.json</code>.",
             "<a href='/commands.html' class='text-accent hover:text-accent2 underline'>Commands</a> — operator tools, including <code class='text-accent2'>/meridian reload</code>.",
             "<a href='/faq.html' class='text-accent hover:text-accent2 underline'>FAQ</a> — compatibility, multiplayer, and common questions."

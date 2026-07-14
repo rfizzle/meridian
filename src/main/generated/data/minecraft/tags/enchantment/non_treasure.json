@@ -13,6 +13,10 @@
       "required": false
     },
     {
+      "id": "meridian:alchemists_draw",
+      "required": false
+    },
+    {
       "id": "meridian:ambush",
       "required": false
     },
@@ -374,6 +378,10 @@
     },
     {
       "id": "meridian:thermal",
+      "required": false
+    },
+    {
+      "id": "meridian:thrift",
       "required": false
     },
     {

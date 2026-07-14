@@ -15,7 +15,7 @@ import java.util.List;
 public class EnchantmentRosterIntegrationTest implements FabricGameTest {
 
     private static final List<String> ALL_IDS = List.of(
-            "abyss_ward", "abyssal", "adamant", "alacrity", "ambush", "animus",
+            "abyss_ward", "abyssal", "adamant", "alacrity", "alchemists_draw", "ambush", "animus",
             "antidote", "attunement", "aurify", "ballast", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bullrush", "bulwark", "cinderwalk", "clamber",
             "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
@@ -36,7 +36,7 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "stormward", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
+            "tether", "thermal", "thrift", "timberfell", "torrent", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
             "vault", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
@@ -66,8 +66,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 143) {
-            helper.fail("Expected 143 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 145) {
+            helper.fail("Expected 145 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();
