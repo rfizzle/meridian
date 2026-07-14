@@ -1,11 +1,11 @@
 {
   "nav": "Commands",
   "metaTitle": "Commands — Meridian | Enchanting Overhaul for Minecraft",
-  "metaDescription": "Command reference for Meridian. The /meridian reload command with permission levels and hot-reload behavior.",
+  "metaDescription": "Command reference for Meridian: the /meridian reload server command and the /meridian audit client-side third-party enchantment diagnostic.",
   "ogTitle": "Commands — Meridian",
   "ogDescription": "Command reference for /meridian with permissions and hot-reload details.",
   "title": "Commands",
-  "lede": "All commands use the <code class='text-accent2'>/meridian</code> root. Permission level 2 = operator.",
+  "lede": "All commands use the <code class='text-accent2'>/meridian</code> root. <code class='text-accent2'>reload</code> is a server command at permission level 2 (operator); <code class='text-accent2'>audit</code> is a client-side diagnostic anyone can run.",
   "width": "4xl",
   "sections": [
     {
@@ -17,7 +17,8 @@
           "nowrapHeaders": true,
           "headers": ["Command", "Perm", "Description"],
           "rows": [
-            ["<code class='text-accent2 whitespace-nowrap'>/meridian reload</code>", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>2</span>", "Reload the config from disk, rebuild enchantment info, and sync to all connected players"]
+            ["<code class='text-accent2 whitespace-nowrap'>/meridian reload</code>", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>2</span>", "Reload the config from disk, rebuild enchantment info, and sync to all connected players"],
+            ["<code class='text-accent2 whitespace-nowrap'>/meridian audit</code>", "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-bone/10 border border-bone/25 text-bone'>Client</span>", "Client-side: list third-party enchantments missing a description or unable to roll at the enchanting table"]
           ]
         }
       ]
@@ -54,6 +55,35 @@
           ]
         },
         {
+          "type": "sub",
+          "title": "Audit third-party enchantments",
+          "blocks": [
+            { "type": "code", "code": "/meridian audit", "bottomGap": true },
+            {
+              "type": "prose",
+              "html": [
+                "A client-side diagnostic for modpack authors. It scans every enchantment from other mods (excluding <code class='text-accent2'>minecraft:</code> and <code class='text-accent2'>meridian:</code>) and reports, per namespace, which ones integrate poorly with Meridian.",
+                "It runs on the client because it checks for a translated description key, which only resolves client-side; the enchantment registry and tags are synced, so it works in single-player and connected to a dedicated server. What it flags:"
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                "Missing description — no <code class='text-accent2'>enchantment.&lt;namespace&gt;.&lt;path&gt;.desc</code> lang key, so the library, info screen, tooltips, and recipe viewers show nothing for it",
+                "No obtainability tag — in neither <code class='text-accent2'>minecraft:in_enchanting_table</code> nor <code class='text-accent2'>minecraft:treasure</code>, so it can never roll at the table (the real red flag)",
+                "Disabled — in the table tag but turned off by Meridian's per-enchantment config",
+                "Treasure — treasure-only, excluded from the table by design (reported for completeness, not a problem)"
+              ]
+            },
+            {
+              "type": "prose",
+              "html": [
+                "The chat output is a per-namespace count summary; the full list of flagged ids prints in chat when short, or is written to <code class='text-accent2'>meridian-enchant-audit.txt</code> in the game directory when long."
+              ]
+            }
+          ]
+        },
+        {
           "type": "cards",
           "titleSize": "base",
           "items": [
@@ -76,7 +106,7 @@
           "items": [
             {
               "title": "Level 2 — Operator",
-              "html": ["The <code class='text-accent2'>reload</code> command requires op level 2. This is the only command Meridian registers — all other interaction happens through the enchanting table, anvil, and library GUIs."]
+              "html": ["The <code class='text-accent2'>reload</code> command requires op level 2. It is the only <em>server</em> command Meridian registers — the <code class='text-accent2'>audit</code> command runs entirely client-side and needs no permission. All other interaction happens through the enchanting table, anvil, and library GUIs."]
             },
             {
               "title": "Permissions Mods",
