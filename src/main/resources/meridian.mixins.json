@@ -23,6 +23,7 @@
         "EnderDragonMixin",
         "EnduranceMixin",
         "EverbloomMixin",
+        "FireworkRocketItemMixin",
         "FireworkRocketMixin",
         "FishingHookLootMixin",
         "FishingHookMixin",

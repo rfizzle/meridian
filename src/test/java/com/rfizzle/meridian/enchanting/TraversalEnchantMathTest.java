@@ -124,6 +124,25 @@ class TraversalEnchantMathTest {
         assertTrue(TraversalEnchantMath.tailwindPush(3) > TraversalEnchantMath.tailwindPush(1));
     }
 
+    // ---- Thrift: chance a firework boost leaves the rocket unspent ----
+
+    @Test
+    void thriftRefundChance_isZeroAtLevelZero() {
+        assertEquals(0.0f, TraversalEnchantMath.thriftRefundChance(0), EPSILON);
+    }
+
+    @Test
+    void thriftRefundChance_scalesPerLevel() {
+        assertEquals(0.25f, TraversalEnchantMath.thriftRefundChance(1), EPSILON);
+        assertEquals(0.50f, TraversalEnchantMath.thriftRefundChance(2), EPSILON);
+    }
+
+    @Test
+    void thriftRefundChance_isClampedToOne() {
+        // A level beyond the enchantment's max must never yield a >100% chance.
+        assertEquals(1.0f, TraversalEnchantMath.thriftRefundChance(10), EPSILON);
+    }
+
     // ---- Falconstrike: kinetic glide-strike ----
 
     @Test

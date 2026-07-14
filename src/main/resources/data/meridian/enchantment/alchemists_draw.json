@@ -1,0 +1,47 @@
+{
+  "description": {
+    "translate": "enchantment.meridian.alchemists_draw"
+  },
+  "supported_items": "#meridian:enchantable/range",
+  "weight": 1,
+  "max_level": 2,
+  "min_cost": {
+    "base": 20,
+    "per_level_above_first": 12
+  },
+  "max_cost": {
+    "base": 60,
+    "per_level_above_first": 12
+  },
+  "anvil_cost": 4,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:ammo_use": [
+      {
+        "effect": {
+          "type": "minecraft:remove_binomial",
+          "chance": {
+            "type": "minecraft:fraction",
+            "numerator": {
+              "type": "minecraft:linear",
+              "base": 1.0,
+              "per_level_above_first": 1.0
+            },
+            "denominator": 5.0
+          }
+        },
+        "requirements": {
+          "condition": "minecraft:match_tool",
+          "predicate": {
+            "items": [
+              "minecraft:tipped_arrow",
+              "minecraft:spectral_arrow"
+            ]
+          }
+        }
+      }
+    ]
+  }
+}

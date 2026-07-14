@@ -32,7 +32,7 @@ class EnchantmentJsonValidationTest {
             "src/main/resources/assets/meridian/lang/en_us.json");
 
     private static final List<String> ALL_ENCHANTMENT_IDS = List.of(
-            "abyss_ward", "adamant", "alacrity", "ambush", "animus",
+            "abyss_ward", "adamant", "alacrity", "alchemists_draw", "ambush", "animus",
             "antidote", "attunement", "aurify", "bastion", "beckon", "blight", "blink",
             "bloodrage", "bounty", "bullrush", "bulwark", "cinderwalk", "clamber",
             "clearsight", "cleave", "colossus", "crescendo", "curse_of_decay", "curse_of_sealing",
@@ -54,7 +54,7 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "stormward", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "timberfell", "torrent", "trailblaze", "trample", "trophy",
+            "tether", "thermal", "thrift", "timberfell", "torrent", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
             "vault", "verdure", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
@@ -199,7 +199,7 @@ class EnchantmentJsonValidationTest {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(143, count, "expected exactly 143 enchantment JSON files");
+        assertEquals(145, count, "expected exactly 145 enchantment JSON files");
     }
 
     @TestFactory

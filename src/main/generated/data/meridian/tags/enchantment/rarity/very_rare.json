@@ -9,6 +9,10 @@
       "required": false
     },
     {
+      "id": "meridian:alchemists_draw",
+      "required": false
+    },
+    {
       "id": "meridian:attunement",
       "required": false
     },

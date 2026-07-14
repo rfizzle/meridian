@@ -197,6 +197,10 @@
       "required": false
     },
     {
+      "id": "meridian:thrift",
+      "required": false
+    },
+    {
       "id": "meridian:timberfell",
       "required": false
     },
