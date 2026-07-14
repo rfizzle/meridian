@@ -431,6 +431,132 @@ tasks.named('check') {
     dependsOn 'verifyEnchantmentCount'
 }
 
+// Single source of truth for the declares-a-codec vs pure-Java split within the
+// roster: an enchantment whose `effects` map is non-empty attaches at least one
+// vanilla effect codec ("declares"); an empty or absent `effects` map means the
+// behavior is driven entirely by Java handlers ("java"). design/SPEC.md §8 is the
+// only doc that states this split numerically, so it is the sole scanned file;
+// the split is synced (syncEnchantmentSplit) and asserted in CI
+// (verifyEnchantmentSplit, wired into `check`) so it can't drift out of the roster.
+def enchantmentSplitFiles = [
+        'design/SPEC.md',
+]
+// Each entry pairs a claim idiom with which count it asserts ('declares' or 'java'),
+// so a single documented sentence carrying both numbers is anchored precisely.
+// The patterns must track the exact §8 prose — reword one and you reword the other.
+def enchantmentSplitClaims = [
+        [/(\d+) enchantments attach at least one vanilla effect codec/, 'declares'],
+        [/the other (\d+) drive their behavior entirely through Java/, 'java'],
+]
+def enchantmentSplit = {
+    def dir = file('src/main/resources/data/meridian/enchantment')
+    if (!dir.isDirectory()) {
+        throw new GradleException("enchantment data dir not found: ${dir}")
+    }
+    def slurper = new groovy.json.JsonSlurper()
+    def declares = 0
+    def java = 0
+    // Recursive glob mirrors enchantmentCount(): the data-pack loader descends into
+    // subfolders, so a nested entry must be bucketed too.
+    fileTree(dir).matching { include '**/*.json' }.files.each { f ->
+        def parsed
+        try {
+            parsed = slurper.parse(f)
+        } catch (Exception e) {
+            throw new GradleException("malformed enchantment JSON: ${f} — ${e.message}", e)
+        }
+        def effects = parsed?.effects
+        if (effects instanceof Map && !effects.isEmpty()) {
+            declares++
+        } else {
+            java++
+        }
+    }
+    // Carry the total so verify partitions the roster without re-walking the tree.
+    [declares: declares, java: java, total: declares + java]
+}
+
+tasks.register('syncEnchantmentSplit') {
+    description = 'Rewrites the documented codec-vs-Java split from the enchantment JSONs'
+    group = 'verification'
+    doLast {
+        def split = enchantmentSplit()
+        def changed = []
+        enchantmentSplitFiles.each { rel ->
+            def f = file(rel)
+            def original = f.text
+            def updated = original
+            enchantmentSplitClaims.each { claim ->
+                def (pat, key) = claim
+                updated = updated.replaceAll(pat) { match ->
+                    match[0].replaceAll(/\d+/, split[key].toString())
+                }
+            }
+            if (updated != original) {
+                f.text = updated
+                changed << rel
+            }
+        }
+        if (changed.isEmpty()) {
+            logger.lifecycle("Enchantment split claims already at ${split.declares}/${split.java}.")
+        } else {
+            logger.lifecycle("Set enchantment split to ${split.declares}/${split.java} in: ${changed.join(', ')}")
+        }
+    }
+}
+
+tasks.register('verifyEnchantmentSplit') {
+    description = 'Asserts the documented codec-vs-Java split matches the enchantment JSONs'
+    group = 'verification'
+    doLast {
+        def split = enchantmentSplit()
+        def total = enchantmentCount()
+        // The buckets must partition the whole roster — the exact drift #232 fixed.
+        // split.total is derived from the same walk that bucketed; enchantmentCount()
+        // re-derives the roster size independently, so equality cross-checks both.
+        if (split.total != total) {
+            throw new GradleException(
+                    "Enchantment split buckets (${split.declares} declares + ${split.java} java = " +
+                    "${split.total}) do not sum to the roster count (${total}).")
+        }
+        def emptyFiles = []
+        def stale = []
+        enchantmentSplitFiles.each { rel ->
+            def text = file(rel).text
+            def fileMatches = 0
+            enchantmentSplitClaims.each { claim ->
+                def (pat, key) = claim
+                (text =~ pat).each { m ->
+                    fileMatches++
+                    def num = (m[0] =~ /\d+/)[0].toInteger()
+                    if (num != split[key]) {
+                        stale << "${rel}: claims ${num} in \"${m[0].trim()}\", expected ${split[key]}"
+                    }
+                }
+            }
+            if (fileMatches == 0) {
+                emptyFiles << rel
+            }
+        }
+        if (!emptyFiles.isEmpty()) {
+            throw new GradleException(
+                    "No enchantment-split claims found in: ${emptyFiles.join(', ')} — the guard matched " +
+                    'nothing. If the docs were reworded, update the enchantmentSplitClaims patterns in build.gradle.')
+        }
+        if (!stale.isEmpty()) {
+            throw new GradleException(
+                    "Documented enchantment split is stale (actual JSON split: ${split.declares} declares / " +
+                    "${split.java} java):\n  " +
+                    stale.join('\n  ') +
+                    '\nRun ./gradlew syncEnchantmentSplit and commit the results.')
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn 'verifyEnchantmentSplit'
+}
+
 processResources {
     def projectVersion = project.version
     inputs.property "version", projectVersion
