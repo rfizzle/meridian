@@ -15,9 +15,11 @@ public final class SpyglassEnchantMath {
     public static final int TRACKERS_LENS_SIGHTING_TICKS = 30;
 
     /**
-     * How far Tracker's Lens can acquire a target, in blocks — well past Seeker's lock range,
-     * matching the spyglass's own long-sight fantasy. The sight line is clipped against blocks
-     * first, so range never lets it mark through terrain.
+     * How far Tracker's Lens can acquire a target, in blocks — the same reach as Seeker's lock.
+     * Pushing it further would not buy much: a typical server stops tracking entities for a client
+     * not far beyond this, so a longer ray would acquire targets inconsistently depending on view
+     * distance. The sight line is clipped against blocks first, so range never marks through
+     * terrain.
      */
     public static final double TRACKERS_LENS_RANGE = 64.0;
 
