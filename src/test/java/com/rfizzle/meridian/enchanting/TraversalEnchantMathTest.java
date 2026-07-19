@@ -3,6 +3,9 @@ package com.rfizzle.meridian.enchanting;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -122,6 +125,55 @@ class TraversalEnchantMathTest {
         assertEquals(0.05, TraversalEnchantMath.tailwindPush(1), EPSILON);
         assertEquals(0.15, TraversalEnchantMath.tailwindPush(3), EPSILON);
         assertTrue(TraversalEnchantMath.tailwindPush(3) > TraversalEnchantMath.tailwindPush(1));
+    }
+
+    // ---- Curse of Molting: the fizzle verdict derived from the boost rocket's UUID ----
+
+    @Test
+    void moltingFizzles_isDeterministicForTheSameUuid() {
+        // The property client prediction rests on: the same rocket always yields the same verdict,
+        // so the client and the server reach it independently without ever disagreeing.
+        UUID id = UUID.fromString("6f3a1c9e-2b7d-4e58-9a01-c4d5e6f70819");
+        boolean first = TraversalEnchantMath.moltingFizzles(
+                id.getMostSignificantBits(), id.getLeastSignificantBits());
+        for (int i = 0; i < 100; i++) {
+            assertEquals(first, TraversalEnchantMath.moltingFizzles(
+                    id.getMostSignificantBits(), id.getLeastSignificantBits()));
+        }
+    }
+
+    @Test
+    void moltingFizzles_dependsOnBothUuidHalves() {
+        // Neither half may be ignored, or whole classes of UUIDs would share one verdict.
+        boolean lowHalfMatters = false;
+        boolean highHalfMatters = false;
+        for (long i = 1; i <= 200 && !(lowHalfMatters && highHalfMatters); i++) {
+            if (TraversalEnchantMath.moltingFizzles(0L, i) != TraversalEnchantMath.moltingFizzles(0L, 0L)) {
+                lowHalfMatters = true;
+            }
+            if (TraversalEnchantMath.moltingFizzles(i, 0L) != TraversalEnchantMath.moltingFizzles(0L, 0L)) {
+                highHalfMatters = true;
+            }
+        }
+        assertTrue(lowHalfMatters, "the least significant bits must affect the verdict");
+        assertTrue(highHalfMatters, "the most significant bits must affect the verdict");
+    }
+
+    @Test
+    void moltingFizzles_matchesFizzleChanceOverManyUuids() {
+        // Deriving rather than drawing must not skew the rate players actually see.
+        Random uuidSource = new Random(20231231L);
+        int trials = 100_000;
+        int fizzled = 0;
+        for (int i = 0; i < trials; i++) {
+            if (TraversalEnchantMath.moltingFizzles(uuidSource.nextLong(), uuidSource.nextLong())) {
+                fizzled++;
+            }
+        }
+        double rate = (double) fizzled / trials;
+        // ±1% around 25%; the sampling error at 100k trials is ~0.14%, so this is not flaky.
+        assertTrue(Math.abs(rate - TraversalEnchantMath.MOLTING_FIZZLE_CHANCE) < 0.01,
+                "expected ~" + TraversalEnchantMath.MOLTING_FIZZLE_CHANCE + " fizzle rate, got " + rate);
     }
 
     // ---- Thrift: chance a firework boost leaves the rocket unspent ----
