@@ -276,6 +276,18 @@ configurations.testRuntimeClasspath {
 test {
     useJUnitPlatform()
     systemProperty 'meridian.generated.dir', file('src/main/generated').absolutePath
+    // The gametest source set is on no configuration the test task sees, so the entrypoint
+    // registration guard has to declare its inputs by hand — without them a new unregistered
+    // gametest class leaves the task UP-TO-DATE (or FROM-CACHE in CI) and the guard never runs.
+    systemProperty 'meridian.gametest.sources', file('src/gametest/java').absolutePath
+    systemProperty 'meridian.gametest.manifest', file('src/gametest/resources/fabric.mod.json').absolutePath
+    systemProperty 'meridian.main.manifest', file('src/main/resources/fabric.mod.json').absolutePath
+    inputs.dir('src/gametest/java')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+            .withPropertyName('gametestSources')
+    inputs.file('src/gametest/resources/fabric.mod.json')
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+            .withPropertyName('gametestManifest')
     finalizedBy jacocoTestReport
 }
 

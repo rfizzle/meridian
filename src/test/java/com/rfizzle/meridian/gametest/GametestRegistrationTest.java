@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -15,6 +16,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,9 +35,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class GametestRegistrationTest {
 
-    private static final Path MAIN_MANIFEST = Path.of("src/main/resources/fabric.mod.json");
-    private static final Path GAMETEST_MANIFEST = Path.of("src/gametest/resources/fabric.mod.json");
-    private static final Path GAMETEST_SOURCE_ROOT = Path.of("src/gametest/java");
+    /**
+     * Any annotation Fabric needs a registered class for: {@code @GameTest} and
+     * {@code @GameTestGenerator}, whether imported or written fully qualified.
+     */
+    private static final Pattern GAMETEST_ANNOTATION =
+            Pattern.compile("@(?:[\\w.]+\\.)?GameTest(?:Generator)?\\b");
+
+    private static final Path MAIN_MANIFEST = resolve("meridian.main.manifest", "src/main/resources/fabric.mod.json");
+    private static final Path GAMETEST_MANIFEST =
+            resolve("meridian.gametest.manifest", "src/gametest/resources/fabric.mod.json");
+    private static final Path GAMETEST_SOURCE_ROOT = resolve("meridian.gametest.sources", "src/gametest/java");
+
+    private static Set<String> declared;
+    private static Set<String> annotated;
+
+    /**
+     * Gradle injects absolute paths so the test does not depend on the launcher's working
+     * directory; the repo-relative fallback keeps it runnable from the project root directly.
+     */
+    private static Path resolve(String property, String fallback) {
+        String injected = System.getProperty(property);
+        return injected != null ? Path.of(injected) : Path.of(fallback);
+    }
+
+    @BeforeAll
+    static void scanOnce() throws IOException {
+        declared = declaredClasses();
+        annotated = annotatedClasses();
+    }
 
     private static JsonObject loadJson(Path path) throws IOException {
         assertTrue(Files.exists(path), path + " must exist");
@@ -47,23 +75,28 @@ class GametestRegistrationTest {
     /** The fully-qualified class names declared in the gametest manifest. */
     private static Set<String> declaredClasses() throws IOException {
         JsonObject root = loadJson(GAMETEST_MANIFEST);
+        assertTrue(root.has("id"), GAMETEST_MANIFEST + " must declare a mod id");
         assertEquals("meridian-gametest", root.get("id").getAsString(),
                 "The gametest manifest must declare its own mod id, separate from the shipped mod");
 
         JsonObject entrypoints = root.getAsJsonObject("entrypoints");
         assertNotNull(entrypoints, "Gametest manifest must have entrypoints");
-        JsonArray declared = entrypoints.getAsJsonArray("fabric-gametest");
-        assertNotNull(declared, "Gametest manifest must declare a fabric-gametest entrypoint");
+        JsonArray entries = entrypoints.getAsJsonArray("fabric-gametest");
+        assertNotNull(entries, "Gametest manifest must declare a fabric-gametest entrypoint");
 
         Set<String> classes = new TreeSet<>();
-        for (JsonElement element : declared) {
+        for (JsonElement element : entries) {
+            // Schema v1 also permits an {"adapter":…,"value":…} object; this manifest uses plain
+            // strings, and asserting so beats a bare UnsupportedOperationException from Gson.
+            assertTrue(element.isJsonPrimitive(),
+                    "fabric-gametest entries must be plain class-name strings, got: " + element);
             assertTrue(classes.add(element.getAsString()),
                     "Duplicate fabric-gametest entry: " + element.getAsString());
         }
         return classes;
     }
 
-    /** Every class under the gametest source root that carries at least one {@code @GameTest}. */
+    /** Every class under the gametest source root carrying an annotation that needs registration. */
     private static Set<String> annotatedClasses() throws IOException {
         assertTrue(Files.isDirectory(GAMETEST_SOURCE_ROOT), GAMETEST_SOURCE_ROOT + " must exist");
         try (Stream<Path> files = Files.walk(GAMETEST_SOURCE_ROOT)) {
@@ -75,11 +108,10 @@ class GametestRegistrationTest {
     }
 
     private static boolean hasGameTestAnnotation(Path javaFile) {
-        try {
-            return Files.readAllLines(javaFile, StandardCharsets.UTF_8).stream()
-                    .anyMatch(line -> line.stripLeading().startsWith("@GameTest"));
+        try (Stream<String> lines = Files.lines(javaFile, StandardCharsets.UTF_8)) {
+            return lines.anyMatch(line -> GAMETEST_ANNOTATION.matcher(line).find());
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new UncheckedIOException("Unreadable gametest source: " + javaFile, e);
         }
     }
 
@@ -90,20 +122,20 @@ class GametestRegistrationTest {
     }
 
     @Test
-    void everyAnnotatedGametestClassIsDeclared() throws IOException {
-        Set<String> undeclared = new TreeSet<>(annotatedClasses());
-        undeclared.removeAll(declaredClasses());
+    void everyAnnotatedGametestClassIsDeclared() {
+        Set<String> undeclared = new TreeSet<>(annotated);
+        undeclared.removeAll(declared);
         assertTrue(undeclared.isEmpty(),
-                "These classes carry @GameTest but are absent from the fabric-gametest entrypoint, "
-                        + "so they would never run: " + undeclared);
+                "These classes carry a gametest annotation but are absent from the fabric-gametest "
+                        + "entrypoint, so they would never run: " + undeclared);
     }
 
     @Test
-    void everyDeclaredEntryResolvesToASourceFile() throws IOException {
-        Set<String> stale = new TreeSet<>(declaredClasses());
-        stale.removeAll(annotatedClasses());
+    void everyDeclaredEntryResolvesToASourceFile() {
+        Set<String> stale = new TreeSet<>(declared);
+        stale.removeAll(annotated);
         assertTrue(stale.isEmpty(),
-                "These fabric-gametest entries name no @GameTest-bearing source file under "
+                "These fabric-gametest entries name no gametest-annotated source file under "
                         + GAMETEST_SOURCE_ROOT + ": " + stale);
     }
 
@@ -124,5 +156,24 @@ class GametestRegistrationTest {
         for (String key : List.of("main", "client", "fabric-datagen")) {
             assertTrue(entrypoints.has(key), "fabric.mod.json must still declare: " + key);
         }
+    }
+
+    /**
+     * The gametest mod loads beside the real one, so a drifted toolchain bound fails the whole
+     * {@code runGametest} launch with a dependency error that reads like a Loom problem.
+     */
+    @Test
+    void gametestManifestToolchainBoundsMatchTheShippedManifest() throws IOException {
+        JsonObject mainDepends = loadJson(MAIN_MANIFEST).getAsJsonObject("depends");
+        JsonObject gametestDepends = loadJson(GAMETEST_MANIFEST).getAsJsonObject("depends");
+        assertNotNull(gametestDepends, "Gametest manifest must declare depends");
+
+        for (String key : List.of("fabricloader", "minecraft", "java", "fabric-api")) {
+            assertTrue(gametestDepends.has(key), "Gametest manifest must pin: " + key);
+            assertEquals(mainDepends.get(key).getAsString(), gametestDepends.get(key).getAsString(),
+                    "Gametest manifest toolchain bound must match the shipped manifest: " + key);
+        }
+        assertTrue(gametestDepends.has("meridian"),
+                "The gametest mod must depend on the mod it tests");
     }
 }
