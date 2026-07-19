@@ -177,7 +177,6 @@ loom {
         datagen {
             inherit server
             name "Data Generation"
-            source sourceSets.gametest
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
             vmArg "-Dfabric-api.datagen.modid=meridian"
