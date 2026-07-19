@@ -177,6 +177,26 @@ public final class TraversalEnchantMath {
     }
 
     /**
+     * Whether a Curse of Molting firework boost fizzles, derived from the two halves of the boost
+     * rocket's UUID. Deriving the verdict rather than drawing it lets the client and the server
+     * reach the same answer independently from state they both already hold — the rocket's UUID is
+     * carried in its spawn packet — so a fizzled boost is never mispredicted into a rubberband.
+     *
+     * <p>The halves are mixed with the SplitMix64 finalizer so that neighbouring UUIDs (and either
+     * half alone) scatter, then the top 24 bits become a unit float compared against
+     * {@link #MOLTING_FIZZLE_CHANCE}. Pure and total: the same UUID always yields the same verdict.
+     */
+    public static boolean moltingFizzles(long uuidMostSigBits, long uuidLeastSigBits) {
+        long mixed = uuidMostSigBits ^ (uuidLeastSigBits * 0x9E3779B97F4A7C15L);
+        mixed = (mixed ^ (mixed >>> 30)) * 0xBF58476D1CE4E5B9L;
+        mixed = (mixed ^ (mixed >>> 27)) * 0x94D049BB133111EBL;
+        mixed ^= mixed >>> 31;
+        // Top 24 bits → [0, 1), matching how RandomSource derives a float from its next bits.
+        float unit = (mixed >>> 40) * 0x1.0p-24f;
+        return unit < MOLTING_FIZZLE_CHANCE;
+    }
+
+    /**
      * Kinetic damage a Falconstrike glide-strike deals to a creature, for a glider moving at
      * {@code horizontalSpeed} blocks/tick: linear in speed and level, zero below the drift
      * threshold, and capped per level so a power-dive can't scale damage unbounded. Mirrors the
