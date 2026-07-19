@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.TraversalEnchantMath;
 import com.rfizzle.meridian.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -18,6 +19,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.UUID;
 
 /**
  * Tailwind (elytra): a firework rocket used mid-glide burns longer and pushes harder, scaling per
@@ -168,6 +171,42 @@ public class TailwindGameTest implements FabricGameTest {
                     + cursedFizzled + "/" + trials);
             return;
         }
+        helper.succeed();
+    }
+
+    // --- Curse of Molting: the fizzle verdict is a pure function of the rocket's UUID, which both
+    // sides hold from the spawn packet. Asserting the in-world outcome tracks the derived verdict is
+    // the headless proxy for "the client predicts what the server does" — a gametest server has no
+    // client replica to compare against directly. ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfMoltingFizzleFollowsRocketUuid(GameTestHelper helper) {
+        Holder<Enchantment> molting = lookup(helper, "curse_of_molting");
+        if (molting == null) { helper.fail("curse_of_molting not in registry"); return; }
+        ServerLevel level = helper.getLevel();
+
+        ItemStack moltingElytra = new ItemStack(Items.ELYTRA);
+        moltingElytra.enchant(molting, 1);
+        ServerPlayer cursed = glidingPlayer(helper, new BlockPos(1, 2, 1), moltingElytra);
+
+        for (int i = 0; i < 64; i++) {
+            FireworkRocketEntity rocket = new FireworkRocketEntity(
+                    level, new ItemStack(Items.FIREWORK_ROCKET), cursed);
+            level.addFreshEntity(rocket);
+            UUID id = rocket.getUUID();
+            boolean predicted = TraversalEnchantMath.moltingFizzles(
+                    id.getMostSignificantBits(), id.getLeastSignificantBits());
+            rocket.tick();
+            boolean fizzled = rocket.isRemoved();
+            if (!rocket.isRemoved()) rocket.discard();
+            if (fizzled != predicted) {
+                cursed.discard();
+                helper.fail("Molting fizzle must follow the rocket UUID: rocket " + id
+                        + " predicted " + predicted + " but observed " + fizzled);
+                return;
+            }
+        }
+        cursed.discard();
         helper.succeed();
     }
 
