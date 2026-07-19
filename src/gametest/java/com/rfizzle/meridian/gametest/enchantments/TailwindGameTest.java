@@ -20,6 +20,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.OptionalInt;
 import java.util.UUID;
 
 /**
@@ -207,6 +208,61 @@ public class TailwindGameTest implements FabricGameTest {
             }
         }
         cursed.discard();
+        helper.succeed();
+    }
+
+    // --- Curse of Molting: the fizzle must be reachable from the synced attach target alone. The
+    // glider constructor that populates attachedToEntity runs only on the server, so a client
+    // resolves the glider from DATA_ATTACHED_TO_TARGET instead — this drives that same path by
+    // spawning a bare rocket and setting only the synced target, leaving the field null. Without
+    // it the branch that keeps the client's prediction in step with the server is never executed. ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void curseOfMoltingFizzlesFromSyncedAttachTarget(GameTestHelper helper) {
+        Holder<Enchantment> molting = lookup(helper, "curse_of_molting");
+        if (molting == null) { helper.fail("curse_of_molting not in registry"); return; }
+        ServerLevel level = helper.getLevel();
+
+        ItemStack moltingElytra = new ItemStack(Items.ELYTRA);
+        moltingElytra.enchant(molting, 1);
+        ServerPlayer cursed = glidingPlayer(helper, new BlockPos(1, 2, 1), moltingElytra);
+
+        int fizzled = 0;
+        int survived = 0;
+        for (int i = 0; i < 64; i++) {
+            // The unattached constructor, so the rocket gets a real lifetime and survives its first
+            // tick on merit — the bare (EntityType, Level) one leaves lifetime at 0, which would
+            // expire every rocket immediately and mask the fizzle we are measuring.
+            FireworkRocketEntity rocket = new FireworkRocketEntity(
+                    level, cursed.getX(), cursed.getY(), cursed.getZ(),
+                    new ItemStack(Items.FIREWORK_ROCKET));
+            // Only the synced target — attachedToEntity stays null, as it is on a client.
+            rocket.getEntityData().set(
+                    FireworkRocketEntity.DATA_ATTACHED_TO_TARGET, OptionalInt.of(cursed.getId()));
+            level.addFreshEntity(rocket);
+
+            UUID id = rocket.getUUID();
+            boolean predicted = TraversalEnchantMath.moltingFizzles(
+                    id.getMostSignificantBits(), id.getLeastSignificantBits());
+            rocket.tick();
+            boolean observed = rocket.isRemoved();
+            if (!rocket.isRemoved()) rocket.discard();
+            if (observed != predicted) {
+                cursed.discard();
+                helper.fail("A rocket attached only through synced data must still fizzle by UUID: "
+                        + id + " predicted " + predicted + " but observed " + observed);
+                return;
+            }
+            if (observed) fizzled++; else survived++;
+        }
+        cursed.discard();
+
+        // Both outcomes must appear, or the assertion above could have held vacuously.
+        if (fizzled == 0 || survived == 0) {
+            helper.fail("Expected both fizzled and surviving rockets over 64 trials, got "
+                    + fizzled + " fizzled and " + survived + " surviving");
+            return;
+        }
         helper.succeed();
     }
 

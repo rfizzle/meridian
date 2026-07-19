@@ -8,6 +8,11 @@ accessible method net/minecraft/world/item/ProjectileWeaponItem shoot (Lnet/mine
 # Waterlogging) without waiting on a server tick, which is unreliable for a placed mock player.
 accessible method net/minecraft/world/entity/Entity updateInWaterStateAndDoFluidPushing ()Z
 
+# Lets a gametest drive Curse of Molting's fizzle from the synced attach target alone, as the
+# client does. The server-only glider constructor populates attachedToEntity directly, so without
+# this the branch that keeps the client's prediction in step is unreachable from a test.
+accessible field net/minecraft/world/entity/projectile/FireworkRocketEntity DATA_ATTACHED_TO_TARGET Lnet/minecraft/network/syncher/EntityDataAccessor;
+
 # Dowse reveal overlay — the render-state shards its custom xray RenderType composes from.
 accessible field net/minecraft/client/renderer/RenderStateShard TRANSLUCENT_TRANSPARENCY Lnet/minecraft/client/renderer/RenderStateShard$TransparencyStateShard;
 accessible field net/minecraft/client/renderer/RenderStateShard NO_DEPTH_TEST Lnet/minecraft/client/renderer/RenderStateShard$DepthTestStateShard;

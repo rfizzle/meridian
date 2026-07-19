@@ -96,6 +96,8 @@ public abstract class FireworkRocketMixin {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void meridian$tailwindPush(CallbackInfo ci) {
+        // Safe to read the field directly here: by TAIL vanilla has already resolved it from the
+        // synced attach target. Only the HEAD hook above runs before that and has to resolve it.
         LivingEntity glider = this.attachedToEntity;
         if (glider == null || !glider.isFallFlying()) return;
         int level = EnchantmentEffects.getEquippedLevel(glider,
