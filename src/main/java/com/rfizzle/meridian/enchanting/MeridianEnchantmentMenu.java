@@ -13,6 +13,7 @@ import com.rfizzle.meridian.net.CluesPayload;
 import com.rfizzle.meridian.net.CraftingResultEntry;
 import com.rfizzle.meridian.net.EnchantmentClue;
 import com.rfizzle.meridian.net.StatsPayload;
+import com.rfizzle.meridian.tag.MeridianItemTags;
 import com.rfizzle.meridian.tome.XpTomeItem;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -318,8 +319,14 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         this.lastStats = stats;
         this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats, Meridian.getConfig());
 
+        // Vanilla's Item#isEnchantable requires a max_damage component, so a durability-less
+        // Meridian surface (the spyglass) would be turned away here before its enchantments'
+        // supported_items tags are ever consulted. #meridian:enchantable_surface names exactly
+        // those items; the anvil path needs no equivalent, as it gates on Enchantment#canEnchant.
         boolean canEnchant = input.getCount() == 1
-                && (input.getItem().isEnchantable(input) || input.is(Items.BOOK))
+                && (input.getItem().isEnchantable(input)
+                        || input.is(Items.BOOK)
+                        || input.is(MeridianItemTags.ENCHANTABLE_SURFACE))
                 && isEnchantableEnough(input);
         if (!canEnchant && currentRecipe.isEmpty()) {
             clearSlotState();
