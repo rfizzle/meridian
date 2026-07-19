@@ -1115,7 +1115,7 @@
               "IV",
               "Spyglass",
               "<span class='inline-block px-2 py-0.5 text-xs font-semibold rounded bg-accent/15 border border-accent/30 text-accent'>Rare</span>",
-              "Holding a creature in the spyglass for a moment marks it, glowing through walls for 6, 12, 20, or 30 seconds by level — mobs only unless <code class='text-accent2'>combat.trackersLensAffectsPlayers</code> is enabled"
+              "Holding a creature in the spyglass for a moment marks it, glowing through walls for 6, 12, 20, or 30 seconds by level — the sighting needs a clear line of sight, and mobs only unless <code class='text-accent2'>combat.trackersLensAffectsPlayers</code> is enabled"
             ]
           ]
         }

@@ -512,7 +512,7 @@
     "enchantment.meridian.kiln": "Kiln",
     "enchantment.meridian.kiln.desc": "Mined blocks drop their smelted form when a furnace recipe exists",
     "enchantment.meridian.trackers_lens": "Tracker's Lens",
-    "enchantment.meridian.trackers_lens.desc": "Studying a creature through the spyglass marks it, glowing through walls for longer per level",
+    "enchantment.meridian.trackers_lens.desc": "Creatures held in the spyglass glow through walls, longer at higher levels",
     "enchantment.meridian.meticulous": "Meticulous",
     "enchantment.meridian.meticulous.desc": "Brushes faster and uncovers rarer archaeology finds",
     "enchantment.meridian.groom": "Groom",

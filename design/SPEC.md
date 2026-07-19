@@ -410,7 +410,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 
 ## Configuration
 
-`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 10) with a forward-migration hook.
+`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 11) with a forward-migration hook.
 
 ### `enchantingTable`
 | Key | Type | Default | Range / Notes |

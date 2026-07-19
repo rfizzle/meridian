@@ -95,7 +95,7 @@ tree marks the path from first shelf to Eterna 50.
 
 ### 146 original enchantments
 - **What it is** — A roster of 146 enchantments spanning melee, ranged, tools,
-  mobility, mounts, elytra, and shields — from Excavate's 3×3 mining to True
+  mobility, mounts, elytra, shields, and the spyglass — from Excavate's 3×3 mining to True
   Flight, Gravitas, and Final Gambit.
 - **How you use it** — They roll at the table, drop as loot, and combine at the
   anvil like any enchantment, respecting their own exclusivity rules.

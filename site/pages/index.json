@@ -49,7 +49,7 @@
               "icon": "&#128218;",
               "title": "146 Original Enchantments",
               "html": [
-                "Combat, ranged, tool, mobility, shield, elytra, and mount enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."
+                "Combat, ranged, tool, mobility, shield, elytra, mount, and spyglass enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."
               ]
             },
             {
