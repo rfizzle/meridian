@@ -268,6 +268,12 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(false)
                     .setSaveConsumer(v -> current.combat.bullrushAffectsPlayers = v)
                     .build());
+            combatCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.meridian.trackers_lens_affects_players"),
+                            current.combat.trackersLensAffectsPlayers)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.combat.trackersLensAffectsPlayers = v)
+                    .build());
 
             // Attunement
             ConfigCategory attunementCategory = builder.getOrCreateCategory(

@@ -209,6 +209,10 @@
       "required": false
     },
     {
+      "id": "meridian:trackers_lens",
+      "required": false
+    },
+    {
       "id": "meridian:trailblaze",
       "required": false
     },

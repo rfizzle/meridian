@@ -357,6 +357,7 @@ public class MeridianEnchantmentTagProvider extends FabricTagProvider.Enchantmen
                 .addOptional(Meridian.id("thrift"))
                 .addOptional(Meridian.id("timberfell"))
                 .addOptional(Meridian.id("torrent"))
+                .addOptional(Meridian.id("trackers_lens"))
                 .addOptional(Meridian.id("trailblaze"))
                 .addOptional(Meridian.id("trample"))
                 .addOptional(Meridian.id("trophy"))
