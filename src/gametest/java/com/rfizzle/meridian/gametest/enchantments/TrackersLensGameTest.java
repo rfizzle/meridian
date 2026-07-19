@@ -25,8 +25,8 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Behavior coverage for Tracker's Lens: the sighting threshold, the line-of-sight requirement,
- * the no-enchant baseline, and the mobs-only default. Drives
- * {@link TrackersLensHandler#tickScope} directly rather than faking item-use state, which is why
+ * re-marking once a glow lapses, the no-enchant baseline, and the mobs-only default. Drives
+ * {@link TrackersLensHandler#sampleScope} directly rather than faking item-use state, which is why
  * that method takes the spyglass explicitly.
  *
  * <p>The enabled path of {@code combat.trackersLensAffectsPlayers} lives in
@@ -56,9 +56,9 @@ public class TrackersLensGameTest implements FabricGameTest {
         return spyglass;
     }
 
-    private void scopeFor(ServerPlayer player, ItemStack spyglass, int ticks) {
-        for (int i = 0; i < ticks; i++) {
-            TrackersLensHandler.tickScope(player, spyglass);
+    private void scopeFor(ServerPlayer player, ItemStack spyglass, int samples) {
+        for (int i = 0; i < samples; i++) {
+            TrackersLensHandler.sampleScope(player, spyglass);
         }
     }
 
@@ -74,7 +74,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, enchantedSpyglass(lens, 1),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES);
             if (!victim.hasEffect(MobEffects.GLOWING)) {
                 helper.fail("Tracker's Lens should mark a mob held for the full sighting");
                 return;
@@ -85,7 +85,7 @@ public class TrackersLensGameTest implements FabricGameTest {
         }
     }
 
-    // One tick short of the threshold, nothing is marked — the sighting is a real cost.
+    // One sample short of the threshold, nothing is marked — the sighting is a real cost.
     @GameTest(template = "meridian:empty_5x5x5")
     public void doesNotMarkBeforeTheSightingCompletes(GameTestHelper helper) {
         TrackersLensHandler.reset();
@@ -97,7 +97,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, enchantedSpyglass(lens, 4),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS - 1);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES - 1);
             if (victim.hasEffect(MobEffects.GLOWING)) {
                 helper.fail("Tracker's Lens must not mark before the sighting completes");
                 return;
@@ -120,7 +120,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, enchantedSpyglass(lens, 4),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES);
             var effect = victim.getEffect(MobEffects.GLOWING);
             if (effect == null) {
                 helper.fail("Tracker's Lens IV should mark a mob held for the full sighting");
@@ -129,6 +129,70 @@ public class TrackersLensGameTest implements FabricGameTest {
             if (effect.getDuration() <= SpyglassEnchantMath.trackersLensGlowTicks(1)) {
                 helper.fail("Tracker's Lens IV must glow longer than level I, got "
                         + effect.getDuration() + " ticks");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.discard();
+        }
+    }
+
+    // Holding a marked creature does not refresh its glow — that would make it permanent.
+    @GameTest(template = "meridian:empty_5x5x5")
+    public void holdingDoesNotRefreshALiveGlow(GameTestHelper helper) {
+        TrackersLensHandler.reset();
+        Holder<Enchantment> lens = lookup(helper, "trackers_lens");
+        if (lens == null) { helper.fail("trackers_lens not in registry"); return; }
+
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 4));
+        ServerPlayer player = scopingPlayerAt(helper, new BlockPos(1, 1, 0), victim.getEyePosition());
+        ItemStack spyglass = enchantedSpyglass(lens, 1);
+
+        try {
+            scopeFor(player, spyglass, SpyglassEnchantMath.SIGHTING_SAMPLES);
+            var marked = victim.getEffect(MobEffects.GLOWING);
+            if (marked == null) { helper.fail("the first sighting should have marked the mob"); return; }
+            int afterMark = marked.getDuration();
+
+            scopeFor(player, spyglass, SpyglassEnchantMath.SIGHTING_SAMPLES * 2);
+            var held = victim.getEffect(MobEffects.GLOWING);
+            if (held == null) { helper.fail("the glow should still be running"); return; }
+            if (held.getDuration() > afterMark) {
+                helper.fail("holding the lens must not refresh a live glow, duration went from "
+                        + afterMark + " to " + held.getDuration());
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.discard();
+        }
+    }
+
+    // Once the glow lapses, keeping the creature scoped earns a fresh mark — no dead zone.
+    @GameTest(template = "meridian:empty_5x5x5")
+    public void marksAgainOnceTheGlowLapses(GameTestHelper helper) {
+        TrackersLensHandler.reset();
+        Holder<Enchantment> lens = lookup(helper, "trackers_lens");
+        if (lens == null) { helper.fail("trackers_lens not in registry"); return; }
+
+        Pig victim = helper.spawn(EntityType.PIG, new BlockPos(1, 1, 4));
+        ServerPlayer player = scopingPlayerAt(helper, new BlockPos(1, 1, 0), victim.getEyePosition());
+        ItemStack spyglass = enchantedSpyglass(lens, 1);
+
+        try {
+            scopeFor(player, spyglass, SpyglassEnchantMath.SIGHTING_SAMPLES);
+            if (!victim.hasEffect(MobEffects.GLOWING)) {
+                helper.fail("the first sighting should have marked the mob");
+                return;
+            }
+
+            // Stand in for the glow running out while the player keeps watching.
+            victim.removeEffect(MobEffects.GLOWING);
+
+            // One sample notices the lapse and restarts the sighting; the rest complete it.
+            scopeFor(player, spyglass, SpyglassEnchantMath.SIGHTING_SAMPLES + 1);
+            if (!victim.hasEffect(MobEffects.GLOWING)) {
+                helper.fail("a lapsed glow must be re-earned by keeping the creature scoped");
                 return;
             }
             helper.succeed();
@@ -146,7 +210,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, new ItemStack(Items.SPYGLASS),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS * 2);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES * 2);
             if (victim.hasEffect(MobEffects.GLOWING)) {
                 helper.fail("An unenchanted spyglass must never mark");
                 return;
@@ -173,7 +237,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, enchantedSpyglass(lens, 4),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS * 2);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES * 2);
             if (victim.hasEffect(MobEffects.GLOWING)) {
                 helper.fail("Tracker's Lens must not acquire a target through a wall");
                 return;
@@ -199,7 +263,7 @@ public class TrackersLensGameTest implements FabricGameTest {
 
         try {
             scopeFor(player, enchantedSpyglass(lens, 4),
-                    SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS * 2);
+                    SpyglassEnchantMath.SIGHTING_SAMPLES * 2);
             if (victim.hasEffect(MobEffects.GLOWING)) {
                 helper.fail("Tracker's Lens must not mark a player while "
                         + "combat.trackersLensAffectsPlayers is false");

@@ -51,6 +51,22 @@ class SpyglassEnchantMathTest {
     }
 
     @Test
+    void samplingDividesTheSightingExactly() {
+        assertEquals(SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS,
+                SpyglassEnchantMath.SIGHTING_SAMPLE_INTERVAL_TICKS * SpyglassEnchantMath.SIGHTING_SAMPLES,
+                "samples must tile the sighting window exactly, or the wall-clock cost drifts");
+        assertTrue(SpyglassEnchantMath.SIGHTING_SAMPLE_INTERVAL_TICKS > 1,
+                "sampling every tick would defeat the interval gate the raycast needs");
+    }
+
+    @Test
+    void trackingCone_isNarrowButForgiving() {
+        assertTrue(SpyglassEnchantMath.TRACKING_CONE_COS > 0.9
+                        && SpyglassEnchantMath.TRACKING_CONE_COS < 1.0,
+                "the hold cone must be a few degrees — not a full hemisphere, not an exact ray");
+    }
+
+    @Test
     void sightingAndRange_areSane() {
         assertEquals(30, SpyglassEnchantMath.TRACKERS_LENS_SIGHTING_TICKS,
                 "the sighting is a second and a half at every level");

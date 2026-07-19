@@ -8,11 +8,32 @@ package com.rfizzle.meridian.enchanting;
 public final class SpyglassEnchantMath {
 
     /**
+     * Server ticks between sighting samples. Acquisition is the expensive half of this enchantment
+     * — a block raycast and, when no target is held, an entity sweep — so it is sampled on an
+     * interval rather than run every tick, matching how every other per-player effect in the mod
+     * gates its expensive work. 250 ms granularity is well below what a player can perceive as a
+     * delay in "look away and start over".
+     */
+    public static final int SIGHTING_SAMPLE_INTERVAL_TICKS = 5;
+
+    /** Consecutive samples on one creature that complete a sighting. */
+    public static final int SIGHTING_SAMPLES = 6;
+
+    /**
      * Server ticks a creature must be held steady in the spyglass before Tracker's Lens marks it
      * (1.5 seconds). Constant at every level: the level buys a longer glow, not a faster sighting,
      * so a maxed lens still asks for the same deliberate pause on the target.
      */
-    public static final int TRACKERS_LENS_SIGHTING_TICKS = 30;
+    public static final int TRACKERS_LENS_SIGHTING_TICKS =
+            SIGHTING_SAMPLE_INTERVAL_TICKS * SIGHTING_SAMPLES;
+
+    /**
+     * Cosine of the half-angle within which a already-acquired creature stays held. Acquisition
+     * itself is a true crosshair hit; keeping the lock is deliberately more forgiving than that, so
+     * ordinary mouse drift over a second and a half does not reset the sighting. Roughly eight
+     * degrees.
+     */
+    public static final double TRACKING_CONE_COS = 0.99;
 
     /**
      * How far Tracker's Lens can acquire a target, in blocks — the same reach as Seeker's lock.

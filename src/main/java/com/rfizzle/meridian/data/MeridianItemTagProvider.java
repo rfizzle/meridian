@@ -31,6 +31,8 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_MOUNTED = TagKey.create(Registries.ITEM, Meridian.id("enchantable/mounted"));
     private static final TagKey<Item> ENCHANTABLE_SHEARS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shears"));
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
+    // Aliased from MeridianItemTags rather than rebuilt here: the enchanting menu checks these two
+    // at runtime, so datagen and that check must resolve the same key.
     private static final TagKey<Item> ENCHANTABLE_SPYGLASS = MeridianItemTags.ENCHANTABLE_SPYGLASS;
     private static final TagKey<Item> ENCHANTABLE_SURFACE = MeridianItemTags.ENCHANTABLE_SURFACE;
     private static final TagKey<Item> ENCHANTABLE_SWORD_OR_MACE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/sword_or_mace"));
