@@ -112,6 +112,7 @@ public final class EnchantmentEffects {
     public static final ResourceKey<Enchantment> VOLLEY = key("volley");
     public static final ResourceKey<Enchantment> KILN = key("kiln");
     public static final ResourceKey<Enchantment> METICULOUS = key("meticulous");
+    public static final ResourceKey<Enchantment> TRACKERS_LENS = key("trackers_lens");
     public static final ResourceKey<Enchantment> STAGGER = key("stagger");
     public static final ResourceKey<Enchantment> TAILWIND = key("tailwind");
     public static final ResourceKey<Enchantment> CURSE_OF_ECHOES = key("curse_of_echoes");

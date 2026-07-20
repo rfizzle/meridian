@@ -54,7 +54,7 @@ class EnchantmentJsonValidationTest {
             "seismic_slam", "sentinel", "shackle", "siphon", "skybound", "skyfall",
             "slipstream", "snare", "soul_tax", "spellguard", "stagger", "steadfast",
             "stormcall", "stormward", "sunder", "tailwind", "tempest", "tempo", "terrasculpt",
-            "tether", "thermal", "thrift", "timberfell", "torrent", "trailblaze", "trample", "trophy",
+            "tether", "thermal", "thrift", "timberfell", "torrent", "trackers_lens", "trailblaze", "trample", "trophy",
             "true_flight", "twin_hook",
             "umbral", "undertow", "updraft",
             "vault", "verdure", "vital_mend", "vitality", "voidbane", "volley", "wavestride", "winterward");
@@ -199,7 +199,7 @@ class EnchantmentJsonValidationTest {
         long count = Files.list(ENCHANTMENT_DIR)
                 .filter(p -> p.toString().endsWith(".json"))
                 .count();
-        assertEquals(145, count, "expected exactly 145 enchantment JSON files");
+        assertEquals(146, count, "expected exactly 146 enchantment JSON files");
     }
 
     @TestFactory

@@ -3,6 +3,7 @@ package com.rfizzle.meridian.data;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.shelf.EnchantingShelfBlock;
+import com.rfizzle.meridian.tag.MeridianItemTags;
 import com.rfizzle.meridian.shelf.MeridianShelves;
 
 import java.util.concurrent.CompletableFuture;
@@ -30,6 +31,10 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
     private static final TagKey<Item> ENCHANTABLE_MOUNTED = TagKey.create(Registries.ITEM, Meridian.id("enchantable/mounted"));
     private static final TagKey<Item> ENCHANTABLE_SHEARS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shears"));
     private static final TagKey<Item> ENCHANTABLE_SHIELD = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shield"));
+    // Aliased from MeridianItemTags rather than rebuilt here: the enchanting menu checks these two
+    // at runtime, so datagen and that check must resolve the same key.
+    private static final TagKey<Item> ENCHANTABLE_SPYGLASS = MeridianItemTags.ENCHANTABLE_SPYGLASS;
+    private static final TagKey<Item> ENCHANTABLE_SURFACE = MeridianItemTags.ENCHANTABLE_SURFACE;
     private static final TagKey<Item> ENCHANTABLE_SWORD_OR_MACE = TagKey.create(Registries.ITEM, Meridian.id("enchantable/sword_or_mace"));
     private static final TagKey<Item> ENCHANTABLE_PICKAXES = TagKey.create(Registries.ITEM, Meridian.id("enchantable/pickaxes"));
     private static final TagKey<Item> ENCHANTABLE_SHOVELS = TagKey.create(Registries.ITEM, Meridian.id("enchantable/shovels"));
@@ -98,6 +103,17 @@ public class MeridianItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
         getOrCreateTagBuilder(ENCHANTABLE_SHIELD)
                 .add(Items.SHIELD);
+
+        // Tracker's Lens — the spyglass is the only item it lands on; vanilla ships no
+        // #minecraft:enchantable/spyglass tag, so Meridian defines one.
+        getOrCreateTagBuilder(ENCHANTABLE_SPYGLASS)
+                .add(Items.SPYGLASS);
+
+        // Surfaces the table must accept even though vanilla's Item#isEnchantable rejects them for
+        // carrying no durability. The durable custom surfaces (shield, brush, elytra, horse armour)
+        // clear that check unaided and stay out of this tag.
+        getOrCreateTagBuilder(ENCHANTABLE_SURFACE)
+                .addTag(ENCHANTABLE_SPYGLASS);
 
         // Sword + mace, without the axes that #minecraft:enchantable/sharp_weapon carries.
         getOrCreateTagBuilder(ENCHANTABLE_SWORD_OR_MACE)

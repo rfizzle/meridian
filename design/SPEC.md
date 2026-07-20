@@ -346,10 +346,10 @@ Left = any damageable, not-already-unbreakable item, right = a Tempered Core. Ma
 
 ## 8. Enchantments
 
-145 original enchantments, defined as JSON in `data/meridian/enchantment/` (145 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
+146 original enchantments, defined as JSON in `data/meridian/enchantment/` (146 files) on top of vanilla's data-driven `EnchantmentEffectComponents`, with custom Java handlers where vanilla components are insufficient. Names, IDs, weights, costs, and effects are original to Meridian.
 
 ### JSON Structure
-Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. 30 enchantments attach at least one vanilla effect codec (e.g. `minecraft:attributes`); the other 115 drive their behavior entirely through Java event handlers with an empty `effects: {}`.
+Each file is a standard 1.21.1 enchantment definition: `description` (translation key), `supported_items` / `primary_items` (item tags), optional `exclusive_set`, `weight`, `max_level`, `min_cost` / `max_cost` (`{base, per_level_above_first}`), `anvil_cost`, `slots`, and an `effects` map. 30 enchantments attach at least one vanilla effect codec (e.g. `minecraft:attributes`); the other 116 drive their behavior entirely through Java event handlers with an empty `effects: {}`.
 
 ### Categories and Handlers
 | Category | Example enchantments | Handler |
@@ -410,7 +410,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 
 ## Configuration
 
-`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 10) with a forward-migration hook.
+`config/meridian.json` is generated with defaults on first launch. All values hot-reload via `/meridian reload` (server-authoritative, synced to clients). The config is a **nested object** (sections, not a flat key list); shelf stat contributions live in datapacks, not here. The file carries a `configVersion` (currently 11) with a forward-migration hook.
 
 ### `enchantingTable`
 | Key | Type | Default | Range / Notes |

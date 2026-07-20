@@ -9,7 +9,7 @@ Meridian takes over one thing: enchanting. Vanilla's table is a single "power"
 number and a slot machine — you ring it with bookshelves, spend levels, and
 hope. Meridian replaces that with five independent stats you raise by building a
 workshop of themed shelves, then layers a book-banking library, salvage and
-experience tomes, anvil upgrades, and 145 original enchantments on top.
+experience tomes, anvil upgrades, and 146 original enchantments on top.
 Enchanting stops being a corner you visit and becomes a progression you chase —
 from your first stone shelf to a room that pushes an enchant to level 100.
 Everything about your world outside the table is left alone.
@@ -93,9 +93,9 @@ tree marks the path from first shelf to Eterna 50.
 - **What changes for you** — Curses, anvil wear, and durability grinding each get
   an escape hatch — any of which a server owner can switch off to keep the grind.
 
-### 145 original enchantments
-- **What it is** — A roster of 145 enchantments spanning melee, ranged, tools,
-  mobility, mounts, elytra, and shields — from Excavate's 3×3 mining to True
+### 146 original enchantments
+- **What it is** — A roster of 146 enchantments spanning melee, ranged, tools,
+  mobility, mounts, elytra, shields, and the spyglass — from Excavate's 3×3 mining to True
   Flight, Gravitas, and Final Gambit.
 - **How you use it** — They roll at the table, drop as loot, and combine at the
   anvil like any enchantment, respecting their own exclusivity rules.

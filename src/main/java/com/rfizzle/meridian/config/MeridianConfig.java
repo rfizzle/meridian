@@ -382,6 +382,8 @@ public class MeridianConfig {
         public boolean staggerAffectsPlayers = false;
         /** Whether a Bullrush shield charge may knock back and daze player victims; mobs are always eligible. */
         public boolean bullrushAffectsPlayers = false;
+        /** Whether Tracker's Lens may mark players to glow through walls; mobs are always eligible. */
+        public boolean trackersLensAffectsPlayers = false;
     }
 
     public static class Attunement {

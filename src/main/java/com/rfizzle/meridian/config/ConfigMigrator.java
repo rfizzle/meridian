@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 10;
+    static final int CURRENT_VERSION = 11;
 
     @FunctionalInterface
     interface Migration {
@@ -72,6 +72,10 @@ final class ConfigMigrator {
             // v9 → v10: the groom section (#224) — chanceLevel1, chanceLevel2, cooldownTicks. Purely
             // additive; Gson field initializers supply the defaults, and the post-migration re-save
             // writes the section into the file so operators can discover the levers.
+            json -> { },
+            // v10 → v11: combat.trackersLensAffectsPlayers (#228). Purely additive; Gson deserializes
+            // an absent boolean as false, which already matches the field default, and the
+            // post-migration re-save writes it into the file so operators can discover the toggle.
             json -> { },
     };
 

@@ -66,8 +66,8 @@ public class EnchantmentRosterIntegrationTest implements FabricGameTest {
         long meridianCount = reg.holders()
                 .filter(h -> h.key().location().getNamespace().equals("meridian"))
                 .count();
-        if (meridianCount != 145) {
-            helper.fail("Expected 145 meridian enchantments in registry, found " + meridianCount);
+        if (meridianCount != 146) {
+            helper.fail("Expected 146 meridian enchantments in registry, found " + meridianCount);
             return;
         }
         helper.succeed();

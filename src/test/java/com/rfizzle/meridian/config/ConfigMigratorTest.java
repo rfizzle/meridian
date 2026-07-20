@@ -135,6 +135,28 @@ class ConfigMigratorTest {
     }
 
     @Test
+    void migrate_v10_advancesToCurrentWithoutStructuralChange() {
+        // v10 → v11 (combat.trackersLensAffectsPlayers, #228) is purely additive: Gson deserializes
+        // an absent boolean as false, which already matches the field default, so the migration only
+        // advances the version stamp and the post-migration re-save surfaces the toggle.
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 10);
+        JsonObject combat = new JsonObject();
+        combat.addProperty("markAffectsPlayers", true);
+        json.add("combat", combat);
+
+        boolean changed = ConfigMigrator.migrate(json);
+
+        assertTrue(changed, "migrating a v10 config must report a change");
+        assertTrue(json.getAsJsonObject("combat").get("markAffectsPlayers").getAsBoolean(),
+                "sibling combat toggles must survive the migration");
+        assertFalse(json.getAsJsonObject("combat").has("trackersLensAffectsPlayers"),
+                "the migration itself does not seed the toggle — Gson defaults do on deserialize");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt(),
+                "configVersion must be stamped to the current version");
+    }
+
+    @Test
     void migrate_currentVersion_isNoOp() {
         JsonObject json = new JsonObject();
         json.addProperty("configVersion", ConfigMigrator.CURRENT_VERSION);

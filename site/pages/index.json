@@ -2,12 +2,12 @@
   "type": "home",
   "nav": "Home",
   "metaTitle": "Meridian \u2014 Enchanting Overhaul for Minecraft",
-  "metaDescription": "Meridian is a complete enchanting overhaul mod for Minecraft 1.21.1 Fabric. Five stat axes, 145 original enchantments, 25+ themed shelves, enchantment libraries, salvage tomes, and anvil upgrades.",
+  "metaDescription": "Meridian is a complete enchanting overhaul mod for Minecraft 1.21.1 Fabric. Five stat axes, 146 original enchantments, 25+ themed shelves, enchantment libraries, salvage tomes, and anvil upgrades.",
   "ogTitle": "Meridian \u2014 Enchanting Overhaul for Minecraft",
-  "ogDescription": "A complete enchanting overhaul for Minecraft 1.21.1 Fabric. Five stat axes, 145 original enchantments, themed shelves, libraries, tomes, and more.",
+  "ogDescription": "A complete enchanting overhaul for Minecraft 1.21.1 Fabric. Five stat axes, 146 original enchantments, themed shelves, libraries, tomes, and more.",
   "hero": {
     "lede": "A complete enchanting overhaul for Minecraft 1.21.1 (Fabric).",
-    "sub": "Five independent stats replace vanilla's single power value. 145 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage and XP tomes, and anvil upgrades \u2014 all fully data-driven.",
+    "sub": "Five independent stats replace vanilla's single power value. 146 original enchantments, 25+ themed shelf blocks, two-tier enchantment libraries, salvage and XP tomes, and anvil upgrades \u2014 all fully data-driven.",
     "buttons": [
       {
         "label": "Download Latest Release",
@@ -47,9 +47,9 @@
             },
             {
               "icon": "&#128218;",
-              "title": "145 Original Enchantments",
+              "title": "146 Original Enchantments",
               "html": [
-                "Combat, ranged, tool, mobility, shield, elytra, and mount enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."
+                "Combat, ranged, tool, mobility, shield, elytra, mount, and spyglass enchantments. All built on vanilla's data-driven EnchantmentEffectComponents with custom Java handlers."
               ]
             },
             {

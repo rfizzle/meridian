@@ -65,6 +65,8 @@
             "com.rfizzle.meridian.gametest.enchantments.TailwindGameTest",
             "com.rfizzle.meridian.gametest.enchantments.ThriftGameTest",
             "com.rfizzle.meridian.gametest.enchantments.RangedEnchantmentGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.TrackersLensGameTest",
+            "com.rfizzle.meridian.gametest.enchantments.TrackersLensConfigGameTest",
             "com.rfizzle.meridian.gametest.enchantments.MiningEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.BrushEnchantmentGameTest",
             "com.rfizzle.meridian.gametest.enchantments.DefenseEnchantmentGameTest",

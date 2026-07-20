@@ -21,6 +21,7 @@ import com.rfizzle.meridian.event.MountedEnchantmentHandler;
 import com.rfizzle.meridian.event.ProjectileEnchantmentHandler;
 import com.rfizzle.meridian.event.TetherHandler;
 import com.rfizzle.meridian.event.ToolEnchantmentHandler;
+import com.rfizzle.meridian.event.TrackersLensHandler;
 import com.rfizzle.meridian.event.GroomHandler;
 import com.rfizzle.meridian.event.VerdureLootHandler;
 import com.rfizzle.meridian.event.WardenLootHandler;
@@ -72,6 +73,7 @@ public class Meridian implements ModInitializer {
         GroomHandler.register();
         MountedEnchantmentHandler.register();
         ProjectileEnchantmentHandler.register();
+        TrackersLensHandler.register();
         TetherHandler.register();
         AurifyHandler.register();
         MeridianNetworking.registerPayloads();
