@@ -159,21 +159,21 @@ class GametestRegistrationTest {
     }
 
     /**
-     * The gametest mod loads beside the real one, so a drifted toolchain bound fails the whole
-     * {@code runGametest} launch with a dependency error that reads like a Loom problem.
+     * The gametest mod depends on the main mod and nothing else. Loader, Minecraft, Java, and
+     * Fabric API are enforced transitively — {@code meridian-gametest} cannot load unless
+     * {@code meridian} did, and {@code meridian} cannot load without them — so restating their
+     * floors here would only add a second place to update on every toolchain bump, where a missed
+     * edit surfaces as a confusing load failure inside {@code runGametest}.
      */
     @Test
-    void gametestManifestToolchainBoundsMatchTheShippedManifest() throws IOException {
-        JsonObject mainDepends = loadJson(MAIN_MANIFEST).getAsJsonObject("depends");
+    void gametestManifestDependsOnlyOnTheMod() throws IOException {
         JsonObject gametestDepends = loadJson(GAMETEST_MANIFEST).getAsJsonObject("depends");
         assertNotNull(gametestDepends, "Gametest manifest must declare depends");
 
-        for (String key : List.of("fabricloader", "minecraft", "java", "fabric-api")) {
-            assertTrue(gametestDepends.has(key), "Gametest manifest must pin: " + key);
-            assertEquals(mainDepends.get(key).getAsString(), gametestDepends.get(key).getAsString(),
-                    "Gametest manifest toolchain bound must match the shipped manifest: " + key);
-        }
         assertTrue(gametestDepends.has("meridian"),
                 "The gametest mod must depend on the mod it tests");
+        assertEquals(Set.of("meridian"), gametestDepends.keySet(),
+                "Gametest manifest depends must name only the main mod — the toolchain floors are "
+                        + "enforced transitively and belong solely in " + MAIN_MANIFEST);
     }
 }
