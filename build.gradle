@@ -299,6 +299,76 @@ jacocoTestReport {
     }
 }
 
+// Attach the JaCoCo agent to the gametest server so code only exercised in-game
+// (event handlers, commands, registration, mixin-driven behavior) counts toward
+// coverage. Loom's run task is a JavaExec, so the task extension applies. The
+// includes filter keeps the agent from instrumenting Minecraft/Fabric classes.
+tasks.named('runGametest') {
+    jacoco.applyTo(it)
+    it.jacoco.destinationFile = layout.buildDirectory.file('jacoco/runGametest.exec').get().asFile
+    it.jacoco.includes = ['com.rfizzle.meridian.*']
+    // applyTo registers the exec file as a task output, which re-enables up-to-date
+    // checking on a run task Loom deliberately leaves output-free. Without this, a
+    // second `runGametest` with the exec file already on disk reports UP-TO-DATE and
+    // BUILD SUCCESSFUL having run none of the suites — which is exactly the invocation
+    // you make when re-running to shake out a flaky batch.
+    it.outputs.upToDateWhen { false }
+}
+
+// Single source of coverage truth: unit tests + gametests merged over src/main.
+// The unit-test-only jacocoTestReport reads 0% for everything a gametest drives,
+// so per-package coverage is read from this report, never from that one.
+tasks.register('jacocoMergedReport', JacocoReport) {
+    // The report reads compileJava/processResources output, so it must depend on
+    // them — without this, any invocation that compiles without also scheduling a
+    // test task (e.g. `gradlew jar jacocoMergedReport`) fails Gradle's
+    // implicit-dependency validation.
+    dependsOn tasks.named('classes')
+    // Ordering only — not dependsOn, so the report can run from existing exec
+    // data without forcing a gametest server spin-up.
+    mustRunAfter test, tasks.named('runGametest')
+    // fileTree only picks up exec files that exist, so the report still runs when
+    // one of the two sweeps hasn't.
+    executionData fileTree(layout.buildDirectory.dir('jacoco')) {
+        include 'test.exec', 'runGametest.exec'
+    }
+    // The report is a cheap read over existing exec data, and its whole job is to
+    // report a number a human will act on — so it always runs rather than standing
+    // on a cached result whose exec inputs may since have gone missing or stale.
+    // This also keeps the doFirst diagnostics below from being skipped exactly when
+    // they would have fired.
+    outputs.upToDateWhen { false }
+    // A sweep that never ran leaves its exec file absent, which would otherwise
+    // yield a partial number under the "merged" label with no indication. A sweep
+    // that ran before the classes were recompiled is worse: JaCoCo keys execution
+    // data by class ID, so a stale exec silently contributes nothing and its classes
+    // read 0% rather than failing the build.
+    doFirst {
+        def newestClass = classDirectories.asFileTree.files*.lastModified().max() ?: 0L
+        ['test.exec', 'runGametest.exec'].each { name ->
+            def execFile = layout.buildDirectory.file("jacoco/${name}").get().asFile
+            if (!execFile.exists() || execFile.length() == 0) {
+                logger.warn("jacocoMergedReport: ${name} is missing or empty — this report is NOT merged coverage")
+            } else if (execFile.lastModified() < newestClass) {
+                logger.warn("jacocoMergedReport: ${name} predates the compiled classes — anything recompiled " +
+                        'since that sweep reads 0%; re-run `make coverage`')
+            }
+        }
+    }
+    sourceSets sourceSets.main
+    // Mixin bodies execute inside the transformed vanilla classes, so the agent
+    // can never attribute coverage to the mixin class files — excluding them keeps
+    // the denominator honest. Mixins stay thin (delegate to handlers), so nothing
+    // measurable hides here.
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: ['com/rfizzle/meridian/mixin/**'])
+    }))
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 tasks.register('verifyDatagenIdempotent') {
     description = 'Runs datagen and asserts git reports no changes in src/main/generated/'
     group = 'verification'

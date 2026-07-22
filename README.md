@@ -188,7 +188,10 @@ See the full annotated reference: **[Configuration Guide](https://meridian.rfizz
 ```sh
 ./gradlew build          # produces build/libs/meridian-<version>.jar
 ./gradlew test           # runs unit tests
+./gradlew runGametest    # runs the in-world gametest suites
 ./gradlew runDatagen     # regenerates src/main/generated/
+
+make coverage            # unit + gametest sweep, merged coverage report
 ```
 
 ---
