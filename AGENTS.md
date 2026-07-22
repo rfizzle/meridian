@@ -32,6 +32,7 @@ in the local workspace. Normative for this repo:
 ./gradlew build                    # compile + test + jar
 ./gradlew test                     # JUnit tests only
 ./gradlew runGametest              # Fabric gametests (headless server)
+./gradlew test runGametest jacocoMergedReport  # merged unit + gametest coverage
 ./gradlew runClient                # launch dev client
 ./gradlew runServer                # launch dev server
 ./gradlew runDatagen               # regenerate data into src/main/generated
