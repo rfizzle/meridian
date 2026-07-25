@@ -6,6 +6,8 @@
 size: 16
 frametime: 6
 interpolate: true
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/everfeast_baked_potato.png
 
 legend:
   . transparent

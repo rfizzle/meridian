@@ -6,6 +6,8 @@
 size: 16
 frametime: 3
 interpolate: true
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/everfull_flask.png
 
 legend:
   . transparent

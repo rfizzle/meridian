@@ -7,6 +7,8 @@
 size: 16
 frametime: 6
 interpolate: true
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/everfeast_cooked_beef.png
 
 legend:
   . transparent

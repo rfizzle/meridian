@@ -3,6 +3,8 @@
 # salvage rune on the cover and cream/bone page edges along the bottom. Reads as
 # "scrap / break down" at a glance.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/scrap_tome.png
 
 legend:
   . transparent

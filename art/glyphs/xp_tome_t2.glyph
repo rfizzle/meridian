@@ -3,6 +3,8 @@
 # ramp. Pages are neutral cream and the gem is a constant white socket, so only
 # the cover (chars A/B/P/p/s/q) changes between tomes.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/xp_tome_t2.png
 
 legend:
   . transparent
