@@ -1,5 +1,7 @@
 # sight t1 top — nether brick + gold corner gems, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/sight_top.png
 
 legend:
   . transparent

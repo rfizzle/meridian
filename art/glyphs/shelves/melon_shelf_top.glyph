@@ -1,5 +1,7 @@
 # melonshelf top/bottom — melon rind, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/melon_shelf_top.png
 
 legend:
   . transparent

@@ -1,5 +1,7 @@
 # sight t2 concept.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/sightshelf_t2.png
 
 legend:
   . transparent

@@ -1,5 +1,7 @@
 # dormant_deepshelf side (deepslate family) — deepslate frame, cool books, dormant (unlit) amethyst accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/dormant_deepshelf.png
 
 legend:
   . transparent

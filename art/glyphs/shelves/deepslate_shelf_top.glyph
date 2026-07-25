@@ -1,5 +1,7 @@
 # shared deepslate-tile shelf top/bottom (deepslate family), seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/deepslate_shelf_top.png
 
 legend:
   . transparent

@@ -1,5 +1,7 @@
 # library top — purple cloth.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/library/top.png
 
 legend:
   . transparent

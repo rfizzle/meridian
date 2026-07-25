@@ -1,5 +1,7 @@
 # pearl_endshelf side (end family) — end-stone frame, varied books, ender-pearl cluster accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/pearl_endshelf.png
 
 legend:
   . transparent

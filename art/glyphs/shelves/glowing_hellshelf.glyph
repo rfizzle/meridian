@@ -1,5 +1,7 @@
 # glowing_hellshelf side (nether family) — nether-brick frame, nether books, glowstone accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/glowing_hellshelf.png
 
 legend:
   . transparent

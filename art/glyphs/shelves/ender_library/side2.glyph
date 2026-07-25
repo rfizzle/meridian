@@ -1,5 +1,7 @@
 # ender_library bookshelf face.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/ender_library/side2.png
 
 legend:
   . transparent

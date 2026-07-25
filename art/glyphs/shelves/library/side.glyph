@@ -1,5 +1,7 @@
 # library front — purple drape + gold sigil.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/library/side.png
 
 legend:
   . transparent

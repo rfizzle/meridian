@@ -1,5 +1,7 @@
 # hellshelf side (nether family) — nether-brick frame, nether books, nether-wart accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/hellshelf.png
 
 legend:
   . transparent

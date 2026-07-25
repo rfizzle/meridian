@@ -1,5 +1,7 @@
 # melonshelf side (single) — melon-rind frame, flesh books, melon-slice accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/melonshelf.png
 
 legend:
   . transparent

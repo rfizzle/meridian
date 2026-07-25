@@ -1,5 +1,7 @@
 # filtering_shelf occupied slots (atlas).
 size: 32
+kind: ui
+ships: src/main/resources/assets/meridian/textures/block/filtering_shelf/occupied.png
 
 legend:
   . transparent

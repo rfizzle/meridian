@@ -1,5 +1,7 @@
 # infused_hellshelf side (nether family) — base hellshelf empowered with a gold infusion mote.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/infused_hellshelf.png
 
 legend:
   . transparent

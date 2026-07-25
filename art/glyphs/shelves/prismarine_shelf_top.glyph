@@ -1,5 +1,7 @@
 # shared prismarine shelf top/bottom (sea family), seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/prismarine_shelf_top.png
 
 legend:
   . transparent

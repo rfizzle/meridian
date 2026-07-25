@@ -1,5 +1,7 @@
 # beeshelf top/bottom — honeycomb, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/honeycomb_shelf_top.png
 
 legend:
   . transparent

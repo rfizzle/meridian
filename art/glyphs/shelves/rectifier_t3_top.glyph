@@ -1,5 +1,7 @@
 # rectifier t3 top — purpur, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/rectifier_t3_top.png
 
 legend:
   . transparent

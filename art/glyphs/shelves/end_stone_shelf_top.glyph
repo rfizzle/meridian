@@ -1,5 +1,7 @@
 # shared end-stone shelf top/bottom (end family), seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/end_stone_shelf_top.png
 
 legend:
   . transparent

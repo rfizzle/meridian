@@ -1,5 +1,7 @@
 # library bookshelf face.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/library/side2.png
 
 legend:
   . transparent

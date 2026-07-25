@@ -1,5 +1,7 @@
 # filtering_shelf side — prismarine wave.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/filtering_shelf/side.png
 
 legend:
   . transparent

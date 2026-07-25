@@ -1,5 +1,7 @@
 # ender_library books atlas.
 size: 32
+kind: ui
+ships: src/main/resources/assets/meridian/textures/block/ender_library/books.png
 
 legend:
   . transparent

@@ -1,5 +1,7 @@
 # filtering_shelf empty slots (atlas).
 size: 32
+kind: ui
+ships: src/main/resources/assets/meridian/textures/block/filtering_shelf/empty.png
 
 legend:
   . transparent

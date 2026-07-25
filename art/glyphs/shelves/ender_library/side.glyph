@@ -1,5 +1,7 @@
 # ender_library front — teal drape + pale sigil.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/ender_library/side.png
 
 legend:
   . transparent

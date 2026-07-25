@@ -1,5 +1,7 @@
 # crystal_seashelf side (sea family) — prismarine frame, sea books, themed accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/crystal_seashelf.png
 
 legend:
   . transparent

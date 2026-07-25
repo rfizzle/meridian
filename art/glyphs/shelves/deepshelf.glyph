@@ -1,5 +1,7 @@
 # deepshelf side (deepslate family) — deepslate frame, cool books, amethyst-cluster accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/deepshelf.png
 
 legend:
   . transparent

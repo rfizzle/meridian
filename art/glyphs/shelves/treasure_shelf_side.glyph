@@ -1,5 +1,7 @@
 # treasure concept.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/treasure_shelf_side.png
 
 legend:
   . transparent
