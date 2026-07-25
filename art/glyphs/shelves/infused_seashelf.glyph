@@ -1,5 +1,7 @@
 # infused_seashelf side (sea family) — base seashelf empowered with a cyan infusion mote.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/infused_seashelf.png
 
 legend:
   . transparent

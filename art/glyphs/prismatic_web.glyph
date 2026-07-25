@@ -7,6 +7,8 @@
 # string.
 size: 16
 frametime: 5
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/prismatic_web.png
 
 legend:
   . transparent

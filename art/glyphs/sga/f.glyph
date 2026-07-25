@@ -2,6 +2,8 @@
 # Top-lit glow ramp (H bright -> M mid -> D dim). Renders the fire variant
 # standalone; render-sga.py recolors it into water/sculk/end.
 size: 8
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/particle/sga_f_fire.png
 
 legend:
   . transparent

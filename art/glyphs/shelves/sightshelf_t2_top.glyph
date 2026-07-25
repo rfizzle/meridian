@@ -1,5 +1,7 @@
 # sight t2 top — netherite + emerald corner gems, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/sightshelf_t2_top.png
 
 legend:
   . transparent

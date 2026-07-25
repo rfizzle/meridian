@@ -1,6 +1,8 @@
 # warden_tendril — curved sensory tendril: glowing cyan tip (upper-left)
 # tapering into near-black teal at the lower-right. 16x16 item icon.
 size: 16
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/warden_tendril.png
 
 legend:
   . transparent

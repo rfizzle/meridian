@@ -1,5 +1,7 @@
 # rectifier t2 top — gilded blackstone, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/rectifier_t2_top.png
 
 legend:
   . transparent

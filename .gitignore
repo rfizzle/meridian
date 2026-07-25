@@ -67,3 +67,7 @@ art/audio/**/*.report.png
 # committing them would make `./gradlew runDatagen` non-idempotent against git.
 # The generated assets/data under src/main/generated are committed.
 src/main/generated/.cache/
+
+# Bytecode caches left behind by the vendored art/audio tooling (glyph.py,
+# sfx.py, the art/ generators) whenever one is imported as a module.
+__pycache__/

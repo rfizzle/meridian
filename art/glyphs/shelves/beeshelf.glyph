@@ -1,5 +1,7 @@
 # beeshelf side (single) — honeycomb frame, honey books, bee accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/beeshelf.png
 
 legend:
   . transparent

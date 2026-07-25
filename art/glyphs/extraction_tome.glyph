@@ -2,6 +2,8 @@
 # reads as "extraction" at a glance: a rich royal-blue cover carrying a bright
 # cyan crossed-bones salvage rune, with tan/brown page edges along the bottom.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/extraction_tome.png
 
 legend:
   . transparent

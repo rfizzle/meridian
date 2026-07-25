@@ -1,5 +1,7 @@
 # shared sculk shelf top/bottom — dark with glowing veins, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/sculkshelf_top.png
 
 legend:
   . transparent

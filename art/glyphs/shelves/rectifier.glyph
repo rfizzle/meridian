@@ -1,5 +1,7 @@
 # rectifier t1 concept.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/rectifier.png
 
 legend:
   . transparent

@@ -1,5 +1,7 @@
 # stoneshelf side (single) — andesite frame, muted books, carved-rune accent.
 size: 32
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/stoneshelf.png
 
 legend:
   . transparent

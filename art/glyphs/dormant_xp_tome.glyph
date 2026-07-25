@@ -4,6 +4,8 @@
 # / T2 crimson / T3 gold). Pages are neutral cream; the gem is a constant white
 # socket, matching the activated tomes so only the cover (A/B/P/p/s/q) differs.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/dormant_xp_tome.png
 
 legend:
   . transparent

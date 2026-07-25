@@ -414,16 +414,25 @@ def sculk_top(g, level=1):
 # -------------------------------------------------------------------- emit ----
 def _legend(palette): return [f"  {k} {v}" for k, v in palette.items()]
 
-def emit(name, build, palette=SEA, comment=None):
+# Every shelf spec renders 1:1 into the block texture tree under its own name, so
+# the `ships:` target follows from the name alone. `kind:` follows the face's
+# role: a shelf side tiles against copies of itself (block), a top or bottom cap
+# never repeats (cap), and the UV atlases are flat fields by design (ui).
+SHIPS_ROOT = "src/main/resources/assets/meridian/textures/block"
+
+def _header(name, kind): return [f"kind: {kind}", f"ships: {SHIPS_ROOT}/{name}.png"]
+
+def emit(name, build, palette=SEA, comment=None, kind="block"):
     g = grid(); frame(g); interior(g); build(g)
     comment = comment or f"# {name} side (sea family) — prismarine frame, sea books, themed accent."
-    out = [comment, "size: 32", "", "legend:"] + _legend(palette) + ["", "grid:"]
+    out = [comment, "size: 32"] + _header(name, kind) + ["", "legend:"] + _legend(palette) + ["", "grid:"]
     out += ["  " + "".join(r) for r in g]
     open(f"{OUT}/{name}.glyph", "w").write("\n".join(out) + "\n")
 
-def emit_anim(name, builders, palette, comment, frametime=3, interpolate=True):
+def emit_anim(name, builders, palette, comment, frametime=3, interpolate=True, kind="block"):
     out = [comment, "size: 32", f"frametime: {frametime}",
-           f"interpolate: {'true' if interpolate else 'false'}", "", "legend:"] + _legend(palette) + [""]
+           f"interpolate: {'true' if interpolate else 'false'}"] + _header(name, kind) \
+        + ["", "legend:"] + _legend(palette) + [""]
     for b in builders:
         g = grid(); frame(g); interior(g); b(g)
         out += ["frame:"] + ["  " + "".join(r) for r in g]
@@ -438,7 +447,7 @@ def top(name, palette, comment, speckle):
     for y in range(0, 32, 8): rect(g, 0, y, 31, y, 'm')
     for y in range(4, 32, 8): rect(g, 0, y, 31, y, 'F')
     for x, y, ch in speckle: g[y][x] = ch
-    out = [comment, "size: 32", "", "legend:"] + _legend(palette) + ["", "grid:"]
+    out = [comment, "size: 32"] + _header(name, "cap") + ["", "legend:"] + _legend(palette) + ["", "grid:"]
     out += ["  " + "".join(r) for r in g]
     open(f"{OUT}/{name}.glyph", "w").write("\n".join(out) + "\n")
 
@@ -527,9 +536,9 @@ top("end_stone_shelf_top", END,
     [(6, 5, 'm'), (21, 20, 'm'), (12, 26, 'u')])
 
 # ---------------------------------------------------------------- sculk family ----
-def emit_grid(name, drawfn, palette, comment):
+def emit_grid(name, drawfn, palette, comment, kind="cap"):
     g = grid(); drawfn(g)
-    out = [comment, "size: 32", "", "legend:"] + _legend(palette) + ["", "grid:"]
+    out = [comment, "size: 32"] + _header(name, kind) + ["", "legend:"] + _legend(palette) + ["", "grid:"]
     out += ["  " + "".join(r) for r in g]
     open(f"{OUT}/{name}.glyph", "w").write("\n".join(out) + "\n")
 
@@ -762,11 +771,11 @@ def lib_books(g):
     cover(0, 0, 11, 11, 'G', 'W')          # (up-region) green book
     rect(g, 12, 0, 23, 9, 'T'); rect(g, 12, 0, 23, 1, 'W')  # teal book
     cover(24, 0, 31, 13, 'u', 'g')         # blue book + gold
-emit_grid("library/side", lib_side, LIBRARY, "# library front — purple drape + gold sigil.")
-emit_grid("library/side2", lib_side2, LIBRARY, "# library bookshelf face.")
+emit_grid("library/side", lib_side, LIBRARY, "# library front — purple drape + gold sigil.", kind="block")
+emit_grid("library/side2", lib_side2, LIBRARY, "# library bookshelf face.", kind="block")
 emit_grid("library/top", lib_top, LIBRARY, "# library top — purple cloth.")
 emit_grid("library/bottom", lib_bottom, LIBRARY, "# library bottom — planks.")
-emit_grid("library/books", lib_books, LIBRARY, "# library books atlas (UV-mapped to book stacks).")
+emit_grid("library/books", lib_books, LIBRARY, "# library books atlas (UV-mapped to book stacks).", kind="ui")
 print("emitted library set")
 
 # ender_library — same geometry, end-tier palette (teal cloth, end-stone wood)
@@ -778,11 +787,11 @@ ENDER_LIBRARY = {
  't': '#3aa6b8', 'T': '#226e7a', 'a': '#8a5fce', 'A': '#5a3596', 'u': '#4fb0a0', 'U': '#2a7068',
  'g': '#caa030', 'G': '#8a6a18', 'n': '#b8485a', 'N': '#7a2838', 'W': '#e4ecd8', 'w': '#b6c0a8',
 }
-emit_grid("ender_library/side", lib_side, ENDER_LIBRARY, "# ender_library front — teal drape + pale sigil.")
-emit_grid("ender_library/side2", lib_side2, ENDER_LIBRARY, "# ender_library bookshelf face.")
+emit_grid("ender_library/side", lib_side, ENDER_LIBRARY, "# ender_library front — teal drape + pale sigil.", kind="block")
+emit_grid("ender_library/side2", lib_side2, ENDER_LIBRARY, "# ender_library bookshelf face.", kind="block")
 emit_grid("ender_library/top", lib_top, ENDER_LIBRARY, "# ender_library top — teal cloth.")
 emit_grid("ender_library/bottom", lib_bottom, ENDER_LIBRARY, "# ender_library bottom — end-stone.")
-emit_grid("ender_library/books", lib_books, ENDER_LIBRARY, "# ender_library books atlas.")
+emit_grid("ender_library/books", lib_books, ENDER_LIBRARY, "# ender_library books atlas.", kind="ui")
 print("emitted ender_library set")
 
 # =========================================================== filtering_shelf ====
@@ -828,8 +837,8 @@ def filt_occupied(g):
         for yy in range(by - ht, by):
             for xx in range(x, x + w): g[yy][xx] = sl if xx == x else sd
         g[by - ht][min(x + w - 1, 28)] = 'W'                      # page top
-emit_grid("filtering_shelf/side", filt_side, FILTERING, "# filtering_shelf side — prismarine wave.")
+emit_grid("filtering_shelf/side", filt_side, FILTERING, "# filtering_shelf side — prismarine wave.", kind="block")
 emit_grid("filtering_shelf/top", filt_top, FILTERING, "# filtering_shelf top — prismarine + diamond.")
-emit_grid("filtering_shelf/empty", filt_empty, FILTERING, "# filtering_shelf empty slots (atlas).")
-emit_grid("filtering_shelf/occupied", filt_occupied, FILTERING, "# filtering_shelf occupied slots (atlas).")
+emit_grid("filtering_shelf/empty", filt_empty, FILTERING, "# filtering_shelf empty slots (atlas).", kind="ui")
+emit_grid("filtering_shelf/occupied", filt_occupied, FILTERING, "# filtering_shelf occupied slots (atlas).", kind="ui")
 print("emitted filtering_shelf set")

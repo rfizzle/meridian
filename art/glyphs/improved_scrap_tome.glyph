@@ -3,6 +3,8 @@
 # cover glows light blue/cyan (the "improved" tell), and cream/bone page edges
 # run along the bottom. Faithful trace of the shipped 32×32 item icon.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/improved_scrap_tome.png
 
 legend:
   . transparent

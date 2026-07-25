@@ -1,5 +1,7 @@
 # library books atlas (UV-mapped to book stacks).
 size: 32
+kind: ui
+ships: src/main/resources/assets/meridian/textures/block/library/books.png
 
 legend:
   . transparent

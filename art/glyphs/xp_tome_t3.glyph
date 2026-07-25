@@ -3,6 +3,8 @@
 # cyan→crimson→gold ramp and the most on-brand. Pages are neutral cream and the
 # gem is a constant white socket, so only the cover (A/B/P/p/s/q) changes.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/xp_tome_t3.png
 
 legend:
   . transparent

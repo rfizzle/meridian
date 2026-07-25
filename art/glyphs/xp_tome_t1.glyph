@@ -5,6 +5,8 @@
 # and the experience gem is a constant white socket across all tiers, so only
 # the cover (chars A/B/P/p/s/q) changes between tomes.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/xp_tome_t1.png
 
 legend:
   . transparent

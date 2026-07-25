@@ -1,5 +1,7 @@
 # stoneshelf top/bottom — polished andesite, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/stone_shelf_top.png
 
 legend:
   . transparent

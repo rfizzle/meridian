@@ -2,6 +2,8 @@
 # mod's identity colors so it reads as "experience" at a glance, no label needed:
 # a Meridian-purple cover with gold page edges and a glowing gold experience orb.
 size: 32
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/tome/xp_tome.png
 
 legend:
   . transparent

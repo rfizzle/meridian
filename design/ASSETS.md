@@ -21,6 +21,10 @@
 
 `art/glyphs/` holds every glyph's `.glyph` source; rendered `.png`/`@16x.png` previews there are gitignored review artifacts (the shipped masters live under `assets/`).
 
+Each spec names its own deliverable in a `ships:` line and what the texture is in a `kind:` line: `./gradlew verifyGlyphSpecs` (wired into `check`) asserts every spec declares both and re-renders each one against the asset it ships, failing on a hand-patched PNG or a stale asset behind an edited spec. The specs under `art/glyphs/shelves/` are emitted by `shelfgen.py` and `astrolabe_logo.glyph` by its `.gen.py` — those directives are set in the generator.
+
+Two rows below sit outside that check. The SGA runes verify the fire tint only: `render-sga.py` recolors each rune into the water, sculk and end variants, which are not renders of the spec and so have no `ships:` target. The GUI atlases are composited by `art/gui/guigen.py` and have no `.glyph` at all.
+
 | Asset | `.glyph` source | Final asset |
 |---|---|---|
 | XP Tome | `art/glyphs/xp_tome.glyph` | `assets/meridian/textures/item/tome/xp_tome.png` |

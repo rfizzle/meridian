@@ -1,5 +1,7 @@
 # treasure top — gold with stone flecks, seamless.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/treasure_shelf_top.png
 
 legend:
   . transparent

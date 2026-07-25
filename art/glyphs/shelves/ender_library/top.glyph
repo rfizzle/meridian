@@ -1,5 +1,7 @@
 # ender_library top — teal cloth.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/ender_library/top.png
 
 legend:
   . transparent

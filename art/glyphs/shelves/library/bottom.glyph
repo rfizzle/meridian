@@ -1,5 +1,7 @@
 # library bottom — planks.
 size: 32
+kind: cap
+ships: src/main/resources/assets/meridian/textures/block/library/bottom.png
 
 legend:
   . transparent

@@ -1,6 +1,8 @@
 # dormant_core — inert golden core, loot-only precursor to the Tempered Core.
 # Circular orb, top-left light, muted antique-gold shell, dark unlit fissure.
 size: 16
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/dormant_core.png
 
 legend:
   . transparent

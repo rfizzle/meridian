@@ -2,6 +2,8 @@
 size: 32
 frametime: 3
 interpolate: true
+kind: block
+ships: src/main/resources/assets/meridian/textures/block/soul_touched_deepshelf.png
 
 legend:
   . transparent

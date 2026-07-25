@@ -2,6 +2,8 @@
 size: 16
 frametime: 3
 interpolate: true
+kind: sprite
+ships: src/main/resources/assets/meridian/textures/item/infused_breath.png
 
 legend:
   . transparent
