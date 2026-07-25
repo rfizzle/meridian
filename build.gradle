@@ -653,6 +653,126 @@ tasks.named('check') {
     dependsOn 'verifyEnchantmentSplit'
 }
 
+// The .glyph spec under art/glyphs/ is the source of truth for every texture it
+// names; the PNG under src/main/resources is derived from it. Two things can rot
+// that pair: a spec that never declares what it ships (nothing holds it to
+// anything), and a shipped PNG hand-patched away from the spec that renders it.
+// verifyGlyphSpecs guards both — adoption in Groovy, drift through the vendored
+// renderer. See .ai/skills/mc-textures/SKILL.md.
+def glyphSpecDirs = {
+    def root = file('art/glyphs')
+    if (!root.isDirectory()) return []
+    // --verify-all globs one directory; it does not recurse, so every directory
+    // holding specs is invoked explicitly.
+    def dirs = []
+    root.traverse(type: groovy.io.FileType.DIRECTORIES) { dirs << it }
+    ([root] + dirs).findAll { d -> (d.listFiles() ?: new File[0]).any { it.name.endsWith('.glyph') } }
+}
+
+def glyphKinds = ['sprite', 'block', 'cap', 'ui', 'icon'] as Set
+
+// Run a command from the repo root, merging stderr into stdout. ProcessBuilder
+// rather than providers.exec because only redirectErrorStream keeps the two
+// streams interleaved in the order the renderer wrote them — it reports a
+// spec's findings across both, and split streams scramble that.
+def runFromRoot = { List<String> cmd, File cwd ->
+    try {
+        def proc = new ProcessBuilder(cmd).directory(cwd).redirectErrorStream(true).start()
+        def out = proc.inputStream.text
+        proc.waitFor()
+        [exit: proc.exitValue(), out: out]
+    } catch (IOException ignored) {
+        [exit: -1, out: '']
+    }
+}
+
+tasks.register('verifyGlyphSpecs') {
+    description = 'Asserts every .glyph spec declares kind:/ships: and still renders to its shipped asset'
+    group = 'verification'
+    doLast {
+        def specDirs = glyphSpecDirs()
+        def specs = specDirs.collectMany { d ->
+            (d.listFiles() ?: new File[0]).findAll { it.name.endsWith('.glyph') }
+        }
+        if (specs.isEmpty()) {
+            throw new GradleException(
+                    'No .glyph specs found under art/glyphs — the guard matched nothing. If the art ' +
+                    'sources moved, update glyphSpecDirs in build.gradle.')
+        }
+
+        // Adoption: a spec with no ships: has no declared deliverable, so nothing
+        // verifies it. Pure Groovy, so this half runs everywhere.
+        def problems = []
+        specs.each { spec ->
+            def rel = rootDir.toPath().relativize(spec.toPath()).toString()
+            def kinds = [], targets = []
+            spec.eachLine { line ->
+                def m = line =~ /^kind:\s*(\S+)\s*$/
+                if (m) kinds << m[0][1]
+                def s = line =~ /^ships:\s*(\S+)(?:\s+(\d+))?\s*$/
+                if (s) targets << s[0][1]
+            }
+            if (kinds.isEmpty()) problems << "${rel}: no 'kind:' — the spec never says what the texture is"
+            if (kinds.size() > 1) problems << "${rel}: ${kinds.size()} 'kind:' lines, expected one"
+            kinds.findAll { !(it in glyphKinds) }.each {
+                problems << "${rel}: unknown kind '${it}' — expected one of ${glyphKinds.sort().join(', ')}"
+            }
+            if (targets.isEmpty()) problems << "${rel}: no 'ships:' — nothing verifies this spec"
+            targets.findAll { !file(it).isFile() }.each {
+                problems << "${rel}: ships: target '${it}' does not exist"
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new GradleException(
+                    "Glyph specs are missing or misdeclaring their directives:\n  " +
+                    problems.join('\n  ') +
+                    '\nEvery spec declares kind: and ships:; see .ai/skills/mc-textures/SKILL.md. ' +
+                    'Specs under art/glyphs/shelves are emitted by shelfgen.py and art/glyphs/' +
+                    'astrolabe_logo.glyph by its .gen.py — edit the generator, not the emitted spec.')
+        }
+
+        // Drift: re-render each spec and compare against what shipped. Needs the
+        // vendored renderer, so it degrades to a warning where python3 is absent
+        // rather than blocking a local build.
+        def python = ['python3', 'python'].find { exe ->
+            runFromRoot([exe, '--version'], rootDir).exit == 0
+        }
+        if (python == null) {
+            // Locally this degrades so a python-less machine can still build; in CI
+            // it is a hard failure, because a silently skipped drift check reads as
+            // a passing one.
+            def msg = 'verifyGlyphSpecs: no python3 on PATH, so the render-drift check cannot run. ' +
+                    "${specs.size()} specs were still checked for kind:/ships: adoption."
+            if (System.getenv('CI')) {
+                throw new GradleException("${msg} CI must check drift — install python3 in the workflow.")
+            }
+            logger.warn("${msg} Install python3 to check drift locally.")
+            return
+        }
+        def renderer = file('.ai/skills/mc-textures/scripts/glyph.py')
+        if (!renderer.isFile()) {
+            throw new GradleException(
+                    "Missing ${renderer} — the glyph renderer is vendored from concord by `make sync`.")
+        }
+        def drifted = []
+        specDirs.each { dir ->
+            def rel = rootDir.toPath().relativize(dir.toPath()).toString() ?: '.'
+            def result = runFromRoot([python, renderer.path, '--verify-all', dir.path], rootDir)
+            if (result.exit != 0) drifted << "${rel}:\n${result.out.trim()}"
+        }
+        if (!drifted.isEmpty()) {
+            throw new GradleException(
+                    "Shipped assets no longer match the specs that render them:\n" +
+                    drifted.join('\n') +
+                    "\nRe-render the spec to its ships: target rather than hand-patching the PNG.")
+        }
+    }
+}
+
+tasks.named('check') {
+    dependsOn 'verifyGlyphSpecs'
+}
+
 processResources {
     def projectVersion = project.version
     inputs.property "version", projectVersion
