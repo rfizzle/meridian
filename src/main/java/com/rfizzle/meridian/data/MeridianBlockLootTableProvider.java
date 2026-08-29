@@ -31,7 +31,23 @@ public class MeridianBlockLootTableProvider extends FabricBlockLootTableProvider
     @Override
     public void generate() {
         for (Block block : MeridianRegistry.BLOCKS.values()) {
-            dropSelf(block);
+            dropSelfWithSequence(block);
         }
+    }
+
+    /**
+     * {@link #dropSelf(Block)} with the table's random sequence restored.
+     *
+     * <p>Vanilla's own {@code LootTableProvider} stamps every table with
+     * {@code random_sequence = <its own id>} before setting the param set;
+     * {@code FabricLootTableProviderImpl.run} only sets the param set, so a bare
+     * {@code dropSelf} silently omits the key. It selects the per-table RNG stream —
+     * seeded off the world seed and persisted in the level's {@code random_sequences}
+     * data — that the {@code survives_explosion} condition rolls against, so a table
+     * without it sits outside the sequence state vanilla puts every table into.
+     * See the {@code mc-datagen} skill.
+     */
+    private void dropSelfWithSequence(Block block) {
+        add(block, createSingleItemTable(block).setRandomSequence(block.getLootTable().location()));
     }
 }
