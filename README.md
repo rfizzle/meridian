@@ -10,6 +10,7 @@
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/github/license/rfizzle/meridian"></a>
   <a href="https://github.com/rfizzle/meridian/releases"><img alt="Latest release" src="https://img.shields.io/github/v/release/rfizzle/meridian?include_prereleases"></a>
   <a href="https://github.com/rfizzle/meridian/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/rfizzle/meridian/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://modrinth.com/mod/meridian-enchanting-overhaul"><img alt="Modrinth downloads" src="https://img.shields.io/modrinth/dt/qywREjYt?logo=modrinth&label=Modrinth&color=00AF5C"></a>
   <a href="https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul"><img alt="CurseForge downloads" src="https://img.shields.io/curseforge/dt/1546092?logo=curseforge&label=CurseForge"></a>
 </p>
 
@@ -17,8 +18,8 @@ A complete enchanting overhaul for Minecraft 1.21.1 (Fabric). Meridian replaces 
 
 ## Download
 
-| [CurseForge](https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul) | [GitHub Releases](https://github.com/rfizzle/meridian/releases) | [Website](https://meridian.rfizzle.com) | [Report an issue](https://github.com/rfizzle/meridian/issues) |
-| --- | --- | --- | --- |
+| [Modrinth](https://modrinth.com/mod/meridian-enchanting-overhaul) | [CurseForge](https://www.curseforge.com/minecraft/mc-mods/meridian-enchanting-overhaul) | [GitHub Releases](https://github.com/rfizzle/meridian/releases) | [Website](https://meridian.rfizzle.com) | [Report an issue](https://github.com/rfizzle/meridian/issues) |
+| --- | --- | --- | --- | --- |
 
 ---
 
