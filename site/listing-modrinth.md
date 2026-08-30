@@ -52,8 +52,9 @@ Building your enchanting setup is no longer about stacking 15 bookshelves. It's 
 
 Every shelf contributes a unique combination of stats, and they're organized into progression tiers themed around Minecraft's dimensions.
 
-**Organic Shelves** — Early-game options crafted from renewable resources.
-- Beeshelf, Melonshelf
+**Starter Shelves** — Early-game options, crafted from stone and renewable
+resources.
+- Stoneshelf, Beeshelf, Melonshelf
 
 **Nether Shelves** — Fire-themed shelves with escalating Eterna.
 - Hellshelf → Infused Hellshelf → Glowing Hellshelf → Blazing Hellshelf
@@ -75,6 +76,15 @@ Every shelf contributes a unique combination of stats, and they're organized int
 - Deepshelf of Arcane Treasures — Unlock treasure-tier enchantments (like Mending) at the table
 
 Each shelf tier displays themed enchanting particles — fire, water, end, and sculk.
+
+### The Enchantment Library
+
+A two-tier storage block that pools enchanted books into a per-enchantment
+point bank, then dispenses them deterministically for XP. The **Basic Library**
+stores enchantments up to level 16; the **Library of Alexandria** reaches 31,
+and upgrading preserves everything already inside. It tracks the highest level
+ever deposited as well as the points, so no amount of Sharpness I grinds into a
+Sharpness V. Hoppers can fill it in bulk; taking books back out is menu-only.
 
 ### 146 Original Enchantments
 
