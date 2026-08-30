@@ -1,5 +1,5 @@
 // Tier: 2 (fabric-loader-junit)
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import com.rfizzle.meridian.enchanting.PowerFunction;
 import io.netty.buffer.Unpooled;

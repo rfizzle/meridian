@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.Registries;

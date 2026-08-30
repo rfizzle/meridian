@@ -18,7 +18,7 @@ import java.util.List;
  * visible through walls via the xray render type, fading out as the pulse expires. Runs in
  * {@code WorldRenderEvents.LAST} — a post-scene pass that never touches chunk/block-entity
  * rendering, so it composes with Sodium/Iris. State comes entirely from {@link ClientDowseState},
- * which the server-authoritative {@link com.rfizzle.meridian.net.DowseGlowPayload} fills.
+ * which the server-authoritative {@link com.rfizzle.meridian.network.DowseGlowPayload} fills.
  */
 public final class DowseOverlayRenderer {
 

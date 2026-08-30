@@ -1,5 +1,7 @@
 package com.rfizzle.meridian.anvil;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import com.rfizzle.meridian.Meridian;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ItemStack;
@@ -59,11 +61,27 @@ public final class AnvilDispatcher {
      * the mixin call site stable across future handlers, even though the {@link AnvilHandler}
      * contract only forwards {@code left}/{@code right}/{@code player}.
      */
+    /** One-shot gate: the anvil menu re-dispatches on every slot change. */
+    private static final AtomicBoolean HANDLER_FAILURE_LOGGED = new AtomicBoolean(false);
+
     public static Optional<AnvilResult> handle(
             AnvilMenu menu, ItemStack left, ItemStack right, Player player, int currentCost) {
         for (AnvilHandler handler : HANDLERS) {
-            Optional<AnvilResult> result = handler.handle(left, right, player);
-            if (result.isPresent()) {
+            Optional<AnvilResult> result;
+            try {
+                result = handler.handle(left, right, player);
+            } catch (VirtualMachineError e) {
+                throw e;
+            } catch (Throwable t) {
+                // Per-handler isolation (API Standard §3.1): one bad handler yields no claim and
+                // the rest of the chain still gets its turn.
+                if (HANDLER_FAILURE_LOGGED.compareAndSet(false, true)) {
+                    Meridian.LOGGER.warn("AnvilHandler {} threw; skipping it for this pairing",
+                            handler.getClass().getName(), t);
+                }
+                continue;
+            }
+            if (result != null && result.isPresent()) {
                 return result;
             }
         }

@@ -14,6 +14,10 @@ Meridian transforms Minecraft's enchanting table from a flat, luck-based mechani
 
 *"Chart your enchantments."*
 
+### Motif
+
+The **compass rose** — an eight-pointed rose with a golden central star, the navigator's instrument for charting a course. It is the one object Meridian owns (concord `design/DESIGN-SYSTEM.md` §4): it anchors the full logo, is rendered as the circular astrolabe dial in the icon glyph, and may appear in site headers and flavor art. It never appears in another member's assets, and Meridian uses no sibling's motif (no scales, hourglass, or chalice).
+
 ### Logo Description
 
 **Full Logo (`art/logo.png`):** A stone archway frames a glowing compass rose set against a star field. The compass has an eight-pointed design with a golden central star. Runic symbols (enchanting table glyphs) fill the background on dark blue-violet brickwork. Constellation lines and galaxy swirls weave through the scene. Below, the word "MERIDIAN" appears in a blocky pixel font on a stone tablet, with "MINECRAFT ENCHANTING OVERHAUL" as a subtitle. A crescent moon crowns the arch.
@@ -42,10 +46,6 @@ Shared neutrals (text and surfaces) follow the standard tokens as-is —
 - **Body:** Monospace stack: SF Mono, Cascadia Code, Fira Code, Consolas
 - **Website gradient animation:** `gold-pulse` keyframes (4s ease-in-out, brightness 1→1.15)
 
-### Audio
-
-Meridian's soundscape stays vanilla. Its cues are organic foley — the enchanting hum, the anvil clang, the sculk bloom, book pages — which vanilla already renders convincingly; synthesizing them would only make them feel fake. A custom synthesized cue (via the `/sfx` pipeline, concord `design/DESIGN-SYSTEM.md` §9) earns its place only where a sound needs its own identity, and none currently do. [`SPEC.md`](SPEC.md) owns the trigger-to-sound mapping.
-
 ---
 
 ## 2. HUD
@@ -58,9 +58,24 @@ Meridian occupies **no HUD slot**, by design — enchanting is table-interaction
 
 The full asset manifest — every `.glyph` source under `art/`, the final resource/site path it ships as, and what is still `MISSING` a glyph source — lives in [`ASSETS.md`](ASSETS.md). This document owns the *why and the look* of each asset family; the manifest owns the *where*.
 
+- **Textures:** original pixel art through the glyph pipeline (`art/glyphs/`), in the violet/gold palette above — shelves, tomes, specialty materials, the SGA rune particle sprites. Nothing is Zenith/Apotheosis-derived.
+- **Audio:** stays vanilla. Meridian's cues are organic foley — the enchanting hum, the anvil clang, the sculk bloom, book pages — which vanilla already renders convincingly; synthesizing them would only make them feel fake. A custom synthesized cue (via the `/sfx` pipeline, concord `design/DESIGN-SYSTEM.md` §9) earns its place only where a sound needs its own identity, and none currently do. [`SPEC.md`](SPEC.md) owns the trigger-to-sound mapping.
+
 ---
 
-## 4. Website & Listing Brand Notes
+## 4. Generation Prompts
+
+The non-glyph masters — `art/logo.png` (full logo), `art/icon-128.png` / `art/icon-512.png` — predate this document's prompt-keeping rule and have **no committed prompt**; their look is specified by the Logo Description above and the palette hexes, which is what a regeneration should be prompted from (stone archway, eight-point compass rose, golden central star, blue-violet runic brickwork `#1a0a3e` / `#2a1a6e`, gold `#DAA520` → `#FFD700`, cyan `#00BFFF` constellation lines, crescent moon). Every pixel-art asset is a `.glyph` source under `art/glyphs/` and is regenerated from that file — referenced from [`ASSETS.md`](ASSETS.md), never duplicated here. Recording the prompt the next time a master is regenerated is the open decision below.
+
+---
+
+## 5. Image References
+
+No exploration or reference images are committed (`art/exploration/` does not exist). The brand's references are the vanilla enchanting table's glyph book and the Standard Galactic Alphabet, and real astrolabe and compass-rose engravings — the runic-stone plus celestial-instrument register the Narrative names.
+
+---
+
+## 6. Website & Listing Brand Notes
 
 How the Meridian brand lands on its web and store surfaces. The page and listing copy themselves are content, not brand — they live in `site/` and render through the shared Concord template; this section carries only the brand direction.
 
@@ -73,7 +88,7 @@ Content lives elsewhere: page copy in `site/pages/*.json`, theme tokens in `site
 
 ---
 
-## 5. Concord Context
+## 7. Concord Context
 
 Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independent system overhauls. Its **violet + gold** signature and **compass-rose** motif read distinct from its siblings:
 
@@ -85,3 +100,9 @@ Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independ
 | **Prosperity** | Loot & Containers | Gold / Diamond Cyan | Trophy chalice |
 
 The suite-wide rules the four share — base website theme, neutral text palette, typography stack, logo formula, and the standard optional integrations — are the standard, not restated here: see concord's [`design/DESIGN-SYSTEM.md`](../../concord/design/DESIGN-SYSTEM.md) and the collection [`VISION.md`](../../concord/VISION.md).
+
+---
+
+## Open Decisions
+
+- **Master prompts:** the next regeneration of `art/logo.png` or the icon masters should commit its prompt under §4 so the art stays regenerable without reverse-engineering the description.

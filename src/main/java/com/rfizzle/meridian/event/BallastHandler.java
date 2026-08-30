@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Server-side rising-intent tracking for Ballast. Crouching to sink is read straight off the
  * server's view of the player, but a held jump key is client-only input the server never sees for a
- * real player — so the client reports it through {@link com.rfizzle.meridian.net.BallastAscendPayload}
+ * real player — so the client reports it through {@link com.rfizzle.meridian.network.BallastAscendPayload}
  * and this class remembers which players are currently asking to rise. The lift itself is applied,
  * and re-gated on the enchant and the water check, in {@code ArmorTickHandler#handleBallast}; a
  * spoofed "rising" flag only ever lets a wearer swim up in water, never fly.

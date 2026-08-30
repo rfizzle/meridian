@@ -1,7 +1,7 @@
-package com.rfizzle.meridian.client.net;
+package com.rfizzle.meridian.client.network;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
-import com.rfizzle.meridian.net.BallastAscendPayload;
+import com.rfizzle.meridian.network.BallastAscendPayload;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.player.LocalPlayer;

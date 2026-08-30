@@ -9,7 +9,7 @@ point at the same content so each agent finds what it expects to read.
 Meridian is a Minecraft 1.21.1 Fabric mod — a complete enchanting overhaul
 with five enchanting stats (Eterna, Quanta, Arcana, Rectification, Clues),
 25+ themed shelf blocks, enchantment libraries, salvage tomes, anvil
-upgrades, and 80 original enchantments. Java 21, Fabric Loader 0.16.10,
+upgrades, and 146 original enchantments. Java 21, Fabric Loader 0.16.10,
 Loom 1.9. The feature surface is documented in [`README.md`](README.md) and
 [meridian.rfizzle.com](https://meridian.rfizzle.com). Work is tracked in
 GitHub Issues — see the [Development lifecycle](#development-lifecycle)
@@ -94,6 +94,7 @@ The mod has optional integrations (all `modCompileOnly` — not bundled):
 - **Cloth Config** — settings GUI builder
 - **Jade / WTHIT** — tooltip overlays
 - **EMI / REI / JEI** — recipe viewer support
+- **Tribulation** (Concord sibling) — `TribulationAPI.isSoulInventoryActive()` so keep-on-death mechanics stand down when Soul Inventory owns them; resolved from GitHub Releases, `modCompileOnly`, guarded by `isModLoaded("tribulation")`
 
 Compat classes live under `com.rfizzle.meridian.compat.<modid>`.
 

@@ -228,7 +228,7 @@ Everything under `com.rfizzle.meridian.api` is stable across patch and minor ver
 
 | Type | What it's for |
 |---|---|
-| `MeridianAPI` | Static read-only facade: `gatherStats(Level, BlockPos)`, `getEnchantmentInfo(Holder<Enchantment>)`, `getAllEnchantmentInfo()`, `getStoredPoints(Level, BlockPos, ResourceKey<Enchantment>)` |
+| `MeridianAPI` | Static read-only facade: `gatherStats(Level, BlockPos)`, `getEnchantmentInfo(Holder<Enchantment>)`, `getAllEnchantmentInfo()`, `getStoredPoints(Level, BlockPos, ResourceKey<Enchantment>)`, `rollLootEnchantments(ServerLevel, RandomSource, ItemStack, int, boolean)` |
 | `StatCollection` | Aggregated shelf stats (eterna, quanta, arcana, rectification, clues, blacklist, treasure flag) |
 | `EnchantmentInfo` | Per-enchantment config: effective max level, max loot level, level cap, power functions, enabled flag |
 | `MeridianReloadCallback` | Fabric event fired server-side at the end of `/meridian reload` |

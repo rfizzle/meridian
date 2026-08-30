@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import com.rfizzle.meridian.Meridian;
 import net.minecraft.network.FriendlyByteBuf;

@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.enchanting;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.api.EnchantableItem;
 import com.rfizzle.meridian.api.EnchantmentInfo;
@@ -36,6 +37,9 @@ import java.util.function.Function;
  * yields a top enchanting level of 100 (22.5 Eterna → 45, 30 → 60, 50 → 100).
  */
 public final class RealEnchantmentHelper {
+
+    /** One-shot gate: selection runs on every enchanting-menu refresh. */
+    private static final AtomicBoolean SELECT_FAILURE_LOGGED = new AtomicBoolean(false);
 
     /** Fallback when called before {@link Meridian#onInitialize} has populated the config. */
     public static final int DEFAULT_MAX_ETERNA = 50;
@@ -194,7 +198,22 @@ public final class RealEnchantmentHelper {
         if (stack.getItem() instanceof EnchantableItem enchantable) {
             StatCollection stats = new StatCollection(
                     level, quanta, arcana, rectification, 0, level, safeBlacklist, treasureAllowed);
-            chosen = enchantable.selectEnchantments(chosen, rand, stack, level, stats);
+            // Third-party post-processing (API Standard §3.1): a throwing or null-returning
+            // item keeps the list the table built.
+            try {
+                List<EnchantmentInstance> selected =
+                        enchantable.selectEnchantments(chosen, rand, stack, level, stats);
+                if (selected != null) {
+                    chosen = selected;
+                }
+            } catch (VirtualMachineError e) {
+                throw e;
+            } catch (Throwable t) {
+                if (SELECT_FAILURE_LOGGED.compareAndSet(false, true)) {
+                    Meridian.LOGGER.warn("EnchantableItem {} threw in selectEnchantments; "
+                            + "keeping the table's selection", enchantable.getClass().getName(), t);
+                }
+            }
         }
         return chosen;
     }

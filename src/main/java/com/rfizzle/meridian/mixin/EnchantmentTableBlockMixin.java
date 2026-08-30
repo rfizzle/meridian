@@ -1,5 +1,8 @@
 package com.rfizzle.meridian.mixin;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import org.spongepowered.asm.mixin.Unique;
+import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
 import net.minecraft.core.BlockPos;
@@ -21,6 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantingTableBlock.class)
 abstract class EnchantmentTableBlockMixin {
 
+    /** One-shot gate: animateTick runs every client tick per table. */
+    @Unique
+    private static final AtomicBoolean PARTICLE_FAILURE_LOGGED = new AtomicBoolean(false);
+
     @Inject(method = "getMenuProvider", at = @At("HEAD"), cancellable = true)
     private void meridian$menuProvider(
             BlockState state, Level level, BlockPos pos,
@@ -39,7 +46,18 @@ abstract class EnchantmentTableBlockMixin {
         for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
             BlockState shelfState = level.getBlockState(pos.offset(offset));
             if (shelfState.getBlock() instanceof IEnchantingStatProvider provider) {
-                provider.spawnTableParticle(shelfState, level, random, pos, offset);
+                // Client render path with vanilla's animateTick already cancelled: a throwing
+                // third-party shelf must not take the table's particles down with it (§3.1).
+                try {
+                    provider.spawnTableParticle(shelfState, level, random, pos, offset);
+                } catch (VirtualMachineError e) {
+                    throw e;
+                } catch (Throwable t) {
+                    if (PARTICLE_FAILURE_LOGGED.compareAndSet(false, true)) {
+                        Meridian.LOGGER.warn("IEnchantingStatProvider {} threw in spawnTableParticle; "
+                                + "skipping its particles", provider.getClass().getName(), t);
+                    }
+                }
             } else if (EnchantingTableBlock.isValidBookShelf(level, pos, offset)) {
                 if (random.nextInt(16) == 0) {
                     level.addParticle(ParticleTypes.ENCHANT,

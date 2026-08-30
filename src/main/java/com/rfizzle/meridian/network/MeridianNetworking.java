@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;

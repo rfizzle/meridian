@@ -5,7 +5,7 @@ import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;
 import com.rfizzle.meridian.enchanting.recipe.StatRequirements;
-import com.rfizzle.meridian.net.CraftingResultEntry;
+import com.rfizzle.meridian.network.CraftingResultEntry;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
