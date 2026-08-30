@@ -33,9 +33,12 @@ import net.minecraft.world.level.block.EnchantingTableBlock;
  */
 public class CraftingButtonGameTest implements FabricGameTest {
 
+    /** Longer than the default: these tests wait on deferred ticks (advancement grants, menu round-trips). */
+    private static final int TIMEOUT = 100;
+
     private static final BlockPos TABLE_POS = new BlockPos(4, 1, 4);
 
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void craftingRecipeMatchDetected(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -77,7 +80,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void craftingClickProducesOutput(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -134,7 +137,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
      * S-6.3b — Seashelf with only 3 endshelves (E=7.5) does not reach the infused_seashelf
      * recipe minimum (E≥22.5). Verifies that no crafting recipe matches.
      */
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void statsBelowMinNoInfusion(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -178,7 +181,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
      * S-6.3c — Carrot with 5 endshelves (E=12.5) exceeds the golden_carrot recipe's
      * max_requirements (E≤10). Verifies that no crafting recipe matches.
      */
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void statsAboveMaxNoInfusion(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -216,7 +219,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
      * S-6.3d — Hellshelf with 10 endshelves (E=25, Q=65, A=50) meets the infused_hellshelf
      * recipe thresholds (E≥22.5, Q≥30, A≥0). Clicking the crafting button produces infused_hellshelf.
      */
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void shelfUpgradeHellshelfToInfused(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -276,7 +279,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
      * Uses 7 echoing deepshelves + 6 endshelves + 4 draconic endshelves to hit the tight
      * stat window (E=50, Q=45, A=100). Verifies enchantments are preserved on the output.
      */
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void keepNbtInfusionRetainsEnchantments(GameTestHelper helper) {
         Block echoingDeepshelf = BuiltInRegistries.BLOCK.get(Meridian.id("echoing_deepshelf"));
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
@@ -362,7 +365,7 @@ public class CraftingButtonGameTest implements FabricGameTest {
      * Uses 7 echoing deepshelves + 3 endshelves (E=25, Q=30, A=100) to match the recipe
      * (E≥22.5, Q∈[25,50], A≥35).
      */
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void infusionConsumesOneProducesCorrectCount(GameTestHelper helper) {
         Block echoingDeepshelf = BuiltInRegistries.BLOCK.get(Meridian.id("echoing_deepshelf"));
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));

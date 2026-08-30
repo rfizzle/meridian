@@ -65,7 +65,7 @@ public final class AurifyHandler {
 
     // Package-private: the deterministic block-to-gold mapping is the testable core of the
     // (otherwise RNG-gated) Aurify interaction.
-    static BlockState getGoldConversion(BlockState state) {
+    public static BlockState getGoldConversion(BlockState state) {
         if (state.is(Blocks.STONE) || state.is(Blocks.COBBLESTONE) || state.is(Blocks.ANDESITE)
                 || state.is(Blocks.DIORITE) || state.is(Blocks.GRANITE)) {
             return Blocks.GOLD_ORE.defaultBlockState();

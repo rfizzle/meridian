@@ -2,7 +2,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.TraversalEnchantMath;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -82,8 +82,8 @@ public class TailwindGameTest implements FabricGameTest {
 
         double plainSpeed = plain.getDeltaMovement().horizontalDistanceSqr();
         double tailwindSpeed = tailwind.getDeltaMovement().horizontalDistanceSqr();
-        plain.discard();
-        tailwind.discard();
+        MockPlayers.retire(plain);
+        MockPlayers.retire(tailwind);
 
         if (!(tailwindSpeed > plainSpeed + 0.05)) {
             helper.fail("Tailwind boost must be stronger than a plain firework boost "
@@ -122,13 +122,13 @@ public class TailwindGameTest implements FabricGameTest {
             plainLifetime = lifetime.getInt(plainRocket);
             tailwindLifetime = lifetime.getInt(tailwindRocket);
         } catch (ReflectiveOperationException e) {
-            plain.discard();
-            tailwind.discard();
+            MockPlayers.retire(plain);
+            MockPlayers.retire(tailwind);
             helper.fail("FireworkRocketEntity.lifetime not found — mapping changed? " + e);
             return;
         }
-        plain.discard();
-        tailwind.discard();
+        MockPlayers.retire(plain);
+        MockPlayers.retire(tailwind);
 
         // Vanilla's random lifetime spread is at most 11 ticks (nextInt(6) + nextInt(7)); Tailwind III
         // adds 30, so the enchanted rocket's lifetime always clears the plain one's, roll or no roll.
@@ -158,8 +158,8 @@ public class TailwindGameTest implements FabricGameTest {
         int trials = 64;
         int cursedFizzled = countFizzledBoosts(level, cursed, trials);
         int plainFizzled = countFizzledBoosts(level, plain, trials);
-        cursed.discard();
-        plain.discard();
+        MockPlayers.retire(cursed);
+        MockPlayers.retire(plain);
 
         // A plain elytra never fizzles; the curse fizzles roughly a quarter of boosts. Over 64 trials
         // the odds of zero cursed fizzles are ~1e-8, so ">0" is a safe assertion, not a flaky one.
@@ -201,13 +201,13 @@ public class TailwindGameTest implements FabricGameTest {
             boolean fizzled = rocket.isRemoved();
             if (!rocket.isRemoved()) rocket.discard();
             if (fizzled != predicted) {
-                cursed.discard();
+                MockPlayers.retire(cursed);
                 helper.fail("Molting fizzle must follow the rocket UUID: rocket " + id
                         + " predicted " + predicted + " but observed " + fizzled);
                 return;
             }
         }
-        cursed.discard();
+        MockPlayers.retire(cursed);
         helper.succeed();
     }
 
@@ -248,14 +248,14 @@ public class TailwindGameTest implements FabricGameTest {
             boolean observed = rocket.isRemoved();
             if (!rocket.isRemoved()) rocket.discard();
             if (observed != predicted) {
-                cursed.discard();
+                MockPlayers.retire(cursed);
                 helper.fail("A rocket attached only through synced data must still fizzle by UUID: "
                         + id + " predicted " + predicted + " but observed " + observed);
                 return;
             }
             if (observed) fizzled++; else survived++;
         }
-        cursed.discard();
+        MockPlayers.retire(cursed);
 
         // Both outcomes must appear, or the assertion above could have held vacuously.
         if (fizzled == 0 || survived == 0) {

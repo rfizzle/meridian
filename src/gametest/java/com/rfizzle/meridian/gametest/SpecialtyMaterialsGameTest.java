@@ -18,6 +18,9 @@ import net.minecraft.world.item.Rarity;
 
 public class SpecialtyMaterialsGameTest implements FabricGameTest {
 
+    /** Longer than the default: these tests wait on deferred ticks (advancement grants, menu round-trips). */
+    private static final int TIMEOUT = 100;
+
     // --- TEST-5.4-T3a: InfusedBreathItem registered ---
 
     @GameTest(template = "meridian:empty_3x3")
@@ -78,7 +81,7 @@ public class SpecialtyMaterialsGameTest implements FabricGameTest {
 
     // --- TEST-5.4-T3d: Warden kill drops tendril via loot table modifier ---
 
-    @GameTest(template = "meridian:empty_3x3", timeoutTicks = 100)
+    @GameTest(template = "meridian:empty_3x3", timeoutTicks = TIMEOUT)
     public void wardenDropsTendrilOnKill(GameTestHelper helper) {
         Warden warden = helper.spawnWithNoFreeWill(EntityType.WARDEN, new BlockPos(1, 1, 1));
         warden.hurt(helper.getLevel().damageSources().genericKill(), Float.MAX_VALUE);

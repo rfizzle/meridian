@@ -25,7 +25,7 @@ public class PinConfigGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation15")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation15")
     public void pinAffectsPlayersWhenConfigEnabled(GameTestHelper helper) {
         byte[] original;
         try {

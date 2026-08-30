@@ -85,7 +85,7 @@ public final class GroomHandler {
      * drop is spawned at the animal. Returns {@code false} for an ineligible animal or one still on
      * cooldown, leaving no side effects.
      */
-    static boolean attemptGroom(ServerLevel level, Animal animal, int enchantLevel,
+    public static boolean attemptGroom(ServerLevel level, Animal animal, int enchantLevel,
                                 @Nullable MeridianConfig config, RandomSource random) {
         if (enchantLevel <= 0 || animal.isBaby()) return false;
 
@@ -113,7 +113,7 @@ public final class GroomHandler {
      * ({@code MushroomCow extends Cow}).
      */
     @Nullable
-    static ItemStack groomDropFor(Animal animal) {
+    public static ItemStack groomDropFor(Animal animal) {
         if (animal instanceof Chicken) {
             return new ItemStack(Items.FEATHER);
         }

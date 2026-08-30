@@ -14,7 +14,7 @@ import java.nio.file.Path;
 
 /**
  * Both tests rewrite the shared {@code config/meridian.json} and reload the global config
- * singleton, so they get a unique {@code batch} each (see ConfigDisableEnchantmentTest):
+ * singleton, so they get a unique {@code batch} each (see ConfigDisableEnchantmentGameTest):
  * vanilla runs batches strictly sequentially, which keeps concurrent tests from observing —
  * or saving and restoring — another test's mutated config.
  */
@@ -23,7 +23,7 @@ public class ConfigReloadGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation5")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation5")
     public void reloadReReadsConfigFromDisk(GameTestHelper helper) {
         byte[] original;
         try {
@@ -58,7 +58,7 @@ public class ConfigReloadGameTest implements FabricGameTest {
         }
     }
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation6")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation6")
     public void reloadWithMalformedJsonFallsToDefaults(GameTestHelper helper) {
         byte[] original;
         try {

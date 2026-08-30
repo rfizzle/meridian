@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.TollExperienceMath;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -61,7 +61,7 @@ public class CurseOfTollGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -90,7 +90,7 @@ public class CurseOfTollGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 }

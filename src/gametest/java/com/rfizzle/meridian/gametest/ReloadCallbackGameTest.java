@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class ReloadCallbackGameTest implements FabricGameTest {
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation7")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation7")
     public void reloadFiresCallback(GameTestHelper helper) {
         AtomicInteger fired = new AtomicInteger();
         AtomicReference<MinecraftServer> received = new AtomicReference<>();
@@ -45,7 +45,7 @@ public class ReloadCallbackGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation8")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation8")
     public void throwingListenerIsIsolated(GameTestHelper helper) {
         AtomicInteger fired = new AtomicInteger();
         MeridianReloadCallback.EVENT.register(server -> {

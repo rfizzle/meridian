@@ -19,7 +19,7 @@ import java.util.function.BooleanSupplier;
  * itself, per the {@code mc-tick-work} guardrail. This mirrors the host-side error isolation the
  * Concord API Standard already applies to {@code MeridianReloadCallback} listeners.
  */
-final class EffectGuard {
+public final class EffectGuard {
 
     /**
      * Last wall-clock time each effect name logged a full failure, so a persistently-throwing
@@ -42,7 +42,7 @@ final class EffectGuard {
      * @param context the entity the effect was acting on (may be {@code null} for a server-wide sweep)
      * @param body    the effect logic to run in isolation
      */
-    static void run(String effect, Entity context, Runnable body) {
+    public static void run(String effect, Entity context, Runnable body) {
         try {
             body.run();
         } catch (Exception e) {
@@ -62,7 +62,7 @@ final class EffectGuard {
      * @param body     the effect logic to run in isolation
      * @return {@code body}'s result, or {@code fallback} if it threw
      */
-    static boolean run(String effect, Entity context, boolean fallback, BooleanSupplier body) {
+    public static boolean run(String effect, Entity context, boolean fallback, BooleanSupplier body) {
         try {
             return body.getAsBoolean();
         } catch (Exception e) {

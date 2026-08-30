@@ -193,7 +193,7 @@ public final class ToolEnchantmentHandler {
         }
     }
 
-    static void applyTrailblaze(Level world, BlockPos center, int radius) {
+    public static void applyTrailblaze(Level world, BlockPos center, int radius) {
         for (BlockPos bp : BlockPos.betweenClosed(center.offset(-radius, 0, -radius),
                 center.offset(radius, 0, radius))) {
             if (bp.equals(center)) continue;
@@ -284,7 +284,7 @@ public final class ToolEnchantmentHandler {
      * connectivity rather than the 6-face connectivity Prospect uses, so offset branches
      * and 2×2 giant-tree trunks are caught. Bounded by {@link #TIMBERFELL_MAX_LOGS}.
      */
-    static List<BlockPos> findConnectedLogs(ServerLevel world, BlockPos start) {
+    public static List<BlockPos> findConnectedLogs(ServerLevel world, BlockPos start) {
         List<BlockPos> logs = new ArrayList<>();
         Queue<BlockPos> queue = new ArrayDeque<>();
         Set<BlockPos> visited = new HashSet<>();

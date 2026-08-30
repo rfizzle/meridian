@@ -144,7 +144,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
      * <p>Returns {@code true} iff the deposit mutated state; the adapter ORs these together to
      * decide whether {@code onFinalCommit} needs to fire {@code setChanged}.
      */
-    boolean depositBookSilent(ItemStack book) {
+    public boolean depositBookSilent(ItemStack book) {
         if (book == null || book.isEmpty() || !book.is(Items.ENCHANTED_BOOK)) return false;
         ItemEnchantments stored = book.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         if (stored.isEmpty()) return false;

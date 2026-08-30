@@ -31,6 +31,9 @@ import net.minecraft.world.level.block.EnchantingTableBlock;
  */
 public class XpTomeEnchantIntegrationGameTest implements FabricGameTest {
 
+    /** Longer than the default: these tests wait on deferred ticks (advancement grants, menu round-trips). */
+    private static final int TIMEOUT = 100;
+
     private static final BlockPos TABLE_POS = new BlockPos(4, 1, 4);
 
     private static void placeTable(GameTestHelper helper) {
@@ -219,7 +222,7 @@ public class XpTomeEnchantIntegrationGameTest implements FabricGameTest {
 
     // --- AC: crafting path — bar + tome covers the full cost, XP conserved ---
 
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void craftSucceedsWithTomeConservesXp(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {
@@ -282,7 +285,7 @@ public class XpTomeEnchantIntegrationGameTest implements FabricGameTest {
 
     // --- AC: crafting path — bar + tome still short → rejected, no state change ---
 
-    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = 100)
+    @GameTest(template = "meridian:shelf_scan_9x4x9", timeoutTicks = TIMEOUT)
     public void craftRejectedWhenInsufficient(GameTestHelper helper) {
         Block endshelf = BuiltInRegistries.BLOCK.get(Meridian.id("endshelf"));
         if (endshelf == Blocks.AIR) {

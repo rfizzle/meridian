@@ -5,7 +5,7 @@ import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
 import com.rfizzle.meridian.event.LoftHandler;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -263,7 +263,7 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("Air jump must require Loft on the boots");
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
 
@@ -274,20 +274,20 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         if (!LoftHandler.tryAirJump(player)) {
             helper.fail("Airborne Loft wearer should get a mid-air jump");
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
         if (Math.abs(player.getDeltaMovement().y - DefenseEnchantMath.LOFT_JUMP_VELOCITY) > 1e-6) {
             helper.fail("Air jump should set upward velocity " + DefenseEnchantMath.LOFT_JUMP_VELOCITY
                     + ", found " + player.getDeltaMovement().y);
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("Loft grants exactly one mid-air jump per airtime");
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
 
@@ -299,13 +299,13 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
             helper.fail("Landing on real ground should clear the air-jump budget (grounded="
                     + LoftHandler.isGroundedForTest(player) + ")");
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
         if (LoftHandler.tryAirJump(player)) {
             helper.fail("A collision-grounded player must not air jump");
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             return;
         }
         player.teleportTo(inAir.getX() + 0.5, inAir.getY(), inAir.getZ() + 0.5);
@@ -314,7 +314,7 @@ public class DefenseEnchantmentGameTest implements FabricGameTest {
         helper.runAfterDelay(DefenseEnchantMath.LOFT_AIR_JUMP_MIN_INTERVAL_TICKS * 2L, () -> {
             boolean rearmed = LoftHandler.tryAirJump(player);
             LoftHandler.clearPlayerForTest(player.getUUID());
-            player.discard();
+            MockPlayers.retire(player);
             if (!rearmed) {
                 helper.fail("Touching ground should re-arm the mid-air jump");
                 return;

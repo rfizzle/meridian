@@ -2,7 +2,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.MiningEnchantMath;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -148,7 +148,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
                 .anyMatch(s -> s.is(Items.COBBLESTONE));
         List<ItemEntity> groundItems = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
                 new AABB(abs).inflate(4.0));
-        player.discard();
+        MockPlayers.retire(player);
 
         if (!inInventory) {
             helper.fail("Reclaim should place the cobblestone drop in the player's inventory");
@@ -175,7 +175,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
 
         List<ItemEntity> groundItems = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
                 new AABB(abs).inflate(4.0), item -> item.getItem().is(Items.COBBLESTONE));
-        player.discard();
+        MockPlayers.retire(player);
 
         if (groundItems.isEmpty()) {
             helper.fail("Without Reclaim, the vanilla ground drop must be untouched");
@@ -208,7 +208,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
                 item -> item.getItem().is(Items.STONE)).isEmpty();
         boolean cobbleDropped = !helper.getLevel().getEntitiesOfClass(ItemEntity.class, area,
                 item -> item.getItem().is(Items.COBBLESTONE)).isEmpty();
-        player.discard();
+        MockPlayers.retire(player);
 
         if (!stoneDropped) {
             helper.fail("Kiln should drop the smelted result (stone) when breaking cobblestone");
@@ -244,7 +244,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
         boolean rawInInventory = player.getInventory().items.stream().anyMatch(s -> s.is(Items.COBBLESTONE));
         List<ItemEntity> groundItems = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
                 new AABB(abs).inflate(4.0));
-        player.discard();
+        MockPlayers.retire(player);
 
         if (!smeltedInInventory) {
             helper.fail("Kiln + Reclaim should place the smelted stone straight into the inventory");
@@ -281,7 +281,7 @@ public class MiningEnchantmentGameTest implements FabricGameTest {
 
         boolean dirtDropped = !helper.getLevel().getEntitiesOfClass(ItemEntity.class,
                 new AABB(abs).inflate(4.0), item -> item.getItem().is(Items.DIRT)).isEmpty();
-        player.discard();
+        MockPlayers.retire(player);
 
         if (!dirtDropped) {
             helper.fail("Kiln must drop a non-smeltable block (dirt) normally");

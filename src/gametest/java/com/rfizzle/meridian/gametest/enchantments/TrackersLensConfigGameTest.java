@@ -25,7 +25,7 @@ public class TrackersLensConfigGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation17")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation17")
     public void trackersLensAffectsPlayersWhenConfigEnabled(GameTestHelper helper) {
         byte[] original;
         try {

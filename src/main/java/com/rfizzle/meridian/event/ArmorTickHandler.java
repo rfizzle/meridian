@@ -40,10 +40,10 @@ public final class ArmorTickHandler {
     private record TrackedBlock(ResourceKey<Level> dimension, BlockPos pos) {}
 
     private static final Map<TrackedBlock, Long> cinderwalkBlocks = new ConcurrentHashMap<>();
-    static final int CINDERWALK_REVERT_TICKS = 80;
+    public static final int CINDERWALK_REVERT_TICKS = 80;
 
     /** Curse of Hunger: extra food exhaustion added per level, every tick, while worn. */
-    static final float CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL = 0.005f;
+    public static final float CURSE_OF_HUNGER_EXHAUSTION_PER_LEVEL = 0.005f;
 
     /**
      * Curse of Attraction: hostile mobs within this radius of the wearer that have no current
@@ -145,7 +145,7 @@ public final class ArmorTickHandler {
      * ever swims a wearer up, never flies them. Package-private so ArmorTickHandlerGameTest can drive
      * it directly with a mock player.
      */
-    static void handleBallast(ServerPlayer player) {
+    public static void handleBallast(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.BALLAST,
                 EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
@@ -191,7 +191,7 @@ public final class ArmorTickHandler {
         }
     }
 
-    static void revertCinderwalkBlocks(MinecraftServer server) {
+    public static void revertCinderwalkBlocks(MinecraftServer server) {
         if (cinderwalkBlocks.isEmpty()) return;
 
         long currentTick = server.overworld().getGameTime();
@@ -212,11 +212,11 @@ public final class ArmorTickHandler {
 
     // Test support: package-private hooks exercised by ArmorTickHandlerGameTest to drive
     // the Cinderwalk revert path with explicit dimension keys and timestamps.
-    static void cinderwalkTrackForTest(ResourceKey<Level> dimension, BlockPos pos, long gameTime) {
+    public static void cinderwalkTrackForTest(ResourceKey<Level> dimension, BlockPos pos, long gameTime) {
         cinderwalkBlocks.put(new TrackedBlock(dimension, pos.immutable()), gameTime);
     }
 
-    static void cinderwalkResetForTest() {
+    public static void cinderwalkResetForTest() {
         cinderwalkBlocks.clear();
     }
 
@@ -308,7 +308,7 @@ public final class ArmorTickHandler {
 
     // Package-private so ArmorTickHandlerGameTest can drive the effect directly with a mock player,
     // matching the *ForTest seam convention used elsewhere in this class.
-    static void handleCurseOfHunger(ServerPlayer player) {
+    public static void handleCurseOfHunger(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_HUNGER,
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
@@ -323,7 +323,7 @@ public final class ArmorTickHandler {
      * stronger Slowness from another source. Package-private so ArmorTickHandlerGameTest can drive it
      * directly with a mock player.
      */
-    static void handleCurseOfWaterlogging(ServerPlayer player) {
+    public static void handleCurseOfWaterlogging(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_WATERLOGGING,
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;
@@ -344,7 +344,7 @@ public final class ArmorTickHandler {
      * each interval — the call-site gate throttles the interval, so this always sheds when invoked.
      * Package-private so ArmorTickHandlerGameTest can drive it directly with a mock player.
      */
-    static void handleCurseOfMolting(ServerPlayer player) {
+    public static void handleCurseOfMolting(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_MOLTING, EquipmentSlot.CHEST);
         if (level <= 0) return;
         if (!player.isFallFlying()) return;
@@ -361,7 +361,7 @@ public final class ArmorTickHandler {
      * Players are never struck — only Bullrush carries a player-affecting config gate. Package-private
      * so ArmorTickHandlerGameTest can drive it directly with a mock player.
      */
-    static void handleFalconstrike(ServerPlayer player) {
+    public static void handleFalconstrike(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.FALCONSTRIKE, EquipmentSlot.CHEST);
         if (level <= 0) return;
         if (!player.isFallFlying()) return;
@@ -399,7 +399,7 @@ public final class ArmorTickHandler {
      * so a sustained charge is a rhythmic shove, not a per-tick knockback lock. Package-private so
      * ArmorTickHandlerGameTest can drive it directly with a mock player.
      */
-    static void handleBullrush(ServerPlayer player) {
+    public static void handleBullrush(ServerPlayer player) {
         EquipmentSlot shieldSlot = bullrushShieldSlot(player);
         if (shieldSlot == null) return;
         if (!player.isSprinting()) return;
@@ -442,7 +442,7 @@ public final class ArmorTickHandler {
         return null;
     }
 
-    static void handleCurseOfAttraction(ServerPlayer player) {
+    public static void handleCurseOfAttraction(ServerPlayer player) {
         int level = EnchantmentEffects.getEquippedLevel(player, EnchantmentEffects.CURSE_OF_ATTRACTION,
                 EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET);
         if (level <= 0) return;

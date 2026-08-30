@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -98,8 +98,8 @@ public class ThriftGameTest implements FabricGameTest {
 
         int thriftyRefunds = countRefunds(level, thrifty);
         int plainRefunds = countRefunds(level, plain);
-        thrifty.discard();
-        plain.discard();
+        MockPlayers.retire(thrifty);
+        MockPlayers.retire(plain);
 
         // A plain elytra always spends the rocket; Thrift II (~50%) leaves some but not all. Over 128
         // trials the odds of zero or all-128 refunds are negligible, so the bounds are safe, not flaky.
@@ -141,7 +141,7 @@ public class ThriftGameTest implements FabricGameTest {
             discardFireworks(level);
             if (refunded && boostSpawned) sawRefundedBoost = true;
         }
-        glider.discard();
+        MockPlayers.retire(glider);
 
         if (!sawRefundedBoost) {
             helper.fail("Thrift should still spawn the boost rocket on a refunded firework use");

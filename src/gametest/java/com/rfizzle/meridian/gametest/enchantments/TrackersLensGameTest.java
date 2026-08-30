@@ -4,7 +4,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.SpyglassEnchantMath;
 import com.rfizzle.meridian.event.TrackersLensHandler;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -81,7 +81,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -104,7 +104,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -133,7 +133,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -164,7 +164,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -197,7 +197,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -217,7 +217,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -244,7 +244,7 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            player.discard();
+            MockPlayers.retire(player);
         }
     }
 
@@ -271,8 +271,8 @@ public class TrackersLensGameTest implements FabricGameTest {
             }
             helper.succeed();
         } finally {
-            victim.discard();
-            player.discard();
+            MockPlayers.retire(victim);
+            MockPlayers.retire(player);
         }
     }
 }
