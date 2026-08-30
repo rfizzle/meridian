@@ -109,7 +109,7 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
 
     /**
      * Triggers an EMI recipe reload so the enchantment browser repopulates with server-configured
-     * values after {@link com.rfizzle.meridian.net.EnchantmentInfoPayload} has been applied: EMI
+     * values after {@link com.rfizzle.meridian.network.EnchantmentInfoPayload} has been applied: EMI
      * re-invokes {@link #register}, which now calls {@link EnchantmentBrowserExtractor#extract} with
      * the sync guard satisfied and emits the browser cards.
      *

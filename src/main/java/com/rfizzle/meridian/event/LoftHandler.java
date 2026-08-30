@@ -19,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Server side of Loft's mid-air jump. The client detects the airborne jump-key press and
- * sends {@link com.rfizzle.meridian.net.LoftJumpPayload}; everything that matters is
+ * sends {@link com.rfizzle.meridian.network.LoftJumpPayload}; everything that matters is
  * validated and applied here, so a spoofed packet can't jump without the enchant, in the
  * wrong state, or more than once per airtime. (The safe-fall half of Loft lives in
  * {@code LoftMixin}.)

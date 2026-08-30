@@ -1,5 +1,5 @@
 // Tier: 2 (fabric-loader-junit)
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.SharedConstants;

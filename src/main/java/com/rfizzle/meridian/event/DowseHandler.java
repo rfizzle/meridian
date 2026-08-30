@@ -2,7 +2,7 @@ package com.rfizzle.meridian.event;
 
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.enchanting.MiningEnchantMath;
-import com.rfizzle.meridian.net.DowseGlowPayload;
+import com.rfizzle.meridian.network.DowseGlowPayload;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;

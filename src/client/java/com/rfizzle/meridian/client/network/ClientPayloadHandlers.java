@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.client.net;
+package com.rfizzle.meridian.client.network;
 
 import com.rfizzle.meridian.client.config.ClientMeridianConfig;
 import com.rfizzle.meridian.client.render.ClientDowseState;
@@ -9,12 +9,12 @@ import com.rfizzle.meridian.enchanting.EnchantingStats;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.enchanting.MiningEnchantMath;
-import com.rfizzle.meridian.net.CluesPayload;
-import com.rfizzle.meridian.net.ConfigSyncPayload;
-import com.rfizzle.meridian.net.DowseGlowPayload;
-import com.rfizzle.meridian.net.EnchantingStatSyncPayload;
-import com.rfizzle.meridian.net.EnchantmentInfoPayload;
-import com.rfizzle.meridian.net.StatsPayload;
+import com.rfizzle.meridian.network.CluesPayload;
+import com.rfizzle.meridian.network.ConfigSyncPayload;
+import com.rfizzle.meridian.network.DowseGlowPayload;
+import com.rfizzle.meridian.network.EnchantingStatSyncPayload;
+import com.rfizzle.meridian.network.EnchantmentInfoPayload;
+import com.rfizzle.meridian.network.StatsPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;

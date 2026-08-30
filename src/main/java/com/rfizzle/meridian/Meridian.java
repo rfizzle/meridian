@@ -25,8 +25,8 @@ import com.rfizzle.meridian.event.TrackersLensHandler;
 import com.rfizzle.meridian.event.GroomHandler;
 import com.rfizzle.meridian.event.VerdureLootHandler;
 import com.rfizzle.meridian.event.WardenLootHandler;
-import com.rfizzle.meridian.net.EnchantmentInfoPayload;
-import com.rfizzle.meridian.net.MeridianNetworking;
+import com.rfizzle.meridian.network.EnchantmentInfoPayload;
+import com.rfizzle.meridian.network.MeridianNetworking;
 import com.rfizzle.meridian.particle.ModParticles;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -51,7 +51,7 @@ public class Meridian implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("Meridian initialized");
-        config = MeridianConfig.load();
+        reloadConfig();
         MeridianAttachments.init();
         ModParticles.register();
         ModTriggers.register();
@@ -111,12 +111,42 @@ public class Meridian implements ModInitializer {
         }
     }
 
+    /**
+     * The active config, loading it on first use. Lazy and double-checked so a caller that runs
+     * ahead of {@link #onInitialize()} (a mixin in a static initializer, an entrypoint ordered
+     * before ours) gets a config rather than {@code null}. Snapshot it once per method — every
+     * call is a volatile read, and two of them can straddle a {@code /meridian reload}.
+     */
     public static MeridianConfig getConfig() {
-        return config;
+        MeridianConfig local = config;
+        if (local == null) {
+            synchronized (Meridian.class) {
+                local = config;
+                if (local == null) {
+                    config = local = MeridianConfig.load();
+                }
+            }
+        }
+        return local;
     }
 
     public static void reloadConfig() {
-        config = MeridianConfig.load();
+        synchronized (Meridian.class) {
+            config = MeridianConfig.load();
+        }
+    }
+
+    /**
+     * The commit point for an edited working copy (see {@link MeridianConfig#copy()}): clamps,
+     * persists, then swaps it in as the live instance in one store, so readers mid-tick never
+     * observe a half-applied edit.
+     */
+    public static void publishConfig(MeridianConfig next) {
+        next.clamp();
+        next.save();
+        synchronized (Meridian.class) {
+            config = next;
+        }
     }
 
     /**
@@ -125,7 +155,7 @@ public class Meridian implements ModInitializer {
      * {@link MeridianReloadCallback#EVENT} so API consumers can re-read.
      */
     public static void reloadConfig(MinecraftServer server) {
-        config = MeridianConfig.load();
+        reloadConfig();
         rebuildEnchantmentInfo(server);
         syncEnchantmentInfoToAll(server);
         MeridianNetworking.syncConfigToAll(server);

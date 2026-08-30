@@ -3,7 +3,7 @@ package com.rfizzle.meridian.enchanting;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.api.EnchantmentInfo;
 import com.rfizzle.meridian.config.MeridianConfig;
-import com.rfizzle.meridian.net.EnchantmentInfoPayload;
+import com.rfizzle.meridian.network.EnchantmentInfoPayload;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

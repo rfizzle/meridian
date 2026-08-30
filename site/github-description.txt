@@ -1,1 +1,1 @@
-A standalone Minecraft 1.21.1 Fabric mod overhauling enchanting. Enchanting you build toward, not a slot machine — five-stat shelves shape every roll, with treasure shelves, salvage tomes, and enchantment libraries. 101 enchantments. Part of the Concord collection.
+A standalone Minecraft 1.21.1 Fabric mod overhauling enchanting. Enchanting you build toward, not a slot machine — five-stat shelves shape every roll, with treasure shelves, salvage tomes, and enchantment libraries. 146 enchantments. Part of the Concord collection.

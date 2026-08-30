@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.enchanting;
 
 import com.rfizzle.meridian.api.StatCollection;
-import com.rfizzle.meridian.net.EnchantmentClue;
+import com.rfizzle.meridian.network.EnchantmentClue;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;

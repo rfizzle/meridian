@@ -1,5 +1,6 @@
 package com.rfizzle.meridian.enchanting;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.api.BlacklistSource;
 import com.rfizzle.meridian.api.IEnchantingStatProvider;
@@ -114,6 +115,9 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * {@link TreasureFlagSource} flips {@link StatCollection#treasureAllowed()} to {@code true}.
      * Shelves whose midpoint fails the transmitter check contribute neither stats nor context.
      */
+    /** One-shot gate: a provider that throws throws on every scan, and the scan runs per menu open. */
+    private static final AtomicBoolean PROVIDER_FAILURE_LOGGED = new AtomicBoolean(false);
+
     public static StatCollection gatherStats(Level level, BlockPos tablePos) {
         return gatherRawStats(level, tablePos).clamped();
     }
@@ -131,7 +135,21 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
                     BlockPos shelfPos = tablePos.offset(offset);
                     BlockState state = level.getBlockState(shelfPos);
                     if (state.getBlock() instanceof IEnchantingStatProvider provider) {
-                        return provider.getStats(level, shelfPos, state);
+                        // Third-party provider: host-side isolation (API Standard §3.1). A
+                        // throwing shelf contributes the registry's value for its state instead.
+                        try {
+                            EnchantingStats stats = provider.getStats(level, shelfPos, state);
+                            if (stats != null) {
+                                return stats;
+                            }
+                        } catch (VirtualMachineError e) {
+                            throw e;
+                        } catch (Throwable t) {
+                            if (PROVIDER_FAILURE_LOGGED.compareAndSet(false, true)) {
+                                Meridian.LOGGER.warn("IEnchantingStatProvider {} threw in getStats; "
+                                        + "using the registry value", provider.getClass().getName(), t);
+                            }
+                        }
                     }
                     return INSTANCE.resolve(state);
                 },

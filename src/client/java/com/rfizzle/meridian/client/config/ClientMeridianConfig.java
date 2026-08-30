@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Client-side holder for the server-authoritative gameplay config pushed by
- * {@link com.rfizzle.meridian.net.ConfigSyncPayload} (#149).
+ * {@link com.rfizzle.meridian.network.ConfigSyncPayload} (#149).
  *
  * <p>Gameplay-affecting client code (tooltips, UI math) must read {@link #effective()} rather than
  * {@link Meridian#getConfig()} directly, so it honors the server's values with the local config as a
@@ -25,7 +25,7 @@ public final class ClientMeridianConfig {
     private ClientMeridianConfig() {
     }
 
-    /** Stores the config decoded from a {@link com.rfizzle.meridian.net.ConfigSyncPayload}. */
+    /** Stores the config decoded from a {@link com.rfizzle.meridian.network.ConfigSyncPayload}. */
     public static void setServerConfig(@Nullable MeridianConfig config) {
         serverConfig = config;
     }

@@ -106,11 +106,12 @@ tree marks the path from first shelf to Eterna 50.
 
 Meridian ships with sensible defaults and adds no HUD element — nothing new sits
 on your screen. Shelf stats and library contents surface only when you look at a
-block with Jade or WTHIT, or open a recipe browser. Every value tunes live with
-`/meridian reload`, no restart. Curse-stripping, anvil repair, the Tempered Core,
+block with Jade or WTHIT, or open a recipe browser. Every setting tunes live with
+`/meridian reload`, no restart, and shelf stat contributions are data-pack values
+that follow the vanilla `/reload`. Curse-stripping, anvil repair, the Tempered Core,
 table duplication, and the Everfeast ration can each be turned off, and the
-Sunder, Seeker, and Harpoon enchantments leave other players alone unless a
-server enables their PvP effects. Any enchantment, Meridian's or vanilla's, can
+Sunder, Seeker, Harpoon, Undertow, Mark, Pin, Stagger, and Bullrush enchantments
+leave other players alone unless a server enables their PvP effects. Any enchantment, Meridian's or vanilla's, can
 have its cap retuned or be disabled outright — which pulls it from the table,
 loot, and tooltips without harming gear that already carries it — and every
 shelf's stat contribution is retunable by server owners. A player who changes
@@ -118,7 +119,7 @@ nothing gets the whole progression, defaults intact.
 
 ## Better together
 
-Meridian is one of four Concord mods, each overhauling a different vanilla
+Meridian is one of eight Concord mods, each overhauling a different vanilla
 system, and it stands entirely on its own — with no siblings installed, nothing
 is missing.
 

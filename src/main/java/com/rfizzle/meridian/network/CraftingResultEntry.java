@@ -1,4 +1,4 @@
-package com.rfizzle.meridian.net;
+package com.rfizzle.meridian.network;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

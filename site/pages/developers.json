@@ -1,0 +1,196 @@
+{
+  "nav": "Developers",
+  "metaTitle": "Developers — Meridian | API for Mod Integration",
+  "metaDescription": "Meridian's stable public API for mod developers: read a table's shelf stats, per-enchantment limits and library contents, roll loot enchantments through the same engine as the table, contribute stats from your own blocks, and react to config reloads — as a soft dependency.",
+  "ogTitle": "Developers — Meridian",
+  "ogDescription": "Stable public API for integrating with Meridian's enchanting overhaul.",
+  "title": "Developers",
+  "lede": "Meridian exposes a stable, read-only API plus a handful of provider interfaces so other mods can read the enchanting system's state, feed it their own blocks and items, and roll enchantments through the same engine the table uses — without a hard dependency.",
+  "width": "4xl",
+  "sections": [
+    {
+      "id": "soft-dependency",
+      "title": "Soft Dependency Setup",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Compile against Meridian with <code class='text-accent2'>modCompileOnly</code> so it stays optional at runtime, then guard every call with a mod-loaded check."
+          ]
+        },
+        {
+          "type": "code",
+          "label": "Gradle:",
+          "bottomGap": true,
+          "code": "repositories {\n    // Sibling jars resolve from GitHub Releases through an artifact-only `rfizzle:` ivy repo.\n    ivy {\n        name = 'GitHubReleases'\n        url = 'https://github.com'\n        patternLayout {\n            artifact '/[organisation]/[module]/releases/download/v[revision]/[module]-[revision].jar'\n        }\n        metadataSources { artifact() }\n        content { includeGroup 'rfizzle' }\n    }\n}\n\ndependencies {\n    modCompileOnly \"rfizzle:meridian:<version>\"\n}"
+        },
+        {
+          "type": "prose",
+          "html": [
+            "Guard calls so your mod loads cleanly whether or not Meridian is present:"
+          ]
+        },
+        {
+          "type": "code",
+          "code": "if (FabricLoader.getInstance().isModLoaded(\"meridian\")) {\n    // safe to touch the Meridian API here\n}"
+        }
+      ]
+    },
+    {
+      "id": "api-reference",
+      "title": "MeridianAPI",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Static entry points on <code class='text-accent2'>com.rfizzle.meridian.api.MeridianAPI</code>. Every method is read-only, never throws for a well-formed call, and never returns <code class='text-accent2'>null</code>."
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Method",
+            "Returns",
+            "Side",
+            "Description"
+          ],
+          "rows": [
+            [
+              "<code class='text-accent2 whitespace-nowrap'>gatherStats(Level, BlockPos)</code>",
+              "StatCollection",
+              "Both",
+              "The clamped shelf stats (Eterna, Quanta, Arcana, Rectification, Clues, blacklist, treasure flag) an enchanting table at that position would scan right now."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>getEnchantmentInfo(Holder&lt;Enchantment&gt;)</code>",
+              "EnchantmentInfo",
+              "Both",
+              "Effective max level, max loot level, level cap, power functions and enabled flag for one enchantment, config overrides applied."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>getAllEnchantmentInfo()</code>",
+              "Map&lt;ResourceKey&lt;Enchantment&gt;, EnchantmentInfo&gt;",
+              "Both",
+              "The same, for every registered enchantment."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>getStoredPoints(Level, BlockPos, ResourceKey&lt;Enchantment&gt;)</code>",
+              "OptionalInt",
+              "Both",
+              "Points stored for one enchantment in the Enchantment Library at that position; empty if the block is not a library."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>rollLootEnchantments(ServerLevel, RandomSource, ItemStack, int, boolean)</code>",
+              "List&lt;EnchantmentInstance&gt;",
+              "Server",
+              "Roll enchantments for a stack through Meridian's selection engine at the given power, optionally allowing treasure; clamped to each entry's loot cap. Empty when the item is unenchantable or nothing rolls."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "provider-interfaces",
+      "title": "Provider Interfaces",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Implement these on your own blocks and items to take part in Meridian's mechanics. Every call the host makes into them is isolated: a provider that throws is logged once and skipped, and the table, anvil, or reload carries on."
+          ]
+        },
+        {
+          "type": "table",
+          "headers": [
+            "Type",
+            "Implement on",
+            "Effect"
+          ],
+          "rows": [
+            [
+              "<code class='text-accent2 whitespace-nowrap'>IEnchantingStatProvider</code>",
+              "a Block",
+              "Contributes stats to the table scan and draws its own table particles."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>BlacklistSource</code> / <code class='text-accent2 whitespace-nowrap'>TreasureFlagSource</code>",
+              "a shelf BlockEntity",
+              "Blacklists enchantments from rolling / unlocks treasure rolls while in range."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>EnchantableItem</code>",
+              "an Item",
+              "Post-processes the enchantment list the table selected for that item."
+            ],
+            [
+              "<code class='text-accent2 whitespace-nowrap'>MeridianReloadCallback</code>",
+              "a listener",
+              "Fabric event fired server-side at the end of <code class='text-accent2'>/meridian reload</code>, after config and enchantment info are rebuilt and synced."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "usage",
+      "title": "Usage Examples",
+      "blocks": [
+        {
+          "type": "examples",
+          "items": [
+            {
+              "title": "Read a table's stats",
+              "body": [
+                {
+                  "type": "code",
+                  "tone": "bone",
+                  "code": "import com.rfizzle.meridian.api.MeridianAPI;\nimport com.rfizzle.meridian.api.StatCollection;\n\nif (FabricLoader.getInstance().isModLoaded(\"meridian\")) {\n    StatCollection stats = MeridianAPI.gatherStats(level, tablePos);\n    float eterna = stats.eterna();\n}"
+                }
+              ]
+            },
+            {
+              "title": "Roll loot enchantments (server)",
+              "body": [
+                {
+                  "type": "code",
+                  "tone": "bone",
+                  "code": "import com.rfizzle.meridian.api.MeridianAPI;\n\nList<EnchantmentInstance> rolled = MeridianAPI.rollLootEnchantments(\n        serverLevel, rng, stack, /* power */ 30, /* treasureAllowed */ false);\nfor (EnchantmentInstance inst : rolled) {\n    stack.enchant(inst.enchantment, inst.level);\n}"
+                }
+              ]
+            },
+            {
+              "title": "React to a config reload",
+              "body": [
+                {
+                  "type": "code",
+                  "tone": "bone",
+                  "code": "import com.rfizzle.meridian.api.MeridianReloadCallback;\n\nMeridianReloadCallback.EVENT.register(server -> {\n    // re-read MeridianAPI.getAllEnchantmentInfo() here\n});"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "notes",
+      "title": "Notes",
+      "blocks": [
+        {
+          "type": "list",
+          "items": [
+            "The API package is <code class='text-accent2'>com.rfizzle.meridian.api</code> — everything outside it is internal and may change without notice. Types in it are annotated <code class='text-accent2'>@Stable</code> and hold across patch and minor versions.",
+            "<code class='text-accent2'>rollLootEnchantments</code> needs a <code class='text-accent2'>ServerLevel</code>; call it from server logic, not client rendering. The other accessors work on either side.",
+            "Meridian uses official Mojang mappings (e.g. <code class='text-accent2'>ServerLevel</code>, <code class='text-accent2'>ItemStack</code>), matching a standard 1.21.1 Fabric + Loom setup."
+          ]
+        },
+        {
+          "type": "prose",
+          "html": [
+            "Building an integration and something's missing? <a href='https://github.com/rfizzle/meridian/issues' rel='noopener noreferrer' target='_blank' class='text-accent hover:text-accent2 underline'>Open an issue</a> — the API surface grows based on real integration needs."
+          ]
+        }
+      ]
+    }
+  ]
+}

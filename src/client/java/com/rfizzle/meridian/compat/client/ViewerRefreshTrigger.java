@@ -17,7 +17,7 @@ import net.fabricmc.loader.api.FabricLoader;
  * {@code /reload} on rejoin or a manual resource reload (F3+T).
  *
  * <p>All calls happen on the render thread (inside a {@code client.execute()} block in
- * {@link com.rfizzle.meridian.client.net.ClientPayloadHandlers}).
+ * {@link com.rfizzle.meridian.client.network.ClientPayloadHandlers}).
  */
 public final class ViewerRefreshTrigger {
 

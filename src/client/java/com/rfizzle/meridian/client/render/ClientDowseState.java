@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Client-side hold for the ore positions a Dowse pulse revealed and the game-time at which the
- * glow expires. Written by the {@link com.rfizzle.meridian.net.DowseGlowPayload} receiver and read
+ * glow expires. Written by the {@link com.rfizzle.meridian.network.DowseGlowPayload} receiver and read
  * by {@link DowseOverlayRenderer} — both on the client render thread, but the fields are
  * {@code volatile} to publish safely per the {@code mc-shared-state} guardrails. Cleared on
  * disconnect so a stale vein can't flash when joining another server. The reveal is also pinned to

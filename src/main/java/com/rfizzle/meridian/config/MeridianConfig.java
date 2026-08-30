@@ -114,6 +114,15 @@ public class MeridianConfig {
         save(configPath());
     }
 
+    /**
+     * A deep copy for editing off the live instance (the config screen edits this and publishes
+     * it in one swap — see {@link Meridian#publishConfig}). Round-trips through the on-disk
+     * serializer, which carries every field including the client-only {@link #display} block.
+     */
+    public MeridianConfig copy() {
+        return GSON.fromJson(GSON.toJson(this), MeridianConfig.class);
+    }
+
     void save(Path path) {
         // Write to a sibling temp file then atomically rename, so a crash or kill mid-write can
         // never leave a truncated/corrupt config.json in place. Fall back to a plain move where the
@@ -185,6 +194,7 @@ public class MeridianConfig {
         if (tomes == null) tomes = new Tomes();
         if (everfeast == null) everfeast = new Everfeast();
         if (warden == null) warden = new Warden();
+        if (groom == null) groom = new Groom();
         if (combat == null) combat = new Combat();
         if (attunement == null) attunement = new Attunement();
         if (display == null) display = new Display();
@@ -252,8 +262,13 @@ public class MeridianConfig {
         }
     }
 
+    /**
+     * Open-topped, so it needs an explicit finite gate: {@code NaN} fails every ordering
+     * comparison and {@code +Infinity} satisfies every lower bound, and either would reach a
+     * field and then throw on the next {@code toJson} (mc-config).
+     */
     private static double clampNonNegative(String name, double value) {
-        if (value < 0) {
+        if (!(value >= 0) || !Double.isFinite(value)) {
             Meridian.LOGGER.warn("clamped {} from {} to {}", name, value, 0.0);
             return 0.0;
         }
@@ -269,7 +284,8 @@ public class MeridianConfig {
     }
 
     private static double clampUnit(String name, double value) {
-        if (value < 0) {
+        // Negated lower bound folds NaN into the underflow branch; the upper bound catches +Infinity.
+        if (!(value >= 0)) {
             Meridian.LOGGER.warn("clamped {} from {} to {}", name, value, 0.0);
             return 0.0;
         }
