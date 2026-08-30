@@ -60,7 +60,12 @@ def runGitDescribe(String tagPrefix) {
                 .directory(rootDir)
                 .redirectErrorStream(true)
                 .start()
-        proc.waitFor()
+        // A hung git (a stale index.lock, a slow network filesystem) must not hang configuration:
+        // bound the wait, kill the process, and fall back to the tagless version form.
+        if (!proc.waitFor(10, java.util.concurrent.TimeUnit.SECONDS)) {
+            proc.destroyForcibly()
+            return null
+        }
         def out = proc.inputStream.text.trim()
         if (proc.exitValue() != 0) return null
         return out
@@ -303,7 +308,7 @@ jacocoTestReport {
 // (event handlers, commands, registration, mixin-driven behavior) counts toward
 // coverage. Loom's run task is a JavaExec, so the task extension applies. The
 // includes filter keeps the agent from instrumenting Minecraft/Fabric classes.
-tasks.named('runGametest') {
+tasks.matching { it.name == 'runGametest' }.configureEach {
     jacoco.applyTo(it)
     it.jacoco.destinationFile = layout.buildDirectory.file('jacoco/runGametest.exec').get().asFile
     it.jacoco.includes = ['com.rfizzle.meridian.*']
@@ -326,7 +331,7 @@ tasks.register('jacocoMergedReport', JacocoReport) {
     dependsOn tasks.named('classes')
     // Ordering only — not dependsOn, so the report can run from existing exec
     // data without forcing a gametest server spin-up.
-    mustRunAfter test, tasks.named('runGametest')
+    mustRunAfter test, 'runGametest'
     // fileTree only picks up exec files that exist, so the report still runs when
     // one of the two sweeps hasn't.
     executionData fileTree(layout.buildDirectory.dir('jacoco')) {
@@ -369,10 +374,24 @@ tasks.register('jacocoMergedReport', JacocoReport) {
     }
 }
 
+// Fabric datagen keeps a gitignored src/main/generated/.cache/ hash index and skips rewriting any
+// file whose provider hash is unchanged — so a hand edit to a generated file survives runDatagen
+// and verifyDatagenIdempotent compares the edit to itself (green locally, red only on a fresh CI
+// checkout). Clearing the cache first makes the local run tell the truth.
+tasks.register('cleanDatagenCache', Delete) {
+    description = 'Removes the Fabric datagen hash cache so the next runDatagen rewrites every file'
+    group = 'verification'
+    delete 'src/main/generated/.cache'
+}
+
+tasks.matching { it.name == 'runDatagen' }.configureEach {
+    mustRunAfter 'cleanDatagenCache'
+}
+
 tasks.register('verifyDatagenIdempotent') {
     description = 'Runs datagen and asserts git reports no changes in src/main/generated/'
     group = 'verification'
-    dependsOn 'runDatagen'
+    dependsOn 'cleanDatagenCache', 'runDatagen'
     notCompatibleWithConfigurationCache('shells out to git against live working-tree state')
     doLast {
         def genDir = file('src/main/generated').absolutePath

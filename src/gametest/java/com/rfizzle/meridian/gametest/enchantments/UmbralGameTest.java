@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import com.rfizzle.meridian.enchanting.UmbralStealthMath;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -64,7 +64,7 @@ public class UmbralGameTest implements FabricGameTest {
 
         Zombie hostile = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
         double visibility = wearer.getVisibilityPercent(hostile);
-        wearer.discard();
+        MockPlayers.retire(wearer);
         hostile.discard();
 
         // Standing (not discrete): the mixin returns before touching the factor, so it stays vanilla's 1.0.
@@ -94,7 +94,7 @@ public class UmbralGameTest implements FabricGameTest {
         helper.runAfterDelay(5, () -> {
             int brightness = helper.getLevel().getMaxLocalRawBrightness(wearer.blockPosition());
             double visibility = wearer.getVisibilityPercent(hostile);
-            wearer.discard();
+            MockPlayers.retire(wearer);
             hostile.discard();
 
             if (brightness <= UmbralStealthMath.MAX_LIGHT_LEVEL) {
@@ -129,7 +129,7 @@ public class UmbralGameTest implements FabricGameTest {
         // each is independently detected on its own slot with no exclusivity clash.
         int umbralLevel = EnchantmentEffects.getEquippedLevel(wearer, EnchantmentEffects.UMBRAL, EquipmentSlot.HEAD);
         int hushLevel = EnchantmentEffects.getEquippedLevel(wearer, EnchantmentEffects.HUSH, EquipmentSlot.FEET);
-        wearer.discard();
+        MockPlayers.retire(wearer);
 
         if (umbralLevel != 2) { helper.fail("Umbral should read level 2 on the head, got " + umbralLevel); return; }
         if (hushLevel != 1) { helper.fail("Hush should read level 1 on the feet, got " + hushLevel); return; }

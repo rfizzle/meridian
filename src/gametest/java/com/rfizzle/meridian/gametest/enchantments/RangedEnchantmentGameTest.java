@@ -4,7 +4,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.enchanting.RangedEnchantMath;
 import com.rfizzle.meridian.event.ProjectileEnchantmentHandler;
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -222,7 +222,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
 
         boolean unchanged = bolt.getDeltaMovement().subtract(velocity).length() < 1.0e-6;
         shooter.discard();
-        target.discard();
+        MockPlayers.retire(target);
         if (!unchanged) {
             helper.fail("Seeker must not lock onto players while combat.seekerTargetsPlayers is false");
             return;
@@ -292,7 +292,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
 
         Vec3 delta = victim.getDeltaMovement();
         thrower.discard();
-        victim.discard();
+        MockPlayers.retire(victim);
         if (delta.length() > 1.0e-6) {
             helper.fail("Harpoon must not move a player while combat.harpoonAffectsPlayers is false, got "
                     + delta);
@@ -423,7 +423,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
 
         Vec3 delta = bystander.getDeltaMovement();
         thrower.discard();
-        bystander.discard();
+        MockPlayers.retire(bystander);
         if (delta.length() > 1.0e-6) {
             helper.fail("Undertow must not move a player while combat.undertowAffectsPlayers is false, got "
                     + delta);
@@ -501,7 +501,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
         ProjectileEnchantmentHandler.handleEntityImpact(arrow, new EntityHitResult(victim));
 
         boolean glowing = victim.hasEffect(MobEffects.GLOWING);
-        victim.discard();
+        MockPlayers.retire(victim);
         if (glowing) {
             helper.fail("Mark must not glow a player while combat.markAffectsPlayers is false");
             return;
@@ -620,7 +620,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
 
         boolean rooted = victim.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
         shooter.discard();
-        victim.discard();
+        MockPlayers.retire(victim);
         if (rooted) {
             helper.fail("Pin must not root a player while combat.pinAffectsPlayers is false");
             return;
@@ -846,7 +846,7 @@ public class RangedEnchantmentGameTest implements FabricGameTest {
                 }
             }
         } finally {
-            shooter.discard();
+            MockPlayers.retire(shooter);
         }
         return maxDeviation;
     }

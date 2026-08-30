@@ -34,7 +34,7 @@ public final class TetherHandler {
     // Package-private: moves any items stashed on `from` into `to`'s inventory (dropping the
     // overflow), consuming the stash so a second restore is a no-op. Split from the respawn hook so
     // it can be driven directly in a gametest.
-    static void restoreTetheredItems(Player from, Player to) {
+    public static void restoreTetheredItems(Player from, Player to) {
         List<ItemStack> items = from.getAttachedOrElse(MeridianAttachments.TETHERED_ITEMS, List.of());
         if (items.isEmpty()) return;
         from.removeAttached(MeridianAttachments.TETHERED_ITEMS);

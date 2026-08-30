@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.CombatEnchantMath;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import com.rfizzle.meridian.mixin.LivingEntityCombatAccessor;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -30,6 +30,9 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 
 public class CombatEnchantmentGameTest implements FabricGameTest {
+
+    /** Crescendo's streak timeout plus settle ticks; longer than the default so the reset can be observed. */
+    private static final int TIMEOUT = 150;
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
@@ -529,7 +532,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         });
     }
 
-    @GameTest(template = "meridian:empty_3x3", timeoutTicks = 150)
+    @GameTest(template = "meridian:empty_3x3", timeoutTicks = TIMEOUT)
     public void crescendoTimeoutResetsStreak(GameTestHelper helper) {
         Holder<Enchantment> ench = lookup(helper, "crescendo");
         if (ench == null) { helper.fail("crescendo not in registry"); return; }
@@ -598,7 +601,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
             spawnInvulnerableTime.setAccessible(true);
             spawnInvulnerableTime.setInt(player, 0);
         } catch (ReflectiveOperationException e) {
-            player.discard();
+            MockPlayers.retire(player);
             helper.fail("useItemRemaining/spawnInvulnerableTime not found — mapping changed? " + e);
             return;
         }
@@ -607,7 +610,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         clearEquipment(attacker);
 
         if (!player.isBlocking()) {
-            player.discard();
+            MockPlayers.retire(player);
             helper.fail("test setup: the mock player never raised its shield");
             return;
         }
@@ -615,7 +618,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
 
         boolean slowed = attacker.hasEffect(MobEffects.MOVEMENT_SLOWDOWN);
         boolean weakened = attacker.hasEffect(MobEffects.WEAKNESS);
-        player.discard();
+        MockPlayers.retire(player);
         if (!slowed || !weakened) {
             helper.fail("A Stagger shield block must daze the attacker "
                     + "(slowness=" + slowed + ", weakness=" + weakened + ")");
@@ -659,7 +662,7 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
             spawnInvulnerableTime.setAccessible(true);
             spawnInvulnerableTime.setInt(player, 0);
         } catch (ReflectiveOperationException e) {
-            player.discard();
+            MockPlayers.retire(player);
             helper.fail("useItemRemaining/spawnInvulnerableTime not found — mapping changed? " + e);
             return;
         }
@@ -668,18 +671,18 @@ public class CombatEnchantmentGameTest implements FabricGameTest {
         clearEquipment(attacker);
 
         if (EnchantmentEffectHandler.hasRiposteWindow(player)) {
-            player.discard();
+            MockPlayers.retire(player);
             helper.fail("The window must not be armed before any block");
             return;
         }
         if (!player.isBlocking()) {
-            player.discard();
+            MockPlayers.retire(player);
             helper.fail("test setup: the mock player never raised its shield");
             return;
         }
         attacker.doHurtTarget(player);
         boolean armed = EnchantmentEffectHandler.hasRiposteWindow(player);
-        player.discard();
+        MockPlayers.retire(player);
         if (!armed) {
             helper.fail("A real shield block must arm the Riposte window");
             return;

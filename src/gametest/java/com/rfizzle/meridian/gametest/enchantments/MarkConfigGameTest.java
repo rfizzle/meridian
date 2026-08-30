@@ -25,7 +25,7 @@ public class MarkConfigGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation12")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation12")
     public void markAffectsPlayersWhenConfigEnabled(GameTestHelper helper) {
         byte[] original;
         try {

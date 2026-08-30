@@ -32,7 +32,7 @@ import java.util.List;
  * <p>Several tests rewrite the shared {@code config/meridian.json} and reload the global config
  * singleton, so each config-mutating test gets a unique {@code batch}: vanilla runs batches
  * strictly sequentially, which keeps concurrent tests from observing — or saving and restoring —
- * another test's mutated config (see {@code ConfigDisableEnchantmentTest}).
+ * another test's mutated config (see {@code ConfigDisableEnchantmentGameTest}).
  */
 public class LootEnchantApiGameTest implements FabricGameTest {
 
@@ -59,7 +59,7 @@ public class LootEnchantApiGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    @GameTest(template = "meridian:empty_3x3", batch = "lootApiMutation1")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianLootApiMutation1")
     public void maxLootLevelClampsRolledLevels(GameTestHelper helper) {
         byte[] original = applyOverrides(helper,
                 "\"minecraft:sharpness\": { \"maxLootLevel\": 1 }");
@@ -91,7 +91,7 @@ public class LootEnchantApiGameTest implements FabricGameTest {
         }
     }
 
-    @GameTest(template = "meridian:empty_3x3", batch = "lootApiMutation2")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianLootApiMutation2")
     public void disabledEnchantmentNeverRolls(GameTestHelper helper) {
         byte[] original = applyOverrides(helper,
                 "\"minecraft:sharpness\": { \"enabled\": false }");
@@ -131,7 +131,7 @@ public class LootEnchantApiGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    @GameTest(template = "meridian:empty_3x3", batch = "lootApiMutation3")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianLootApiMutation3")
     public void lootTableRollIsClampedByMixin(GameTestHelper helper) {
         byte[] original = applyOverrides(helper,
                 "\"minecraft:sharpness\": { \"maxLootLevel\": 1 }");

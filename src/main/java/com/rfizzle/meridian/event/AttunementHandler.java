@@ -55,7 +55,7 @@ public final class AttunementHandler {
      * table search. Package-private so {@code AttunementHandlerGameTest} drives it directly with
      * an explicit config instead of waiting out real tick intervals.
      */
-    static void repairPulse(ServerPlayer player, MeridianConfig.Attunement config) {
+    public static void repairPulse(ServerPlayer player, MeridianConfig.Attunement config) {
         Inventory inventory = player.getInventory();
         boolean anyDamagedAttuned = false;
         for (int i = 0; i < inventory.getContainerSize(); i++) {

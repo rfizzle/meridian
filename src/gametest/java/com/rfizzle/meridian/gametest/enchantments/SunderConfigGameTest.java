@@ -16,7 +16,7 @@ import java.nio.file.Path;
 /**
  * Covers the {@code combat.sunderAffectsPlayers} toggle's enabled path (the disabled
  * default is asserted in {@code CombatEnchantmentGameTest}). Rewrites the shared
- * {@code config/meridian.json}, so it follows {@code ConfigDisableEnchantmentTest}'s
+ * {@code config/meridian.json}, so it follows {@code ConfigDisableEnchantmentGameTest}'s
  * rule: a unique {@code batch} serializes it against the other config-mutating tests.
  */
 public class SunderConfigGameTest implements FabricGameTest {
@@ -24,7 +24,7 @@ public class SunderConfigGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation9")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation9")
     public void sunderAffectsPlayersWhenConfigEnabled(GameTestHelper helper) {
         byte[] original;
         try {

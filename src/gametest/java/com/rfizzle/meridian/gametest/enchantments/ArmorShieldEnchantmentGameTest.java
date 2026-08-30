@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.event.DecoyManager;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -110,7 +110,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
             helper.fail("Decoy deployment should track exactly one active decoy, found "
                     + DecoyManager.activeDecoyCountForTest());
             DecoyManager.clearForTest();
-            owner.discard();
+            MockPlayers.retire(owner);
             return;
         }
 
@@ -119,7 +119,7 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
         if (stands.isEmpty()) {
             helper.fail("Decoy deployment should have spawned an armor-stand body near the owner");
             DecoyManager.clearForTest();
-            owner.discard();
+            MockPlayers.retire(owner);
             return;
         }
 
@@ -128,11 +128,11 @@ public class ArmorShieldEnchantmentGameTest implements FabricGameTest {
         if (DecoyManager.activeDecoyCountForTest() != 0) {
             helper.fail("Clearing decoys should leave none tracked, found "
                     + DecoyManager.activeDecoyCountForTest());
-            owner.discard();
+            MockPlayers.retire(owner);
             return;
         }
 
-        owner.discard();
+        MockPlayers.retire(owner);
         helper.succeed();
     }
 }

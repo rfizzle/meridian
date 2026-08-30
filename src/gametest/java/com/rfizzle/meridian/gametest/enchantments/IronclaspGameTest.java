@@ -1,7 +1,7 @@
 package com.rfizzle.meridian.gametest.enchantments;
 
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.gametest.MockPlayers;
+import com.rfizzle.meridian.gametest.util.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -53,7 +53,7 @@ public class IronclaspGameTest implements FabricGameTest {
         boolean plainDropped = player.drop(false);
         boolean plainSlotEmpty = player.getInventory().getItem(1).isEmpty();
 
-        player.discard();
+        MockPlayers.retire(player);
 
         if (claspedDropped) { helper.fail("The drop key must report no drop for an Ironclasp item"); return; }
         if (!claspedStillHeld) { helper.fail("An Ironclasp item must stay in the selected slot after the drop key"); return; }

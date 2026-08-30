@@ -17,7 +17,7 @@ import java.nio.file.Path;
 /**
  * Covers the {@code combat.harpoonAffectsPlayers} toggle's enabled path (the disabled
  * default is asserted in {@code RangedEnchantmentGameTest}). Rewrites the shared
- * {@code config/meridian.json}, so it follows {@code ConfigDisableEnchantmentTest}'s
+ * {@code config/meridian.json}, so it follows {@code ConfigDisableEnchantmentGameTest}'s
  * rule: a unique {@code batch} serializes it against the other config-mutating tests.
  */
 public class HarpoonConfigGameTest implements FabricGameTest {
@@ -25,7 +25,7 @@ public class HarpoonConfigGameTest implements FabricGameTest {
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");
 
-    @GameTest(template = "meridian:empty_3x3", batch = "configMutation11")
+    @GameTest(template = "meridian:empty_3x3", batch = "meridianConfigMutation11")
     public void harpoonAffectsPlayersWhenConfigEnabled(GameTestHelper helper) {
         byte[] original;
         try {

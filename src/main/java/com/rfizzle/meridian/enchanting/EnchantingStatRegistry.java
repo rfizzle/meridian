@@ -73,7 +73,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         static final Snapshot EMPTY = new Snapshot(Map.of(), List.of());
     }
 
-    EnchantingStatRegistry() {
+    public EnchantingStatRegistry() {
     }
 
     public static EnchantingStatRegistry getInstance() {
@@ -149,19 +149,19 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         return new BlockPos(offset.getX() / 2, offset.getY(), offset.getZ() / 2);
     }
 
-    StatCollection gatherStatsFromOffsets(
+    public StatCollection gatherStatsFromOffsets(
             List<BlockPos> offsets, Function<BlockPos, EnchantingStats> lookup) {
         return gatherStatsFromOffsets(offsets, lookup, pos -> true, pos -> null);
     }
 
-    StatCollection gatherStatsFromOffsets(
+    public StatCollection gatherStatsFromOffsets(
             List<BlockPos> offsets,
             Function<BlockPos, EnchantingStats> lookup,
             Predicate<BlockPos> transmitterCheck) {
         return gatherStatsFromOffsets(offsets, lookup, transmitterCheck, pos -> null);
     }
 
-    StatCollection gatherStatsFromOffsets(
+    public StatCollection gatherStatsFromOffsets(
             List<BlockPos> offsets,
             Function<BlockPos, EnchantingStats> lookup,
             Predicate<BlockPos> transmitterCheck,
@@ -176,7 +176,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * {@link StatCollection#clamped()} pass afterwards (see {@link StatCollection#applyBaselines}).
      * Most callers want {@link #gatherStatsFromOffsets}, which clamps immediately.
      */
-    StatCollection rawStatsFromOffsets(
+    public StatCollection rawStatsFromOffsets(
             List<BlockPos> offsets,
             Function<BlockPos, EnchantingStats> lookup,
             Predicate<BlockPos> transmitterCheck,
