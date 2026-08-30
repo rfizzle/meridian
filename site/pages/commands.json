@@ -43,11 +43,13 @@
               "type": "list",
               "items": [
                 "Enchanting table settings (maxEterna, treasure shelf requirement, global minimum enchantability)",
+                "Table crafting toggles (duplication recipes, Everfeast recipes and ration bites)",
                 "Shelf behavior (sculk shrieker chance, particle rates)",
-                "Anvil settings (prismatic web cost, iron block repair toggle)",
+                "Anvil settings (prismatic web cost, iron block repair toggle, Tempered Core cost and toggle)",
                 "Library settings (hopper rate limit)",
                 "Tome XP costs and durability values",
                 "Warden drop rates",
+                "Groom chances and cooldown, combat player-targeting toggles, and Attunement radius/interval/minimum Eterna",
                 "Display settings (tooltips, colors, inline descriptions)",
                 "Per-enchantment overrides (max levels, power functions, enable/disable)"
               ]

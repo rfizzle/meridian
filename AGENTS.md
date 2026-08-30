@@ -74,8 +74,9 @@ resources). They are committed; after touching any datagen provider, run
   names everywhere (`CompoundTag`, not `NbtCompound`; `Level`, not `World`).
 - **Assets:** Meridian has its own custom assets at `assets/meridian/`
   (textures, models, sounds).
-- **Mixin config:** `meridian.mixins.json` in `src/main/resources`. Mixin
-  package: `com.rfizzle.meridian.mixin`. Access widener:
+- **Mixin configs:** `meridian.mixins.json` in `src/main/resources` and the
+  client-only `meridian.client.mixins.json` in `src/client/resources`. Mixin
+  package (both): `com.rfizzle.meridian.mixin`. Access widener:
   `meridian.accesswidener`.
 - **Commits:** [Conventional Commits](https://www.conventionalcommits.org/)
   with a topical scope naming the feature area: `feat(enchanting): …`,

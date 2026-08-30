@@ -41,14 +41,14 @@ Stats are contributed by nearby shelf blocks and are fully data-driven — serve
 
 ### Shelf Blocks
 
-25 themed shelves organized into progression tiers:
+25 themed shelves (plus the Filtering and Treasure shelves) organized into progression tiers:
 
 - **Starter** — Vanilla Bookshelves, Stoneshelf, Beeshelf, Melonshelf, Dormant Deepshelf
 - **Early** — Hellshelf, Seashelf (Nether and Ocean materials)
 - **Mid** — Infused and upgraded variants (Infused Hellshelf, Glowing Hellshelf, Blazing Hellshelf, Infused Seashelf, Crystal Seashelf, Heart Seashelf)
 - **Late** — Deepshelf, Echoing Deepshelf, Soul-Touched Deepshelf, Echoing Sculkshelf, Soul-Touched Sculkshelf
 - **End** — Endshelf, Pearl Endshelf, Draconic Endshelf (the only way to reach Eterna 50)
-- **Utility** — Sightshelf (bonus Clues), Rectifier (bonus Rectification), Filtering Shelf (blacklist specific enchantments), Deepshelf of Arcane Treasures (unlocks treasure enchantments like Mending)
+- **Utility** — Hellshelf of Sight and Hellshelf of Masterful Sight (bonus Clues), three tiers of Rectifier shelves (Seabound, Hellbound, End-Fused — bonus Rectification), Filtering Shelf (blacklist specific enchantments), Deepshelf of Arcane Treasures (unlocks treasure enchantments like Mending)
 
 Higher-tier shelves are crafted at the enchanting table itself using stat-gated recipes — building your shelf collection *is* the progression.
 
@@ -101,6 +101,7 @@ The Dormant XP Tome itself stores nothing — it's the crafting base for the act
 
 - **Prismatic Web** — Strips all curses from an item (30 levels, 1 web consumed). Non-curse enchantments are preserved.
 - **Iron Block Repair** — Repairs a Damaged or Chipped Anvil by one tier (1 iron block consumed).
+- **Tempered Core** — Makes one item unbreakable (10 levels, 1 core consumed). Crafted at the enchanting table from the Dormant Core the Ender Dragon drops.
 
 ### 146 Enchantments
 
@@ -126,7 +127,8 @@ Wardens drop Warden Tendrils (1 guaranteed, +10% per Looting level for a second)
 First-class recipe and tooltip adapters ship at launch for:
 
 - **EMI**, **REI**, and **JEI** — two recipe categories: an **Infusions** crafting category (enchanting-table recipes, library mechanics) and an **Enchantments** browser (per-enchantment max level, exclusive sets, treasure flag, and power windows)
-- **Jade** — shelf stat tooltips, library contents
+- **Jade** / **WTHIT** — shelf stat tooltips, library contents
+- **ModMenu** (with Cloth Config) — in-game config screen
 
 ### Advancement Tree
 

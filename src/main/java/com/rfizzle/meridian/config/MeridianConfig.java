@@ -194,6 +194,7 @@ public class MeridianConfig {
         if (tomes == null) tomes = new Tomes();
         if (everfeast == null) everfeast = new Everfeast();
         if (warden == null) warden = new Warden();
+        if (groom == null) groom = new Groom();
         if (combat == null) combat = new Combat();
         if (attunement == null) attunement = new Attunement();
         if (display == null) display = new Display();

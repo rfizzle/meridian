@@ -365,7 +365,7 @@ Each file is a standard 1.21.1 enchantment definition: `description` (translatio
 | Shield | Retribution, Pummel, Fortify | `EnchantmentEffectHandler`, `ShieldFortifyMixin` |
 | Utility | Mason's Reach, Aurify, Tether | `AurifyHandler`, `TetherHandler` |
 
-`EnchantmentEffects` holds ~75 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`).
+`EnchantmentEffects` holds 121 `ResourceKey<Enchantment>` constants and helpers (`getEnchantmentLevel`, `getEquippedLevel`).
 
 ### Exclusive Sets
 Ten exclusive-set tags constrain mutually exclusive picks: `exclusive_set/mining`, `/size`, `/arrow_impact`, `/glass_cannon`, `/aspect`, `/mending`, `/axe`, `/loot_bonus`, `/mobility`, `/trophy`.
@@ -473,6 +473,26 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `sunderAffectsPlayers` | bool | false | Whether Sunder may knock equipment off player victims (mobs always eligible) |
 | `seekerTargetsPlayers` | bool | false | Whether Seeker bolts may lock onto player targets (mobs always eligible) |
 | `harpoonAffectsPlayers` | bool | false | Whether Harpoon may drag player victims toward the thrower (mobs always eligible) |
+| `undertowAffectsPlayers` | bool | false | Whether Undertow may gather player victims toward the impact point (mobs always eligible) |
+| `markAffectsPlayers` | bool | false | Whether Mark may make struck players glow through walls (mobs always eligible) |
+| `pinAffectsPlayers` | bool | false | Whether Pin bolts may root player victims in place (mobs always eligible) |
+| `staggerAffectsPlayers` | bool | false | Whether a Stagger shield block may daze player attackers (mobs always eligible) |
+| `bullrushAffectsPlayers` | bool | false | Whether a Bullrush shield charge may knock back and daze player victims (mobs always eligible) |
+| `trackersLensAffectsPlayers` | bool | false | Whether Tracker's Lens may mark players to glow through walls (mobs always eligible) |
+
+### `groom`
+| Key | Type | Default | Range / Notes |
+|---|---|---|---|
+| `chanceLevel1` | double | 0.25 | 0.0–1.0; chance a Groom I attempt yields the animal's renewable drop |
+| `chanceLevel2` | double | 0.45 | 0.0–1.0; chance a Groom II attempt yields the animal's renewable drop |
+| `cooldownTicks` | int | 2400 | 0–1728000; ticks an animal stays on cooldown after a groom attempt |
+
+### `attunement`
+| Key | Type | Default | Range / Notes |
+|---|---|---|---|
+| `radius` | int | 8 | 1–32; blocks from a qualifying enchanting table within which attuned gear repairs |
+| `intervalTicks` | int | 80 | 20–1200; server ticks between repair pulses (each pulse repairs `level` durability per item) |
+| `minEterna` | int | 15 | 0–100; minimum shelf-scan Eterna a table needs to count as an enchanting setup |
 
 ### `display` (client-facing tooltip behavior)
 | Key | Type | Default | Notes |
@@ -491,8 +511,9 @@ Map of enchantment ID → override entry (`enabled`, `maxLevel`, `maxLootLevel`,
 | Command | Permission | Description |
 |---|---|---|
 | `/meridian reload` | Op level 2 | Re-reads `config/meridian.json`, rebuilds `EnchantmentInfo`, fires `MeridianReloadCallback`, and syncs updated values to all connected players |
+| `/meridian audit` | Client-side (no permission) | Registered through Fabric's `ClientCommandManager` (`EnchantmentAuditCommand`); lists third-party enchantments that lack a description or cannot roll at the enchanting table |
 
-`/meridian reload` is the **only** command Meridian registers. The permission node for permission mods is `meridian.command.reload`. Localization keys: `command.meridian.reload.ok`, `command.meridian.reload.error`. Shelf stat changes use the vanilla `/reload` instead (datapack-driven).
+`/meridian reload` is the only **server** command Meridian registers. The permission node for permission mods is `meridian.command.reload`. Localization keys: `command.meridian.reload.ok`, `command.meridian.reload.error`. Shelf stat changes use the vanilla `/reload` instead (datapack-driven).
 
 ---
 
@@ -502,7 +523,7 @@ Everything under `com.rfizzle.meridian.api` is stable across patch/minor version
 
 | Type | Purpose |
 |---|---|
-| `MeridianAPI` | Static read-only facade: `gatherStats(Level, BlockPos)`, `getEnchantmentInfo(Holder<Enchantment>)`, `getAllEnchantmentInfo()`, `getStoredPoints(Level, BlockPos, ResourceKey<Enchantment>)` |
+| `MeridianAPI` | Static read-only facade: `gatherStats(Level, BlockPos)`, `getEnchantmentInfo(Holder<Enchantment>)`, `getAllEnchantmentInfo()`, `getStoredPoints(Level, BlockPos, ResourceKey<Enchantment>)`, `rollLootEnchantments(ServerLevel, RandomSource, ItemStack, int power, boolean treasureAllowed)` (loot-style roll with zero table stats, clamped to each entry's loot cap; empty list on unenchantable input or contained failure) |
 | `StatCollection` | Aggregated shelf stats: `eterna`, `quanta`, `arcana`, `rectification`, `clues`, `maxEterna`, `blacklist`, `treasureAllowed`; `EMPTY` constant |
 | `EnchantmentInfo` | Per-enchantment config: effective max level, max loot level, level cap, min/max power functions, enabled flag |
 | `MeridianReloadCallback` | Fabric event fired server-side at the end of `/meridian reload` (listener exceptions isolated) |
@@ -510,6 +531,7 @@ Everything under `com.rfizzle.meridian.api` is stable across patch/minor version
 | `BlacklistSource` | Implement on a shelf block entity to blacklist enchantments (`getEnchantmentBlacklist()`) |
 | `TreasureFlagSource` | Marker interface on a shelf block entity to unlock treasure enchantments |
 | `EnchantableItem` | Implement on an item to post-process the table's enchantment selection (`selectEnchantments(...)`) |
+| `@Stable` | Marker annotation on every stable API element (Concord API Standard §2) |
 
 ---
 

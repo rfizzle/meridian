@@ -34,6 +34,8 @@ The **compass rose** — an eight-pointed rose with a golden central star, the n
 | Accent 2 | Enchant Gold | `#DAA520` | Titles, stars, key accents |
 | Bright | Celestial Gold | `#FFD700` | Hover states, emphasis |
 | Glow | Cyan Spark | `#00BFFF` | Particle effects, sparkles |
+| Working shade | Gold Deep | `#8B6914` | Site `accentDark` — pressed/muted gold |
+| Working shade | Gold Mid | `#F0C040` | Site `accent2` — gradient midpoint |
 
 Shared neutrals (text and surfaces) follow the standard tokens as-is —
 `--color-bone`, `--color-ash`, `--color-smoke`, `--color-ink`,
@@ -90,7 +92,7 @@ Content lives elsewhere: page copy in `site/pages/*.json`, theme tokens in `site
 
 ## 7. Concord Context
 
-Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independent system overhauls. Its **violet + gold** signature and **compass-rose** motif read distinct from its siblings:
+Meridian is the **enchanting** overhaul in Concord, an eight-mod suite of independent system overhauls. Its **violet + gold** signature and **compass-rose** motif read distinct from its siblings:
 
 | Mod | Domain | Color Signature | Icon Motif |
 |-----|--------|----------------|------------|
@@ -98,8 +100,12 @@ Meridian is the **enchanting** overhaul in Concord, a four-mod suite of independ
 | **Mercantile** | Villagers & Trade | Green / Emerald | Market stall / scales |
 | **Tribulation** | Difficulty & Scaling | Crimson / Red | Hourglass with hearts |
 | **Prosperity** | Loot & Containers | Gold / Diamond Cyan | Trophy chalice |
+| **Respite** | Night & Rest | Moonlight Indigo / Candleglow | Hanging lantern |
+| **Distillation** | Brewing | Potion Magenta / Copper | Alchemist's still |
+| **Cultivation** | Farming | Wheat Amber / Leaf Green | Wheat sheaf |
+| **Instinct** | Taming & Animals | Heart Rose / Hide Russet | Paw |
 
-The suite-wide rules the four share — base website theme, neutral text palette, typography stack, logo formula, and the standard optional integrations — are the standard, not restated here: see concord's [`design/DESIGN-SYSTEM.md`](../../concord/design/DESIGN-SYSTEM.md) and the collection [`VISION.md`](../../concord/VISION.md).
+The suite-wide rules the eight share — base website theme, neutral text palette, typography stack, logo formula, and the standard optional integrations — are the standard, not restated here: see concord's [`design/DESIGN-SYSTEM.md`](../../concord/design/DESIGN-SYSTEM.md) and the collection [`VISION.md`](../../concord/VISION.md).
 
 ---
 
