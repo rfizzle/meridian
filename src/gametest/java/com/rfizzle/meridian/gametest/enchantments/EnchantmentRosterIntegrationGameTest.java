@@ -12,7 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EnchantmentRosterIntegrationTestGameTest implements FabricGameTest {
+public class EnchantmentRosterIntegrationGameTest implements FabricGameTest {
 
     private static final List<String> ALL_IDS = List.of(
             "abyss_ward", "abyssal", "adamant", "alacrity", "alchemists_draw", "ambush", "animus",

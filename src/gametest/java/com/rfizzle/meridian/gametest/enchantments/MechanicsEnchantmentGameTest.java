@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-public class MechanicsEnchantmentTestGameTest implements FabricGameTest {
+public class MechanicsEnchantmentGameTest implements FabricGameTest {
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()

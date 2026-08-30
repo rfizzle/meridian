@@ -17,7 +17,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 
-public class AttributeEnchantmentEffectTestGameTest implements FabricGameTest {
+public class AttributeEnchantmentEffectGameTest implements FabricGameTest {
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()

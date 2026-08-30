@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * enchants for sibling mods scaling hostile-mob gear. Asserts the tag exists, carries the expected
  * inclusions, and keeps the documented exclusions out.
  */
-public class MobEquipmentTagTestGameTest implements FabricGameTest {
+public class MobEquipmentTagGameTest implements FabricGameTest {
 
     private static final TagKey<Enchantment> MOB_EQUIPMENT = TagKey.create(
             Registries.ENCHANTMENT, Meridian.id("mob_equipment"));

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class DefinitionVerificationTestGameTest implements FabricGameTest {
+public class DefinitionVerificationGameTest implements FabricGameTest {
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()

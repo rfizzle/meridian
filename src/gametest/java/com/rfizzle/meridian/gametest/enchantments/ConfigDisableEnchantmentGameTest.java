@@ -30,7 +30,7 @@ import java.util.Set;
  * restore) another test's mutated config instead of the pristine one. A unique {@code batch}
  * per config-mutating test serializes them — vanilla runs batches strictly one at a time.
  */
-public class ConfigDisableEnchantmentTestGameTest implements FabricGameTest {
+public class ConfigDisableEnchantmentGameTest implements FabricGameTest {
 
     private static final Path CONFIG_FILE =
             FabricLoader.getInstance().getConfigDir().resolve("meridian.json");

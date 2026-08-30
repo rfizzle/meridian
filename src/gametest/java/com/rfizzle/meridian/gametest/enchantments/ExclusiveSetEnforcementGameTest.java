@@ -14,7 +14,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExclusiveSetEnforcementTestGameTest implements FabricGameTest {
+public class ExclusiveSetEnforcementGameTest implements FabricGameTest {
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
