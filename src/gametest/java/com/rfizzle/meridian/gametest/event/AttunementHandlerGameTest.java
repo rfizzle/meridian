@@ -4,7 +4,7 @@ package com.rfizzle.meridian.gametest.event;
 import com.rfizzle.meridian.event.AttunementHandler;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

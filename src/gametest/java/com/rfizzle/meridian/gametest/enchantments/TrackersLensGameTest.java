@@ -4,7 +4,7 @@ package com.rfizzle.meridian.gametest.enchantments;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.enchanting.SpyglassEnchantMath;
 import com.rfizzle.meridian.event.TrackersLensHandler;
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;

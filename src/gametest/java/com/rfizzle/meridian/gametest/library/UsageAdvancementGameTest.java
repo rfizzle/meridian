@@ -4,7 +4,7 @@ package com.rfizzle.meridian.gametest.library;
 import com.rfizzle.meridian.library.EnchantmentLibraryMenu;
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.MeridianRegistry;
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlockEntity;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.advancements.AdvancementHolder;
