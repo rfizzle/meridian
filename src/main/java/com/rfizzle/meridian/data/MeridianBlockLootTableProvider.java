@@ -6,7 +6,13 @@ import java.util.concurrent.CompletableFuture;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
+import com.rfizzle.meridian.library.EnchantmentLibraryBlock;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -31,7 +37,11 @@ public class MeridianBlockLootTableProvider extends FabricBlockLootTableProvider
     @Override
     public void generate() {
         for (Block block : MeridianRegistry.BLOCKS.values()) {
-            dropSelfWithSequence(block);
+            if (block instanceof EnchantmentLibraryBlock) {
+                dropLibraryWithContents(block);
+            } else {
+                dropSelfWithSequence(block);
+            }
         }
     }
 
@@ -49,5 +59,16 @@ public class MeridianBlockLootTableProvider extends FabricBlockLootTableProvider
      */
     private void dropSelfWithSequence(Block block) {
         add(block, createSingleItemTable(block).setRandomSequence(block.getLootTable().location()));
+    }
+
+    /** Library drop that copies the block entity's stored pools onto the item. */
+    private void dropLibraryWithContents(Block block) {
+        add(block, LootTable.lootTable()
+                .withPool(applyExplosionCondition(block, LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(1.0F))
+                        .add(LootItem.lootTableItem(block)
+                                .apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                                        .include(MeridianRegistry.LIBRARY_CONTENTS)))))
+                .setRandomSequence(block.getLootTable().location()));
     }
 }

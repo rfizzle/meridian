@@ -5,6 +5,7 @@ import com.rfizzle.meridian.enchanting.MeridianEnchantmentMenu;
 import com.rfizzle.meridian.event.VerdureToolCondition;
 import com.rfizzle.meridian.event.WardenPoolCondition;
 import com.rfizzle.meridian.item.DormantCoreItem;
+import com.rfizzle.meridian.library.LibraryContents;
 import com.rfizzle.meridian.item.EverfeastRationItem;
 import com.rfizzle.meridian.item.EverfullFlaskItem;
 import com.rfizzle.meridian.item.InfusedBreathItem;
@@ -104,6 +105,15 @@ public final class MeridianRegistry {
      */
     public static final DataComponentType<Integer> STORED_XP =
             registerDataComponentType("stored_xp", builder -> builder.persistent(Codec.INT).networkSynchronized(ByteBufCodecs.VAR_INT));
+
+    /**
+     * Stored point/level pools of an Enchantment Library, carried on its dropped item so breaking,
+     * re-placing, and the Basic to Ender upgrade keep the contents.
+     */
+    public static final DataComponentType<LibraryContents> LIBRARY_CONTENTS =
+            registerDataComponentType("library_contents", builder -> builder
+                    .persistent(LibraryContents.CODEC)
+                    .networkSynchronized(LibraryContents.STREAM_CODEC));
 
     public static final MenuType<MeridianEnchantmentMenu> ENCHANTING_TABLE_MENU =
             new MenuType<>(MeridianEnchantmentMenu::new, FeatureFlags.VANILLA_SET);

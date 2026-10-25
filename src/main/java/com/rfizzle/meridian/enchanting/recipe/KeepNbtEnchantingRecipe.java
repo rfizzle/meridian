@@ -1,6 +1,8 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
 import com.mojang.serialization.MapCodec;
+import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.library.LibraryContents;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,8 +21,8 @@ import java.util.OptionalInt;
  *
  * <p>Zenith's 1.20.1 implementation copied the whole NBT compound via {@code out.setTag(...)};
  * 1.21.1 replaced item NBT with a component map, so only the {@link DataComponents#ENCHANTMENTS}
- * component is copied here — that's the only field any of the shipped recipes actually needs to
- * carry (the Basic → Ender Library upgrade path in DESIGN § "Enchantment-Table Crafting").
+ * component is copied here, plus {@link MeridianRegistry#LIBRARY_CONTENTS} — the fields the shipped
+ * recipes actually need to carry (the Basic → Ender Library upgrade path in DESIGN § "Enchantment-Table Crafting").
  *
  * <p>Everything else — ingredient/ stat matching, fields, stream codec — is inherited from
  * {@link EnchantingRecipe}; only {@link #assemble}, {@link #getSerializer}, and {@link #getType}
@@ -53,6 +55,10 @@ public class KeepNbtEnchantingRecipe extends EnchantingRecipe {
         ItemEnchantments enchantments = pInput.item().get(DataComponents.ENCHANTMENTS);
         if (enchantments != null && !enchantments.isEmpty()) {
             out.set(DataComponents.ENCHANTMENTS, enchantments);
+        }
+        LibraryContents contents = pInput.item().get(MeridianRegistry.LIBRARY_CONTENTS);
+        if (contents != null) {
+            out.set(MeridianRegistry.LIBRARY_CONTENTS, contents);
         }
         return out;
     }
