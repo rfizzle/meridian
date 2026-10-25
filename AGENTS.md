@@ -61,6 +61,12 @@ JUnit tests go in the standard `src/test/java` directory. The test classpath
 includes `fabric-loader-junit` but excludes `fabric-api` — tests that need
 Fabric APIs must use gametests instead.
 
+The shared build wiring (version, split source sets, gametest/datagen runs, JaCoCo, jar packaging,
+the shared guard tests under `com.rfizzle.concord.guard`, and the shared `MockPlayers` gametest helper)
+is hub-owned: `gradle/concord-common.gradle` and `concord.mk`, synced verbatim from concord. Do not
+edit those files, `src/test/java/com/rfizzle/concord/` or `src/gametest/java/com/rfizzle/concord/`
+here; `build.gradle` and the `Makefile` keep only what is meridian-specific.
+
 Generated resources land in `src/main/generated` (wired into `main`'s
 resources). They are committed; after touching any datagen provider, run
 `runDatagen` and commit the diff (`verifyDatagenIdempotent` enforces this).

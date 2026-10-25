@@ -3,7 +3,7 @@ package com.rfizzle.meridian.gametest.shelf;
 
 import com.rfizzle.meridian.shelf.FilteringShelfBlockEntity;
 import com.rfizzle.meridian.Meridian;
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

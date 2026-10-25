@@ -1,6 +1,6 @@
 package com.rfizzle.meridian.gametest;
 
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 /**
  * Guards that {@link MockPlayers} stays a faithful replica of the (deprecated)
- * {@code makeMockServerPlayerInLevel} it replaced: a live connection, a player-list registration,
+ * vanilla factory it replaced: a live connection, a player-list registration,
  * level membership, and the creative / non-spectator flags the connected-player call sites rely
  * on — and that {@link MockPlayers#retire} actually takes the player back out of the player list.
  * If someone later "simplifies" the helper into a bare {@code new ServerPlayer(...)}, this fails
@@ -38,7 +38,7 @@ public class MockPlayersGameTest implements FabricGameTest {
                 return;
             }
             if (!player.isCreative()) {
-                helper.fail("mock server player must be creative, matching makeMockServerPlayerInLevel");
+                helper.fail("mock server player must be creative, matching the vanilla factory");
                 return;
             }
             if (player.isSpectator()) {

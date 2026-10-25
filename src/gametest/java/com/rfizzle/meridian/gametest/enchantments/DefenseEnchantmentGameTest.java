@@ -5,7 +5,7 @@ import com.rfizzle.meridian.attachment.MeridianAttachments;
 import com.rfizzle.meridian.enchanting.DefenseEnchantMath;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
 import com.rfizzle.meridian.event.LoftHandler;
-import com.rfizzle.meridian.gametest.util.MockPlayers;
+import com.rfizzle.concord.gametest.MockPlayers;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
