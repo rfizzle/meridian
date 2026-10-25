@@ -1,6 +1,7 @@
 // Tier: 3 (Fabric Gametest)
 package com.rfizzle.meridian.gametest.event;
 
+import com.rfizzle.meridian.enchanting.MiningEnchantMath;
 import com.rfizzle.meridian.event.DowseHandler;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -47,11 +48,19 @@ public class DowseGameTest implements FabricGameTest {
     }
 
     // With no ore in range the scan returns nothing (and the handler burns only the cooldown).
-    @GameTest(template = "meridian:empty_5x5x5")
+    // The scan reaches DOWSE_SEARCH_RADIUS blocks in every direction, far past a small template, so
+    // this test owns a template that spans the whole search cube (structure placement clears it to
+    // air) and a batch of its own: otherwise ore placed by a neighbouring test lands in range.
+    @GameTest(template = "meridian:empty_25x25x25", batch = "meridianDowseEmpty")
     public void emptyWhenNoOreInRange(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
+        int r = MiningEnchantMath.DOWSE_SEARCH_RADIUS;
+        if (2 * r + 1 > 25) {
+            helper.fail("empty_25x25x25 no longer spans the Dowse search cube (radius " + r + "); enlarge it");
+            return;
+        }
 
-        List<BlockPos> vein = DowseHandler.findNearestVein(level, helper.absolutePos(new BlockPos(2, 2, 2)));
+        List<BlockPos> vein = DowseHandler.findNearestVein(level, helper.absolutePos(new BlockPos(r, r, r)));
 
         if (!vein.isEmpty()) {
             helper.fail("Dowse must find nothing when no ore is nearby, got " + vein);
