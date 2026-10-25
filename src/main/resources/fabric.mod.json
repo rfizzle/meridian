@@ -44,6 +44,7 @@
         "jei": "*",
         "jade": "*",
         "wthit": "*",
-        "modmenu": "*"
+        "modmenu": "*",
+        "cloth-config": "*"
     }
 }
