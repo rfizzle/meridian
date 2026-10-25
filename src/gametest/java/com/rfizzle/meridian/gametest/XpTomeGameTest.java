@@ -76,4 +76,36 @@ public class XpTomeGameTest implements FabricGameTest {
         helper.assertTrue(player.experienceLevel == 5, "Expected still 5 player levels");
         helper.succeed();
     }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void testDepositIntoStackSplitsOneTome(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 5;
+        player.getInventory().clearContent();
+        ItemStack stack = new ItemStack(MeridianRegistry.XP_TOME_T1, 16);
+        player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+
+        MeridianRegistry.XP_TOME_T1.use(helper.getLevel(), player, InteractionHand.MAIN_HAND);
+
+        int tomes = 0;
+        int filled = 0;
+        int totalXp = 0;
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack s = player.getInventory().getItem(i);
+            if (s.is(MeridianRegistry.XP_TOME_T1)) {
+                tomes += s.getCount();
+                int xp = s.getOrDefault(MeridianRegistry.STORED_XP, 0);
+                if (xp > 0) {
+                    filled += s.getCount();
+                    helper.assertTrue(s.getCount() == 1, "Filled tome must not stack");
+                }
+                totalXp += xp * s.getCount();
+            }
+        }
+        helper.assertTrue(tomes == 16, "Expected 16 tomes total, got " + tomes);
+        helper.assertTrue(filled == 1, "Expected exactly 1 filled tome, got " + filled);
+        helper.assertTrue(totalXp == 1, "Expected 1 total stored XP, got " + totalXp);
+        helper.assertTrue(player.experienceLevel == 4, "Expected 4 player levels");
+        helper.succeed();
+    }
 }
