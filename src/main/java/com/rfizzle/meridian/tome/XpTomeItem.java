@@ -46,7 +46,16 @@ public class XpTomeItem extends Item {
             // Deposit 1 level
             if (stored < capacity) {
                 if (player.experienceLevel > 0 || player.getAbilities().instabuild) {
-                    stack.set(MeridianRegistry.STORED_XP, stored + 1);
+                    if (stack.getCount() > 1) {
+                        // Empty tomes stack; split one off so the level is stored once, not per tome.
+                        ItemStack single = stack.split(1);
+                        single.set(MeridianRegistry.STORED_XP, stored + 1);
+                        if (!player.getInventory().add(single)) {
+                            player.drop(single, false);
+                        }
+                    } else {
+                        stack.set(MeridianRegistry.STORED_XP, stored + 1);
+                    }
                     if (!player.getAbilities().instabuild) {
                         player.giveExperienceLevels(-1);
                     }
