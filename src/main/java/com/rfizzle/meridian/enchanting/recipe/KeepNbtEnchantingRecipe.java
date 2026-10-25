@@ -1,11 +1,10 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
 import com.mojang.serialization.MapCodec;
-import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.library.LibraryContents;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -57,21 +56,11 @@ public class KeepNbtEnchantingRecipe extends EnchantingRecipe {
         if (enchantments != null && !enchantments.isEmpty()) {
             out.set(DataComponents.ENCHANTMENTS, enchantments);
         }
-        // Looked up by id rather than through MeridianRegistry, whose static init (block/item/menu
-        // registration) can't run on the unit-test classpath that exercises this recipe.
-        DataComponentType<?> libraryContents =
-                BuiltInRegistries.DATA_COMPONENT_TYPE.get(Meridian.id("library_contents"));
-        if (libraryContents != null) {
-            copyComponent(libraryContents, pInput.item(), out);
+        LibraryContents contents = pInput.item().get(MeridianRegistry.LIBRARY_CONTENTS);
+        if (contents != null) {
+            out.set(MeridianRegistry.LIBRARY_CONTENTS, contents);
         }
         return out;
-    }
-
-    private static <T> void copyComponent(DataComponentType<T> type, ItemStack from, ItemStack to) {
-        T value = from.get(type);
-        if (value != null) {
-            to.set(type, value);
-        }
     }
 
     @Override
