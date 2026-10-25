@@ -1,8 +1,11 @@
 package com.rfizzle.meridian.enchanting.recipe;
 
 import com.mojang.serialization.MapCodec;
+import com.rfizzle.meridian.Meridian;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +22,8 @@ import java.util.OptionalInt;
  *
  * <p>Zenith's 1.20.1 implementation copied the whole NBT compound via {@code out.setTag(...)};
  * 1.21.1 replaced item NBT with a component map, so only the {@link DataComponents#ENCHANTMENTS}
- * component is copied here — that's the only field any of the shipped recipes actually needs to
- * carry (the Basic → Ender Library upgrade path in DESIGN § "Enchantment-Table Crafting").
+ * component is copied here, plus {@code meridian:library_contents} — the fields the shipped
+ * recipes actually need to carry (the Basic → Ender Library upgrade path in DESIGN § "Enchantment-Table Crafting").
  *
  * <p>Everything else — ingredient/ stat matching, fields, stream codec — is inherited from
  * {@link EnchantingRecipe}; only {@link #assemble}, {@link #getSerializer}, and {@link #getType}
@@ -54,7 +57,21 @@ public class KeepNbtEnchantingRecipe extends EnchantingRecipe {
         if (enchantments != null && !enchantments.isEmpty()) {
             out.set(DataComponents.ENCHANTMENTS, enchantments);
         }
+        // Looked up by id rather than through MeridianRegistry, whose static init (block/item/menu
+        // registration) can't run on the unit-test classpath that exercises this recipe.
+        DataComponentType<?> libraryContents =
+                BuiltInRegistries.DATA_COMPONENT_TYPE.get(Meridian.id("library_contents"));
+        if (libraryContents != null) {
+            copyComponent(libraryContents, pInput.item(), out);
+        }
         return out;
+    }
+
+    private static <T> void copyComponent(DataComponentType<T> type, ItemStack from, ItemStack to) {
+        T value = from.get(type);
+        if (value != null) {
+            to.set(type, value);
+        }
     }
 
     @Override

@@ -3,6 +3,13 @@ package com.rfizzle.meridian.gametest;
 
 import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.library.BasicLibraryBlockEntity;
+import com.rfizzle.meridian.enchanting.recipe.KeepNbtEnchantingRecipe;
+import com.rfizzle.meridian.enchanting.recipe.StatRequirements;
+import com.rfizzle.meridian.library.EnderLibraryBlockEntity;
+import java.util.OptionalInt;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.level.block.Block;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -79,6 +86,73 @@ public class LibraryPersistGameTest implements FabricGameTest {
         if (reloadedLib.getMaxLevels().getInt(unbrkKey) != unbrkMax) {
             helper.fail("Unbreaking maxLevels not preserved: expected " + unbrkMax
                     + " got " + reloadedLib.getMaxLevels().getInt(unbrkKey));
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void brokenLibraryDropKeepsContentsAndPlacementRestores(GameTestHelper helper) {
+        BlockState state = MeridianRegistry.BASIC_LIBRARY.defaultBlockState();
+        helper.setBlock(LIB_POS, state);
+        BlockPos absPos = helper.absolutePos(LIB_POS);
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel().getBlockEntity(absPos);
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 5));
+        be.depositBook(enchantedBook(reg, Enchantments.UNBREAKING, 3));
+        int sharpPts = be.getPoints().getInt(Enchantments.SHARPNESS);
+        int sharpMax = be.getMaxLevels().getInt(Enchantments.SHARPNESS);
+
+        // Real loot-table path, as a player break would take it.
+        java.util.List<ItemStack> drops = Block.getDrops(state, helper.getLevel(), absPos, be);
+        if (drops.size() != 1 || !drops.get(0).is(MeridianRegistry.BASIC_LIBRARY.asItem())) {
+            helper.fail("Expected one library item drop, got " + drops);
+            return;
+        }
+        ItemStack dropped = drops.get(0);
+        if (!dropped.has(MeridianRegistry.LIBRARY_CONTENTS)) {
+            helper.fail("Dropped library item carries no contents");
+            return;
+        }
+
+        BlockPos second = new BlockPos(2, 1, 2);
+        helper.setBlock(second, state);
+        BlockPos absSecond = helper.absolutePos(second);
+        helper.getLevel().getBlockEntity(absSecond).applyComponentsFromItemStack(dropped);
+        BasicLibraryBlockEntity placed = (BasicLibraryBlockEntity) helper.getLevel().getBlockEntity(absSecond);
+        if (placed.getPoints().getInt(Enchantments.SHARPNESS) != sharpPts
+                || placed.getMaxLevels().getInt(Enchantments.SHARPNESS) != sharpMax
+                || placed.getPoints().getInt(Enchantments.UNBREAKING) != be.getPoints().getInt(Enchantments.UNBREAKING)) {
+            helper.fail("Placed library did not restore contents");
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void upgradeRecipeKeepsLibraryContents(GameTestHelper helper) {
+        BlockState state = MeridianRegistry.BASIC_LIBRARY.defaultBlockState();
+        helper.setBlock(LIB_POS, state);
+        BlockPos absPos = helper.absolutePos(LIB_POS);
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel().getBlockEntity(absPos);
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 5));
+        ItemStack dropped = Block.getDrops(state, helper.getLevel(), absPos, be).get(0);
+
+        KeepNbtEnchantingRecipe recipe = new KeepNbtEnchantingRecipe(
+                Ingredient.of(MeridianRegistry.BASIC_LIBRARY.asItem()),
+                new StatRequirements(0F, 0F, 0F), StatRequirements.NO_MAX,
+                new ItemStack(MeridianRegistry.ENDER_LIBRARY), OptionalInt.empty(), 0);
+        ItemStack out = recipe.assemble(new SingleRecipeInput(dropped), helper.getLevel().registryAccess());
+
+        BlockPos second = new BlockPos(2, 1, 2);
+        helper.setBlock(second, MeridianRegistry.ENDER_LIBRARY.defaultBlockState());
+        BlockPos absSecond = helper.absolutePos(second);
+        helper.getLevel().getBlockEntity(absSecond).applyComponentsFromItemStack(out);
+        EnderLibraryBlockEntity ender = (EnderLibraryBlockEntity) helper.getLevel().getBlockEntity(absSecond);
+        if (ender.getPoints().getInt(Enchantments.SHARPNESS) != be.getPoints().getInt(Enchantments.SHARPNESS)
+                || ender.getMaxLevels().getInt(Enchantments.SHARPNESS) != 5) {
+            helper.fail("Ender library lost the stored books");
             return;
         }
         helper.succeed();

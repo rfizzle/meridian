@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.MeridianRegistry;
 import com.rfizzle.meridian.config.MeridianConfig;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 
@@ -9,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Shared storage engine for the Basic and Ender library block entities. A point-pool model keyed
@@ -212,6 +215,39 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
         super.saveAdditional(tag, registries);
         tag.put(TAG_POINTS, writeSortedMap(this.points));
         tag.put(TAG_LEVELS, writeSortedMap(this.maxLevels));
+    }
+
+    /** Snapshot of the pools onto the dropped/picked item (shulker-box style implicit component). */
+    @Override
+    protected void collectImplicitComponents(DataComponentMap.Builder builder) {
+        super.collectImplicitComponents(builder);
+        if (this.points.isEmpty() && this.maxLevels.isEmpty()) return;
+        builder.set(MeridianRegistry.LIBRARY_CONTENTS,
+                new LibraryContents(toIdMap(this.points), toIdMap(this.maxLevels)));
+    }
+
+    @Override
+    protected void applyImplicitComponents(BlockEntity.DataComponentInput input) {
+        super.applyImplicitComponents(input);
+        LibraryContents contents = input.get(MeridianRegistry.LIBRARY_CONTENTS);
+        if (contents == null) return;
+        this.points.clear();
+        this.maxLevels.clear();
+        contents.points().forEach((id, v) -> this.points.put(ResourceKey.create(Registries.ENCHANTMENT, id), (int) v));
+        contents.levels().forEach((id, v) -> this.maxLevels.put(ResourceKey.create(Registries.ENCHANTMENT, id), (int) v));
+    }
+
+    /** Keep the contents out of the item's block_entity_data copy (pick-block); the component carries them. */
+    @Override
+    public void removeComponentsFromTag(CompoundTag tag) {
+        tag.remove(TAG_POINTS);
+        tag.remove(TAG_LEVELS);
+    }
+
+    private static Map<ResourceLocation, Integer> toIdMap(Object2IntMap<ResourceKey<Enchantment>> map) {
+        Map<ResourceLocation, Integer> out = new TreeMap<>();
+        map.object2IntEntrySet().forEach(e -> out.put(e.getKey().location(), e.getIntValue()));
+        return out;
     }
 
     /**

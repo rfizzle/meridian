@@ -11,6 +11,15 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "meridian:library_contents"
+              ],
+              "source": "block_entity"
+            }
+          ],
           "name": "meridian:ender_library"
         }
       ],
