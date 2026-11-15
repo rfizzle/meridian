@@ -130,7 +130,7 @@ class TomeHandlerLogicTest {
         sword.set(DataComponents.ENCHANTMENTS,
                 buildEnchantments(Map.of(sharpnessHolder, 5, unbreakingHolder, 3)));
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 50);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0.05);
 
         ItemEnchantments resultEnchants = result.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         assertTrue(resultEnchants.isEmpty(), "all enchantments must be stripped");
@@ -140,10 +140,10 @@ class TomeHandlerLogicTest {
     void stripAndDamage_appliesDamage() {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 200);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0.05);
 
-        assertEquals(200, result.getDamageValue(),
-                "damage delta should be applied to fresh item");
+        assertEquals((int) Math.floor(sword.getMaxDamage() * 0.05), result.getDamageValue(),
+                "the configured share of max durability should be applied to a fresh item");
     }
 
     @Test
@@ -151,7 +151,7 @@ class TomeHandlerLogicTest {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
         int maxDmg = sword.getMaxDamage();
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, maxDmg + 100);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 1.0);
 
         assertEquals(maxDmg - 1, result.getDamageValue(),
                 "damage must be clamped to maxDamage - 1");
@@ -161,10 +161,10 @@ class TomeHandlerLogicTest {
     void stripAndDamage_zeroDelta_noDamage() {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0.0);
 
         assertEquals(0, result.getDamageValue(),
-                "zero delta must not apply damage");
+                "zero percent must not apply damage");
     }
 
     @Test
@@ -173,7 +173,7 @@ class TomeHandlerLogicTest {
         book.set(DataComponents.STORED_ENCHANTMENTS,
                 buildEnchantments(Map.of(sharpnessHolder, 3)));
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(book, 200);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(book, 0.5);
 
         assertFalse(result.isDamageableItem(), "book is not damageable");
         assertTrue(result.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY).isEmpty(),
@@ -184,7 +184,7 @@ class TomeHandlerLogicTest {
     void stripAndDamage_preservesItemType() {
         ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
 
-        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 50);
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0.05);
 
         assertEquals(Items.DIAMOND_SWORD, result.getItem());
         assertEquals(1, result.getCount());
@@ -196,12 +196,23 @@ class TomeHandlerLogicTest {
         sword.set(DataComponents.ENCHANTMENTS,
                 buildEnchantments(Map.of(sharpnessHolder, 5)));
 
-        ExtractionTomeHandler.stripAndDamage(sword, 200);
+        ExtractionTomeHandler.stripAndDamage(sword, 0.5);
 
         assertEquals(5, sword.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY)
                         .getLevel(sharpnessHolder),
                 "original stack must not be mutated");
         assertEquals(0, sword.getDamageValue(), "original damage must be unchanged");
+    }
+
+    @Test
+    void stripAndDamage_smallDurabilityItem_keepsMostOfItsLife() {
+        // A golden sword (max 32) used to come back at 1/32 under the flat 50-point cost (#321).
+        ItemStack sword = new ItemStack(Items.GOLDEN_SWORD);
+
+        ItemStack result = ExtractionTomeHandler.stripAndDamage(sword, 0.05);
+
+        assertEquals(1, result.getDamageValue(),
+                "5% of 32 floors to 1 point, so the sword keeps 31 of 32 durability");
     }
 
     // --- fixtures ---

@@ -130,13 +130,16 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
         AnvilResult pending = this.meridian$pendingResult;
         this.meridian$pendingResult = null;
         if (pending == null) return;
+        // Restore the preserved left item first, so nothing that happens afterwards (the advancement
+        // trigger below runs arbitrary criterion listeners) can strand the player without it.
+        ItemStack replacement = pending.leftReplacement();
+        if (replacement != null && !replacement.isEmpty()) {
+            this.inputSlots.setItem(0, replacement.copy());
+        }
         // Award the mechanic's usage advancement now that the player has actually taken the
         // output — createResult only builds previews, so the take path is the true "used it" event.
         if (pending.usage() != null && player instanceof ServerPlayer serverPlayer) {
             pending.usage().award(serverPlayer);
         }
-        ItemStack replacement = pending.leftReplacement();
-        if (replacement == null || replacement.isEmpty()) return;
-        this.inputSlots.setItem(0, replacement.copy());
     }
 }

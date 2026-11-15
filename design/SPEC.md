@@ -292,7 +292,7 @@ Three salvage tomes move enchantments between items at the anvil — input item 
 ### Behavior
 - **Scrap Tome:** outputs one enchanted book carrying one enchantment chosen by a **deterministic seeded RNG** — the seed combines the player's enchantment seed with the candidate enchantments' resource-location hashes, and candidates are sorted by ID string, so the same player + same item yields the same pick (re-rolling requires changing the loadout). One tome consumed. Source item destroyed by the vanilla anvil take.
 - **Improved Scrap Tome:** outputs one enchanted book with every enchantment at its original level (no RNG). One tome consumed; source destroyed.
-- **Extraction Tome:** outputs one enchanted book with all enchantments; the source item is **preserved**, fully unenchanted, and damaged by `tomes.extractionTomeItemDamage` (default 50 durability), clamped so the item never breaks (`min(damage + delta, maxDamage − 1)`). Non-damageable inputs are unenchanted without damage. The stripped item is restored to the left slot by the `AnvilMenuMixin#onTake` tail. One tome consumed.
+- **Extraction Tome:** outputs one enchanted book with all enchantments; the source item is **preserved**, fully unenchanted, and damaged by `max(1, floor(maxDamage * tomes.extractionTomeItemDamagePercent))` (default 0.05 → 5% of max durability), clamped so the item never breaks (`min(damage + delta, maxDamage − 1)`). A left stack of more than one item is declined, since vanilla's take clears the whole slot and only one item can be preserved. Non-damageable inputs are unenchanted without damage. The stripped item is restored to the left slot by the `AnvilMenuMixin#onTake` tail. One tome consumed.
 
 ### Extraction Tome — Repair Path
 A separate handler (`ExtractionTomeFuelSlotRepairHandler`, registered after the extraction handler so extraction wins on enchanted items) fires when the left item is a **damaged, unenchanted, damageable** item and the right is an Extraction Tome. It repairs `floor(maxDamage * tomes.extractionTomeRepairPercent)` (default 0.25 → 25% of max durability), declines if the result would be a no-op, consumes one tome, and costs 10 XP levels.
@@ -452,7 +452,7 @@ Both conditions read config live (reload-safe) and clamp the chance to [0, 1]. `
 | `scrapTomeXpCost` | int | 3 | |
 | `improvedScrapTomeXpCost` | int | 5 | |
 | `extractionTomeXpCost` | int | 10 | |
-| `extractionTomeItemDamage` | int | 50 | durability damage to preserved item |
+| `extractionTomeItemDamagePercent` | double | 0.05 | 0.0–1.0; share of max durability the preserved item loses |
 | `extractionTomeRepairPercent` | double | 0.25 | 0.0–1.0; repair-path durability restored |
 
 ### `everfeast`

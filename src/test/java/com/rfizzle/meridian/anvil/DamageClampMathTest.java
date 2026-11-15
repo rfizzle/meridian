@@ -65,4 +65,34 @@ class DamageClampMathTest {
     void largeDelta_withPreExistingDamage_clampsToMaxMinusOne() {
         assertEquals(999, ExtractionTomeHandler.clampDamage(500, 1000, 1000));
     }
+
+    // --- damageFor: the percentage cost (#321) ---
+
+    @Test
+    void damageFor_floorsTheShareOfMaxDurability() {
+        assertEquals(78, ExtractionTomeHandler.damageFor(1561, 0.05), "diamond sword at 5%");
+        assertEquals(12, ExtractionTomeHandler.damageFor(250, 0.05), "iron sword at 5%");
+    }
+
+    @Test
+    void damageFor_nonZeroPercent_costsAtLeastOnePoint() {
+        assertEquals(1, ExtractionTomeHandler.damageFor(25, 0.01),
+                "0.25 points floors to 0 but a non-zero percent must still cost something");
+    }
+
+    @Test
+    void damageFor_zeroOrNegativeInputs_costNothing() {
+        assertEquals(0, ExtractionTomeHandler.damageFor(1561, 0.0));
+        assertEquals(0, ExtractionTomeHandler.damageFor(1561, -0.5));
+        assertEquals(0, ExtractionTomeHandler.damageFor(0, 0.05));
+    }
+
+    @Test
+    void damageFor_fullPercent_isClampedByClampDamage() {
+        int max = 32;
+        int delta = ExtractionTomeHandler.damageFor(max, 1.0);
+        assertEquals(32, delta);
+        assertEquals(31, ExtractionTomeHandler.clampDamage(0, delta, max),
+                "even a 100% cost leaves the item one durability");
+    }
 }

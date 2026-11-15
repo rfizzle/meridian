@@ -12,7 +12,9 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -125,7 +127,103 @@ public class TomeAnvilGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    // --- TEST-5.2-T3d: ExtractionTomeFuelSlotRepairHandler ---
+    // --- #321: Extraction Tome take path (the item must come back, not just preview) ---
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void extractionTomeTakeRestoresStrippedItem(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        AnvilMenu menu = setupAnvil(helper, player);
+        menu.getSlot(0).set(enchantedSword(helper, Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(MeridianRegistry.EXTRACTION_TOME));
+
+        menu.clicked(RESULT_SLOT, 0, ClickType.PICKUP, player);
+
+        if (!menu.getCarried().is(Items.ENCHANTED_BOOK)) {
+            helper.fail("Taking the result should put the book on the cursor, got " + menu.getCarried());
+            return;
+        }
+        ItemStack restored = menu.getSlot(0).getItem();
+        if (!restored.is(Items.DIAMOND_SWORD)) {
+            helper.fail("The stripped sword must be restored to the left slot, got " + restored);
+            return;
+        }
+        if (!EnchantmentHelper.getEnchantmentsForCrafting(restored).isEmpty()) {
+            helper.fail("The restored sword must be unenchanted");
+            return;
+        }
+        int expectedDamage = (int) Math.floor(restored.getMaxDamage() * 0.05);
+        if (restored.getDamageValue() != expectedDamage) {
+            helper.fail("Restored sword should take 5% of max durability (" + expectedDamage
+                    + "), took " + restored.getDamageValue());
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void extractionTomeShiftClickTakeRestoresStrippedItem(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        AnvilMenu menu = setupAnvil(helper, player);
+        menu.getSlot(0).set(enchantedSword(helper, Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(MeridianRegistry.EXTRACTION_TOME, 8));
+
+        menu.clicked(RESULT_SLOT, 0, ClickType.QUICK_MOVE, player);
+
+        if (player.getInventory().countItem(Items.ENCHANTED_BOOK) != 1) {
+            helper.fail("Shift-click should move exactly one book into the inventory");
+            return;
+        }
+        if (!menu.getSlot(0).getItem().is(Items.DIAMOND_SWORD)) {
+            helper.fail("Shift-click take must restore the sword, got " + menu.getSlot(0).getItem());
+            return;
+        }
+        if (menu.getSlot(1).getItem().getCount() != 7) {
+            helper.fail("Exactly one tome should be consumed, " + menu.getSlot(1).getItem().getCount() + " left");
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void extractionTomeKeepsSmallDurabilityItemUsable(GameTestHelper helper) {
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        AnvilMenu menu = setupAnvil(helper, player);
+        menu.getSlot(0).set(enchantedSword(helper, Items.GOLDEN_SWORD));
+        menu.getSlot(1).set(new ItemStack(MeridianRegistry.EXTRACTION_TOME));
+
+        menu.clicked(RESULT_SLOT, 0, ClickType.PICKUP, player);
+
+        ItemStack restored = menu.getSlot(0).getItem();
+        int remaining = restored.getMaxDamage() - restored.getDamageValue();
+        if (!restored.is(Items.GOLDEN_SWORD) || remaining != restored.getMaxDamage() - 1) {
+            helper.fail("A golden sword should lose one point, not be driven to 1 durability; remaining="
+                    + remaining + " of " + restored.getMaxDamage());
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "meridian:empty_3x3")
+    public void extractionTomeDeclinesStackedLeft(GameTestHelper helper) {
+        AnvilMenu menu = setupAnvil(helper);
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ItemStack sticks = new ItemStack(Items.STICK, 4);
+        sticks.enchant(reg.getHolderOrThrow(Enchantments.KNOCKBACK), 1);
+
+        menu.getSlot(0).set(sticks);
+        menu.getSlot(1).set(new ItemStack(MeridianRegistry.EXTRACTION_TOME));
+
+        if (menu.getSlot(2).getItem().is(Items.ENCHANTED_BOOK)) {
+            helper.fail("A stacked left input must not be claimed: taking it would destroy all but one item");
+            return;
+        }
+        helper.succeed();
+    }
+
+        // --- TEST-5.2-T3d: ExtractionTomeFuelSlotRepairHandler ---
 
     @GameTest(template = "meridian:empty_3x3")
     public void extractionTomeRepairsDamagedUnenchantedSword(GameTestHelper helper) {
@@ -173,10 +271,24 @@ public class TomeAnvilGameTest implements FabricGameTest {
 
     // --- Helpers ---
 
+    private static final int RESULT_SLOT = 2;
+
+    private ItemStack enchantedSword(GameTestHelper helper, Item item) {
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ItemStack sword = new ItemStack(item);
+        sword.enchant(reg.getHolderOrThrow(Enchantments.SHARPNESS), 5);
+        sword.enchant(reg.getHolderOrThrow(Enchantments.UNBREAKING), 3);
+        return sword;
+    }
+
     private AnvilMenu setupAnvil(GameTestHelper helper) {
-        helper.setBlock(ANVIL_POS, Blocks.ANVIL.defaultBlockState());
         Player player = helper.makeMockPlayer(GameType.SURVIVAL);
         player.experienceLevel = 30;
+        return setupAnvil(helper, player);
+    }
+
+    private AnvilMenu setupAnvil(GameTestHelper helper, Player player) {
+        helper.setBlock(ANVIL_POS, Blocks.ANVIL.defaultBlockState());
         BlockPos absAnvil = helper.absolutePos(ANVIL_POS);
         return new AnvilMenu(
                 1, player.getInventory(),
