@@ -185,4 +185,25 @@ class ConfigMigratorTest {
                 "absence of the key must not reintroduce it");
         assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
     }
+
+    @Test
+    void migrate_v11_dropsFlatExtractionTomeItemDamage() {
+        // v11 → v12 (#321): the flat point cost is replaced by a share of max durability. The old
+        // key is removed so the re-saved file no longer advertises an inert option.
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 11);
+        JsonObject tomes = new JsonObject();
+        tomes.addProperty("extractionTomeItemDamage", 50);
+        tomes.addProperty("extractionTomeXpCost", 12);
+        json.add("tomes", tomes);
+
+        boolean changed = ConfigMigrator.migrate(json);
+
+        assertTrue(changed, "migrating a v11 config must report a change");
+        assertFalse(json.getAsJsonObject("tomes").has("extractionTomeItemDamage"),
+                "the flat damage key must be removed by the v11 to v12 migration");
+        assertEquals(12, json.getAsJsonObject("tomes").get("extractionTomeXpCost").getAsInt(),
+                "unrelated tome keys must survive the migration");
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
+    }
 }

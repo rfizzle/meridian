@@ -11,7 +11,7 @@ import com.rfizzle.meridian.Meridian;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 11;
+    static final int CURRENT_VERSION = 12;
 
     @FunctionalInterface
     interface Migration {
@@ -77,6 +77,16 @@ final class ConfigMigrator {
             // an absent boolean as false, which already matches the field default, and the
             // post-migration re-save writes it into the file so operators can discover the toggle.
             json -> { },
+            // v11 → v12: the Extraction Tome's durability cost becomes a share of max durability
+            // (#321). The flat tomes.extractionTomeItemDamage key is replaced by
+            // tomes.extractionTomeItemDamagePercent; a flat point value has no meaningful percentage
+            // equivalent across items, so the old key is dropped and the new one takes its default.
+            json -> {
+                JsonElement tomes = json.get("tomes");
+                if (tomes != null && tomes.isJsonObject()) {
+                    tomes.getAsJsonObject().remove("extractionTomeItemDamage");
+                }
+            },
     };
 
     private ConfigMigrator() {}

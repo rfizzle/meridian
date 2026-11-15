@@ -29,11 +29,13 @@ import java.util.function.Supplier;
  * worlds (full enchantment salvage + item retention) at a correspondingly higher XP cost.
  *
  * <p>Durability handling: the copy's damage value is raised by
- * {@code config.tomes.extractionTomeItemDamage} but clamped to {@code maxDamage - 1} so the item
- * always has at least one hit-point of durability left. A sword with 1 durability remaining
- * stays at 1 — the tome never outright breaks an item. Non-damageable items (e.g. an enchanted
- * book in the left slot) get unenchanted but not damaged, since there is no damage axis to
- * increment.
+ * {@code floor(maxDamage * config.tomes.extractionTomeItemDamagePercent)} (at least one point
+ * when the percent is above zero) but clamped to {@code maxDamage - 1} so the item always has at
+ * least one hit-point of durability left. The cost scales with the item, so a golden sword
+ * (max 32) pays the same share of its life as a diamond one rather than being driven straight to
+ * one durability by a flat cost. A sword with 1 durability remaining stays at 1 — the tome never
+ * outright breaks an item. Non-damageable items (e.g. an enchanted book in the left slot) get
+ * unenchanted but not damaged, since there is no damage axis to increment.
  *
  * <p>Declines ({@link Optional#empty()}) when any of the following holds, letting vanilla or a
  * later dispatcher entry own the pair:
@@ -42,6 +44,10 @@ import java.util.function.Supplier;
  *   <li>Either slot is empty.</li>
  *   <li>Right slot is not an Extraction Tome.</li>
  *   <li>Left stack carries no enchantments (nothing to extract).</li>
+ *   <li>Left stack holds more than one item. One tome strips one item, and vanilla's
+ *       {@code onTake} clears the whole left slot, so claiming a stack would silently destroy
+ *       every item but the preserved one. Declining leaves the anvil blank until the player
+ *       splits the stack.</li>
  * </ul>
  */
 public final class ExtractionTomeHandler implements AnvilHandler {
@@ -73,6 +79,10 @@ public final class ExtractionTomeHandler implements AnvilHandler {
             return Optional.empty();
         }
 
+        if (left.getCount() > 1) {
+            return Optional.empty();
+        }
+
         ItemEnchantments existing = EnchantmentHelper.getEnchantmentsForCrafting(left);
         if (existing.isEmpty()) {
             return Optional.empty();
@@ -85,7 +95,7 @@ public final class ExtractionTomeHandler implements AnvilHandler {
         }
         book.set(DataComponents.STORED_ENCHANTMENTS, transferred.toImmutable());
 
-        ItemStack preserved = stripAndDamage(left, config.tomes.extractionTomeItemDamage);
+        ItemStack preserved = stripAndDamage(left, config.tomes.extractionTomeItemDamagePercent);
 
         return Optional.of(new AnvilResult(
                 book,
@@ -97,23 +107,40 @@ public final class ExtractionTomeHandler implements AnvilHandler {
     /**
      * Returns a single-count copy of {@code source} with every enchantment stripped from both
      * the {@code ENCHANTMENTS} and {@code STORED_ENCHANTMENTS} components (so swords and
-     * enchanted-book inputs both come out blank), and durability reduced by {@code damageDelta}
-     * without ever crossing into the item's broken threshold.
+     * enchanted-book inputs both come out blank), and durability reduced by
+     * {@link #damageFor(int, double)} of its max durability without ever crossing into the item's
+     * broken threshold.
      *
      * <p>Package-private for unit-test access — the handler tests assert the stripping and
      * clamp semantics directly on this helper so the production call-site stays one line.
      */
-    static ItemStack stripAndDamage(ItemStack source, int damageDelta) {
+    static ItemStack stripAndDamage(ItemStack source, double damagePercent) {
         ItemStack preserved = source.copyWithCount(1);
         preserved.set(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
         if (preserved.has(DataComponents.STORED_ENCHANTMENTS)) {
             preserved.set(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         }
-        if (preserved.isDamageableItem() && damageDelta > 0) {
-            preserved.setDamageValue(
-                    clampDamage(preserved.getDamageValue(), damageDelta, preserved.getMaxDamage()));
+        if (preserved.isDamageableItem()) {
+            int damageDelta = damageFor(preserved.getMaxDamage(), damagePercent);
+            if (damageDelta > 0) {
+                preserved.setDamageValue(
+                        clampDamage(preserved.getDamageValue(), damageDelta, preserved.getMaxDamage()));
+            }
         }
         return preserved;
+    }
+
+    /**
+     * Durability points the extraction costs: {@code floor(maxDamage * damagePercent)}, raised to
+     * one point so any non-zero percent always costs something, and zero when either input is
+     * non-positive. Mirrors {@link ExtractionTomeFuelSlotRepairHandler#repairAmount(int, double)}
+     * so the tome's cost and its repair side-path scale the same way.
+     */
+    static int damageFor(int maxDamage, double damagePercent) {
+        if (maxDamage <= 0 || damagePercent <= 0.0) {
+            return 0;
+        }
+        return Math.max(1, (int) Math.floor(maxDamage * damagePercent));
     }
 
     static int clampDamage(int currentDamage, int damageDelta, int maxDamage) {

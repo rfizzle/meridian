@@ -155,11 +155,11 @@ public final class MeridianConfigScreen {
                 .setDefaultValue(10).setMin(0)
                 .setSaveConsumer(v -> current.tomes.extractionTomeXpCost = v)
                 .build());
-        tomesCategory.addEntry(entry.startIntField(
-                        Component.translatable("config.meridian.tomes.extractionTomeItemDamage"),
-                        current.tomes.extractionTomeItemDamage)
-                .setDefaultValue(50).setMin(0)
-                .setSaveConsumer(v -> current.tomes.extractionTomeItemDamage = v)
+        tomesCategory.addEntry(entry.startDoubleField(
+                        Component.translatable("config.meridian.tomes.extractionTomeItemDamagePercent"),
+                        current.tomes.extractionTomeItemDamagePercent)
+                .setDefaultValue(0.05).setMin(0.0).setMax(1.0)
+                .setSaveConsumer(v -> current.tomes.extractionTomeItemDamagePercent = v)
                 .build());
         tomesCategory.addEntry(entry.startDoubleField(
                         Component.translatable("config.meridian.tomes.extractionTomeRepairPercent"),

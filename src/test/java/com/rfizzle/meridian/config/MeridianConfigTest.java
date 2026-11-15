@@ -51,7 +51,7 @@ class MeridianConfigTest {
         assertTrue(cfg.tomes.scrapTomeXpCost >= 0, "scrapTomeXpCost must be >= 0");
         assertTrue(cfg.tomes.improvedScrapTomeXpCost >= 0, "improvedScrapTomeXpCost must be >= 0");
         assertTrue(cfg.tomes.extractionTomeXpCost >= 0, "extractionTomeXpCost must be >= 0");
-        assertTrue(cfg.tomes.extractionTomeItemDamage >= 0, "extractionTomeItemDamage must be >= 0");
+        assertTrue(inUnit(cfg.tomes.extractionTomeItemDamagePercent), "extractionTomeItemDamagePercent must be in [0, 1]");
         assertTrue(inUnit(cfg.tomes.extractionTomeRepairPercent), "extractionTomeRepairPercent must be in [0, 1]");
 
         // warden — clampUnit
@@ -95,7 +95,7 @@ class MeridianConfigTest {
         assertEquals(3, cfg.tomes.scrapTomeXpCost);
         assertEquals(5, cfg.tomes.improvedScrapTomeXpCost);
         assertEquals(10, cfg.tomes.extractionTomeXpCost);
-        assertEquals(50, cfg.tomes.extractionTomeItemDamage);
+        assertEquals(0.05, cfg.tomes.extractionTomeItemDamagePercent);
         assertEquals(0.25, cfg.tomes.extractionTomeRepairPercent);
 
         assertEquals(1.0, cfg.warden.tendrilDropChance);
@@ -155,7 +155,7 @@ class MeridianConfigTest {
         assertEquals(3, loaded.tomes.scrapTomeXpCost);
         assertEquals(5, loaded.tomes.improvedScrapTomeXpCost);
         assertEquals(10, loaded.tomes.extractionTomeXpCost);
-        assertEquals(50, loaded.tomes.extractionTomeItemDamage);
+        assertEquals(0.05, loaded.tomes.extractionTomeItemDamagePercent);
         assertEquals(0.25, loaded.tomes.extractionTomeRepairPercent);
 
         assertNotNull(loaded.warden);
@@ -185,7 +185,7 @@ class MeridianConfigTest {
                     "scrapTomeXpCost": -1,
                     "improvedScrapTomeXpCost": -2,
                     "extractionTomeXpCost": -3,
-                    "extractionTomeItemDamage": -4,
+                    "extractionTomeItemDamagePercent": -4.0,
                     "extractionTomeRepairPercent": 2.5
                   },
                   "warden": {"tendrilDropChance": -0.25, "tendrilLootingBonus": 2.0},
@@ -202,7 +202,7 @@ class MeridianConfigTest {
         assertEquals(0, loaded.tomes.scrapTomeXpCost);
         assertEquals(0, loaded.tomes.improvedScrapTomeXpCost);
         assertEquals(0, loaded.tomes.extractionTomeXpCost);
-        assertEquals(0, loaded.tomes.extractionTomeItemDamage);
+        assertEquals(0.0, loaded.tomes.extractionTomeItemDamagePercent);
         assertEquals(1.0, loaded.tomes.extractionTomeRepairPercent);
         assertEquals(0.0, loaded.warden.tendrilDropChance);
         assertEquals(1.0, loaded.warden.tendrilLootingBonus);

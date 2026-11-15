@@ -222,7 +222,8 @@ public class MeridianConfig {
         tomes.scrapTomeXpCost = clampNonNegative("tomes.scrapTomeXpCost", tomes.scrapTomeXpCost);
         tomes.improvedScrapTomeXpCost = clampNonNegative("tomes.improvedScrapTomeXpCost", tomes.improvedScrapTomeXpCost);
         tomes.extractionTomeXpCost = clampNonNegative("tomes.extractionTomeXpCost", tomes.extractionTomeXpCost);
-        tomes.extractionTomeItemDamage = clampNonNegative("tomes.extractionTomeItemDamage", tomes.extractionTomeItemDamage);
+        tomes.extractionTomeItemDamagePercent = clampUnit(
+                "tomes.extractionTomeItemDamagePercent", tomes.extractionTomeItemDamagePercent);
         tomes.extractionTomeRepairPercent = clampUnit("tomes.extractionTomeRepairPercent", tomes.extractionTomeRepairPercent);
 
         everfeast.bites = clampIntRange("everfeast.bites", everfeast.bites, 1, 4096);
@@ -353,7 +354,8 @@ public class MeridianConfig {
         public int scrapTomeXpCost = 3;
         public int improvedScrapTomeXpCost = 5;
         public int extractionTomeXpCost = 10;
-        public int extractionTomeItemDamage = 50;
+        /** Share of the source item's max durability the Extraction Tome costs (0.0–1.0). */
+        public double extractionTomeItemDamagePercent = 0.05;
         public double extractionTomeRepairPercent = 0.25;
     }
 
